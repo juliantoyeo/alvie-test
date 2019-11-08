@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const trackerApi = axios.create(
 {
- baseURL: 'http://192.168.1.10:3000',
+ baseURL: 'http://34.245.109.190:3000',
  timeout: 1000,
 });
 /*

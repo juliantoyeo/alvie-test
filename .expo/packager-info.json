@@ -1,19 +1,9 @@
 {
-<<<<<<< HEAD
   "devToolsPort": 19003,
-=======
-  "devToolsPort": 19002,
->>>>>>> nadir
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
-<<<<<<< HEAD
   "ngrokPid": null
 }
-=======
-  "ngrokPid": null,
-  "webpackServerPort": null
-}
->>>>>>> nadir
