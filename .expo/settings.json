@@ -1,0 +1,12 @@
+{
+  "hostType": "lan",
+  "lanType": "ip",
+  "dev": true,
+  "minify": false,
+<<<<<<< HEAD
+  "urlRandomness": "qx-ms9",
+=======
+  "urlRandomness": "id-h5g",
+>>>>>>> nadir
+  "https": false
+}
