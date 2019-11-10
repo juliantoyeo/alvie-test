@@ -6,7 +6,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Provider } from 'react-redux';
-import Store from './src/store/configureStore';
+import configureStore from './src/store/configureStore';
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -20,8 +20,13 @@ const switchNavigator = createSwitchNavigator({
 
 const AppContainer = createAppContainer(switchNavigator);
 
+const store = configureStore();
+const state = store.getState();
+console.log(store.getState());
+
+
 export default App = () => (
-  <Provider store={Store}>
+  <Provider store={store}>
     <AppContainer />
   </Provider>  
 ) 

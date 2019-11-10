@@ -21,7 +21,9 @@ class AccountScreen extends React.Component {
                 justifyContent= 'center'
                 alignItems= 'center'
             >
-                <Text style = {{fontSize: 48}}>Account Screen</Text>
+                <Text style = {{fontSize: 48}}>Account Screen </Text>
+                <Text style = {{fontSize: 48}}>{this.props.token}</Text>
+                <Text style = {{fontSize: 48}}>{this.props.produitPhytoClicked}</Text>
                 <Button 
                     title='Logout'
                     onPress={this.onLogOut}
@@ -30,10 +32,13 @@ class AccountScreen extends React.Component {
         )
     }
 }
+const mapStateToProps = ({token, produitPhytoClicked}) => {
+    return {
+      produitPhytoClicked, 
+      token
+    };
+  };
 
-const mapStateToProps = ({token}) => ({
-    token
-  });
   const mapDispatchToProps = (dispatch, props) => ({
     deleteToken: () => dispatch(deleteToken())
   });

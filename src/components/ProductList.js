@@ -1,9 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions,   } from 'react-native';
 import {Text, Button} from 'react-native-elements';
-
 import RNPickerSelect from 'react-native-picker-select';
-export default class ProductList extends React.Component {
+import {updatePhyto} from '../store/actions/pulveActions';
+import { connect, dispatch } from 'react-redux';
+
+
+
+class ProductList extends React.Component {
+    state = {
+        produitPhytoClicked: ""
+      };
 
 
    constructor(props) {
@@ -14,6 +21,13 @@ export default class ProductList extends React.Component {
        
     }
 
+    onProductChange = (value) => { 
+        this.setState({produitPhytoClicked : value});
+        console.log(value);
+        this.props.updatePhyto(value);
+        console.log(updatePhyto(value));
+    }
+
     render() {
         return (
         <View style={{width:Dimensions.get("window").width - 20}}>
@@ -21,7 +35,7 @@ export default class ProductList extends React.Component {
             <View style={styles.pickerPhyto}>
             <RNPickerSelect 
                     placeholder={{}}
-                    onValueChange={(value) => this.setState({produitPhytoClicked: value})}
+                    onValueChange={this.onProductChange}
                     items={[
                         { label: 'racinaire', value: 'racinaire' },
                         { label: 'adjuvant', value: 'adjuvant' },
@@ -43,5 +57,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5
     }
-})
-;
+});
+
+const mapStateToProps = (state) => {
+    return {
+      produitPhytoClicked: state.produitPhytoClicked
+    };
+  };
+  const mapDispatchToProps = (dispatch, props) => ({
+    updatePhyto: (produitPhytoClicked) => dispatch(updatePhyto(produitPhytoClicked)),
+  })
+  export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
