@@ -1,6 +1,7 @@
 
 const initialState = {
-    token: ''
+    token: '',
+    userName:''
 }
 
 export default authReducer =  (state = initialState, action) => {
@@ -17,7 +18,7 @@ export default authReducer =  (state = initialState, action) => {
     case 'UPDATE_USERNAME':
     nextState = {
         ...state,
-            userName: action.userName,
+            userName: action.userName.charAt(0).toUpperCase()+action.userName.slice(1),
         }
     return nextState || state;
 

@@ -31,7 +31,7 @@ class BarCodeScreen extends React.Component {
       this.setState({scanned: true})
       this.props.updateToken(storedToken);
       this.props.updateUserName(userName);
-      alert(`Hello ${userName}`);
+      alert(`Bonjour ${userName}`);
       this.props.navigation.navigate('mainFlow');
     }
     else {

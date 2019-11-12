@@ -22,8 +22,9 @@ class AccountScreen extends React.Component {
                 alignItems= 'center'
             >
                 <Text style = {{fontSize: 48}}>Account Screen </Text>
-                <Text style = {{fontSize: 48}}>{this.props.token}</Text>
                 <Text style = {{fontSize: 48}}>{this.props.produitPhytoClicked}</Text>
+                {console.log('nadir 23'+this.props.token)}
+                
                 <Button 
                     title='Logout'
                     onPress={this.onLogOut}
@@ -32,10 +33,10 @@ class AccountScreen extends React.Component {
         )
     }
 }
-const mapStateToProps = ({token, produitPhytoClicked}) => {
+const mapStateToProps = (state) => {
     return {
-      produitPhytoClicked, 
-      token
+      produitPhytoClicked: state.pulve.produitPhytoClicked,
+      token: state.authen.token
     };
   };
 

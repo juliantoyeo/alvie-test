@@ -4,7 +4,7 @@ const initialState = {
 
 export default pulveReducer =  (state = initialState, action) => {
     switch (action.type) {
-    case 'UPDATE_TOKEN':
+    case 'UPDATE_PHYTO':
         return {
             ...state,
                 produitPhytoClicked : action.produitPhytoClicked,
@@ -12,5 +12,5 @@ export default pulveReducer =  (state = initialState, action) => {
     default:
       return state
     }
-    
+
 };
