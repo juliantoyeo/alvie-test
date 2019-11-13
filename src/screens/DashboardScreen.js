@@ -30,11 +30,11 @@ class DashboardScreen extends React.Component {
     }
     loop = async () => {
         try {
-            const {value} = await getLastValue(this.props.token, 'temp')
-            if (value) {
+            const {temp} = await getLastValue(this.props.token)
+            if (temp) {
                 this.setState({
                     ...this.state,
-                    lastValue: value
+                    lastValue: temp
                 });
             }
             if(this.state.loop) {
