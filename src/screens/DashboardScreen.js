@@ -62,8 +62,10 @@ class DashboardScreen extends React.Component {
         
         if (!this.props.produitPhytoClicked){
             return (
-               <SelectPhyto>
-              </SelectPhyto>
+               <SelectPhyto
+                userName = {this.props.userName}
+                date = {this.props.date}
+              />
                 
             );
         } else {
