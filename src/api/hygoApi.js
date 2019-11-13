@@ -76,18 +76,14 @@ export const checkToken = async (token) => {
     }
 }
 
-export const getLastValue = async(token, valueType) => {
+export const getLastValue = async(token) => {
     if(token) {
         try {
-            const response  = await trackerApi.post('/getLastValue', {token, valueType});
-            const {value} = response.data;
-            return ({
-                value
-            });
-
+            const response  = await trackerApi.post('/getLastValue', {token});
+            const {id, deviceid, temp, humi, lat, long, timestamp} = response.data;
+            return ({id, deviceid, temp, humi, lat, long, timestamp});
         } catch(error) {
             return ({
-                value: ''
             });
         }
     }
