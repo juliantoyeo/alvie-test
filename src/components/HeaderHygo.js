@@ -3,7 +3,7 @@ import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1 } from 'native-base';
 
 
-export default class SelectPhyto extends React.Component {
+export default class HeaderHygo extends React.Component {
     render() {
         return (
                 <Header style={styles.header}>
