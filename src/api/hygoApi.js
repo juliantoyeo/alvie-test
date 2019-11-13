@@ -32,14 +32,14 @@ export const signUp = async (email, password) => {
 export const signInWithBarCode = async (barcode) => {
     try
     {
-        console.log(barcode + 'nad4');
+        
         const response =  await trackerApi.post('/signinwithbarcode',{barcode});
-            console.log(response+ 'nad5');
+            
         
         
         return ({
             token: response.data.token,
-            userName: response.data.userName,
+            userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
             errorMessage: ''
         });
     } catch(err)
@@ -64,7 +64,7 @@ export const checkToken = async (token) => {
             const response = await trackerApi.post('/checkToken', {token});
             return ({
                 errorMessage: '',
-                userName: response.data.userName
+                userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1)
             });
         }
         catch(err) {
