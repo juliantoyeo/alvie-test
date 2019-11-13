@@ -1,5 +1,5 @@
 const initialState = {
-    produitPhytoClicked: ""
+    produitPhytoClicked: undefined,
 }
 
 export default pulveReducer =  (state = initialState, action) => {

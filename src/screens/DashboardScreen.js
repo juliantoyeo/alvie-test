@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1 } from 'native-base';
 import { getLastValue } from '../api/hygoApi';
 import Sensor from '../components/Sensor';
+import SelectPhyto from '../components/SelectPhyto';
 import ProductList from '../components/ProductList';
 
 import {
@@ -23,7 +24,6 @@ class DashboardScreen extends React.Component {
             lastValue: 0,
             array: [10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
             loop: true,
-            isProductSelected: false,
             date: new Date().getDate(),
         }
        
@@ -56,50 +56,14 @@ class DashboardScreen extends React.Component {
 
 
     render() {
-        const isLoggedIn = this.state.isProductSelected;
         
         console.log(this.state.date);
         
         
-        if (isLoggedIn){
+        if (!this.props.produitPhytoClicked){
             return (
-               <Container>
-                <Header style={styles.header}>
-                    <Right>
-                         <Image style={styles.image} source={require('../../assets/HYGO_by_Alvie_logo.png')} />
-                    </Right>
-                </Header>
-                <Content contentContainerStyle={{ flexGrow: 1}} >
-                    <View style = {
-                        {
-                            flex: 1,
-                            flexDirection: 'column',
-                            alignItems:'center', 
-                            alignContent:'center',
-                            justifyContent : 'space-around',
-                            
-                        }
-                    }>
-                        <H1 >
-                            Bonjour {this.props.userName} ! 
-                        </H1>
-                        <Text>
-                            Nous sommes le mercredi {this.state.date}
-                        </Text>
-                        <Text>
-                            Quel Produit utilisez-vous aujourd'hui?
-                        </Text>
-                        <ProductList/>
-                    </View>
-                </Content>
-                <Footer>
-                  <FooterTab>
-                    <Button full>
-                      <Text>Footer</Text>
-                    </Button>
-                  </FooterTab>
-                </Footer>
-              </Container>
+               <SelectPhyto>
+              </SelectPhyto>
                 
             );
         } else {
@@ -195,7 +159,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
-    userName: state.authen.userName
+    userName: state.authen.userName,
+    produitPhytoClicked : state.pulve.produitPhytoClicked
 });
 const mapDispatchToProps = (dispatch, props) => ({
 })

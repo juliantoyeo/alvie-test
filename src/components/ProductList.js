@@ -1,22 +1,20 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { View, StyleSheet, Dimensions,   } from 'react-native';
 import {Text, Button} from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import { Container, Header, Content, Icon, Picker, Form} from 'native-base'
 import {updatePhyto} from '../store/actions/pulveActions';
 import { connect, dispatch } from 'react-redux';
 
 
 
 class ProductList extends React.Component {
-    state = {
-        produitPhytoClicked: ""
-      };
 
 
    constructor(props) {
         super(props);
         this.state = {
-            produitPhytoClicked : ""
+            produitPhytoClicked : undefined,
         };
        
     }
@@ -30,20 +28,27 @@ class ProductList extends React.Component {
 
     render() {
         return (
-        <View style={{width:Dimensions.get("window").width - 20}}>
-            <Text h5>Quel produit utilisez-vous aujourd’hui? </Text>
-            <View style={styles.pickerPhyto}>
-            <RNPickerSelect 
-                    placeholder={{}}
-                    onValueChange={this.onProductChange}
-                    items={[
-                        { label: 'racinaire', value: 'racinaire' },
-                        { label: 'adjuvant', value: 'adjuvant' },
-                        { label: 'fungicide', value: 'fungicide' },
-                    ]}
-            />
-            </View>   
-        </View>
+            <View style={{width:Dimensions.get("window").width - 20}}>
+                <Content>
+                    <Form>
+                        <Picker
+                        mode="dropdown"
+                        iosIcon={<Icon name="arrow-down" />}
+                        placeholder="Quel produit utilisez vous?"
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                        style={{ width: undefined }}
+                        selectedValue={this.state.produitPhytoClicked}
+                        onValueChange={this.onProductChange}
+                        >
+                        <Picker.Item label="Foliaires systèmiques" value="Foliaires systèmiques" />
+                        <Picker.Item label="Foliaires de contact" value="Foliaires de contact" />
+                        <Picker.Item label="Foliaires systèmiques avec adjuvent" value="Foliaires systèmiques avec adjuvent" />
+                        <Picker.Item label="Foliaires de contact avec adjuvent" value="Foliaires de contact avec adjuvent" />
+                        </Picker>
+                    </Form>
+                </Content>
+            </View>
         );
     }
 }
@@ -61,7 +66,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-      produitPhytoClicked: state.produitPhytoClicked
+      produitPhytoClicked: state.produitPhytoClicked,
+      
     };
   };
   const mapDispatchToProps = (dispatch, props) => ({
