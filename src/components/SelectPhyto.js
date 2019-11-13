@@ -10,12 +10,6 @@ import ProductList from '../components/ProductList';
 export default class SelectPhyto extends React.Component {
     render() {
         return (
-            <Container>
-                <Header style={styles.header}>
-                    <Right>
-                        <Image style={styles.image} source={require('../../assets/HYGO_by_Alvie_logo.png')} />
-                    </Right>
-                </Header>
                     <Content contentContainerStyle={{ flexGrow: 1}} >
                         <View style = {
                             {
@@ -39,24 +33,11 @@ export default class SelectPhyto extends React.Component {
                             <ProductList/>
                         </View>
                     </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button full>
-                        <Text>Footer</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
-            </Container>
+               
         );
     }
 }   
-    const styles = StyleSheet.create({
-       
-        header: {
-            backgroundColor: '#FCFCFC',
-        }
-       
-    });
+
     
     
 

@@ -7,6 +7,8 @@ import { getLastValue } from '../api/hygoApi';
 import Sensor from '../components/Sensor';
 import SelectPhyto from '../components/SelectPhyto';
 import ProductList from '../components/ProductList';
+import HeaderHygo from '../components/HeaderHygo';
+import FooterHygo from '../components/FooterHygo';
 
 import {
     LineChart,
@@ -62,11 +64,14 @@ class DashboardScreen extends React.Component {
         
         if (!this.props.produitPhytoClicked){
             return (
-               <SelectPhyto
-                userName = {this.props.userName}
-                date = {this.props.date}
-              />
-                
+                <Container>
+                    <HeaderHygo/>    
+                        <SelectPhyto
+                            userName = {this.props.userName}
+                            date = {this.props.date}
+                        />
+                    <FooterHygo />
+            </Container> 
             );
         } else {
              return (
