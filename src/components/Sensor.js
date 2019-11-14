@@ -41,7 +41,7 @@ export default class Sensor extends React.Component {
                     {
                         backgroundColor: this.props.color || "black", 
                         width: this.state.width.interpolate({
-                            inputRange: [0, 1],
+                            inputRange: [0, this.props.max],
                             outputRange: ['0%', '100%']
                         })
                     }
