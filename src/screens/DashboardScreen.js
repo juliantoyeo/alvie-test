@@ -21,7 +21,8 @@ class DashboardScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            lastValue: 0,
+            temp: 0,
+            humi: 0,
             array: [10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
             loop: true,
             date: new Date().getDate(),
@@ -30,11 +31,12 @@ class DashboardScreen extends React.Component {
     }
     loop = async () => {
         try {
-            const {temp} = await getLastValue(this.props.token)
-            if (temp) {
+            const {temp, humi} = await getLastValue(this.props.token)
+            if (!!temp && !!humi) {
                 this.setState({
                     ...this.state,
-                    lastValue: temp
+                    temp,
+                    humi
                 });
             }
             if(this.state.loop) {
@@ -83,12 +85,14 @@ class DashboardScreen extends React.Component {
                     <Sensor 
                         name="Température"
                         color="green"
-                        value={this.state.lastValue}
+                        value={this.state.temp}
+                        max={50.0}
                     />
                     <Sensor 
-                        name="Hygo"
+                        name="Hygro"
                         color="blue"
-                        value={this.state.lastValue}
+                        value={this.state.humi}
+                        max={100.0}
                     />
                     <LineChart
                         data={{
