@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1 } from 'native-base';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1, H2 } from 'native-base';
 import { getLastValue } from '../api/hygoApi';
 import ProductList from '../components/ProductList';
 
 
 export default class SelectPhyto extends React.Component {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          date: props.date
+        };
+      }
     render() {
         return (
                     <Content contentContainerStyle={{ flexGrow: 1}} >
@@ -21,15 +28,15 @@ export default class SelectPhyto extends React.Component {
                                 
                             }
                         }>
-                            <H1 >
+                            <H1 style={{color : '#194769'}}>
                                 Bonjour {this.props.userName} ! 
                             </H1>
-                            <Text>
-                                Nous sommes le mercredi {this.props.date}
-                            </Text>
-                            <Text>
+                            <H2 style={{color : '#194769'}}>
+                                Nous sommes le {this.props.date}/{this.props.month}!
+                            </H2>
+                            <H2 style={{color : '#194769'}}>
                                 Quel Produit utilisez-vous aujourd'hui?
-                            </Text>
+                            </H2>
                             <ProductList/>
                         </View>
                     </Content>

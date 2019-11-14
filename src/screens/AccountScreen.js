@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, Button} from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 import { AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { deleteToken } from '../store/actions/authActions'
+import HeaderHygo from '../components/HeaderHygo';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1 } from 'native-base';
 
 class AccountScreen extends React.Component {
     constructor(props) {
@@ -16,20 +17,23 @@ class AccountScreen extends React.Component {
     }
     render() {
         return (
-            <SafeAreaView 
-                forceInset = {{top: 'always'}}
-                justifyContent= 'center'
-                alignItems= 'center'
-            >
-                <Text style = {{fontSize: 48}}>Account Screen </Text>
-                <Text style = {{fontSize: 48}}>{this.props.produitPhytoClicked}</Text>
-                {console.log('nadir 23'+this.props.token)}
-                
-                <Button 
-                    title='Logout'
-                    onPress={this.onLogOut}
-                />
-            </SafeAreaView>
+            <Container>
+                <HeaderHygo/>  
+                    <SafeAreaView 
+                        forceInset = {{top: 'always'}}
+                        justifyContent= 'center'
+                        alignItems= 'center'
+                    >
+                        <Text style = {{fontSize: 48}}>Account Screen </Text>
+                        <Text style = {{fontSize: 48}}>{this.props.produitPhytoClicked}</Text>
+                        
+                        <Button 
+                            title='Logout'
+                            onPress={this.onLogOut}
+                        />
+                    </SafeAreaView>
+            </Container> 
+            
         )
     }
 }

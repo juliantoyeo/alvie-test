@@ -30,13 +30,15 @@ class ProductList extends React.Component {
         return (
             <View style={{width:Dimensions.get("window").width - 20}}>
                 <Content>
-                    <Form>
+                    <Form style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
                         <Picker
                         mode="dropdown"
                         iosIcon={<Icon name="arrow-down" />}
                         placeholder="Quel produit utilisez vous?"
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
+                        
+                        placeholderStyle={{ color: "#194769" }}
+                        headerBackButtonText ='retour'
+                        placeholderIconColor="59DFD6"
                         style={{ width: undefined }}
                         selectedValue={this.state.produitPhytoClicked}
                         onValueChange={this.onProductChange}

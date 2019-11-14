@@ -47,7 +47,7 @@ export const signInWithBarCode = async (barcode) => {
         console.log(err);
         return ({
             token: '',
-            errorMessage: 'Error while signing up'
+            errorMessage: 'Erreur lors de l\'enregistrement'
         });
     }
 }
