@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 94384,
-  "expoServerNgrokUrl": "https://cs-rmw.anonymous.hygoclient.exp.direct",
-  "packagerNgrokUrl": "https://packager.cs-rmw.anonymous.hygoclient.exp.direct",
-  "ngrokPid": 94399
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": "https://cs-rmw.anonymous.hygoclientnative.exp.direct",
+  "packagerNgrokUrl": "https://packager.cs-rmw.anonymous.hygoclientnative.exp.direct",
+  "ngrokPid": 16759
 }
