@@ -83,7 +83,9 @@ class DashboardScreen extends React.Component {
                         alignItems= 'center'
                         >   
                             <Text h1>Dashboard - {this.props.userName}</Text>
+
                             <ProductList/>
+                            
                             <Text h3 style={{backgroundColor: this.state.lastValue > 0.5 ? '#EBF6EC' : '#FF99A6'}}>
                                 {this.state.lastValue > 0.5 ? 'Bonnes' : 'Mauvaises'} conditions
                             </Text>
