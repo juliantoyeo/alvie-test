@@ -28,8 +28,12 @@ class ProductList extends React.Component {
 
     render() {
         return (
-            <View style={{width:Dimensions.get("window").width - 20}}>
-                <Content>
+            <View style={
+                {
+                    
+                    height: 50
+                }}>
+                
                     <Form style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
                         <Picker
                         mode="dropdown"
@@ -49,7 +53,7 @@ class ProductList extends React.Component {
                         <Picker.Item label="Foliaires de contact avec adjuvent" value="Foliaires de contact avec adjuvent" />
                         </Picker>
                     </Form>
-                </Content>
+                
             </View>
         );
     }
