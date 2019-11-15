@@ -31,6 +31,7 @@ export default class SelectPhyto extends React.Component {
                             <H1 style={{color : '#194769'}}>
                                 Bonjour {this.props.userName} ! 
                             </H1>
+                            <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
                             <H2 style={{color : '#194769'}}>
                                 Nous sommes le {this.props.date}/{this.props.month}!
                             </H2>
