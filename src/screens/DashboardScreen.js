@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col } from 'native-base';
-import { getLastValue } from '../api/hygoApi';
 import SelectPhyto from '../components/SelectPhyto';
 import HeaderHygo from '../components/HeaderHygo';
 import DashBoard from '../components/DashBoard';
@@ -35,7 +34,7 @@ class DashboardScreen extends React.Component {
             );
         } else {
              return (
-                <Container>
+                <Container style={styles.container}>
                     <HeaderHygo/>
                     <Content>
                         <DashBoard

@@ -36,7 +36,7 @@ export default class SelectPhyto extends React.Component {
                                 Nous sommes le {this.props.date}/{this.props.month}!
                             </H2>
                             <H2 style={{color : '#194769'}}>
-                                Quel Produit utilisez-vous aujourd'hui?
+                                Quel produit utilisez-vous aujourd'hui?
                             </H2>
                             <ProductList/>
                         </View>

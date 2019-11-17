@@ -95,7 +95,7 @@ class DashBoard extends React.Component {
             <Content>
             <Grid>
                 <Row >
-                    <Col size={30} style ={
+                    <Col  style ={
                         {
                         justifyContent: 'space-around',
                         alignItems: 'center' 
@@ -103,7 +103,7 @@ class DashBoard extends React.Component {
                     }>
                         <H3>Date : {this.props.date}/{this.props.month}</H3>
                     </Col>
-                    <Col size={70} style ={
+                    <Col  style ={
                         {
                         justifyContent: 'space-around',
                         alignItems: 'center' 
@@ -121,7 +121,7 @@ class DashBoard extends React.Component {
                     paddingBottom: 10,
                     }}>
                     <Col size={70}>
-                        <Button large iconLeft style={{backgroundColor:this.state.conditionColor, justifyContent: 'center'}}>
+                        <Button large style={{backgroundColor:this.state.conditionColor, justifyContent: 'center'}}>
                             <Text > {this.state.condition}
                             </Text>
                         </Button> 
