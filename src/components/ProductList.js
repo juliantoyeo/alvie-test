@@ -10,7 +10,6 @@ import { connect, dispatch } from 'react-redux';
 
 class ProductList extends React.Component {
 
-
    constructor(props) {
         super(props);
         this.state = {
@@ -28,37 +27,28 @@ class ProductList extends React.Component {
 
     render() {
         return (
-            <View style={
-                {
-                    
-                    height: 50
-                }}>
-                
-                    <Form style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
-                        <Picker
-                        mode="dropdown"
-                        iosIcon={<Icon name="arrow-down" />}
-                        placeholder="Quel produit utilisez vous?"
-                        
-                        placeholderStyle={{ color: "#194769" }}
-                        headerBackButtonText ='retour'
-                        placeholderIconColor="59DFD6"
-                        style={{ width: undefined }}
-                        selectedValue={this.state.produitPhytoClicked}
-                        onValueChange={this.onProductChange}
-                        >
-                        <Picker.Item label="Foliaires systèmiques" value="Foliaires systèmiques" />
-                        <Picker.Item label="Foliaires de contact" value="Foliaires de contact" />
-                        <Picker.Item label="Foliaires systèmiques avec adjuvent" value="Foliaires systèmiques avec adjuvent" />
-                        <Picker.Item label="Foliaires de contact avec adjuvent" value="Foliaires de contact avec adjuvent" />
-                        </Picker>
-                    </Form>
-                
-            </View>
+            <Picker
+            mode="dropdown"
+            iosIcon={<Icon name="arrow-down" />}
+            placeholder="Quel produit utilisez vous?"
+            
+            placeholderStyle={{ color: "#194769" }}
+            headerBackButtonText ='retour'
+            placeholderIconColor="59DFD6"
+            //style={{width:400}}
+            selectedValue={this.state.produitPhytoClicked}
+            onValueChange={this.onProductChange}
+            >
+            <Picker.Item label="Foliaires systèmiques" value="Foliaires systèmiques" />
+            <Picker.Item label="Foliaires de contact" value="Foliaires de contact" />
+            <Picker.Item label="Foliaires systèmiques avec adjuvent" value="Foliaires systèmiques avec adjuvent" />
+            <Picker.Item label="Foliaires de contact avec adjuvent" value="Foliaires de contact avec adjuvent" />
+            </Picker>
+              
         );
     }
 }
-
+/*
 const styles = StyleSheet.create({
     pickerPhyto: {
         height: 20,
@@ -68,7 +58,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5
     }
-});
+});*/
 
 const mapStateToProps = (state) => {
     return {

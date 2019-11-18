@@ -32,15 +32,14 @@ export default class Sensor extends React.Component {
 
     render() {
         return (
-        <View style={{width:Dimensions.get("window").width - 20}}
-            >
+        <View style={{flex:1}}>
             <Text h5>{this.props.name + ' - ' + this.props.value.toFixed(2)}</Text>
             <View style={styles.progressBar}>
                 <Animated.View style={
                     [StyleSheet.absoluteFill], 
                     {
                         backgroundColor: this.props.color || "black", 
-                        width: this.state.width.interpolate({
+                        height: this.state.width.interpolate({
                             inputRange: [0, this.props.max],
                             outputRange: ['0%', '100%']
                         })
@@ -54,9 +53,9 @@ export default class Sensor extends React.Component {
 
 const styles = StyleSheet.create({
     progressBar: {
-        flexDirection: 'row',
-        height: 20,
-        width: '100%',
+        flex:3,
+        flexDirection: 'column-reverse',
+        width: 20,
         backgroundColor: 'white',
         borderColor: 'grey',
         borderWidth: 1,

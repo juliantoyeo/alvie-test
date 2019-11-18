@@ -3,7 +3,7 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://ud-gg4.anonymous.hygoclientnative.exp.direct",
+  "packagerNgrokUrl": "https://packager.ud-gg4.anonymous.hygoclientnative.exp.direct",
+  "ngrokPid": 43873
 }
