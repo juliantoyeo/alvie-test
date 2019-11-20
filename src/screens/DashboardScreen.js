@@ -141,6 +141,21 @@ class DashboardScreen extends React.Component {
                 }
 }
 
+const styles = StyleSheet.create({
+    progressBar: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%',
+        backgroundColor: 'white',
+        borderColor: 'grey',
+        borderWidth: 1,
+        borderRadius: 5
+    },
+    container: {
+        backgroundColor: '#F6F6E9',
+    }
+   
+});
 const mapStateToProps = (state) => ({
     token: state.authen.token,
     userName: state.authen.userName,
