@@ -1,77 +1,49 @@
 import React from 'react';
 import { Dimensions, Image, StyleSheet,  } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content,Button, View, Text, H3} from 'native-base';
-import { getLastValue } from '../api/hygoApi';
-import Sensor from '../components/Sensor';
-import SelectPhyto from './SelectPhyto';
-import ProductList from '../components/ProductList';
+import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col } from 'native-base';
+import SelectPhyto from '../components/SelectPhyto';
 import HeaderHygo from '../components/HeaderHygo';
-
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-  } from "react-native-chart-kit";
+import DashBoard from '../components/DashBoard';
 
 class DashboardScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            temp: 0,
-            humi: 0,
-            array: [10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
-            loop: true,
             date: new Date().getDate(),
             month: new Date().getMonth()+1 
         }
        
     }
-    loop = async () => {
-        try {
-            const {temp, humi} = await getLastValue(this.props.token)
-            if (!!temp && !!humi) {
-                this.setState({
-                    ...this.state,
-                    temp,
-                    humi
-                });
-            }
-            if(this.state.loop) {
-                setTimeout(() => this.loop(),3000);
-            }
-        } catch(err)
-        {
-            return;
-        }
-    }
-
-    async componentDidMount() {
-        this.loop();            
-    }
-
-    componentWillUnmount() { 
-        this.setState({loop: false});
-    }
-
 
     render() {
-        return (
-        <Container>
-            <HeaderHygo/>
-            
-            {!(this.props.produitPhytoClicked) ? (
-            <Content contentContainerStyle = {{flex: 1}}>
-                <SelectPhyto
-                    userName = {this.props.userName}
-                    date = {this.state.date}
-                    month = {this.state.month}
-                />
-            </Content>
-            ) : (
+
+        if (!this.props.produitPhytoClicked){
+            return (
+                <Container style={styles.container}>
+                    <HeaderHygo/>    
+                    <SelectPhyto
+                        userName = {this.props.userName}
+                        date = {this.state.date}
+                        month = {this.state.month}
+                    /> 
+                </Container> 
+            );
+        } else {
+             return (
+                <Container style={styles.container}>
+                    <HeaderHygo/>
+                    <Content>
+                        <DashBoard
+                            userName = {this.props.userName}
+                            date = {this.state.date}
+                            month = {this.state.month}
+                        />
+                    </Content>     
+                </Container> 
+                );
+            }
+            /*
             <Content contentContainerStyle = {{flex: 1}}>
                 <View style={{
                     flex:2,
@@ -165,7 +137,8 @@ class DashboardScreen extends React.Component {
                 </Content>
                 )}
         </Container>  
-    )}
+                    )*/
+                }
 }
 
 const mapStateToProps = (state) => ({

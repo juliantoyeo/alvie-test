@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'native-base';
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -21,17 +22,17 @@ const switchNavigator = createSwitchNavigator({
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
-        let IconComponent = Ionicons;
+        let IconComponent = Icon;
         let iconName;
         if (routeName === 'Dashboard') {
           iconName = `ios-information-circle${focused ? '' : '-outline'}`;
         
         } else if (routeName === 'Compte') {
-          iconName = `ios-options`;
+          iconName = "contact";
         }
 
         // You can return any component that you like here!
-        return <IconComponent name={iconName} size={25} color={tintColor} />;
+        return <Icon name={iconName} size={25} style={{color : tintColor}} />;
       },
       }),
         tabBarOptions: {
