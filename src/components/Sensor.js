@@ -32,7 +32,7 @@ export default class Sensor extends React.Component {
 
     render() {
         return (
-        <View style={{height:this.props.height}}>
+        <View >
             <Text h5>{this.props.name + ' - ' + this.props.value.toFixed(2)}</Text>
             <View style={styles.progressBar}>
                 <Animated.View style={

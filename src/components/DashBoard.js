@@ -122,17 +122,16 @@ class DashBoard extends React.Component {
                     
                 <View style={{
                     justifyContent: 'space-around',
-                    flexDirection: 'row'}}
+                    flexDirection: 'row',
+                    height:100}}
                 >
                     <Sensor 
-                        height={100}
                         name="Température"
                         color="green"
                         value={this.state.temp}
                         max={50.0}
                     />
                     <Sensor 
-                        height={100}
                         name="Hygo"
                         color="blue"
                         value={this.state.humi}
