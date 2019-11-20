@@ -6,13 +6,13 @@ export default class Sensor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            width: new Animated.Value(0)
+            height: new Animated.Value(0)
         };
     }
 
     componentDidMount() {
         Animated.timing(
-            this.state.width,
+            this.state.height,
             {
               toValue: this.props.value,
             },
@@ -22,7 +22,7 @@ export default class Sensor extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.value !== this.props.value) {
             Animated.timing(
-                this.state.width,
+                this.state.height,
                 {
                   toValue: this.props.value,
                 },
@@ -32,14 +32,14 @@ export default class Sensor extends React.Component {
 
     render() {
         return (
-        <View style={{flex:1}}>
+        <View style={{height:this.props.height}}>
             <Text h5>{this.props.name + ' - ' + this.props.value.toFixed(2)}</Text>
             <View style={styles.progressBar}>
                 <Animated.View style={
                     [StyleSheet.absoluteFill], 
                     {
                         backgroundColor: this.props.color || "black", 
-                        height: this.state.width.interpolate({
+                        height: this.state.height.interpolate({
                             inputRange: [0, this.props.max],
                             outputRange: ['0%', '100%']
                         })

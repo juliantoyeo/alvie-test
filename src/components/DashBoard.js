@@ -92,6 +92,7 @@ class DashBoard extends React.Component {
 
     render() {
         return (
+            
             <Content contentContainerStyle = {{
                 flex: 1,
                 padding: 10,
@@ -126,18 +127,19 @@ class DashBoard extends React.Component {
                     </Button>
                 </View>
                 <View style={{
+                    justifyContent: 'space-around',
                     flex:3,
                     flexDirection: 'row'}}
                 >
                     <Sensor 
-                        //style={{flex:1, flexGrow:1}}
+                        height={100}
                         name="Température"
                         color="green"
                         value={this.state.temp}
                         max={50.0}
                     />
                     <Sensor 
-                        //style={{flex:1, flexGrow:1}}
+                        height={100}
                         name="Hygo"
                         color="blue"
                         value={this.state.humi}
