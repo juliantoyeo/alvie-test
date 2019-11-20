@@ -17,12 +17,12 @@ export default class SelectPhyto extends React.Component {
       }
     render() {
         return (
-                    <Content contentContainerStyle={{ flexGrow: 1}} >
+            <Content contentContainerStyle = {{flex: 1}}>
                         <View style = {
                             {
                                 flex: 1,
                                 flexDirection: 'column',
-                                alignItems:'center', 
+                                //alignItems:'center', 
                                 alignContent:'center',
                                 justifyContent : 'space-around',
                                 
@@ -40,8 +40,7 @@ export default class SelectPhyto extends React.Component {
                             </H2>
                             <ProductList/>
                         </View>
-                    </Content>
-               
+            </Content>
         );
     }
 }   
