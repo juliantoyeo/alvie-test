@@ -4,6 +4,7 @@ import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { deleteToken } from '../store/actions/authActions'
 import HeaderHygo from '../components/HeaderHygo';
+import ProductList from '../components/ProductList';
 import UserAvatar from 'react-native-user-avatar';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, H2, Body, Icon, Text, H1,H3, Grid, Row, Col } from 'native-base';
 
@@ -42,7 +43,7 @@ class AccountScreen extends React.Component {
                             <Col size={70} style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'right',
+                                alignItems: 'flex-start',
                                 padding: 5 
                                 }
                                 }>
@@ -66,6 +67,9 @@ class AccountScreen extends React.Component {
                             </Button> 
                             </Col>
                         </Row>
+                        <Row>
+                        <ProductList/>
+                        </Row>
                         <Row size={15} style ={
                             {
                             padding: 10, 
@@ -76,7 +80,7 @@ class AccountScreen extends React.Component {
                             <Col size={20} style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'center' 
+                                alignItems: 'flex-end' 
                                 }
                                 }>
                                 <Icon type ="FontAwesome" name="phone-square" style={{color : '#194769', fontSize: 50}}/>
@@ -84,7 +88,7 @@ class AccountScreen extends React.Component {
                             <Col size={80}style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'right' 
+                                alignItems: 'flex-start' 
                                 }
                                 }>
                                 <H3>06 29 05 60 12</H3>
@@ -94,7 +98,7 @@ class AccountScreen extends React.Component {
                             <Col size={20} style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'center' 
+                                alignItems: 'flex-end' 
                                 }
                                 }>
                                 <Icon type ="Entypo" name="mail" style={{color : '#194769', fontSize: 50}}/>
@@ -102,7 +106,7 @@ class AccountScreen extends React.Component {
                             <Col size={80}  style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'right' 
+                                alignItems: 'flex-start' 
                                 
                                 }
                                 }>
@@ -133,3 +137,5 @@ const mapStateToProps = (state) => ({
   });
   
   export default connect(mapStateToProps, mapDispatchToProps)(AccountScreen);
+
+ 

@@ -101,14 +101,13 @@ class DashBoard extends React.Component {
                 paddingBottom: 10,
             }}>
                 <View style={{
-                    alignItems: 'center' ,
+                    alignItems: 'flex-start' ,
                     flexDirection: 'row',
                     justifyContent: 'center',
                     marginLeft: 10,
                     marginRight: 10
                 }}>
                     <H3>Date : {this.state.date}/{this.state.month}</H3>
-                    <ProductList/>
                 </View>
                 
                 <Button large style={{
@@ -126,16 +125,20 @@ class DashBoard extends React.Component {
                     height:100}}
                 >
                     <Sensor 
-                        name="Température"
+                        name="°C"
                         color="green"
                         value={this.state.temp}
                         max={50.0}
+                        iconName="temperature-low"
+                        iconType="FontAwesome5"
                     />
                     <Sensor 
-                        name="Hygo"
+                        name="%"
                         color="blue"
                         value={this.state.humi}
                         max={100.0}
+                        iconName="drop"
+                        iconType="Entypo"
                     />
                 </View>
                 <LineChart

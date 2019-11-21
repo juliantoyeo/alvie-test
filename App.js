@@ -10,13 +10,16 @@ import configureStore from './src/store/configureStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'native-base';
 
+
+
+
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     BarCode: BarCodeScreen,
   }),
   mainFlow: createBottomTabNavigator({
     Dashboard: DashboardScreen,
-    Compte: AccountScreen 
+    Parametres: AccountScreen 
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
@@ -27,7 +30,7 @@ const switchNavigator = createSwitchNavigator({
         if (routeName === 'Dashboard') {
           iconName = `ios-information-circle${focused ? '' : '-outline'}`;
         
-        } else if (routeName === 'Compte') {
+        } else if (routeName === 'Parametres') {
           iconName = "contact";
         }
 
@@ -50,10 +53,7 @@ const switchNavigator = createSwitchNavigator({
 });
 
 const AppContainer = createAppContainer(switchNavigator);
-
 const store = configureStore();
-const state = store.getState();
-console.log(store.getState());
 
 
 export default App = () => (
