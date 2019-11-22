@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, Dimensions, ShadowPropTypesIOS,   } from 'react-native';
+import { View} from 'react-native';
 import {Text, Button} from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import { Container, Header, Content, Icon, Picker, Form} from 'native-base'
@@ -35,30 +35,30 @@ class ProductList extends React.Component {
 
     render() {
         return (
-            <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" />}
-            placeholder="Quel produit utilisez vous?"
             
-            placeholderStyle={{ color: "#194769" }}
-            headerBackButtonText ='retour'
-            placeholderIconColor="59DFD6"
-            //style={{width:400}}
-            selectedValue={this.state.produitPhytoClicked}
-            onValueChange={this.onProductChange}
-            >
-            <Picker.Item label="Désherbant post-levée systémique" value="Désherbant post-levée systémique" />
-            <Picker.Item label="Désherbant prélevée systémique" value="Désherbant prélevée systémique" />
-            <Picker.Item label="Désherbant prélevée de contact" value="Désherbant prélevée de contact" />
-            <Picker.Item label="Désherbant post-levée de contact" value="Désherbant post-levée de contact" />
-            <Picker.Item label="Fongicide systémique" value="Fongicide systémique" />
-            <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
-            <Picker.Item label="Herbicide systémique ou pénétrant" value="Herbicide systémique ou pénétrant" />
-            <Picker.Item label="Herbicide de contact" value="Herbicide de contact" />
-            <Picker.Item label="Insecticide de contact ou par ingestion" value="Insecticide de contact ou par ingestion" />
-            <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
-            </Picker>
-              
+                <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    placeholder="Quel produit utilisez vous?"
+                    placeholderStyle={{ color: "#194769" }}
+                    headerBackButtonText ='retour'
+                    placeholderIconColor="59DFD6"
+                    //style={{width:400}}
+                    selectedValue={this.state.produitPhytoClicked}
+                    onValueChange={this.onProductChange}
+                >
+                    <Picker.Item label="Désherbant post-levée systémique" value="Désherbant post-levée systémique" />
+                    <Picker.Item label="Désherbant prélevée systémique" value="Désherbant prélevée systémique" />
+                    <Picker.Item label="Désherbant prélevée de contact" value="Désherbant prélevée de contact" />
+                    <Picker.Item label="Désherbant post-levée de contact" value="Désherbant post-levée de contact" />
+                    <Picker.Item label="Fongicide systémique" value="Fongicide systémique" />
+                    <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
+                    <Picker.Item label="Herbicide systémique ou pénétrant" value="Herbicide systémique ou pénétrant" />
+                    <Picker.Item label="Herbicide de contact" value="Herbicide de contact" />
+                    <Picker.Item label="Insecticide de contact ou par ingestion" value="Insecticide de contact ou par ingestion" />
+                    <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
+                </Picker>
+            
         );
     }
      /*       <View style={

@@ -2,12 +2,14 @@ import * as React from 'react';
 import { View, AsyncStorage, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet } from 'react-native';
-import { Text, Button} from 'react-native-elements';
+import { Text,Button, colors} from 'react-native-elements';
+import { Container, Content, Grid, Row, Col, H3 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import {updateToken, updateUserName} from '../store/actions/authActions';
 import {signInWithBarCode, checkToken} from '../api/hygoApi';
+import HeaderHygo from '../components/HeaderHygo';
 
 
 class BarCodeScreen extends React.Component {
@@ -43,10 +45,10 @@ class BarCodeScreen extends React.Component {
     this.setState({ scanned: true });
     const {token, errorMessage, userName} = await signInWithBarCode(data);
     if(errorMessage || !token) {
-      alert('erreur');
+      alert('QR code non reconnu');
     }
     else {
-      alert(`Hello ${userName}`);
+      alert(`Bonjour ${userName}`);
       this.props.updateToken(token);
       await AsyncStorage.setItem('token', token);
       this.props.navigation.navigate('mainFlow');
@@ -57,49 +59,59 @@ class BarCodeScreen extends React.Component {
     const { hasCameraPermission, scanned } = this.state;
 
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text> Nous avons besoin d'avoir accès à l'appareil photo du téléphone pour scanner le capteur</Text>;
     }
     if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text>Pas d'accès à l'appareil photo</Text>;
     }
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-        }}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-        <View style= {{
-          height:Dimensions.get("window").height,
-          width:Dimensions.get("window").width,
-          borderColor: 'rgba(0, 0, 0, 0.5)',
-          borderLeftWidth: Dimensions.get("window").width / 15,
-          borderRightWidth: Dimensions.get("window").width / 15,
-          borderTopWidth: Dimensions.get("window").width / 5,
-          borderBottomWidth: Dimensions.get("window").width / 5,
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-          }}
-        >
-        {scanned && (
-          <Button 
-            title='Tap to Scan Again'
-            onPress={() => this.setState({ scanned: false })} 
-            buttonStyle= {{
-              backgroundColor:'#8EE915'
-            }}
-          />
-        )}
-        </View>
+            
+              <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                alignItems: 'center'
+              }}>
 
-      </View>
+                <BarCodeScanner
+                  onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
+                  style={StyleSheet.absoluteFillObject}
+                />
+                <View style= {{
+                  height:Dimensions.get("window").height,
+                  width:Dimensions.get("window").width,
+                  borderColor: 'rgba(46, 88, 118, 0.5)',
+                  borderLeftWidth: Dimensions.get("window").width / 15,
+                  borderRightWidth: Dimensions.get("window").width / 15,
+                  borderTopWidth: Dimensions.get("window").width / 4,
+                  borderBottomWidth: Dimensions.get("window").width / 5,
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center'
+                  }}
+                >
+                <H3 style={{
+                  position: 'absolute',
+                  right: -10,
+                  top: -50,
+                  color:"white"
+
+                }}
+                >Bonjour, merci de scanner le QR code situé sur votre capteur Hygo </H3>
+                {scanned && (
+                  <Button 
+                    title='Appuyer pour rescanner de nouveau le QR Code'
+                    onPress={() => this.setState({ scanned: false })} 
+                    buttonStyle= {{
+                      backgroundColor:'#59DFD6'
+                    }}
+                  />
+                )}
+                </View>
+              </View>
+          
     );
   }
 }

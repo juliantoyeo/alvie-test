@@ -15,6 +15,7 @@ class DashboardScreen extends React.Component {
         }
        
     }
+    
 
     render() {
 
@@ -159,7 +160,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
     token: state.authen.token,
     userName: state.authen.userName,
-    produitPhytoClicked : state.pulve.produitPhytoClicked
+    produitPhytoClicked : state.pulve.produitPhytoClicked,
+    newSession: state.pulve.newSession,
+    lastSession: state.pulve.lastSession
 });
 const mapDispatchToProps = (dispatch, props) => ({
 })

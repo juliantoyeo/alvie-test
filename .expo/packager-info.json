@@ -1,9 +1,9 @@
 {
-  "devToolsPort": 19002,
+  "devToolsPort": 19003,
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
   "expoServerNgrokUrl": "https://ud-gg4.anonymous.hygoclient.exp.direct",
   "packagerNgrokUrl": "https://packager.ud-gg4.anonymous.hygoclient.exp.direct",
-  "ngrokPid": 39252
+  "ngrokPid": 39660
 }

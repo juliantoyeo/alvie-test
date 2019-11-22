@@ -103,7 +103,6 @@ class DashBoard extends React.Component {
                 <View style={{
                     alignItems: 'flex-start' ,
                     flexDirection: 'row',
-                    justifyContent: 'center',
                     marginLeft: 10,
                     marginRight: 10
                 }}>

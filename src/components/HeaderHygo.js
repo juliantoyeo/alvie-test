@@ -6,10 +6,9 @@ import * as Font from 'expo-font';
 export default class HeaderHygo extends React.Component {
     componentDidMount() {
         Font.loadAsync({
-          'Roboto-Regular': require('../../assets/font/Roboto-Regular.ttf'),
+          'Roboto_medium': require('../../assets/font/Roboto-Medium.ttf'),
         });
       }
-    
     render() {
         return (
                 <Header style={styles.header}>

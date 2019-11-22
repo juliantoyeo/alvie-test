@@ -6,7 +6,13 @@ import { deleteToken } from '../store/actions/authActions'
 import HeaderHygo from '../components/HeaderHygo';
 import ProductList from '../components/ProductList';
 import UserAvatar from 'react-native-user-avatar';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, H2, Body, Icon, Text, H1,H3, Grid, Row, Col } from 'native-base';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, H2, Form, Icon, Text, H1,H3, Grid, Row, Col } from 'native-base';
+
+
+
+
+
+
 
 class AccountScreen extends React.Component {
     constructor(props) {
@@ -38,7 +44,7 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5
                                 }
                                 }>
-                                <UserAvatar size="70" name={this.props.userName} />
+                                <UserAvatar size="70" name={this.props.userName|| "xx xx"} />
                             </Col>
                             <Col size={70} style ={
                                 {
@@ -67,12 +73,20 @@ class AccountScreen extends React.Component {
                             </Button> 
                             </Col>
                         </Row>
-                        <Row>
-                        <ProductList/>
+                        <Row size={15} style ={
+                            {
+                            padding: 10, 
+                            flexDirection:"column",
+                            }}>
+                            <H2> Changer de famille de produit à pulvériser</H2>
+                            <Form style={{backgroundColor : '#D9EEF6', borderColor: '#B7DAE3',color:'#194769'}}>
+                                <ProductList />
+                            </Form>
                         </Row>
                         <Row size={15} style ={
                             {
                             padding: 10, 
+                            
                             }}>
                             <H2> Un problème, une idée, n'hésité pas à nous contacter</H2>
                         </Row>
@@ -88,10 +102,11 @@ class AccountScreen extends React.Component {
                             <Col size={80}style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'flex-start' 
+                                alignItems: 'flex-start',
+                                paddingRight: 5
                                 }
                                 }>
-                                <H3>06 29 05 60 12</H3>
+                                <H3> 06 29 05 60 12</H3>
                             </Col>   
                         </Row>
                         <Row size={15}>
@@ -106,8 +121,8 @@ class AccountScreen extends React.Component {
                             <Col size={80}  style ={
                                 {
                                 justifyContent: 'space-around',
-                                alignItems: 'flex-start' 
-                                
+                                alignItems: 'flex-start',
+                                paddingRight: 5 
                                 }
                                 }>
                                 <H3> editab@alvie.fr</H3>

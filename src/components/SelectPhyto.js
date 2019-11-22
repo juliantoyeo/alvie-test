@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1, H2 } from 'native-base';
 import { getLastValue } from '../api/hygoApi';
-import ProductList from '../components/ProductList';
+import ProductList from './ProductList';
 
-
+ 
 export default class SelectPhyto extends React.Component {
     constructor(props) {
         super(props);
@@ -38,7 +38,10 @@ export default class SelectPhyto extends React.Component {
                             <H2 style={{color : '#194769'}}>
                                 Quel produit utilisez-vous aujourd'hui?
                             </H2>
-                            <ProductList/>
+                            <View style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
+                                <ProductList/>
+                            </View>
+                            
                         </View>
             </Content>
         );
