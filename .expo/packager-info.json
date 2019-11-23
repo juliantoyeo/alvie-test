@@ -1,9 +1,10 @@
 {
-  "devToolsPort": 19003,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 88714,
   "expoServerNgrokUrl": "https://ud-gg4.anonymous.hygoclient.exp.direct",
   "packagerNgrokUrl": "https://packager.ud-gg4.anonymous.hygoclient.exp.direct",
-  "ngrokPid": 39660
+  "ngrokPid": 88725,
+  "webpackServerPort": null
 }
