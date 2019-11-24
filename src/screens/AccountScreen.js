@@ -4,7 +4,7 @@ import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { deleteToken } from '../store/actions/authActions'
 import HeaderHygo from '../components/HeaderHygo';
-import ProductList from '../components/ProductList';
+import { ProductList } from '../components/ProductList';
 import UserAvatar from 'react-native-user-avatar';
 import { SafeAreaView } from 'react-navigation';
 import { Container, Switch, ListItem, List, Content, Left, Right, Button, H2, Form, Icon, Body, Text, H1,H3, Grid, Row, Col } from 'native-base';
@@ -78,16 +78,6 @@ class AccountScreen extends React.Component {
                                 </Right>
                             </ListItem>
                             </List> 
-                        </Row>
-                        <Row size={15} style ={
-                            {
-                            padding: 10, 
-                            flexDirection:"column",
-                            }}>
-                            <H2> Changer de famille de produit à pulvériser</H2>
-                            <Form style={{backgroundColor : '#D9EEF6', borderColor: '#B7DAE3',color:'#194769'}}>
-                                <ProductList />
-                            </Form>
                         </Row>
                         <Row size={30}>
                             <Col>

@@ -2,6 +2,7 @@ import React from 'react';
 import AccountScreen from './src/screens/AccountScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import BarCodeScreen from './src/screens/BarCodeScreen';
+import SelectPhytoScreen from './src/screens/SelectPhytoScreen';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -18,6 +19,7 @@ const switchNavigator = createSwitchNavigator({
     BarCode: BarCodeScreen,
   }),
   mainFlow: createBottomTabNavigator({
+    SelectPhyto: SelectPhytoScreen,
     Dashboard: DashboardScreen,
     Parametres: AccountScreen 
     },

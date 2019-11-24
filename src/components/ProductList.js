@@ -8,36 +8,18 @@ import { connect, dispatch } from 'react-redux';
 
 
 
-class ProductList extends React.Component {
+export class ProductList extends React.Component {
 
-   constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
-            produitPhytoClicked : props.produitPhytoClicked,
-        };
+            produitPhytoClicked: this.props.produitPhytoClicked
+        }
     }
     
-
-    componentWillUnmount = async (value) => { 
-        try{
-            this.setState({produitPhytoClicked : value});
-            newDate = new Date().getDate();
-            console.log(newDate);
-            
-            await AsyncStorage.setItem('dateSession',newDate);
-        }
-       catch (e){
-           console.log("nadir erreur 2");
-       }
-
-
-    }
-
-
-
     onProductChange = (value) => { 
         this.setState({produitPhytoClicked : value});
-        this.props.updatePhyto(value);
+        this.props.onProductChange(value);
     }
 
     render() {
@@ -110,13 +92,14 @@ const styles = StyleSheet.create({
     }
 });*/
 
-const mapStateToProps = (state) => {
-    return {
-      produitPhytoClicked: state.pulve.produitPhytoClicked,
+
+// const mapStateToProps = (state) => {
+//     return {
+//       produitPhytoClicked: state.pulve.produitPhytoClicked,
       
-    };
-  };
-  const mapDispatchToProps = (dispatch, props) => ({
-    updatePhyto: (produitPhytoClicked) => dispatch(updatePhyto(produitPhytoClicked)),
-  })
-  export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+//     };
+//   };
+//   const mapDispatchToProps = (dispatch, props) => ({
+//     updatePhyto: (produitPhytoClicked) => dispatch(updatePhyto(produitPhytoClicked)),
+//   })
+//   export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

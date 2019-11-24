@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import {updateToken, updateUserName} from '../store/actions/authActions';
 import {signInWithBarCode, checkToken} from '../api/hygoApi';
 import HeaderHygo from '../components/HeaderHygo';
-import { SafeAreaView } from 'react-navigation';
 
 class BarCodeScreen extends React.Component {
   constructor(props){
@@ -56,8 +55,8 @@ class BarCodeScreen extends React.Component {
       alert(`Bonjour ${userName}`);
       this.props.updateToken(token);
       await AsyncStorage.setItem('token', token);
-      newDate = new Date().getDate();
-      await AsyncStorage.setItem('dateSession',newDate);
+      // newDate = new Date().getDate();
+      // await AsyncStorage.setItem('dateSession',newDate);
       this.props.navigation.navigate('mainFlow');
     }
   };
