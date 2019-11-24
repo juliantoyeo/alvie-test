@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dimensions, Image, StyleSheet,  } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col } from 'native-base';
 import SelectPhyto from '../components/SelectPhyto';
@@ -21,7 +22,8 @@ class DashboardScreen extends React.Component {
 
         if (!this.props.produitPhytoClicked){
             return (
-                <Container style={styles.container}>
+                <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
+                <Container>
                     <HeaderHygo/>    
                     <SelectPhyto
                         userName = {this.props.userName}
@@ -29,9 +31,11 @@ class DashboardScreen extends React.Component {
                         month = {this.state.month}
                     /> 
                 </Container> 
+                </SafeAreaView>
             );
         } else {
              return (
+                <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
                 <Container style={styles.container}>
                     <HeaderHygo/>
                     <Content>
@@ -42,6 +46,7 @@ class DashboardScreen extends React.Component {
                         />
                     </Content>     
                 </Container> 
+                </SafeAreaView>
                 );
             }
             /*

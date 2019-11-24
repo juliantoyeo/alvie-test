@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import {updateToken, updateUserName} from '../store/actions/authActions';
 import {signInWithBarCode, checkToken} from '../api/hygoApi';
 import HeaderHygo from '../components/HeaderHygo';
-
+import { SafeAreaView } from 'react-navigation';
 
 class BarCodeScreen extends React.Component {
   state = {
@@ -65,7 +65,7 @@ class BarCodeScreen extends React.Component {
       return <Text>Pas d'accès à l'appareil photo</Text>;
     }
     return (
-            
+        <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
               <View
               style={{
                 flex: 1,
@@ -111,7 +111,7 @@ class BarCodeScreen extends React.Component {
                 )}
                 </View>
               </View>
-          
+            </SafeAreaView>     
     );
   }
 }

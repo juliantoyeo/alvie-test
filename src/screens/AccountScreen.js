@@ -7,12 +7,7 @@ import HeaderHygo from '../components/HeaderHygo';
 import ProductList from '../components/ProductList';
 import UserAvatar from 'react-native-user-avatar';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, H2, Form, Icon, Text, H1,H3, Grid, Row, Col } from 'native-base';
-
-
-
-
-
-
+import { SafeAreaView } from 'react-navigation';
 
 class AccountScreen extends React.Component {
     constructor(props) {
@@ -25,6 +20,7 @@ class AccountScreen extends React.Component {
     }
     render() {
         return (
+            <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
             <Container>
                 <HeaderHygo/> 
                 <Content contentContainerStyle={{ flexGrow: 1}}
@@ -134,6 +130,7 @@ class AccountScreen extends React.Component {
                 </Content> 
       
             </Container> 
+            </SafeAreaView>
             
         )
     }
