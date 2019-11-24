@@ -35,6 +35,9 @@ const switchNavigator = createSwitchNavigator({
         } else if (routeName === 'Parametres') {
           iconName = "contact";
         }
+        else if (routeName === 'SelectPhyto') {
+          iconName = "ios-leaf";
+        }
 
         // You can return any component that you like here!
         return <Icon name={iconName} size={25} style={{color : tintColor}} />;
