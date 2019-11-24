@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View} from 'react-native';
+import { View, AsyncStorage} from 'react-native';
 import {Text, Button} from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import { Container, Header, Content, Icon, Picker, Form} from 'native-base'
@@ -16,21 +16,28 @@ class ProductList extends React.Component {
             produitPhytoClicked : props.produitPhytoClicked,
         };
     }
-    componentDidMount() {
-        ;            
-    }
+    
 
-    componentWillUnmount = (value) => { 
-        this.setState({produitPhytoClicked : value});
+    componentWillUnmount = async (value) => { 
+        try{
+            this.setState({produitPhytoClicked : value});
+            newDate = new Date().getDate();
+            console.log(newDate);
+            
+            await AsyncStorage.setItem('dateSession',newDate);
+        }
+       catch (e){
+           console.log("nadir erreur 2");
+       }
+
+
     }
 
 
 
     onProductChange = (value) => { 
         this.setState({produitPhytoClicked : value});
-        console.log(value);
         this.props.updatePhyto(value);
-        console.log(updatePhyto(value));
     }
 
     render() {

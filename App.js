@@ -28,7 +28,7 @@ const switchNavigator = createSwitchNavigator({
         let IconComponent = Icon;
         let iconName;
         if (routeName === 'Dashboard') {
-          iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+          iconName = "ios-stats";
         
         } else if (routeName === 'Parametres') {
           iconName = "contact";
