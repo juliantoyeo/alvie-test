@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, H1, H2, H3, Grid, Row, Col } from 'native-base';
 import { getLastValue } from '../api/hygoApi';
 import Sensor from '../components/Sensor';
-import ProductList from '../components/ProductList';
+import SensorEvolution from '../components/SensorEvolution';
+
 import {
     LineChart,
     BarChart,
@@ -14,6 +15,7 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
+
 
 
 
@@ -140,50 +142,18 @@ class DashBoard extends React.Component {
                         iconType="Entypo"
                     />
                 </View>
-                <LineChart
-                    data={{
-                    labels: ["1",  "2", "3"],
-                    datasets: [
-                        {
-                        data: this.state.array
-                        }
-                    ]
-                    }}
-                    width={Dimensions.get("window").width - 20}
-                    height={180}
-                    //yAxisLabel={"$"}
-                    chartConfig={{
-                    backgroundColor: "white", //"#e26a00"
-                    backgroundGradientFrom: "#DDDDDD", //"#fb8c00",
-                    backgroundGradientTo: "#DDDDDD",
-                    decimalPlaces: 2, // optional, defaults to 2dp
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    style: {
-                        borderRadius: 16,
-                    },
-                    propsForDots: {
-                        r: "1", //"6",
-                        strokeWidth: "0", //2",
-                        stroke: "#ffa726"
-                    }
-                    }}
-                    bezier
-                    style={{
-                    marginVertical: 8,
-                    borderRadius: 10
-                    }}
+                <SensorEvolution
+                    dataList={this.state.array}
+                    titleName="Hygrométrie"
+                    color="blue"
                 />
-                <Button
-                    style={{justifyContent: 'center',}}
-                    onPress={() => {
-                        this.setState({
-                        array: [10,12,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,36,36,37],
-                        })
-                    }}>
-                    <Text>test</Text>
-                </Button> 
-                
+                <SensorEvolution
+                    dataList={this.state.array}
+                    titleName="Température"
+                    color="green"
+                />
+               
+                        
         </Content> 
         );
     }

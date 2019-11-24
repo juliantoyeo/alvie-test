@@ -6,8 +6,8 @@ import { deleteToken } from '../store/actions/authActions'
 import HeaderHygo from '../components/HeaderHygo';
 import ProductList from '../components/ProductList';
 import UserAvatar from 'react-native-user-avatar';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, H2, Form, Icon, Text, H1,H3, Grid, Row, Col } from 'native-base';
 import { SafeAreaView } from 'react-navigation';
+import { Container, Switch, ListItem, List, Content, Left, Right, Button, H2, Form, Icon, Body, Text, H1,H3, Grid, Row, Col } from 'native-base';
 
 class AccountScreen extends React.Component {
     constructor(props) {
@@ -58,16 +58,26 @@ class AccountScreen extends React.Component {
                                 </H1>
                             </Col>
                         </Row>
-                        <Row size={30}>
-                            <Col>
-                            <Button full
-                                onPress={this.onLogOut}
-                                style={{backgroundColor:'#FF99A6'}}
-                                >
-                                <Icon type ="MaterialCommunityIcons" name="logout" />
-                                <Text>Se déconnecter</Text>
-                            </Button> 
-                            </Col>
+                        <Row size={30} style ={{
+                            justifyContent: 'space-around',
+                            
+                            padding: 5 
+                            }}
+                        >
+                        <List>
+                        
+                            <ListItem icon>
+                                <Left>
+                                    <Button style={{ backgroundColor: "#194769" }}>
+                                        <Icon active name="ios-notifications" />
+                                    </Button>
+                                </Left>
+                                <Text>Notification Changement </Text>
+                                <Right>
+                                    <Switch value={false} />
+                                </Right>
+                            </ListItem>
+                            </List> 
                         </Row>
                         <Row size={15} style ={
                             {
@@ -79,12 +89,24 @@ class AccountScreen extends React.Component {
                                 <ProductList />
                             </Form>
                         </Row>
+                        <Row size={30}>
+                            <Col>
+                            <Button full
+                                onPress={this.onLogOut}
+                                style={{backgroundColor:'#FF99A6'}}
+                                >
+                                <Icon type ="MaterialCommunityIcons" name="logout" />
+                                <Text>Se déconnecter</Text>
+                            </Button> 
+                            </Col>
+                        </Row>
+                       
                         <Row size={15} style ={
                             {
                             padding: 10, 
                             
                             }}>
-                            <H2> Un problème, une idée, n'hésité pas à nous contacter</H2>
+                            <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
                         </Row>
                         <Row size={15}>
                             <Col size={20} style ={

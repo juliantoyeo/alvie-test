@@ -37,12 +37,11 @@
   },
   "rnpm": {
     "assets": [
-	    "./assets/font/"
+      "./assets/font/"
     ]
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0"
   },
-  
   "private": true
 }

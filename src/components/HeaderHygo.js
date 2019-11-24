@@ -12,7 +12,7 @@ export default class HeaderHygo extends React.Component {
     render() {
         return (
                 <Header style={styles.header}>
-                <Right>
+                <Right >
                     <Image style={styles.image} source={require('../../assets/HYGO_by_Alvie_logo.png')} />
                 </Right>
                 </Header>
@@ -23,5 +23,5 @@ export default class HeaderHygo extends React.Component {
 const styles = StyleSheet.create({    
     header: {
         backgroundColor: '#F6F6E9',
-    }     
+    },     
 });

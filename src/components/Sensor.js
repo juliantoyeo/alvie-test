@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
         height:100,
         width: 10,
         flexDirection: 'column-reverse',
-        backgroundColor: 'white',
-        borderColor: 'grey',
+        backgroundColor: '#D8D8D8',
+        borderColor: '#D8D8D8',
         borderWidth: 1,
         borderRadius: 5
     },

@@ -13,19 +13,24 @@ import HeaderHygo from '../components/HeaderHygo';
 import { SafeAreaView } from 'react-navigation';
 
 class BarCodeScreen extends React.Component {
-  state = {
-    hasCameraPermission: null,
-    scanned: false,
-  };
+  constructor(props){
+    super(props)
+    this.state = {
+      hasCameraPermission: null,
+      scanned: false,
+    };
+
+
+  }
+  
 
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     const storedToken = await AsyncStorage.getItem('token');
-    
     const {errorMessage, userName} = await checkToken(storedToken);
     
     
@@ -51,6 +56,8 @@ class BarCodeScreen extends React.Component {
       alert(`Bonjour ${userName}`);
       this.props.updateToken(token);
       await AsyncStorage.setItem('token', token);
+      newDate = new Date().getDate();
+      await AsyncStorage.setItem('dateSession',newDate);
       this.props.navigation.navigate('mainFlow');
     }
   };
@@ -84,7 +91,7 @@ class BarCodeScreen extends React.Component {
                   borderColor: 'rgba(46, 88, 118, 0.5)',
                   borderLeftWidth: Dimensions.get("window").width / 15,
                   borderRightWidth: Dimensions.get("window").width / 15,
-                  borderTopWidth: Dimensions.get("window").width / 4,
+                  borderTopWidth: Dimensions.get("window").width / 3,
                   borderBottomWidth: Dimensions.get("window").width / 5,
                   flex: 1,
                   flexDirection: 'column',
