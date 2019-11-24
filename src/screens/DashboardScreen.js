@@ -97,7 +97,7 @@ class DashboardScreen extends React.Component {
                         marginLeft: 10,
                         marginRight: 10
                     }}>
-                        <H3>Date : {this.state.date}/{this.state.month}</H3>
+                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé :" +this.props.produitPhytoClicked:"Sélectionner une produit"}</Text>
                     </View>
                     
                     <Button large style={{

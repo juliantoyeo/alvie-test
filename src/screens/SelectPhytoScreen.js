@@ -37,6 +37,8 @@ render() {
                                 //alignItems:'center', 
                                 alignContent:'center',
                                 justifyContent : 'space-around',
+                                backgroundColor: '#F6F6E9',
+                                padding:10,
                                 
                             }
                         }>

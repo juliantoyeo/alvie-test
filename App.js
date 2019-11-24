@@ -19,7 +19,7 @@ const switchNavigator = createSwitchNavigator({
     BarCode: BarCodeScreen,
   }),
   mainFlow: createBottomTabNavigator({
-    SelectPhyto: SelectPhytoScreen,
+    'Traitement': SelectPhytoScreen,
     Dashboard: DashboardScreen,
     Parametres: AccountScreen 
     },
@@ -35,7 +35,7 @@ const switchNavigator = createSwitchNavigator({
         } else if (routeName === 'Parametres') {
           iconName = "contact";
         }
-        else if (routeName === 'SelectPhyto') {
+        else if (routeName === 'Traitement') {
           iconName = "ios-leaf";
         }
 
