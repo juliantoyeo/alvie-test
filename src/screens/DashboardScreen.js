@@ -6,7 +6,7 @@ import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, I
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import SensorEvolution from '../components/SensorEvolution';
-import { getLastValue } from '../api/hygoApi';
+import { getLastValue, getLastValues } from '../api/hygoApi';
 
 class DashboardScreen extends React.Component {
     constructor(props) {
@@ -25,6 +25,7 @@ class DashboardScreen extends React.Component {
 
     loop = async () => {
         try {
+            const values = await getLastValues(this.props.token);
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
@@ -41,6 +42,7 @@ class DashboardScreen extends React.Component {
             }
         } catch(err)
         {
+            console.log(err)
             return;
         }
     }
@@ -139,7 +141,6 @@ class DashboardScreen extends React.Component {
                         titleName="Température"
                         color="green"
                     />
-                   
                     
                 </Content>    
             </Container> 
@@ -174,9 +175,3 @@ const mapDispatchToProps = (dispatch, props) => ({
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
-
-// <DashBoard
-//                         userName = {this.props.userName}
-//                         date = {this.state.date}
-//                         month = {this.state.month}
-//                     />
