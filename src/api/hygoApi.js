@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const trackerApi = axios.create(
 {
- baseURL: 'http://34.245.109.190:3000',
+ baseURL: 'http://ec2-34-245-109-190.eu-west-1.compute.amazonaws.com:3000',
  timeout: 1000,
 });
 /*
@@ -77,13 +77,27 @@ export const checkToken = async (token) => {
 }
 
 export const getLastValue = async(token) => {
-    if(token) {
+    if (token) {
         try {
             const response  = await trackerApi.post('/getLastValue', {token});
             const {id, deviceid, temp, humi, lat, long, timestamp} = response.data;
             return ({id, deviceid, temp, humi, lat, long, timestamp});
         } catch(error) {
             return ({
+            });
+        }
+    }
+}
+
+export const getLastValues = async (token) => {
+    if (token) {
+        try {
+            const response = await trackerApi.post('/getLastValues', {token});
+            return (response.data);
+        }
+        catch(error) {
+            return ({
+                error: 'error'
             });
         }
     }
