@@ -29,10 +29,15 @@ class BarCodeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    const storedToken = await AsyncStorage.getItem('token');
-    const {errorMessage, userName} = await checkToken(storedToken);
+    let storedToken = await AsyncStorage.getItem('token');
+    let {errorMessage, userName} = await checkToken(storedToken);
     
-    
+    /* Uncomment to use with a simulator
+    storedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTc0NjkwNTEwfQ.BMPyYhJeZHnB3YXGTeRGg20COa40OHCkgINoCZ0h5b0";
+    errorMessage = null;
+    userName = "test";
+    //*/
+
     if(!errorMessage) {
       this.setState({scanned: true})
       this.props.updateToken(storedToken);
