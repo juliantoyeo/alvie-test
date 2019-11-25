@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const trackerApi = axios.create(
 {
- baseURL: 'http://ec2-34-245-109-190.eu-west-1.compute.amazonaws.com:3000',
+ baseURL: 'https://api.alvie.fr',
  timeout: 1000,
 });
 /*
