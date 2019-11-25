@@ -2,12 +2,7 @@ import React,{ Component }  from 'react';
 import { View, StyleSheet, Dimensions, Animated, Text, Button } from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Right, Body, Icon, H1, H2, H3, Grid, Row, Col } from 'native-base';
 import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
+    LineChart
   } from "react-native-chart-kit";
 
 export default SensorEvolution = (props) => (

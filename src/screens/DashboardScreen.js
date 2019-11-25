@@ -16,8 +16,7 @@ class DashboardScreen extends React.Component {
             month: new Date().getMonth() + 1,
             temp: 0,
             humi: 0,
-            temp_array: [0],//[10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
-            humi_array: [0],//[10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
+            values: undefined,
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
@@ -27,11 +26,7 @@ class DashboardScreen extends React.Component {
     loop = async () => {
         try {
             const values = await getLastValues(this.props.token);
-            this.setState({
-                temp_array: values.map((item) => item.temp),
-                humi_array: values.map((item) => item.humi)
-            });
-            console.log(this.state.temp_array)
+            this.setState({values});
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
@@ -103,7 +98,7 @@ class DashboardScreen extends React.Component {
                         marginLeft: 10,
                         marginRight: 10
                     }}>
-                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé :" +this.props.produitPhytoClicked:"Sélectionner une produit"}</Text>
+                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé : " +this.props.produitPhytoClicked:"Sélectionner une produit"}</Text>
                     </View>
                     
                     <Button large style={{
@@ -138,12 +133,16 @@ class DashboardScreen extends React.Component {
                         />
                     </View>
                     <SensorEvolution
-                        dataList={this.state.humi_array}
+                        dataList={this.state.values ? (
+                            this.state.values.map((item => item.humi))
+                        ) : [0]}
                         titleName="Hygrométrie"
                         color="blue"
                     />
                     <SensorEvolution
-                        dataList={this.state.temp_array}
+                        dataList={ this.state.values ? (
+                            this.state.values.map((item => item.temp))
+                        ) : [0]}
                         titleName="Température"
                         color="green"
                     />
