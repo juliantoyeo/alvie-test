@@ -19,7 +19,7 @@ const switchNavigator = createSwitchNavigator({
     BarCode: BarCodeScreen,
   }),
   mainFlow: createBottomTabNavigator({
-    'Traitement': SelectPhytoScreen,
+    Traitement: SelectPhytoScreen,
     Dashboard: DashboardScreen,
     Parametres: AccountScreen 
     },

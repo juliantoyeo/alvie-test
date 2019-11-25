@@ -10,10 +10,10 @@ export default SensorEvolution = (props) => (
             <H2>{props.titleName}</H2>
             <LineChart
                         data={{
-                        labels: ["8",  "9", "10", "11"],
+                        labels: [10,20,30],
                         datasets: [
                             {
-                            data: props.dataList
+                            data: props.dataList,
                             }
                         ]
                         }}
@@ -25,7 +25,7 @@ export default SensorEvolution = (props) => (
                         backgroundColor: "white", //"#e26a00"
                         backgroundGradientFrom: "#FFFFFF", //"#fb8c00",
                         backgroundGradientTo: "#FFFFFF",
-                        decimalPlaces: 0,// optional, defaults to 2dp
+                        decimalPlaces: 2,// optional, defaults to 2dp
                         strokeWidth:1, // epaiseur de la courbe
                         
                         color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

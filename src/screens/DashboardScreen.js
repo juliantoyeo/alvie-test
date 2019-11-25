@@ -5,8 +5,16 @@ import { connect } from 'react-redux';
 import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col, View } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
-import SensorEvolution from '../components/SensorEvolution';
+import VChart from '../components/VChart';
 import { getLastValue, getLastValues } from '../api/hygoApi';
+
+const data=[
+    {x:0, y: 2 },
+    {x:1, y: 3 },
+    {x:2, y: 5 },
+    {x:3, y: 4 },
+    {x:4, y: 7 }
+];
 
 class DashboardScreen extends React.Component {
     constructor(props) {
@@ -27,6 +35,7 @@ class DashboardScreen extends React.Component {
         try {
             const values = await getLastValues(this.props.token);
             this.setState({values});
+            console.log(values.map(item => item.timestamp))
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
@@ -98,7 +107,7 @@ class DashboardScreen extends React.Component {
                         marginLeft: 10,
                         marginRight: 10
                     }}>
-                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé : " +this.props.produitPhytoClicked:"Sélectionner une produit"}</Text>
+                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
                     </View>
                     
                     <Button large style={{
@@ -132,21 +141,16 @@ class DashboardScreen extends React.Component {
                             iconType="Entypo"
                         />
                     </View>
-                    <SensorEvolution
-                        dataList={this.state.values ? (
-                            this.state.values.map((item => item.humi))
-                        ) : [0]}
-                        titleName="Hygrométrie"
-                        color="blue"
-                    />
-                    <SensorEvolution
-                        dataList={ this.state.values ? (
-                            this.state.values.map((item => item.temp))
-                        ) : [0]}
+                    {/*<VChart
+                        values={this.state.values.map((item => ({x: item.timestamp, y:item.temp})))}
                         titleName="Température"
                         color="green"
                     />
-                    
+                    {/*<VChart
+                        values={this.state.values.map((item => ({x: item.timestamp, y:item.humi})))}
+                        titleName="Température"
+                        color="green"
+                    />  */}     
                 </Content>    
             </Container> 
             </SafeAreaView>
@@ -180,3 +184,23 @@ const mapDispatchToProps = (dispatch, props) => ({
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
+// <SensorEvolution
+//                         labels={this.state.values ? (
+//                             this.state.values.map((item => item.timestamp))
+//                         ) : [0]}
+//                         dataList={this.state.values ? (
+//                             this.state.values.map((item => item.humi))
+//                         ) : [0]}
+//                         titleName="Hygrométrie"
+//                         color="blue"
+//                     />
+//                     <SensorEvolution
+//                         labels={this.state.values ? (
+//                             this.state.values.map((item => item.timestamp))
+//                         ) : [0]}
+//                         dataList={ this.state.values ? (
+//                             this.state.values.map((item => item.temp))
+//                         ) : [0]}
+//                         titleName="Température"
+//                         color="green"
+//                     />
