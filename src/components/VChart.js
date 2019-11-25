@@ -12,12 +12,13 @@ const data=[
 
 //*
 const getXValues = (item) => {
+    const hours = new Date(item.x).getHours()
     if (typeof this.x == 'undefined') {
-        this.x = Date(item.x).getHours();
+        this.x = hours;
     }
-    if (this.x < Date(item.x).getHours()) {
-        this.x = Date(item.x).getHours();
-        return this.x.toString + "h";
+    if (this.x != hours) {
+        this.x = hours;
+        return this.x.toString() + "h";
     } else {
         return ""
     }
@@ -32,21 +33,23 @@ const getXValues = (item) => {
     }
 }//*/
 
+
 export default VChart = (props) => (
     <View>
         <H2>{props.titleName}</H2>
         <VictoryChart 
             polar={false} 
             height={180}
-           //domain={{ x: [0, 5], y: [0, 7] }}
+           domain={{y: [
+                Math.min(...props.values.map((item => item.y))) - 0.1,
+                Math.max(...props.values.map((item => item.y))) + 0.1] }}
         >
             
             <VictoryAxis
             // tickValues specifies both the number of ticks and where
             // they are placed on the axis
-            tickValues={[0,1,2,3,4]}
+            tickValues={props.values.map((item, index) => index)}
             tickFormat={props.values.map(getXValues)}
-            crossAxis={false}
             //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
             />
             <VictoryAxis
@@ -54,9 +57,13 @@ export default VChart = (props) => (
             // tickFormat specifies how ticks should be displayed
             //tickFormat={(x) => (`$${x / 1000}k`)}
             />
+            <VictoryLine
+            interpolation="cardinal" data={props.values.map((item => item.y))}
+            style={{ data: { stroke: props.color } }}
+          />
             <VictoryScatter data={props.values.map((item => item.y))}
             size={3}
-            style={{ data: { fill: "#c43a31" } }}
+            style={{ data: { fill: props.color} }}
             />
         </VictoryChart>
     </View>
