@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export const trackerApi = axios.create(
 {
- baseURL: 'https://api.alvie.fr',
- timeout: 1000,
+    baseURL: 'https://api.alvie.fr',
+    timeout: 1000,
 });
 /*
 trackerApi.interceptors.request.use(request => {
@@ -34,9 +34,6 @@ export const signInWithBarCode = async (barcode) => {
     {
         
         const response =  await trackerApi.post('/signinwithbarcode',{barcode});
-            
-        
-        
         return ({
             token: response.data.token,
             userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
@@ -93,11 +90,11 @@ export const getLastValues = async (token) => {
     if (token) {
         try {
             const response = await trackerApi.post('/getLastValues', {token});
-            return (response.data);
+            return ({
+                values: response.data});
         }
         catch(error) {
             return ({
-                error: 'error'
             });
         }
     }

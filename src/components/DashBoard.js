@@ -7,19 +7,6 @@ import { getLastValue } from '../api/hygoApi';
 import Sensor from '../components/Sensor';
 import SensorEvolution from '../components/SensorEvolution';
 
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-  } from "react-native-chart-kit";
-
-
-
-
-
 class DashBoard extends React.Component {
     constructor(props) {
         super(props)
