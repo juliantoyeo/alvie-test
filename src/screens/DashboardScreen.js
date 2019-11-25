@@ -16,7 +16,8 @@ class DashboardScreen extends React.Component {
             month: new Date().getMonth() + 1,
             temp: 0,
             humi: 0,
-            array: [10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
+            temp_array: [0],//[10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
+            humi_array: [0],//[10,12,15,23,20,22,19,18,17,16,15,14,13,12,12,12,12,11,11,9,7,6,6,6,6,6,7,8,10,11,15,20,22,23,23,24,24,24,25,26,28,33,33,33,33,33,34,34,35,35,36,36,37],
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
@@ -26,6 +27,11 @@ class DashboardScreen extends React.Component {
     loop = async () => {
         try {
             const values = await getLastValues(this.props.token);
+            this.setState({
+                temp_array: values.map((item) => item.temp),
+                humi_array: values.map((item) => item.humi)
+            });
+            console.log(this.state.temp_array)
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
@@ -132,12 +138,12 @@ class DashboardScreen extends React.Component {
                         />
                     </View>
                     <SensorEvolution
-                        dataList={this.state.array}
+                        dataList={this.state.humi_array}
                         titleName="Hygrométrie"
                         color="blue"
                     />
                     <SensorEvolution
-                        dataList={this.state.array}
+                        dataList={this.state.temp_array}
                         titleName="Température"
                         color="green"
                     />

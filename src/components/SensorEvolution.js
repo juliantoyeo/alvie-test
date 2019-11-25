@@ -10,23 +10,15 @@ import {
     StackedBarChart
   } from "react-native-chart-kit";
 
-export default class SensorEvolution extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            array: this.props.dataList,
-        }  
-    }
-    render() {
-        return (
+export default SensorEvolution = (props) => (
         <View>
-            <H2>{this.props.titleName}</H2>
+            <H2>{props.titleName}</H2>
             <LineChart
                         data={{
                         labels: ["8",  "9", "10", "11"],
                         datasets: [
                             {
-                            data: this.state.array
+                            data: props.dataList
                             }
                         ]
                         }}
@@ -63,7 +55,4 @@ export default class SensorEvolution extends React.Component {
                         }}
                 />
         </View>    
-        );
-
-    }
- }
+);
