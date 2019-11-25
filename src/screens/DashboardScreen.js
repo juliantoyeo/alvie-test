@@ -25,8 +25,10 @@ class DashboardScreen extends React.Component {
 
     loop = async () => {
         try {
-            const values = await getLastValues(this.props.token);
-            this.setState({values});
+            const {values} = await getLastValues(this.props.token);
+            if (values) {
+                this.setState({values});
+            }
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
@@ -35,8 +37,6 @@ class DashboardScreen extends React.Component {
                     humi
                 });
                 this.onConditionchange()
-           
-                
             }
             if(this.state.loop) {
                 setTimeout(() => this.loop(),3000);
