@@ -140,11 +140,11 @@ class DashboardScreen extends React.Component {
                             iconType="Entypo"
                         />
                     </View>
-                    {/*<VChart
+                    {this.state.values && <VChart
                         values={this.state.values.map((item => ({x: item.timestamp, y:item.temp})))}
                         titleName="Température"
                         color="green"
-                    />
+                    />}
                     {/*<VChart
                         values={this.state.values.map((item => ({x: item.timestamp, y:item.humi})))}
                         titleName="Température"
