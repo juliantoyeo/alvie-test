@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, Image, StyleSheet,AsyncStorage  } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Title, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col, View } from 'native-base';
+import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col, View } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
@@ -28,6 +28,7 @@ class DashboardScreen extends React.Component {
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
+            isLoading: true
         }
     }    
 
@@ -44,7 +45,8 @@ class DashboardScreen extends React.Component {
                     temp,
                     humi
                 });
-                this.onConditionchange()
+                this.onConditionchange();
+                this.setState({isLoading:false})
             }
             if(this.state.loop) {
                 setTimeout(() => this.loop(),3000);
@@ -62,6 +64,8 @@ class DashboardScreen extends React.Component {
 
     componentWillUnmount() { 
         this.setState({loop: false});
+        this.setState({isLoading: false});
+        
     }
 
 
@@ -94,6 +98,20 @@ class DashboardScreen extends React.Component {
             <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
             <Container style={styles.container}>
                 <HeaderHygo/>
+                {this.state.isLoading && (
+                    <Content contentContainerStyle = {{ 
+                        padding: 10,
+                        paddingRight: 10,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                    }}>
+                        <Spinner color='#194769' />
+                        <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
+                        <H2>Initialisation du capteur Hygo</H2>
+                    </Content> 
+                )}
+                {!this.state.isLoading && (
+            
                 <Content contentContainerStyle = {{ 
                     padding: 10,
                     paddingRight: 10,
@@ -108,7 +126,6 @@ class DashboardScreen extends React.Component {
                     }}>
                         <Text>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
                     </View>
-                    
                     <Button large style={{
                         justifyContent: 'center',
                         backgroundColor:this.state.conditionColor,
@@ -152,7 +169,8 @@ class DashboardScreen extends React.Component {
                             titleName="Hygrométrie"
                             color="blue"
                         />}
-                </Content>    
+                </Content> 
+                )}   
             </Container> 
             </SafeAreaView>
         );
