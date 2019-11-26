@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 66935,
-  "expoServerNgrokUrl": "https://s5-fvg.anonymous.hygoclientnative.exp.direct",
-  "packagerNgrokUrl": "https://packager.s5-fvg.anonymous.hygoclientnative.exp.direct",
-  "ngrokPid": 66953,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HygoClientNative",
-    "slug": "hygoclientnative",
+    "name": "Hygo",
+    "slug": "hygo",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -24,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alvie.hygo"
+    },
+    "android": {
+      "package": "com.alvie.hygo"
     }
   }
 }
