@@ -7,7 +7,7 @@ import { Container, Content, Grid, Row, Col, H3 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
-import {updateToken, updateUserName} from '../store/actions/authActions';
+import {updateToken, updateUserName, updateFamilyName} from '../store/actions/authActions';
 import {signInWithBarCode, checkToken} from '../api/hygoApi';
 import HeaderHygo from '../components/HeaderHygo';
 
@@ -30,7 +30,7 @@ class BarCodeScreen extends React.Component {
 
   async componentDidMount() {
     let storedToken = await AsyncStorage.getItem('token');
-    let {errorMessage, userName} = await checkToken(storedToken);
+    let {errorMessage, userName, familyName} = await checkToken(storedToken);
     
     /* Uncomment to use with a simulator
     storedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTc0NjkwNTEwfQ.BMPyYhJeZHnB3YXGTeRGg20COa40OHCkgINoCZ0h5b0";
@@ -42,6 +42,7 @@ class BarCodeScreen extends React.Component {
       this.setState({scanned: true})
       this.props.updateToken(storedToken);
       this.props.updateUserName(userName);
+      this.props.updateFamilyName(familyName);
       alert(`Bonjour ${userName}`);
       this.props.navigation.navigate('mainFlow');
     }
@@ -134,11 +135,13 @@ BarCodeScreen.navigationOptions = () => {
 }
 
 const mapStateToProps = ({token}) => ({
-  token
+  token: state.authen.token,
+ 
 });
 const mapDispatchToProps = (dispatch, props) => ({
   updateToken: (token) => dispatch(updateToken(token)),
   updateUserName: (userName) => dispatch(updateUserName(userName)),
+  updateFamilyName:(familyName) => dispatch(updateFamilyName(familyName)),
   checkToken: (token) => dispatch(checkToken(token))
 })
 

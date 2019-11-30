@@ -37,6 +37,7 @@ export const signInWithBarCode = async (barcode) => {
         return ({
             token: response.data.token,
             userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
+            familyName: response.data.familyName.charAt(0).toUpperCase().familyName.data.familyName.slice(1),
             errorMessage: ''
         });
     } catch(err)
@@ -61,7 +62,8 @@ export const checkToken = async (token) => {
             const response = await trackerApi.post('/checkToken', {token});
             return ({
                 errorMessage: '',
-                userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1)
+                userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
+                familyName: response.data.familyName.charAt(0).toUpperCase().familyName.data.familyName.slice(1),
             });
         }
         catch(err) {

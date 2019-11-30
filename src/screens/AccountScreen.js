@@ -40,7 +40,7 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5
                                 }
                                 }>
-                                <UserAvatar size="70" name={this.props.userName|| "xx xx"} />
+                                <UserAvatar size="70" name={this.props.userName+" "+this.props.familyName|| "xx xx"} />
                             </Col>
                             <Col size={70} style ={
                                 {
@@ -153,6 +153,7 @@ const mapStateToProps = (state) => ({
       produitPhytoClicked: state.pulve.produitPhytoClicked,
       token: state.authen.token,
       userName : state.authen.userName,
+      familyName:state.authen.familyName
     }
 );
 

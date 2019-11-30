@@ -12,6 +12,12 @@ export const updateUserName = (userName) => {
         userName
     });
 }
+export const updateFamilyName = (familyName) => {
+    return ({
+        type: 'UPDATE_FAMILYNAME',
+        familyName
+    });
+}
 
 export const deleteToken = () => {
     return ({
