@@ -139,12 +139,6 @@ BarCodeScreen.navigationOptions = () => {
   }
 }
 
-
-
-const mapStateToProps = (state) => ({
-  token: state.authen.token,
- 
-});
 const mapDispatchToProps = (dispatch, props) => ({
   updateToken: (token) => dispatch(updateToken(token)),
   updateUserName: (userName) => dispatch(updateUserName(userName)),
@@ -152,4 +146,4 @@ const mapDispatchToProps = (dispatch, props) => ({
   checkToken: (token) => dispatch(checkToken(token))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BarCodeScreen);
+export default connect(null, mapDispatchToProps)(BarCodeScreen);

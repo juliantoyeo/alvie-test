@@ -9,11 +9,11 @@ import VChart from '../components/VChart';
 import { getLastValue, getLastValues } from '../api/hygoApi';
 
 const data=[
-    {x:0, y: 2 },
-    {x:1, y: 3 },
-    {x:2, y: 5 },
-    {x:3, y: 4 },
-    {x:4, y: 7 }
+    {x:30000000, y: 2 },
+    {x:30010000, y: 3 },
+    {x:32000000, y: 5 },
+    {x:50000000, y: 4 },
+    {x:50500000, y: 7 }
 ];
 
 class DashboardScreen extends React.Component {
@@ -24,7 +24,7 @@ class DashboardScreen extends React.Component {
             month: new Date().getMonth() + 1,
             temp: 0,
             humi: 0,
-            values: undefined,
+            values: [],
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
@@ -157,15 +157,21 @@ class DashboardScreen extends React.Component {
                             iconType="Entypo"
                         />
                     </View>
-                    {this.state.values && 
+                    {(this.state.values.length > 1) && 
                         <VChart
-                            values={this.state.values.map((item => ({x: item.timestamp, y:item.temp})))}
+                            values={this.state.values.map((item => ({
+                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                y:item.temp
+                            })))}
                             titleName="Température"
                             color="green"
                         />}
-                    {this.state.values && 
+                    {(this.state.values.length > 1) && 
                         <VChart
-                            values={this.state.values.map((item => ({x: item.timestamp, y:item.humi})))}
+                            values={this.state.values.map((item => ({
+                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                y:item.humi
+                            })))}
                             titleName="Hygrométrie"
                             color="blue"
                         />}
