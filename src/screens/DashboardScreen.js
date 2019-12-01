@@ -331,6 +331,13 @@ class DashboardScreen extends React.Component {
                         backgroundColor:this.state.conditionColor,
                         margin: 10
                     }}
+                    onPress={() => {if(!this.props.produitPhytoClicked) 
+                        {
+                        this.props.navigation.navigate('Traitement')
+                        }
+                        else {
+
+                        }}}
                     >
                         <Text>{this.state.condition}</Text>
                     </Button>
