@@ -29,9 +29,11 @@ class BarCodeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    let storedToken = await AsyncStorage.getItem('token');
-    let {errorMessage, userName, familyName} = await checkToken(storedToken);
     
+    let storedToken = await AsyncStorage.getItem('token');
+    
+    let {errorMessage, userName, familyName} = await checkToken(storedToken);
+    console.log(errorMessage);
     /* Uncomment to use with a simulator
     storedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTc0NjkwNTEwfQ.BMPyYhJeZHnB3YXGTeRGg20COa40OHCkgINoCZ0h5b0";
     errorMessage = null;
@@ -41,8 +43,6 @@ class BarCodeScreen extends React.Component {
     if(!errorMessage) {
       this.setState({scanned: true});
       this.props.updateToken(storedToken);
-      console.log(userName);
-      console.log(familyName);
       this.props.updateUserName(userName);
       this.props.updateFamilyName(familyName);
       alert(`Bonjour ${userName}`);
@@ -64,6 +64,7 @@ class BarCodeScreen extends React.Component {
       this.props.updateToken(token);
       this.props.updateUserName(userName);
       this.props.updateFamilyName(familyName);
+      console.log(token);
       await AsyncStorage.setItem('token', token);
       // newDate = new Date().getDate();
       // await AsyncStorage.setItem('dateSession',newDate);

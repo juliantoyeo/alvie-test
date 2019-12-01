@@ -63,7 +63,7 @@ export const checkToken = async (token) => {
             return ({
                 errorMessage: '',
                 userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
-                familyName: response.data.familyName.charAt(0).toUpperCase().familyName.data.familyName.slice(1),
+                familyName: response.data.familyName.charAt(0).toUpperCase()+response.data.familyName.slice(1),
             });
         }
         catch(err) {

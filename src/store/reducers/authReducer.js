@@ -5,9 +5,7 @@ const initialState = {
     familyName:'',
 }
 
-export default authReducer =  (state = initialState, action) => {
-    console.log(state);
-    
+export default authReducer =  (state = initialState, action) => {  
     let nextState
     switch (action.type) {
     
