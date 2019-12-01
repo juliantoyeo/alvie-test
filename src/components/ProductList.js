@@ -42,7 +42,7 @@ export class ProductList extends React.Component {
                     <Picker.Item label="Herbicides foliaires sans hormones" value="Herbicides foliaires sans hormones" />
                     <Picker.Item label="Herbicides folidaires avec hormones" value="Herbicides folidaires avec hormones" />
                     <Picker.Item label="Foliaires systémiques (autre que herbicides et fongicides)" value="Foliaires systémiques (autre que herbicides et fongicides)" />
-                    <Picker.Item label="Foliaires de contact (autre que herbicides et fongicides)" value="Herbicide systémique ou pénétrant" />
+                    <Picker.Item label="Foliaires de contact (autre que herbicides et fongicides)" value="Foliaires de contact (autre que herbicides et fongicides)" />
                 </Picker>
             
         );

@@ -70,27 +70,214 @@ class DashboardScreen extends React.Component {
 
 
     onConditionchange = ()=>{
-        if (this.state.humi>65){
-            this.setState({
-                    ...this.state,
-                    condition : "Bonnes conditions",
-                    conditionColor : '#6DE298',
-                })
-            }
-        else if (this.state.humi>50){
-            this.setState({
-                    ...this.state,
-                    condition : "Conditions médiocres",
-                    conditionColor : '#FFDDA6',
-                });
-             }
-        else{
-            this.setState({
-                ...this.state,
-                condition : "Mauvaises conditions",
-                conditionColor : '#FF99A6',
-            });
+        switch(this.props.produitPhytoClicked){
+            case 'Herbicides racinaires':
+                if (this.state.humi>70){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if (this.state.humi>65){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if (this.state.humi>55){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Herbicides racinaires et foliaires':
+                if ((this.state.temp>7) && (this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.temp>6) && (this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ((this.state.temp>5) && (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Fongicides':
+                if ((this.state.temp<20) && (this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.temp<25) && (this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ((this.state.temp<27) && (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Herbicides foliaires sans hormones':
+                if ((this.state.temp>8) && (this.state.temp<10) && (this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.temp>8) && (this.state.temp<10) && (this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ((((this.state.temp>5) && (this.state.temp<7))||((this.state.temp>11) && (this.state.temp<12))) && (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Herbicides foliaires avec hormones':
+                if ((this.state.temp>12) && (this.state.temp<20) && (this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.temp>12) && (this.state.temp<20) && (this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ((((this.state.temp>10) && (this.state.temp<11))||((this.state.temp>21) && (this.state.temp<22))) && (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Foliaires systémiques (autre que herbicides et fongicides)':
+                if ((this.state.temp>5) && (this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.temp>5) && (this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ((this.state.temp>3) && (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+            case 'Foliaires de contact (autre que herbicides et fongicides)':
+                if ((this.state.humi>75)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Excellentes Conditions",
+                            conditionColor : '#25C48E',
+                        })
+                    }
+                else if ((this.state.humi>70)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Bonnes Conditions",
+                            conditionColor : '#A4F7DB',
+                        });
+                    }
+                else if ( (this.state.humi>65)){
+                    this.setState({
+                            ...this.state,
+                            condition : "Conditions médiocres",
+                            conditionColor : '#FFDDA6',
+                        });
+                    }
+                else{
+                    this.setState({
+                        ...this.state,
+                        condition : "Mauvaises conditions",
+                        conditionColor : '#FF99A6',
+                    });
+                }
+        
+
         }
+      
     }
 
     render() {
