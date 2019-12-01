@@ -60,8 +60,10 @@ class BarCodeScreen extends React.Component {
       alert('QR code non reconnu');
     }
     else {
-      alert(`Bonjour ${userName}`);
+      alert(`Bonjour ${userName} ${familyName}`);
       this.props.updateToken(token);
+      this.props.updateUserName(userName);
+      this.props.updateFamilyName(familyName);
       await AsyncStorage.setItem('token', token);
       // newDate = new Date().getDate();
       // await AsyncStorage.setItem('dateSession',newDate);

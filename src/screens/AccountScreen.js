@@ -19,7 +19,6 @@ class AccountScreen extends React.Component {
         this.props.navigation.navigate('BarCode');
     }
     render() {
-        
         return (
             <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
             <Container>
@@ -41,7 +40,7 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5
                                 }
                                 }>
-                                <UserAvatar size="70" name={this.props.userName+" "+this.props.familyName|| "xx xx"} />
+                                <UserAvatar size="70" name={`${this.props.userName} ${this.props.familyName}`|| "xx xx"} />
                             </Col>
                             <Col size={70} style ={
                                 {
@@ -55,7 +54,7 @@ class AccountScreen extends React.Component {
                                     fontSize:30,
                                     }
                                     }>
-                                    {this.props.userName}
+                                    {`${this.props.userName} ${this.props.familyName}`}
                                 </H1>
                             </Col>
                         </Row>
