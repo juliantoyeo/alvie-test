@@ -96,7 +96,7 @@ class AccountScreen extends React.Component {
                             padding: 10, 
                             
                             }}>
-                            <H2> Un problème, une idée, n'hésitez pas à nous contacter +{this.props.familyName}</H2>
+                            <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
                         </Row>
                         <Row size={15}>
                             <Col size={20} style ={
