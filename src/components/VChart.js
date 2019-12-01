@@ -34,22 +34,31 @@ const getXValues = (item) => {
 }//*/
 
 
-export default VChart = (props) => (
+export default VChart = (props) => {
+    return (
     <View>
         <H2>{props.titleName}</H2>
         <VictoryChart 
             polar={false} 
             height={180}
-           domain={{y: [
-                Math.min(...props.values.map((item => item.y))) - 0.1,
-                Math.max(...props.values.map((item => item.y))) + 0.1] }}
+           domain={{
+                x: [
+                    Math.min(...props.values.map((item => item.x))),
+                    Math.max(...props.values.map((item => item.x)))
+                ],
+               y: [
+                Math.min(...props.values.map((item => item.y))),
+                Math.max(...props.values.map((item => item.y)))
+                ]
+            }}
         >
             
             <VictoryAxis
             // tickValues specifies both the number of ticks and where
             // they are placed on the axis
-            tickValues={props.values.map((item, index) => index)}
+            tickValues={props.values.map((item, index) => item.x)}
             tickFormat={props.values.map(getXValues)}
+            fixLabelOverlap={true}
             //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
             />
             <VictoryAxis
@@ -58,13 +67,16 @@ export default VChart = (props) => (
             //tickFormat={(x) => (`$${x / 1000}k`)}
             />
             <VictoryLine
-            interpolation="cardinal" data={props.values.map((item => item.y))}
+            interpolation="catmullRom" 
+            data={props.values}//.map((item => item.y))}
             style={{ data: { stroke: props.color } }}
           />
-            <VictoryScatter data={props.values.map((item => item.y))}
+            <VictoryScatter 
+            data={props.values} //.map((item => item.y))}
             size={3}
             style={{ data: { fill: props.color} }}
             />
         </VictoryChart>
     </View>
-);
+    );
+}
