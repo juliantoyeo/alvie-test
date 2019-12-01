@@ -39,8 +39,10 @@ class BarCodeScreen extends React.Component {
     //*/
 
     if(!errorMessage) {
-      this.setState({scanned: true})
+      this.setState({scanned: true});
       this.props.updateToken(storedToken);
+      console.log(userName);
+      console.log(familyName);
       this.props.updateUserName(userName);
       this.props.updateFamilyName(familyName);
       alert(`Bonjour ${userName}`);
@@ -53,7 +55,7 @@ class BarCodeScreen extends React.Component {
 
   handleBarCodeScanned = async ({ type, data }) => {
     this.setState({ scanned: true });
-    const {token, errorMessage, userName} = await signInWithBarCode(data);
+    const {token, errorMessage, userName,familyName} = await signInWithBarCode(data);
     if(errorMessage || !token) {
       alert('QR code non reconnu');
     }
@@ -134,7 +136,9 @@ BarCodeScreen.navigationOptions = () => {
   }
 }
 
-const mapStateToProps = ({token}) => ({
+
+
+const mapStateToProps = (state) => ({
   token: state.authen.token,
  
 });

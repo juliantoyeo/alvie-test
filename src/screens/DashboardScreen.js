@@ -203,23 +203,3 @@ const mapDispatchToProps = (dispatch, props) => ({
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
-// <SensorEvolution
-//                         labels={this.state.values ? (
-//                             this.state.values.map((item => item.timestamp))
-//                         ) : [0]}
-//                         dataList={this.state.values ? (
-//                             this.state.values.map((item => item.humi))
-//                         ) : [0]}
-//                         titleName="Hygrométrie"
-//                         color="blue"
-//                     />
-//                     <SensorEvolution
-//                         labels={this.state.values ? (
-//                             this.state.values.map((item => item.timestamp))
-//                         ) : [0]}
-//                         dataList={ this.state.values ? (
-//                             this.state.values.map((item => item.temp))
-//                         ) : [0]}
-//                         titleName="Température"
-//                         color="green"
-//                     />

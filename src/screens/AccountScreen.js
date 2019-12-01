@@ -19,6 +19,7 @@ class AccountScreen extends React.Component {
         this.props.navigation.navigate('BarCode');
     }
     render() {
+        
         return (
             <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
             <Container>
@@ -96,7 +97,7 @@ class AccountScreen extends React.Component {
                             padding: 10, 
                             
                             }}>
-                            <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
+                            <H2> Un problème, une idée, n'hésitez pas à nous contacter +{this.props.familyName}</H2>
                         </Row>
                         <Row size={15}>
                             <Col size={20} style ={
@@ -152,8 +153,8 @@ class AccountScreen extends React.Component {
 const mapStateToProps = (state) => ({
       produitPhytoClicked: state.pulve.produitPhytoClicked,
       token: state.authen.token,
-      userName : state.authen.userName,
-      familyName:state.authen.familyName
+      userName: state.authen.userName,
+      familyName: state.authen.familyName
     }
 );
 
