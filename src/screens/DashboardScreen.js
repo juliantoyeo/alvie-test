@@ -45,7 +45,7 @@ class DashboardScreen extends React.Component {
                     temp,
                     humi
                 });
-                this.onConditionchange();
+                this.onConditionchange(this.props.produitPhytoClicked);
                 this.setState({isLoading:false})
             }
             if(this.state.loop) {
@@ -69,8 +69,8 @@ class DashboardScreen extends React.Component {
     }
 
 
-    onConditionchange = ()=>{
-        switch(this.props.produitPhytoClicked){
+    onConditionchange = (value)=>{
+        switch(value){
             case 'Herbicides racinaires':
                 if (this.state.humi>70){
                     this.setState({
@@ -100,6 +100,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Herbicides racinaires et foliaires':
                 if ((this.state.temp>7) && (this.state.humi>75)){
                     this.setState({
@@ -129,6 +130,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Fongicides':
                 if ((this.state.temp<20) && (this.state.humi>75)){
                     this.setState({
@@ -158,6 +160,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Herbicides foliaires sans hormones':
                 if ((this.state.temp>8) && (this.state.temp<10) && (this.state.humi>75)){
                     this.setState({
@@ -187,6 +190,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Herbicides foliaires avec hormones':
                 if ((this.state.temp>12) && (this.state.temp<20) && (this.state.humi>75)){
                     this.setState({
@@ -216,6 +220,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Foliaires systémiques (autre que herbicides et fongicides)':
                 if ((this.state.temp>5) && (this.state.humi>75)){
                     this.setState({
@@ -245,6 +250,7 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
+            break;
             case 'Foliaires de contact (autre que herbicides et fongicides)':
                 if ((this.state.humi>75)){
                     this.setState({
@@ -274,7 +280,14 @@ class DashboardScreen extends React.Component {
                         conditionColor : '#FF99A6',
                     });
                 }
-        
+            break;
+            default:
+                this.setState({
+                    ...this.state,
+                    condition : "Selectionner un produit",
+                    conditionColor : '#000000',
+                });
+    
 
         }
       
@@ -294,7 +307,7 @@ class DashboardScreen extends React.Component {
                     }}>
                         <Spinner color='#194769' />
                         <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                        <H2>Initialisation du capteur Hygo</H2>
+                        <H2>Initialisation du capteur Hygo, merci de patienter quelques instants</H2>
                     </Content> 
                 )}
                 {!this.state.isLoading && (
@@ -334,6 +347,7 @@ class DashboardScreen extends React.Component {
                             max={50.0}
                             iconName="temperature-low"
                             iconType="FontAwesome5"
+                            type="Température"
                         />
                         <Sensor 
                             name="%"
@@ -342,6 +356,7 @@ class DashboardScreen extends React.Component {
                             max={100.0}
                             iconName="drop"
                             iconType="Entypo"
+                            type="Hygrométrie"
                         />
                     </View>
                     {(this.state.values.length > 1) && 
