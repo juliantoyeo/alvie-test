@@ -76,11 +76,13 @@ export default VChart = (props) => {
             interpolation="catmullRom" 
             data={props.values}//.map((item => item.y))}
             />
+            {/*
             <VictoryScatter 
             data={props.values} //.map((item => item.y))}
             size={3}
             style={{ data: { fill: props.color} }}
-            />*/}
+            />
+            */}
         </VictoryChart>
     </View>
     );
