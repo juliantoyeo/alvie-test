@@ -37,6 +37,7 @@ class DashboardScreen extends React.Component {
             const {values} = await getLastValues(this.props.token);
             if (values) {
                 this.setState({values});
+                console.log(values);
             }
             const {temp, humi} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {

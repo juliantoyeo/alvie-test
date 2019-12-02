@@ -37,7 +37,10 @@ const getXValues = (item) => {
 export default VChart = (props) => {
     return (
     <View>
-        <H2>{props.titleName}</H2>
+        <H2 style={{
+            color:props.color
+        }}
+        >{props.titleName}</H2>
         <VictoryChart 
             polar={false} 
             height={180}
@@ -75,11 +78,11 @@ export default VChart = (props) => {
                 }}
            
           />
-            <VictoryScatter 
+            {/*<VictoryScatter 
             data={props.values} //.map((item => item.y))}
             size={3}
             style={{ data: { fill: props.color} }}
-            />
+            />*/}
         </VictoryChart>
     </View>
     );
