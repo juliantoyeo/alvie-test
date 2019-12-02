@@ -35,20 +35,22 @@ const getXValues = (item) => {
 
 
 export default VChart = (props) => {
+    const marginX = Math.abs(Math.min(...props.values.map((item => item.x))) - Math.max(...props.values.map((item => item.x))));
+    const marginY = Math.abs(Math.min(...props.values.map((item => item.y))) - Math.max(...props.values.map((item => item.y))));
     return (
     <View>
         <H2>{props.titleName}</H2>
         <VictoryChart 
             polar={false} 
             height={180}
-           domain={{
+            domain={{
                 x: [
-                    Math.min(...props.values.map((item => item.x))),
-                    Math.max(...props.values.map((item => item.x)))
+                    Math.min(...props.values.map((item => item.x))) - 20/100*marginX,
+                    Math.max(...props.values.map((item => item.x))) + 20/100*marginX
                 ],
-               y: [
-                Math.min(...props.values.map((item => item.y))),
-                Math.max(...props.values.map((item => item.y)))
+                y: [
+                    Math.min(...props.values.map((item => item.y))) - 20/100*marginY,
+                    Math.max(...props.values.map((item => item.y))) + 20/100*marginY,
                 ]
             }}
         >
