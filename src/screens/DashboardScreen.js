@@ -157,24 +157,28 @@ class DashboardScreen extends React.Component {
                             iconType="Entypo"
                         />
                     </View>
-                    {(this.state.values.length > 1) && 
-                        <VChart
-                            values={this.state.values.map((item => ({
-                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                y:item.temp
-                            })))}
-                            titleName="Température"
-                            color="green"
-                        />}
-                    {(this.state.values.length > 1) && 
-                        <VChart
-                            values={this.state.values.map((item => ({
-                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                y:item.humi
-                            })))}
-                            titleName="Hygrométrie"
-                            color="blue"
-                        />}
+                    {(this.state.values.length > 1) ? (
+                        <View>
+                            <VChart
+                                values={this.state.values.map((item => ({
+                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                    y:item.temp
+                                })))}
+                                titleName="Température"
+                                color="green"
+                            />
+                            <VChart
+                                values={this.state.values.map((item => ({
+                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                    y:item.humi
+                                })))}
+                                titleName="Hygrométrie"
+                                color="blue"
+                            />
+                        </View>
+                    ) : (
+                        <Text>Aucune information reçue ces 4 dernières heures</Text>
+                    )}
                 </Content> 
                 )}   
             </Container> 
