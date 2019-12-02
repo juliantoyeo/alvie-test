@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header, Title, Content, Footer, FooterTab, Right, Body, Icon, H1, H2, H3, Grid, Row, Col, View } from 'native-base';
-import {VictoryChart, VictoryLine, VictoryAxis, VictoryScatter } from 'victory-native';
+import {VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryScatter } from 'victory-native';
 
 const data=[
     {x:0, y: 2 },
@@ -68,11 +68,11 @@ export default VChart = (props) => {
             // tickFormat specifies how ticks should be displayed
             //tickFormat={(x) => (`$${x / 1000}k`)}
             />
-            <VictoryLine
+            <VictoryArea
+            style={{ data: { fill: props.color } }}
             interpolation="catmullRom" 
             data={props.values}//.map((item => item.y))}
-            style={{ data: { stroke: props.color } }}
-          />
+            />
             <VictoryScatter 
             data={props.values} //.map((item => item.y))}
             size={3}
