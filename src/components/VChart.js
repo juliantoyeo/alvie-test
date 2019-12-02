@@ -39,7 +39,10 @@ export default VChart = (props) => {
     const marginY = Math.abs(Math.min(...props.values.map((item => item.y))) - Math.max(...props.values.map((item => item.y))));
     return (
     <View>
-        <H2>{props.titleName}</H2>
+        <H2 style={{
+            color:props.color
+        }}
+        >{props.titleName}</H2>
         <VictoryChart 
             polar={false} 
             height={180}
@@ -77,7 +80,7 @@ export default VChart = (props) => {
             data={props.values} //.map((item => item.y))}
             size={3}
             style={{ data: { fill: props.color} }}
-            />
+            />*/}
         </VictoryChart>
     </View>
     );

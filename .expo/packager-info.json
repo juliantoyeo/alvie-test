@@ -1,10 +1,1 @@
-{
-  "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 98693,
-  "expoServerNgrokUrl": "https://s5-fvg.morganitos.hygoclientnative.exp.direct",
-  "packagerNgrokUrl": "https://packager.s5-fvg.morganitos.hygoclientnative.exp.direct",
-  "ngrokPid": 98712,
-  "webpackServerPort": null
-}
+{}

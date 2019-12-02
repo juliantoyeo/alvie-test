@@ -58,7 +58,7 @@ class AccountScreen extends React.Component {
                                 </H1>
                             </Col>
                         </Row>
-                        <Row size={30} style ={{
+                                {/*<Row size={30} style ={{
                             justifyContent: 'space-around',
                             
                             padding: 5 
@@ -78,7 +78,7 @@ class AccountScreen extends React.Component {
                                 </Right>
                             </ListItem>
                             </List> 
-                        </Row>
+                        </Row>*/}
                         <Row size={30}>
                             <Col>
                             <Button full
@@ -96,7 +96,7 @@ class AccountScreen extends React.Component {
                             padding: 10, 
                             
                             }}>
-                            <H2> Un problème, une idée, n'hésitez pas à nous contacter +{this.props.familyName}</H2>
+                            <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
                         </Row>
                         <Row size={15}>
                             <Col size={20} style ={
@@ -114,7 +114,7 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5
                                 }
                                 }>
-                                <H3> 06 29 05 60 12</H3>
+                                <H3> 06 68 48 38 83</H3>
                             </Col>   
                         </Row>
                         <Row size={15}>

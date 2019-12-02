@@ -36,16 +36,13 @@ export class ProductList extends React.Component {
                     selectedValue={this.state.produitPhytoClicked}
                     onValueChange={this.onProductChange}
                 >
-                    <Picker.Item label="Désherbant post-levée systémique" value="Désherbant post-levée systémique" />
-                    <Picker.Item label="Désherbant prélevée systémique" value="Désherbant prélevée systémique" />
-                    <Picker.Item label="Désherbant prélevée de contact" value="Désherbant prélevée de contact" />
-                    <Picker.Item label="Désherbant post-levée de contact" value="Désherbant post-levée de contact" />
-                    <Picker.Item label="Fongicide systémique" value="Fongicide systémique" />
-                    <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
-                    <Picker.Item label="Herbicide systémique ou pénétrant" value="Herbicide systémique ou pénétrant" />
-                    <Picker.Item label="Herbicide de contact" value="Herbicide de contact" />
-                    <Picker.Item label="Insecticide de contact ou par ingestion" value="Insecticide de contact ou par ingestion" />
-                    <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
+                    <Picker.Item label="Herbicides racinaires" value="Herbicides racinaires" />
+                    <Picker.Item label="Herbicides racinaires et foliaires" value="Herbicides racinaires et foliaires" />
+                    <Picker.Item label="Fongicides" value="Fongicides" />
+                    <Picker.Item label="Herbicides foliaires sans hormones" value="Herbicides foliaires sans hormones" />
+                    <Picker.Item label="Herbicides folidaires avec hormones" value="Herbicides folidaires avec hormones" />
+                    <Picker.Item label="Foliaires systémiques (autre que herbicides et fongicides)" value="Foliaires systémiques (autre que herbicides et fongicides)" />
+                    <Picker.Item label="Foliaires de contact (autre que herbicides et fongicides)" value="Foliaires de contact (autre que herbicides et fongicides)" />
                 </Picker>
             
         );
