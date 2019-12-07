@@ -6,7 +6,7 @@ import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body,
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
-import { getLastValue, getLastValues } from '../api/hygoApi';
+import { getLastValue, getLastValues, evalConditions} from '../api/hygoApi';
 
 const data=[
     {x:30000000, y: 2 },
@@ -69,7 +69,7 @@ class DashboardScreen extends React.Component {
         
     }
 
-
+/*
     onConditionchange = (value)=>{
         switch(value){
             case 'Herbicides racinaires':
@@ -292,6 +292,18 @@ class DashboardScreen extends React.Component {
 
         }
       
+    }
+//*/
+    onConditionchange = async (value) => {
+        const { condition, conditionColor, error} = await evalConditions(value, this.state.humi, this.state.temp);
+        if (!error)
+        {
+            this.setState({
+                ...this.state,
+                condition,
+                conditionColor
+            })
+        }
     }
 
     render() {
