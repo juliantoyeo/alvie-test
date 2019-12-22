@@ -294,10 +294,15 @@ class DashboardScreen extends React.Component {
       
     }
 //*/
-    onConditionchange = async (value) => {
-        const { condition, conditionColor, error} = await evalConditions(value, this.state.humi, this.state.temp);
+    onConditionchange = async (phyto) => {
+        console.log(phyto)
+        console.log(this.state.humi);// comment debug
+        console.log(this.state.temp);// comment debug
+        const { condition, conditionColor, error} = await evalConditions(phyto, this.state.humi, this.state.temp);
         if (!error)
         {
+            console.log(condition);// comment debug
+            console.log(conditionColor);// comment debug
             this.setState({
                 ...this.state,
                 condition,

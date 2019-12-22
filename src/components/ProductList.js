@@ -36,13 +36,13 @@ export class ProductList extends React.Component {
                     selectedValue={this.state.produitPhytoClicked}
                     onValueChange={this.onProductChange}
                 >
-                    <Picker.Item label="Herb. foliaire systémique" value="Herb. foliaire systémique" />
-                    <Picker.Item label="Herb. foliaire de contact" value="Herb. foliaire de contact" />
-                    <Picker.Item label="Herb. avec  hormones" value="Herb. avec  hormones" />
-                    <Picker.Item label="Herb. racinaires" value="Herb. racinaires" />
-                    <Picker.Item label="Fongicides racinaires" value="Fongicides racinaires" />
-                    <Picker.Item label="Fongicides de contact" value="Fongicides de contact" />
-                    <Picker.Item label="Fongicides systemique" value="Fongicides systemique" />
+                    <Picker.Item label="Herbicide foliaire systémique" value="Herbicide foliaire systémique" />
+                    <Picker.Item label="Herbicide foliaire de contact" value="Herbicide foliaire de contact" />
+                    <Picker.Item label="Herbicide avec hormones" value="Herbicide avec hormones" />
+                    <Picker.Item label="Herbicide racinaire" value="Herbicide racinaire" />
+                    <Picker.Item label="Fongicide racinaire" value="Fongicide racinaire" />
+                    <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
+                    <Picker.Item label="Fongicide systemique" value="Fongicide systemique" />
                     <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
                     <Picker.Item label="Insecticide de contact" value="Insecticide de contact" />
                 </Picker>
