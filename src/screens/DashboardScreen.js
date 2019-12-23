@@ -24,11 +24,14 @@ class DashboardScreen extends React.Component {
             month: new Date().getMonth() + 1,
             temp: 0,
             humi: 0,
+            timestamp: '',
             values: [],
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
-            isLoading: true
+            isLoading: true,
+            
+           
         }
     }    
 
@@ -39,12 +42,13 @@ class DashboardScreen extends React.Component {
                 this.setState({values});
                 console.log(values);
             }
-            const {temp, humi} = await getLastValue(this.props.token)
+            const {temp, humi, timestamp} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
                     ...this.state,
                     temp,
-                    humi
+                    humi,
+                    timestamp
                 });
 
                 this.onConditionchange(this.props.produitPhytoClicked);
@@ -131,6 +135,10 @@ class DashboardScreen extends React.Component {
                     >
                         <Text>{this.state.condition}</Text>
                     </Button>
+                    <Text> Dernière mesure : {
+                        `le ${new Date(this.state.timestamp).getDate()}/${new Date(this.state.timestamp).getMonth()+1} à ${new Date(this.state.timestamp).getHours()}:${new Date(this.state.timestamp).getMinutes()}  `
+                    }
+                    </Text>
                         
                     <View style={{
                         justifyContent: 'space-around',
