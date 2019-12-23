@@ -72,14 +72,9 @@ class DashboardScreen extends React.Component {
 
 
     onConditionchange = async (phyto) => {
-        console.log(phyto);// comment debug
-        console.log(this.state.humi);// comment debug
-        console.log(this.state.temp);// comment debug
         const { condition, conditionColor, error} = await evalConditions(phyto, this.state.humi, this.state.temp);
         if (!error)
         {
-            console.log(condition);// comment debug
-            console.log(conditionColor);// comment debug
             this.setState({
                 ...this.state,
                 condition,
@@ -166,18 +161,18 @@ class DashboardScreen extends React.Component {
                             <VChart
                                 values={this.state.values.map((item => ({
                                     x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                    y:item.temp
-                                })))}
-                                titleName="Température"
-                                color="green"
-                            />
-                            <VChart
-                                values={this.state.values.map((item => ({
-                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
                                     y:item.humi
                                 })))}
                                 titleName="Hygrométrie"
                                 color="blue"
+                            />
+                            <VChart
+                                values={this.state.values.map((item => ({
+                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                    y:item.temp
+                                })))}
+                                titleName="Température"
+                                color="green"
                             />
                         </View>
                     ) : (
