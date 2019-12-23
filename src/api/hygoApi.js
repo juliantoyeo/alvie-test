@@ -102,9 +102,9 @@ export const getLastValues = async (token) => {
     }
 }
 
-export const evalConditions = async (value, humi, temp) => {
+export const evalConditions = async (phyto, humi, temp) => {
     try {
-        const response = await trackerApi.post('/evalConditions', {value, humi, temp});
+        const response = await trackerApi.post('/evalConditions', {phyto, humi, temp});
         return (response.data);
     }
     catch(error) {
