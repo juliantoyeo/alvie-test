@@ -38,7 +38,7 @@ export default VChart = (props) => {
     const marginX = Math.abs(Math.min(...props.values.map((item => item.x))) - Math.max(...props.values.map((item => item.x))));
     const marginY = Math.abs(Math.min(...props.values.map((item => item.y))) - Math.max(...props.values.map((item => item.y))));
     return (
-    <View>
+    <View pointerEvents="none">
         <H2 style={{
             color:props.color
         }}
