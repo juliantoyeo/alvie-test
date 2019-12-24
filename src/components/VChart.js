@@ -10,11 +10,17 @@ const data=[
     {x:4, y: 7 }
 ];
 
-//*
 const getXValues = (item) => {
-    const hours = new Date(item.x).getHours()
-    if (typeof this.x == 'undefined') {
+    const date = new Date(item.x);
+
+    return date.getHours().toString() + ":"+ date.getMinutes().toString();
+}
+/*
+const getXValues = (item) => {
+    const hours = new Date(item.x).getHours();
+    if (this.x == 'undefined') {
         this.x = hours;
+        return this.x.toString() + "h";
     }
     if (this.x != hours) {
         this.x = hours;
@@ -64,7 +70,7 @@ export default VChart = (props) => {
             tickValues={props.values.map((item, index) => item.x)}
             tickFormat={props.values.map(getXValues)}
             fixLabelOverlap={true}
-            //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
+           //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
             />
             <VictoryAxis
             dependentAxis
