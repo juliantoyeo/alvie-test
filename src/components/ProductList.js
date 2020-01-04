@@ -36,13 +36,15 @@ export class ProductList extends React.Component {
                     selectedValue={this.state.produitPhytoClicked}
                     onValueChange={this.onProductChange}
                 >
-                    <Picker.Item label="Herbicides racinaires" value="Herbicides racinaires" />
-                    <Picker.Item label="Herbicides racinaires et foliaires" value="Herbicides racinaires et foliaires" />
-                    <Picker.Item label="Fongicides" value="Fongicides" />
-                    <Picker.Item label="Herbicides foliaires sans hormones" value="Herbicides foliaires sans hormones" />
-                    <Picker.Item label="Herbicides folidaires avec hormones" value="Herbicides folidaires avec hormones" />
-                    <Picker.Item label="Foliaires systémiques (autre que herbicides et fongicides)" value="Foliaires systémiques (autre que herbicides et fongicides)" />
-                    <Picker.Item label="Foliaires de contact (autre que herbicides et fongicides)" value="Foliaires de contact (autre que herbicides et fongicides)" />
+                    <Picker.Item label="Herbicide foliaire systémique" value="Herbicide foliaire systémique" />
+                    <Picker.Item label="Herbicide foliaire de contact" value="Herbicide foliaire de contact" />
+                    <Picker.Item label="Herbicide avec hormones" value="Herbicide avec hormones" />
+                    <Picker.Item label="Herbicide racinaire" value="Herbicide racinaire" />
+                    <Picker.Item label="Fongicide racinaire" value="Fongicide racinaire" />
+                    <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
+                    <Picker.Item label="Fongicide systemique" value="Fongicide systemique" />
+                    <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
+                    <Picker.Item label="Insecticide de contact" value="Insecticide de contact" />
                 </Picker>
             
         );

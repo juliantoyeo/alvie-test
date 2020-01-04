@@ -6,7 +6,7 @@ import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body,
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
-import { getLastValue, getLastValues, evalConditions } from '../api/hygoApi';
+import { getLastValue, getLastValues, evalConditions} from '../api/hygoApi';
 
 const data=[
     {x:30000000, y: 2 },
@@ -24,11 +24,14 @@ class DashboardScreen extends React.Component {
             month: new Date().getMonth() + 1,
             temp: 0,
             humi: 0,
+            timestamp: '',
             values: [],
             loop: true,
             condition : "evaluation",
             conditionColor : "white",
-            isLoading: true
+            isLoading: true,
+            
+           
         }
     }    
 
@@ -39,13 +42,15 @@ class DashboardScreen extends React.Component {
                 this.setState({values});
                 console.log(values);
             }
-            const {temp, humi} = await getLastValue(this.props.token)
+            const {temp, humi, timestamp} = await getLastValue(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
                     ...this.state,
                     temp,
-                    humi
+                    humi,
+                    timestamp
                 });
+
                 this.onConditionchange(this.props.produitPhytoClicked);
                 this.setState({isLoading:false})
             }
@@ -130,6 +135,10 @@ class DashboardScreen extends React.Component {
                     >
                         <Text>{this.state.condition}</Text>
                     </Button>
+                    <Text> Dernière mesure : {
+                        `le ${new Date(this.state.timestamp).getDate()}/${new Date(this.state.timestamp).getMonth()+1} à ${new Date(this.state.timestamp).getHours()}:${new Date(this.state.timestamp).getMinutes()}  `
+                    }
+                    </Text>
                         
                     <View style={{
                         justifyContent: 'space-around',
@@ -155,24 +164,28 @@ class DashboardScreen extends React.Component {
                             type="Hygrométrie"
                         />
                     </View>
-                    {(this.state.values.length > 1) && 
-                        <VChart
-                            values={this.state.values.map((item => ({
-                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                y:item.temp
-                            })))}
-                            titleName="Température"
-                            color="green"
-                        />}
-                    {(this.state.values.length > 1) && 
-                        <VChart
-                            values={this.state.values.map((item => ({
-                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                y:item.humi
-                            })))}
-                            titleName="Hygrométrie"
-                            color="blue"
-                        />}
+                    {(this.state.values.length > 1) ? (
+                        <View>
+                            <VChart
+                                values={this.state.values.map((item => ({
+                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                    y:item.humi
+                                })))}
+                                titleName="Hygrométrie"
+                                color="blue"
+                            />
+                            <VChart
+                                values={this.state.values.map((item => ({
+                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                    y:item.temp
+                                })))}
+                                titleName="Température"
+                                color="green"
+                            />
+                        </View>
+                    ) : (
+                        <Text>Aucune information reçue ces 4 dernières heures</Text>
+                    )}
                 </Content> 
                 )}   
             </Container> 

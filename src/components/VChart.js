@@ -10,11 +10,17 @@ const data=[
     {x:4, y: 7 }
 ];
 
-//*
 const getXValues = (item) => {
-    const hours = new Date(item.x).getHours()
-    if (typeof this.x == 'undefined') {
+    const date = new Date(item.x);
+
+    return date.getHours().toString() + ":"+ date.getMinutes().toString();
+}
+/*
+const getXValues = (item) => {
+    const hours = new Date(item.x).getHours();
+    if (this.x == 'undefined') {
         this.x = hours;
+        return this.x.toString() + "h";
     }
     if (this.x != hours) {
         this.x = hours;
@@ -35,8 +41,10 @@ const getXValues = (item) => {
 
 
 export default VChart = (props) => {
+    const marginX = Math.abs(Math.min(...props.values.map((item => item.x))) - Math.max(...props.values.map((item => item.x))));
+    const marginY = Math.abs(Math.min(...props.values.map((item => item.y))) - Math.max(...props.values.map((item => item.y))));
     return (
-    <View>
+    <View pointerEvents="none">
         <H2 style={{
             color:props.color
         }}
@@ -44,15 +52,14 @@ export default VChart = (props) => {
         <VictoryChart 
             polar={false} 
             height={180}
-            
-           domain={{
+            domain={{
                 x: [
-                    Math.min(...props.values.map((item => item.x))),
-                    Math.max(...props.values.map((item => item.x)))
+                    Math.min(...props.values.map((item => item.x))) - 20/100*marginX,
+                    Math.max(...props.values.map((item => item.x))) + 20/100*marginX
                 ],
-               y: [
-                Math.min(...props.values.map((item => item.y-2))),
-                Math.max(...props.values.map((item => item.y+2)))
+                y: [
+                    Math.min(...props.values.map((item => item.y))) - 20/100*marginY,
+                    Math.max(...props.values.map((item => item.y))) + 20/100*marginY,
                 ]
             }}
         >
@@ -63,7 +70,7 @@ export default VChart = (props) => {
             tickValues={props.values.map((item, index) => item.x)}
             tickFormat={props.values.map(getXValues)}
             fixLabelOverlap={true}
-            //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
+           //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
             />
             <VictoryAxis
             dependentAxis
@@ -71,18 +78,17 @@ export default VChart = (props) => {
             //tickFormat={(x) => (`$${x / 1000}k`)}
             />
             <VictoryArea
+            style={{ data: { fill: props.color } }}
             interpolation="catmullRom" 
             data={props.values}//.map((item => item.y))}
-            style={{ 
-                data: { stroke: props.color, fill: props.color}
-                }}
-           
-          />
-            {/*<VictoryScatter 
+            />
+            {/*
+            <VictoryScatter 
             data={props.values} //.map((item => item.y))}
             size={3}
             style={{ data: { fill: props.color} }}
-            />*/}
+            />
+            */}
         </VictoryChart>
     </View>
     );

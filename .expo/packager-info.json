@@ -1,10 +1,9 @@
 {
-  "devToolsPort": 19002,
   "expoServerPort": null,
+  "expoServerNgrokUrl": "https://jw-j63.anonymous.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.jw-j63.anonymous.hygoclient.exp.direct",
+  "ngrokPid": 69472,
+  "devToolsPort": 19002,
   "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
-  "webpackServerPort": null
+  "packagerPid": null
 }
