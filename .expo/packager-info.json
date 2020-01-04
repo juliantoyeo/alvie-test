@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 63798,
-  "expoServerNgrokUrl": "https://s5-fvg.nadou23.hygoclient.exp.direct",
-  "packagerNgrokUrl": "https://packager.s5-fvg.nadou23.hygoclient.exp.direct",
-  "ngrokPid": 63881,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

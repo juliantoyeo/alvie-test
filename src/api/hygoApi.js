@@ -38,6 +38,8 @@ export const signInWithBarCode = async (barcode) => {
             token: response.data.token,
             userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
             familyName: response.data.familyName.charAt(0).toUpperCase()+response.data.familyName.slice(1),
+            deviceid: response.data.deviceid,
+            deviceType: response.data.deviceType,
             errorMessage: ''
         });
     } catch(err)
@@ -64,6 +66,8 @@ export const checkToken = async (token) => {
                 errorMessage: '',
                 userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
                 familyName: response.data.familyName.charAt(0).toUpperCase()+response.data.familyName.slice(1),
+                deviceid: response.data.deviceid,
+                deviceType: response.data.deviceType,
             });
         }
         catch(err) {
@@ -99,5 +103,15 @@ export const getLastValues = async (token) => {
             return ({
             });
         }
+    }
+}
+export const evalConditions = async (phyto, humi, temp) => {
+    try {
+        const response = await trackerApi.post('/evalConditions', {phyto, humi, temp});
+        return (response.data);
+    }
+    catch(error) {
+        return ({
+        });
     }
 }

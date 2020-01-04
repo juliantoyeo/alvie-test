@@ -94,7 +94,6 @@ class AccountScreen extends React.Component {
                         <Row size={15} style ={
                             {
                             padding: 10, 
-                            
                             }}>
                             <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
                         </Row>
@@ -136,11 +135,28 @@ class AccountScreen extends React.Component {
                                 <H3> editab@alvie.fr</H3>
                             </Col>  
                         </Row>
+                        <Row size={15}>
+                            <Col size={80} style={styles.caracteristique} 
+                                >
+                                <Text style={styles.ecriture}> version applicative 1.0.1 </Text>
+                                <Text style={styles.ecriture}> Capteur : {`${this.props.deviceid} ${this.props.deviceType}`}</Text>
+                            </Col>  
+                        </Row>
+                        {/*<Row size={15}>
+                            <Col size={80}  style ={
+                                {
+                                justifyContent: 'space-around',
+                                alignItems: 'flex-start',
+                                paddingRight: 5 
+                                }
+                                }>
+                                <Text> Capteur : </Text>
+                            </Col>  
+                            </Row> */}
                         <Row size={10}>
                         </Row>
                     </Grid>
                 </Content> 
-      
             </Container> 
             </SafeAreaView>
             
@@ -148,12 +164,26 @@ class AccountScreen extends React.Component {
     }
 }
 
+const styles = StyleSheet.create({
+    caracteristique: {
+        justifyContent: 'space-around',
+        alignItems: 'flex-start',
+        paddingRight: 10,
+        padding: 10, 
+    },
+    ecriture:{
+        color : '#194769'
+    }
+  });
+
 
 const mapStateToProps = (state) => ({
       produitPhytoClicked: state.pulve.produitPhytoClicked,
       token: state.authen.token,
       userName: state.authen.userName,
-      familyName: state.authen.familyName
+      familyName: state.authen.familyName,
+      deviceid : state.authen.deviceid,
+      deviceType : state.authen.deviceType,
     }
 );
 
