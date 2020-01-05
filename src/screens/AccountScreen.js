@@ -95,7 +95,7 @@ class AccountScreen extends React.Component {
                             {
                             padding: 10, 
                             }}>
-                            <H2> Un problème, une idée, n'hésitez pas à nous contacter</H2>
+                            <Text style={styles.ecriture}> Un problème, une idée, n'hésitez pas à nous contacter</Text>
                         </Row>
                         <Row size={15}>
                             <Col size={20} style ={
@@ -113,7 +113,7 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5
                                 }
                                 }>
-                                <H3> 06 68 48 38 83</H3>
+                                <H3 style={styles.ecriture}> 06 68 48 38 83</H3>
                             </Col>   
                         </Row>
                         <Row size={15}>
@@ -132,14 +132,15 @@ class AccountScreen extends React.Component {
                                 paddingRight: 5 
                                 }
                                 }>
-                                <H3> editab@alvie.fr</H3>
+                                <H3 style={styles.ecriture}> editab@alvie.fr</H3>
                             </Col>  
                         </Row>
                         <Row size={15}>
                             <Col size={80} style={styles.caracteristique} 
                                 >
-                                <Text style={styles.ecriture}> version applicative 1.0.1 </Text>
-                                <Text style={styles.ecriture}> Capteur : {`${this.props.deviceid} ${this.props.deviceType}`}</Text>
+                                <Text style={styles.ecriture}> Version applicative : 1.0.1 </Text>
+                                <Text style={styles.ecriture}> Modèle Capteur : {`${this.props.deviceType}`}</Text>
+                                <Text style={styles.ecriture}> Numéro de serie du capteur : {`${this.props.deviceid}`}</Text>
                             </Col>  
                         </Row>
                         {/*<Row size={15}>

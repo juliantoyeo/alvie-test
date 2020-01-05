@@ -1,9 +1,9 @@
 {
-  "expoServerPort": null,
-  "expoServerNgrokUrl": "https://jw-j63.anonymous.hygoclient.exp.direct",
-  "packagerNgrokUrl": "https://packager.jw-j63.anonymous.hygoclient.exp.direct",
-  "ngrokPid": 69472,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://s5-fvg.nadou2304.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.s5-fvg.nadou2304.hygoclient.exp.direct",
+  "ngrokPid": 41418,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null
+  "packagerPort": 19001,
+  "packagerPid": 41406
 }
