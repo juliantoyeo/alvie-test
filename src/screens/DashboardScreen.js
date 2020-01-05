@@ -89,7 +89,7 @@ class DashboardScreen extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
+            <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container style={styles.container}>
                 <HeaderHygo/>
                 {this.state.isLoading && (
@@ -206,8 +206,11 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: '#F6F6E9',
-    }
-   
+    },
+    statusbar: {
+        backgroundColor: '#F6F6E9',
+        flex: 1
+    } 
 });
 const mapStateToProps = (state) => ({
     token: state.authen.token,

@@ -3,6 +3,7 @@ import AccountScreen from './src/screens/AccountScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import BarCodeScreen from './src/screens/BarCodeScreen';
 import SelectPhytoScreen from './src/screens/SelectPhytoScreen';
+import Interventions from './src/screens/Intervention';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -21,6 +22,7 @@ const switchNavigator = createSwitchNavigator({
   mainFlow: createBottomTabNavigator({
     Traitement: SelectPhytoScreen,
     Dashboard: DashboardScreen,
+    Analytics : Interventions,
     Parametres: AccountScreen 
     },
     {
@@ -37,6 +39,9 @@ const switchNavigator = createSwitchNavigator({
         }
         else if (routeName === 'Traitement') {
           iconName = "ios-leaf";
+        }
+        else if (routeName === 'Analytics') {
+          iconName = "ios-map";
         }
 
         // You can return any component that you like here!

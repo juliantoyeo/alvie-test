@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header, Title, Content, View,Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col } from 'native-base';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage,StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
 import HeaderHygo from '../components/HeaderHygo';
@@ -26,7 +26,7 @@ async componentDidMount() {
 
 render() {
         return (
-            <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
+            <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container>
                 <HeaderHygo/>    
                 <Content contentContainerStyle = {{flex: 1}}>
@@ -70,6 +70,12 @@ render() {
         );
     }
 }
+const styles = StyleSheet.create({
+    statusbar: {
+        backgroundColor: '#F6F6E9',
+        flex: 1
+    } 
+  });
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
