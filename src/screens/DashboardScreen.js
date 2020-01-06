@@ -101,7 +101,7 @@ class DashboardScreen extends React.Component {
                     }}>
                         <Spinner color='#194769' />
                         <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                        <H2>Initialisation du capteur Hygo, merci de patienter quelques instants</H2>
+                        <H2 style={styles.ecritures}>Initialisation du capteur Hygo, merci de patienter quelques instants</H2>
                     </Content> 
                 )}
                 {!this.state.isLoading && (
@@ -111,6 +111,7 @@ class DashboardScreen extends React.Component {
                     paddingRight: 10,
                     paddingTop: 10,
                     paddingBottom: 10,
+                    flex:1
                 }}>
                     <View style={{
                         alignItems: 'flex-start' ,
@@ -118,7 +119,7 @@ class DashboardScreen extends React.Component {
                         marginLeft: 10,
                         marginRight: 10
                     }}>
-                        <Text>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
+                        <Text style={styles.ecritures}>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
                     </View>
                     <Button large style={{
                         justifyContent: 'center',
@@ -135,7 +136,7 @@ class DashboardScreen extends React.Component {
                     >
                         <Text>{this.state.condition}</Text>
                     </Button>
-                    <Text> Dernière mesure : {
+                    <Text style={styles.ecritures}> Dernière mesure : {
                         `le ${new Date(this.state.timestamp).getDate()}/${new Date(this.state.timestamp).getMonth()+1} à ${new Date(this.state.timestamp).getHours()}:${new Date(this.state.timestamp).getMinutes()}  `
                     }
                     </Text>
@@ -183,8 +184,27 @@ class DashboardScreen extends React.Component {
                                 color="green"
                             />
                         </View>
-                    ) : (
-                        <Text>Aucune information reçue ces 4 dernières heures</Text>
+                    ) : ((this.state.values = []) ? (
+                        <View style={styles.message}>
+                            <Card >
+                                <CardItem>
+                                    <Text style={styles.ecritures}> Aucune information reçue ces 4 dernières heures, si vous voulez consulter les anciennes interventions, cliquez sur l'onglet Interventions </Text>
+                                </CardItem>
+                            </Card>
+                            <Text >{this.state.values} </Text>
+                            <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                        </View>
+                        
+                        ): (
+                            <View style={styles.message}>
+                                <Card >
+                                    <CardItem>
+                                        <Text style={styles.ecritures}>1 première mesure, nous attendons la seconde pour commencer à afficher les courbes</Text>
+                                    </CardItem>
+                                </Card>
+                                <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                             </View>
+                        )
                     )}
                 </Content> 
                 )}   
@@ -203,6 +223,20 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         borderWidth: 1,
         borderRadius: 5
+    },
+    message :{
+        flex: 1,
+        justifyContent :"center",
+        flexDirection: 'column',
+        //borderStyle: 'solid',
+        //padding:5
+    },
+    ecritures :{
+        color : '#194769'
+    },
+    icon :{
+        color : '#194769',
+         fontSize: 80
     },
     container: {
         backgroundColor: '#F6F6E9',

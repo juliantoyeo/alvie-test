@@ -22,7 +22,7 @@ const switchNavigator = createSwitchNavigator({
   mainFlow: createBottomTabNavigator({
     Traitement: SelectPhytoScreen,
     Dashboard: DashboardScreen,
-    Analytics : Interventions,
+    Interventions : Interventions,
     Parametres: AccountScreen 
     },
     {
@@ -40,7 +40,7 @@ const switchNavigator = createSwitchNavigator({
         else if (routeName === 'Traitement') {
           iconName = "ios-leaf";
         }
-        else if (routeName === 'Analytics') {
+        else if (routeName === 'Interventions') {
           iconName = "ios-map";
         }
 
