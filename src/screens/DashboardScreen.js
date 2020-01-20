@@ -111,7 +111,8 @@ class DashboardScreen extends React.Component {
                     paddingRight: 10,
                     paddingTop: 10,
                     paddingBottom: 10,
-                    flex:1
+                    disableKBDismissScroll: true,
+                    
                 }}>
                     <View style={{
                         alignItems: 'flex-start' ,

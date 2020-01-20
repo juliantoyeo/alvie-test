@@ -3,7 +3,7 @@ import AccountScreen from './src/screens/AccountScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import BarCodeScreen from './src/screens/BarCodeScreen';
 import SelectPhytoScreen from './src/screens/SelectPhytoScreen';
-import Interventions from './src/screens/Intervention';
+import InterventionsScreen from './src/screens/InterventionsScreen';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -22,7 +22,7 @@ const switchNavigator = createSwitchNavigator({
   mainFlow: createBottomTabNavigator({
     Traitement: SelectPhytoScreen,
     Dashboard: DashboardScreen,
-    Interventions : Interventions,
+    Interventions : InterventionsScreen,
     Parametres: AccountScreen 
     },
     {

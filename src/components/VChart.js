@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header, Title, Content, Footer, FooterTab, Right, Body, Icon, H1, H2, H3, Grid, Row, Col, View } from 'native-base';
-import {VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryScatter } from 'victory-native';
+import {VictoryChart, VictoryLabel, VictoryArea, VictoryAxis, VictoryScatter } from 'victory-native';
 
 const data=[
     {x:0, y: 2 },
@@ -45,17 +45,18 @@ export default VChart = (props) => {
     const marginY = Math.abs(Math.min(...props.values.map((item => item.y))) - Math.max(...props.values.map((item => item.y))));
     return (
     <View pointerEvents="none">
-        <H2 style={{
+        {/*<H2 style={{
             color:props.color
         }}
-        >{props.titleName}</H2>
+        >{props.titleName}</H2>*/}
         <VictoryChart 
             polar={false} 
             height={180}
             domain={{
                 x: [
-                    Math.min(...props.values.map((item => item.x))) - 20/100*marginX,
-                    Math.max(...props.values.map((item => item.x))) + 20/100*marginX
+                    Math.min(...props.values.map((item => item.x))),
+                    //Math.min(...props.values.map((item => item.x))) - 20/100*marginX,
+                    Math.max(...props.values.map((item => item.x))) + 15/100*marginX
                 ],
                 y: [
                     Math.min(...props.values.map((item => item.y))) - 20/100*marginY,
@@ -63,17 +64,29 @@ export default VChart = (props) => {
                 ]
             }}
         >
-            
+            <VictoryLabel 
+                text={props.titleName} 
+                x={80} 
+                y={15} 
+                textAnchor="middle"
+                
+                style={{fontSize: 30,
+                    fill : props.color,
+                
+                }}
+            />
             <VictoryAxis
             // tickValues specifies both the number of ticks and where
             // they are placed on the axis
             tickValues={props.values.map((item, index) => item.x)}
             tickFormat={props.values.map(getXValues)}
             fixLabelOverlap={true}
+            
            //tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
             />
             <VictoryAxis
             dependentAxis
+            VictoryAxis
             // tickFormat specifies how ticks should be displayed
             //tickFormat={(x) => (`$${x / 1000}k`)}
             />

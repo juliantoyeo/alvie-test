@@ -105,6 +105,21 @@ export const getLastValues = async (token) => {
         }
     }
 }
+export const getLastInterventions = async (token) => {
+    if (token) {
+        try {
+            const response = await trackerApi.post('/getLastInterventions', {token});
+            return ({
+                interventionValues: response.data});
+        }
+        catch(error) {
+            return ({
+            });
+        }
+    }
+}
+
+
 export const evalConditions = async (phyto, humi, temp) => {
     try {
         const response = await trackerApi.post('/evalConditions', {phyto, humi, temp});
