@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
