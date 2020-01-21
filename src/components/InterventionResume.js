@@ -20,15 +20,25 @@ export default class InterventionResume extends React.Component {
         return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString();
     }
     
-
+    
 
 
 
     render() {
+        const starttime = new Date(this.props.starttime);
+        const endtime = new Date(this.props.endtime);
+
+        const day = starttime.getDate().toString().padStart(2, "0")
+        const month = (starttime.getMonth()+1).toString().padStart(2, "0")
+        const hoursStart = (starttime.getHours()+1).toString().padStart(2, "0")
+        const minutesStart = starttime.getMinutes().toString().padStart(2, "0")
+        const hoursEnd = (endtime.getHours()+1).toString().padStart(2, "0")
+        const minutesEnd = endtime.getMinutes().toString().padStart(2, "0")
+   
         return (
             <Card key={this.props.id}>
                 <CardItem header bordered>
-                    <Text>Intervention du {`${new Date(this.props.starttime).getDate()}/${new Date(this.props.starttime).getMonth()+1} de ${new Date(this.props.starttime).getHours()+1}:${new Date(this.props.starttime).getMinutes()} à ${new Date(this.props.endtime).getHours()+1}:${new Date(this.props.endtime).getMinutes()}`}</Text>
+                    <Text>Intervention test du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
                 </CardItem>
                 <CardItem>
                     <Left>
