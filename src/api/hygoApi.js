@@ -130,3 +130,15 @@ export const evalConditions = async (phyto, humi, temp) => {
         });
     }
 }
+
+export const storePushToken = async (token, deviceid)=> {
+    try {
+        const response = await trackerApi.post('/storePushToken', {pushToken: token, deviceid});
+        return (response.data);
+    }
+    catch (error) {
+        return ({
+
+        });
+    }
+}

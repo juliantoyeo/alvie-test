@@ -8,8 +8,10 @@ import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import {updateToken, updateUserName, updateFamilyName, updateDeviceid, updateDeviceType} from '../store/actions/authActions';
-import {signInWithBarCode, checkToken} from '../api/hygoApi';
+import {signInWithBarCode, checkToken, storePushToken} from '../api/hygoApi';
 import HeaderHygo from '../components/HeaderHygo';
+import { Notifications } from 'expo';
+
 
 class BarCodeScreen extends React.Component {
   constructor(props){
@@ -18,20 +20,27 @@ class BarCodeScreen extends React.Component {
       hasCameraPermission: null,
       scanned: false,
     };
-
-
   }
   
-
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   };
 
+  registerForPushNotificationsAsync = async (deviceid) => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status !== 'granted') {
+      alert('No notification permissions!');
+      return;
+    }
+    // Get the token that identifies this device
+    const pushToken = await Notifications.getExpoPushTokenAsync();
+    // POST the token to the backend server
+    return storePushToken(pushToken, deviceid)
+  }
+
   async componentDidMount() {
-    
     let storedToken = await AsyncStorage.getItem('token');
-    
     let {errorMessage, userName, familyName, deviceid, deviceType} = await checkToken(storedToken);
     console.log(errorMessage);
     /* Uncomment to use with a simulator
@@ -39,7 +48,6 @@ class BarCodeScreen extends React.Component {
     errorMessage = null;
     userName = "test";
     //*/
-
     if(!errorMessage) {
       this.setState({scanned: true});
       this.props.updateToken(storedToken);
@@ -47,6 +55,7 @@ class BarCodeScreen extends React.Component {
       this.props.updateFamilyName(familyName);
       this.props.updateDeviceid(deviceid);
       this.props.updateDeviceType(deviceType);
+      await this.registerForPushNotificationsAsync(deviceid)
       alert(`Bonjour ${userName}`);
       this.props.navigation.navigate('mainFlow');
     }
@@ -72,6 +81,7 @@ class BarCodeScreen extends React.Component {
       await AsyncStorage.setItem('token', token);
       // newDate = new Date().getDate();
       // await AsyncStorage.setItem('dateSession',newDate);
+      await this.registerForPushNotificationsAsync(deviceid)
       this.props.navigation.navigate('mainFlow');
     }
   };
