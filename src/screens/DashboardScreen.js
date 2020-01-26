@@ -76,7 +76,7 @@ class DashboardScreen extends React.Component {
 
 
     onConditionchange = async (phyto) => {
-        const { condition, conditionColor, error} = await evalConditions(phyto, this.state.humi, this.state.temp);
+        const { condition, conditionColor, error} = await evalConditions(this.props.deviceid, phyto, this.state.humi, this.state.temp);
         if (!error)
         {
             this.setState({
@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => ({
     token: state.authen.token,
+    deviceid: state.authen.deviceid,
     userName: state.authen.userName,
     produitPhytoClicked : state.pulve.produitPhytoClicked,
     newSession: state.pulve.newSession,

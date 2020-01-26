@@ -120,9 +120,9 @@ export const getLastInterventions = async (token) => {
 }
 
 
-export const evalConditions = async (phyto, humi, temp) => {
+export const evalConditions = async (deviceid, phyto, humi, temp) => {
     try {
-        const response = await trackerApi.post('/evalConditions', {phyto, humi, temp});
+        const response = await trackerApi.post('/evalConditions', {deviceid, phyto, humi, temp});
         return (response.data);
     }
     catch(error) {
@@ -145,7 +145,7 @@ export const storePushToken = async (token, deviceid)=> {
 
 export const updateUI = async (phytoProduct, deviceid) => {
     try {
-        const response = await trackerApi.post('/updateUi', {phytoProduct, deviceid});
+        const response = await trackerApi.post('/updateUI', {phytoProduct, deviceid});
         return (response.data);
     } catch(error) {
         return ({
