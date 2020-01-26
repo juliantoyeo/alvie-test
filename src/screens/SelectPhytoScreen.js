@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-navigation';
 import HeaderHygo from '../components/HeaderHygo';
 import { ProductList } from '../components/ProductList';
 import {updatePhyto} from '../store/actions/pulveActions';
+import { updateUI } from '../api/hygoApi'
 
 class SelectPhytoScreen extends React.Component {
     constructor(props) {
@@ -24,6 +25,10 @@ async componentDidMount() {
     }
 }
 
+updatePhyto = async (value) => {
+    this.props.updatePhyto(value);
+    await updateUI(value, this.props.deviceid)
+}
 render() {
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
@@ -54,8 +59,8 @@ render() {
                             </H2>
                             <View style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
                                 <ProductList
-                                    onProductChange={ (value) => { 
-                                        this.props.updatePhyto(value);
+                                    onProductChange={ async (value) => { 
+                                        await this.updatePhyto(value);
                                         this.props.navigation.navigate('Dashboard')}
                                     }
                                     produitPhytoClicked ={this.props.produitPhytoClicked}    
@@ -79,6 +84,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
+    deviceid: state.authen.deviceid,
     userName: state.authen.userName,
     produitPhytoClicked : state.pulve.produitPhytoClicked,
 });
