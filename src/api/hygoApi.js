@@ -142,3 +142,14 @@ export const storePushToken = async (token, deviceid)=> {
         });
     }
 }
+
+export const updateUI = async (phytoProduct, deviceid) => {
+    try {
+        const response = await trackerApi.post('/updateUi', {phytoProduct, deviceid});
+        return (response.data);
+    } catch(error) {
+        return ({
+
+        });
+    }
+}
