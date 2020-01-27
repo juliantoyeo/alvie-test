@@ -119,6 +119,26 @@ export const getLastInterventions = async (token) => {
     }
 }
 
+export const getLastGeometryFields = async (deviceid, interventionid) => {
+    if (interventionid) {
+        try {
+            // console.log('interventionid 2');
+            // console.log(interventionid);
+            // console.log('deviceid 2');
+            // console.log(deviceid);
+            const response = await trackerApi.post('/getLastGeometryFields', {deviceid, interventionid});
+            // console.log('response.data :');
+            // console.log(response.data);
+            
+            return ({
+                fieldValues: response.data});
+        }
+        catch(error) {
+            return ({
+            });
+        }
+    }
+}
 
 export const evalConditions = async (phyto, humi, temp) => {
     try {

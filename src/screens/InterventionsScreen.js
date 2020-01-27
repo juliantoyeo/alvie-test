@@ -16,7 +16,7 @@ const data=[
     {x:50500000, y: 7 }
 ];
 
-class DashboardScreen extends React.Component {
+class InterventionScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,7 +40,7 @@ class DashboardScreen extends React.Component {
             const {interventionValues} = await getLastInterventions(this.props.token);
             if (interventionValues) {
                 this.setState({interventionValues});
-                console.log(interventionValues);
+               // console.log(interventionValues);
                 this.setState({isLoading:false})
             }
             if(this.state.loop) {
@@ -63,18 +63,9 @@ class DashboardScreen extends React.Component {
         
     }
 
-
-// onConditionchange = async (phyto) => {
-// const { condition, conditionColor, error} = await evalConditions(phyto, this.state.humi, this.state.temp);
-// if (!error)
-// {
-// this.setState({
-// ...this.state,
-// condition,
-// conditionColor
-// })
-// }
-// }
+    cardOnPress = (intervention) => {
+        this.props.navigation.navigate('InterventionMapScreen',{intervention})
+    }
 
     render() {
         return (
@@ -106,7 +97,7 @@ class DashboardScreen extends React.Component {
                         {
                             this.state.interventionValues.map((intervention) => {
                                 return (
-                                    <InterventionResume
+                                    <InterventionResume 
                                         key={intervention.id}
                                         id = {intervention.id}
                                         interventionid = {intervention.interventionid}
@@ -118,6 +109,8 @@ class DashboardScreen extends React.Component {
                                         avghumi = {intervention.avghumi}
                                         maxhumi = {intervention.maxhumi}
                                         minhumi = {intervention.minhumi}
+                                        intervention = {intervention}
+                                        onPress = {(interv) => this.cardOnPress(interv)}
                                     /> 
                                 );
                             })
@@ -132,7 +125,7 @@ class DashboardScreen extends React.Component {
                                     <Text style={styles.ecritures}> Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
                                 </CardItem>
                             </Card>
-                            <Text >{this.state.interventionValues} </Text>
+                            
                             <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
                         </View>
                     )}
@@ -186,4 +179,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch, props) => ({
 })
   
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(InterventionScreen);

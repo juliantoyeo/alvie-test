@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, Title, Content,Card, CardItem, Left, Right, Footer, FooterTab, Body, Icon, H1, H2, H3, Grid, Row, Col, View, } from 'native-base';
+import { Container, Header, Title, Content,Card, CardItem, Left, Right, Footer, FooterTab, Body, Icon, H1, H2, H3, Grid, Row, Col, View, Button, } from 'native-base';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import { Text } from 'react-native-elements';
 
@@ -19,10 +19,6 @@ export default class InterventionResume extends React.Component {
     
         return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString();
     }
-    
-    
-
-
 
     render() {
         const starttime = new Date(this.props.starttime);
@@ -37,7 +33,10 @@ export default class InterventionResume extends React.Component {
    
         return (
             <Card key={this.props.id}>
-                <CardItem header bordered>
+                <CardItem 
+                    header bordered button 
+                    onPress = {() => this.props.onPress(this.props.intervention)}
+                >
                     <Text>Intervention test du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
                 </CardItem>
                 <CardItem>

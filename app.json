@@ -25,11 +25,19 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.alvie.hygo"
+      "bundleIdentifier": "com.alvie.hygo",
+      "config" : {
+        "googleMapsApiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
+      }
     },
     "android": {
       "package": "com.alvie.hygo",
       "versionCode": 4,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
+        }
+      },
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
