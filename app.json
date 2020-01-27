@@ -33,13 +33,16 @@
     "android": {
       "package": "com.alvie.hygo",
       "versionCode": 4,
+      "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
         }
       },
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "CAMERA",
+        "NOTIFICATIONS",
         "READ_EXTERNAL_STORAGE",
         "USE_FINGERPRINT",
         "VIBRATE",

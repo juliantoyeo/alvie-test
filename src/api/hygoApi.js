@@ -140,13 +140,36 @@ export const getLastGeometryFields = async (deviceid, interventionid) => {
     }
 }
 
-export const evalConditions = async (phyto, humi, temp) => {
+export const evalConditions = async (deviceid, phyto, humi, temp) => {
     try {
-        const response = await trackerApi.post('/evalConditions', {phyto, humi, temp});
+        const response = await trackerApi.post('/evalConditions', {deviceid, phyto, humi, temp});
         return (response.data);
     }
     catch(error) {
         return ({
+        });
+    }
+}
+
+export const storePushToken = async (token, deviceid)=> {
+    try {
+        const response = await trackerApi.post('/storePushToken', {pushToken: token, deviceid});
+        return (response.data);
+    }
+    catch (error) {
+        return ({
+
+        });
+    }
+}
+
+export const updateUI = async (phytoProduct, deviceid) => {
+    try {
+        const response = await trackerApi.post('/updateUI', {phytoProduct, deviceid});
+        return (response.data);
+    } catch(error) {
+        return ({
+
         });
     }
 }

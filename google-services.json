@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "526986538339",
+    "firebase_url": "https://hygo-6386f.firebaseio.com",
+    "project_id": "hygo-6386f",
+    "storage_bucket": "hygo-6386f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526986538339:android:5841266d79dad0a0e67756",
+        "android_client_info": {
+          "package_name": "com.alvie.hygo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526986538339-ggfifgup2djvt6n2fjb0j089dvgcnqol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2rUUo5ZbOurfN4TFd3o-_OJDdGN_83Y0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526986538339-ggfifgup2djvt6n2fjb0j089dvgcnqol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
