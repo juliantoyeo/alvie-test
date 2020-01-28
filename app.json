@@ -27,16 +27,16 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "config" : {
-        "googleMapsApiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
+        "googleMapsApiKey": "AIzaSyCtac2QV9UVbA8N-9wqF_OZNkS307oj-Is"
       }
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 6,
+      "versionCode": 7,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
+          "apiKey": "AIzaSyCtac2QV9UVbA8N-9wqF_OZNkS307oj-Is"
         }
       },
       "permissions": [
