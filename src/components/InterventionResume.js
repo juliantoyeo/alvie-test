@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Header, Title, Content,Card, CardItem, Left, Right, Footer, FooterTab, Body, Icon, H1, H2, H3, Grid, Row, Col, View, Button, } from 'native-base';
-import { StyleSheet, Dimensions, Animated } from 'react-native';
+import { Card, CardItem, Left, Right, Body, Icon, View } from 'native-base';
+import { StyleSheet, } from 'react-native';
 import { Text } from 'react-native-elements';
 
 
@@ -39,7 +39,10 @@ export default class InterventionResume extends React.Component {
                 >
                     <Text>Intervention test du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
                 </CardItem>
-                <CardItem>
+                <CardItem
+                    button 
+                    onPress = {() => this.props.onPress(this.props.intervention)}
+                >
                     <Left>
                         <Icon type = "FontAwesome5" name= "temperature-low" style={{color : "green"}}/>
                         <View>

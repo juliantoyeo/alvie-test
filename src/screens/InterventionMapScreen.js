@@ -11,6 +11,7 @@ import Geojson from 'react-native-geojson';
 
 
 class InterventionMapScreen extends React.Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.intervention = this.props.navigation.getParam('intervention')
@@ -26,41 +27,43 @@ class InterventionMapScreen extends React.Component {
             conditionColor : "white",
             isLoadingMap: true,
             region: {
-                latitude: 49.961518,
-                longitude: 2.976213,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitude: '',
+                longitude: '',
+                latitudeDelta: '',
+                longitudeDelta: '',
             }
              
         }
-    } 
+    }
+
+    
 
 
     onRegionChange = (region) => {
     this.setState({ region });
     }
-    transformGeojsonPolygon = () =>{
-
-    }
+    
 
     loop = async () => {
         try {
-            // console.log('deviceid');
-            // console.log(this.intervention.deviceid);
-            // console.log('interventionid ');
-            // console.log(this.intervention.interventionid);
             const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
+            console.log('fieldValues');
             console.log(fieldValues);
-            // console.log('resulto :');
-            // console.log(resulto);
-            // const {fieldValues} = resulto;
-            if (fieldValues) {
-                // console.log('fieldValues 2:');
-                // console.log(fieldValues);
-                this.setState({fieldValues});
-                console.log('fieldValues :');
-                console.log(fieldValues);
-                this.setState({isLoadingMap:false})
+            if (!!fieldValues) {
+                if (this._isMounted) {
+                    this.setState({fieldValues});
+                    const region = {latitude: fieldValues[0].lat_centroid, longitude: fieldValues[0].lon_centroid, latitudeDelta: 0.0422,longitudeDelta: 0.0221 }
+                    console.log('region');
+                    console.log(region);
+                    this.setState({region})
+                    this.setState({isLoadingMap:false});
+                    
+                }
+            }
+            else if (fieldValues === undefined){
+                if (this._isMounted) {
+                    this.setState({isLoadingMap:false});
+                }
             }
             if(this.state.loop) {
                 setTimeout(() => this.loop(),30000);
@@ -73,10 +76,12 @@ class InterventionMapScreen extends React.Component {
     }
 
     async componentDidMount() {
+        this._isMounted = true;
         this.loop();            
     }
 
     componentWillUnmount() { 
+        this._isMounted = false;
         this.setState({loop: false});
         this.setState({isLoadingMap: false});
         
@@ -84,61 +89,82 @@ class InterventionMapScreen extends React.Component {
 
 
     render() {
-        const myPlace = { 
-            "type" : "Featurecollection", 
-            "features" : [
-                {
-                    "type" : "Feature", 
-                    
-                    "geometry" : {
-                        "type":"Polygon",
-                        "coordinates":[[[2.977614,49.962026],[2.976637,49.961518],[2.976213,49.961853],[2.97719,49.96236],[2.977614,49.962026]]]
-                    }
-                }
-            ]
-        };
 
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container style={styles.container}>
-            {(this.state.fieldValues.length > 1) ? (
-                <MapView
-                    provider = "google"
-                    //mapType = "hybrid"
-                    region={this.state.region}
-                    //onRegionChange={this.onRegionChange}
-                    style={styles.map}
-                >
-                    <Polygon
-                        coordinates = 
-                        {[
-                            {latitude: 49.962863, longitude:2.979011},
-                            {latitude: 49.962722, longitude:2.979145},
-                            {latitude: 49.961673, longitude:2.980235},
-                            {latitude: 49.960503, longitude:2.972783}
-                        ]}
-                    />
-               
-                {/*
-                    this.state.fieldValues.map((fieldValue) => {
-                        return (
-                            <Geojson geojson={fieldValue.features_rpg} />  
-                        );
+            {this.state.isLoadingMap && (
+                <Content contentContainerStyle = {{ 
+                    padding: 10,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                }}>
+                    <Spinner color='#194769' />
+                    <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
+                    <H2 style={styles.ecritures}>Chargement des données du capteur Hygo, merci de patienter quelques instants</H2>
+                </Content> 
+            )}
+            {!this.state.isLoadingMap && (
+                (this.state.fieldValues.length > 1) ? (
+                    <View style={styles.containerMap}>
+                        <MapView
+                        provider = "google"
+                        mapType = "hybrid"
+                        region={this.state.region}
+                        onRegionChangeComplete={this.onRegionChange}
+                        style={styles.map}
+                    >
+                        {
+                        this.state.fieldValues.map(
+                            (fieldValue) => {
+                                return (
+                                        <Polygon
+                                            key={fieldValue.id}
+                                            strokeWidth ={1}
+                                            strokeColor = {'rgba(89,223,214,1)'}
+                                            fillColor = {fieldValue.color_field}
+                                            coordinates = {
+                                                fieldValue.features_rpg.geometry.coordinates[0].map(
+                                                    (coordinate)=>{
+                                                        let hello ={};
+                                                        hello.latitude = coordinate[1];
+                                                        hello.longitude = coordinate[0];
+                                                        return (hello);
+                                                })
+                                            }
+                                        />  
+                                        );
+                                }) 
                         }
-                    )
-                    */}
-                </MapView>
-                ): (
+                        </MapView>
+                        <InterventionResume 
+                            id = {this.intervention.id}
+                            interventionid = {this.intervention.interventionid}
+                            starttime = {this.intervention.starttime}
+                            endtime = {this.intervention.endtime}
+                            avgtemp = {this.intervention.avgtemp}
+                            maxtemp = {this.intervention.maxtemp}
+                            mintemp = {this.intervention.mintemp}
+                            avghumi = {this.intervention.avghumi}
+                            maxhumi = {this.intervention.maxhumi}
+                            minhumi = {this.intervention.minhumi}
+                            onPress = {(interv) => (interv)}
+                            /> 
+                    </View>
+                   
+            ) : (
                     <View style={styles.message}>
                     <Card >
                         <CardItem>
-                            <Text style={styles.ecritures}> Aucune parcelle enregistrée, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
+                            <Text style={styles.ecritures}> Aucune parcelle enregistrée lors de cette intervention, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
                         </CardItem>
                     </Card>
                     
                     <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
                 </View>
-            )}
+            )
+            )}  
             </Container> 
             </SafeAreaView>
         )
@@ -146,8 +172,24 @@ class InterventionMapScreen extends React.Component {
 }
 const styles = StyleSheet.create({
     map :{
-        width : 600,
-        height : 400,
+        justifyContent :"center",
+        flexDirection: 'column',
+        height : Dimensions.get('window').height*3/5,
+    },
+    containerMap :{
+        height : Dimensions.get('window').height,
+        width : Dimensions.get('window').width,
+    },
+    message :{
+        flex: 1,
+        justifyContent :"center",
+        flexDirection: 'column',
+        //borderStyle: 'solid',
+        //padding:5
+    },
+    icon :{
+        color : '#194769',
+         fontSize: 80
     },
     container: {
         backgroundColor: '#F6F6E9',
@@ -160,10 +202,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
-    userName: state.authen.userName,
-    produitPhytoClicked : state.pulve.produitPhytoClicked,
-    newSession: state.pulve.newSession,
-    lastSession: state.pulve.lastSession
 });
 const mapDispatchToProps = (dispatch, props) => ({
 })

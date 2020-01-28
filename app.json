@@ -39,7 +39,6 @@
           "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
         }
       },
-      "googleServicesFile": "./google-services.json",
       "permissions": [
         "CAMERA",
         "NOTIFICATIONS",

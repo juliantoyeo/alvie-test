@@ -71,7 +71,7 @@ class InterventionScreen extends React.Component {
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container style={styles.container}>
-                <HeaderHygo/>
+                {/*<HeaderHygo/>*/}
                 {this.state.isLoading && (
                     <Content contentContainerStyle = {{ 
                         padding: 10,

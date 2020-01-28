@@ -56,7 +56,7 @@ class BarCodeScreen extends React.Component {
       this.props.updateDeviceid(deviceid);
       this.props.updateDeviceType(deviceType);
       await this.registerForPushNotificationsAsync(deviceid)
-      alert(`Bonjour ${userName}`);
+      //alert(`Bonjour ${userName}`);
       this.props.navigation.navigate('mainFlow');
     }
     else {
