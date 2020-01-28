@@ -52,7 +52,7 @@ class InterventionMapScreen extends React.Component {
             if (!!fieldValues) {
                 if (this._isMounted) {
                     this.setState({fieldValues});
-                    const region = {latitude: fieldValues[0].lat_centroid, longitude: fieldValues[0].lon_centroid, latitudeDelta: 0.0422,longitudeDelta: 0.0221 }
+                    const region = {latitude: fieldValues[0].lat_centroid, longitude: fieldValues[0].lon_centroid, latitudeDelta: 0.0222,longitudeDelta: 0.0121 }
                     console.log('region');
                     console.log(region);
                     this.setState({region})
@@ -66,7 +66,7 @@ class InterventionMapScreen extends React.Component {
                 }
             }
             if(this.state.loop) {
-                setTimeout(() => this.loop(),30000);
+                //setTimeout(() => this.loop(),30000);
             }
         } catch(err)
         {
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     map :{
         justifyContent :"center",
         flexDirection: 'column',
-        height : Dimensions.get('window').height*3/5,
+        height : Dimensions.get('window').height*3/6,
     },
     containerMap :{
         height : Dimensions.get('window').height,

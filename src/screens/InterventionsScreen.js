@@ -8,13 +8,7 @@ import InterventionResume from '../components/InterventionResume';
 import VChart from '../components/VChart';
 import { getLastValue, getLastInterventions, evalConditions} from '../api/hygoApi';
 
-const data=[
-    {x:30000000, y: 2 },
-    {x:30010000, y: 3 },
-    {x:32000000, y: 5 },
-    {x:50000000, y: 4 },
-    {x:50500000, y: 7 }
-];
+
 
 class InterventionScreen extends React.Component {
     constructor(props) {
@@ -44,7 +38,7 @@ class InterventionScreen extends React.Component {
                 this.setState({isLoading:false})
             }
             if(this.state.loop) {
-                setTimeout(() => this.loop(),3000);
+                //setTimeout(() => this.loop(),3000);
             }
         } catch(err)
         {
