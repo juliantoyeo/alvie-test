@@ -88,6 +88,12 @@ class DashboardScreen extends React.Component {
     }
 
     render() {
+
+        const date = new Date(this.state.timestamp);
+        const day = date.getDate().toString().padStart(2, "0")
+        const month = (date.getMonth()+1).toString().padStart(2, "0")
+        const hours = (date.getHours()+1).toString().padStart(2, "0")
+        const minutes = date.getMinutes().toString().padStart(2, "0")
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container style={styles.container}>
@@ -138,7 +144,7 @@ class DashboardScreen extends React.Component {
                         <Text>{this.state.condition}</Text>
                     </Button>
                     <Text style={styles.ecritures}> Dernière mesure : {
-                        `le ${new Date(this.state.timestamp).getDate()}/${new Date(this.state.timestamp).getMonth()+1} à ${new Date(this.state.timestamp).getHours()}:${new Date(this.state.timestamp).getMinutes()}  `
+                        `le ${day}/${month} à ${hours}:${minutes}`
                     }
                     </Text>
                         

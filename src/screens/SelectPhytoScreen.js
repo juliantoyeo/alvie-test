@@ -12,8 +12,7 @@ class SelectPhytoScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            date: new Date().getDate(),
-            month: new Date().getMonth()+1 
+            date: new Date()
         }
        
     }    
@@ -52,7 +51,10 @@ render() {
                             </H1>
                             <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
                             <H2 style={{color : '#194769'}}>
-                                Nous sommes le {this.state.date}/{this.state.month}!
+                                Nous sommes le {
+                                    this.state.date.getDate().toString().padStart(2, "0")}/{
+                                    (this.state.date.getMonth()+1).toString().padStart(2, "0")
+                                }!
                             </H2>
                             <H2 style={ {color : '#194769'}}>
                                 Quel produit utilisez-vous aujourd'hui?
