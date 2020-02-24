@@ -26,9 +26,9 @@ export default class InterventionResume extends React.Component {
 
         const day = starttime.getDate().toString().padStart(2, "0")
         const month = (starttime.getMonth()+1).toString().padStart(2, "0")
-        const hoursStart = (starttime.getHours()+1).toString().padStart(2, "0")
+        const hoursStart = (starttime.getHours()).toString().padStart(2, "0")
         const minutesStart = starttime.getMinutes().toString().padStart(2, "0")
-        const hoursEnd = (endtime.getHours()+1).toString().padStart(2, "0")
+        const hoursEnd = (endtime.getHours()).toString().padStart(2, "0")
         const minutesEnd = endtime.getMinutes().toString().padStart(2, "0")
    
         return (
@@ -37,7 +37,7 @@ export default class InterventionResume extends React.Component {
                     header bordered button 
                     onPress = {() => this.props.onPress(this.props.intervention)}
                 >
-                    <Text>Intervention test du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
+                    <Text>Intervention du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
                 </CardItem>
                 <CardItem
                     button 

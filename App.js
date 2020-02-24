@@ -28,18 +28,18 @@ const switchNavigator = createSwitchNavigator({
       InterventionMapScreen: InterventionMapScreen,
     },
     {
+      headerMode: 'none',
       defaultNavigationOptions : {
-        headerStyle: {
-          backgroundColor: '#F6F6E9',
-        }
+        
+        
       }
     
     } ),
     Parametres: AccountScreen 
     },
     {
+      header: () => < HeaderHygo/>,
       defaultNavigationOptions: ({ navigation }) => ({
-
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
         let IconComponent = Icon;

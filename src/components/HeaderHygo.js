@@ -23,5 +23,6 @@ export default class HeaderHygo extends React.Component {
 const styles = StyleSheet.create({    
     header: {
         backgroundColor: '#F6F6E9',
+        
     },     
 });

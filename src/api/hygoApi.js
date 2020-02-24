@@ -3,6 +3,7 @@ import axios from 'axios';
 export const trackerApi = axios.create(
 {
     baseURL: 'https://api.alvie.fr',
+    //baseURL: 'http://192.168.1.10:3000',
     timeout: 1000,
 });
 /*
@@ -122,14 +123,9 @@ export const getLastInterventions = async (token) => {
 export const getLastGeometryFields = async (deviceid, interventionid) => {
     if (interventionid) {
         try {
-            // console.log('interventionid 2');
-            // console.log(interventionid);
-            // console.log('deviceid 2');
-            // console.log(deviceid);
+        
             const response = await trackerApi.post('/getLastGeometryFields', {deviceid, interventionid});
-            // console.log('response.data :');
-            // console.log(response.data);
-            
+
             return ({
                 fieldValues: response.data});
         }

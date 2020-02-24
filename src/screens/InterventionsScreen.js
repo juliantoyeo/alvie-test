@@ -61,12 +61,16 @@ class InterventionScreen extends React.Component {
         this.props.navigation.navigate('InterventionMapScreen',{intervention})
     }
 
+
+
     render() {
+       
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <Container style={styles.container}>
-                {/*<HeaderHygo/>*/}
+                <HeaderHygo/>
                 {this.state.isLoading && (
+                    
                     <Content contentContainerStyle = {{ 
                         padding: 10,
                         paddingRight: 10,

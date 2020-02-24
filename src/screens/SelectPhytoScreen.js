@@ -28,6 +28,13 @@ updatePhyto = async (value) => {
     this.props.updatePhyto(value);
     await updateUI(value, this.props.deviceid)
 }
+static navigationOptions = {
+        
+    header: () => < HeaderHygo/>,
+    //title: 'Home',
+    //,
+   
+  };
 render() {
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
