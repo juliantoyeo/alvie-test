@@ -47,14 +47,13 @@ class InterventionMapScreen extends React.Component {
     loop = async () => {
         try {
             const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
-            console.log('fieldValues');
-            console.log(fieldValues);
+            
+            
             if (!!fieldValues) {
                 if (this._isMounted) {
                     this.setState({fieldValues});
-                    const region = {latitude: fieldValues[0].lat_centroid, longitude: fieldValues[0].lon_centroid, latitudeDelta: 0.0222,longitudeDelta: 0.0121 }
-                    console.log('region');
-                    console.log(region);
+                    const region = {latitude: (this.intervention.avglat_centroid || fieldValues[0].lat_centroid), longitude: (this.intervention.avglon_centroid || fieldValues[0].lon_centroid), latitudeDelta: (this.intervention.lat_delta || 0.0222),longitudeDelta: (this.intervention.lon_delta || 0.0121 )}
+                  
                     this.setState({region})
                     this.setState({isLoadingMap:false});
                     
