@@ -22,7 +22,7 @@ class InterventionScreen extends React.Component {
             interventionValues: [],
             loop: true,
             condition : "evaluation",
-            conditionColor : "white",
+            //conditionColor : "white",
             isLoading: true,
             
            
@@ -31,14 +31,18 @@ class InterventionScreen extends React.Component {
 
     loop = async () => {
         try {
-            const {interventionValues} = await getLastInterventions(this.props.token);
-            if (interventionValues) {
+            var {interventionValues} = await getLastInterventions(this.props.token);
+            console.log('interventionValues test interventionScreen :');
+            console.log(interventionValues);
+            
+            if (!!interventionValues) {
                 this.setState({interventionValues});
-               // console.log(interventionValues);
                 this.setState({isLoading:false})
             }
-            if(this.state.loop) {
-                //setTimeout(() => this.loop(),3000);
+            if(!interventionValues) {
+                interventionValues = [];
+                this.setState({interventionValues});
+                this.setState({isLoading:false})  
             }
         } catch(err)
         {
@@ -53,7 +57,7 @@ class InterventionScreen extends React.Component {
 
     componentWillUnmount() { 
         this.setState({loop: false});
-        this.setState({isLoading: false});
+        this.setState({isLoading: true});
         
     }
 
@@ -90,7 +94,7 @@ class InterventionScreen extends React.Component {
                         paddingBottom: 10,
                         disableKBDismissScroll: true
                     }}>
-                    {(this.state.interventionValues.length > 1) ? (
+                    {(this.state.interventionValues.length >= 1) ? (
                         <View>
                         {
                             this.state.interventionValues.map((intervention) => {

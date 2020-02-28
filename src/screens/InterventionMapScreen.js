@@ -4,7 +4,7 @@ import { Dimensions, Image, StyleSheet,AsyncStorage  } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Left, Right, View } from 'native-base';
 import HeaderHygoBack from '../components/HeaderHygoBack';
-import InterventionResume from '../components/InterventionResume';
+import InterventionResumeMap from '../components/InterventionResumeMap';
 import { getLastGeometryFields} from '../api/hygoApi';
 import  MapView, {Polygon} from 'react-native-maps';
 
@@ -22,7 +22,7 @@ class InterventionMapScreen extends React.Component {
             humi: 0,
             timestamp: '',
             fieldValues: [],
-            loop: true,
+            // loop: true,
             condition : "evaluation",
             conditionColor : "white",
             isLoadingMap: true,
@@ -47,26 +47,27 @@ class InterventionMapScreen extends React.Component {
     loop = async () => {
         try {
             const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
+            console.log('fieldvalues 2: ');
+            console.log(fieldValues);
             
             
             if (!!fieldValues) {
                 if (this._isMounted) {
                     this.setState({fieldValues});
                     const region = {latitude: (this.intervention.avglat_centroid || fieldValues[0].lat_centroid), longitude: (this.intervention.avglon_centroid || fieldValues[0].lon_centroid), latitudeDelta: (this.intervention.lat_delta || 0.0222),longitudeDelta: (this.intervention.lon_delta || 0.0121 )}
-                  
                     this.setState({region})
                     this.setState({isLoadingMap:false});
                     
                 }
             }
-            else if (fieldValues === undefined){
+            else if (!fieldValues){
                 if (this._isMounted) {
                     this.setState({isLoadingMap:false});
                 }
             }
-            if(this.state.loop) {
-                //setTimeout(() => this.loop(),30000);
-            }
+            // if(this.state.loop) {
+            //     //setTimeout(() => this.loop(),30000);
+            // }
         } catch(err)
         {
             console.log(err)
@@ -78,12 +79,21 @@ class InterventionMapScreen extends React.Component {
         this._isMounted = true;
         this.loop();            
     }
+   
+
 
     componentWillUnmount() { 
         this._isMounted = false;
-        this.setState({loop: false});
-        this.setState({isLoadingMap: false});
+        // this.setState({loop: false});
+        this.setState({isLoadingMap: true});
+        //this.setState({isLoadingMap: false});
         
+    }
+    updatefielsvalues = async ()=>{
+        const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
+        this.setState({fieldValues})
+        console.log('fieldvalue color UPDATE interventionMapScreen: ');
+        console.log(fieldValues);
     }
     
 
@@ -108,7 +118,16 @@ class InterventionMapScreen extends React.Component {
                 </Content> 
             )}
             {!this.state.isLoadingMap && (
-                (this.state.fieldValues.length > 1) ? (
+                (this.state.fieldValues.length > 0) ? (
+                    <Content contentContainerStyle = {{ 
+                        padding: 10,
+                        paddingRight: 10,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        //justifyContent :"center",
+                        alignItems: 'center',
+                        alignContent: 'center',
+                    }}>
                     <View style={styles.containerMap}>
                         <MapView
                         provider = "google"
@@ -120,12 +139,15 @@ class InterventionMapScreen extends React.Component {
                         {
                         this.state.fieldValues.map(
                             (fieldValue) => {
+                                console.log('fieldvalue color interventionMapScreen: ');
+                                console.log(fieldValue.color_field);
                                 return (
                                         <Polygon
                                             key={fieldValue.id}
                                             strokeWidth ={1}
                                             strokeColor = {'rgba(89,223,214,1)'}
                                             fillColor = {fieldValue.color_field}
+                                            //fillColor = {"rgba(37,196,142,0.5)"}
                                             coordinates = {
                                                 fieldValue.features_rpg.geometry.coordinates[0].map(
                                                     (coordinate)=>{
@@ -139,8 +161,8 @@ class InterventionMapScreen extends React.Component {
                                         );
                                 }) 
                         }
-                        </MapView>
-                        <InterventionResume 
+                    </MapView>
+                        <InterventionResumeMap 
                             id = {this.intervention.id}
                             interventionid = {this.intervention.interventionid}
                             starttime = {this.intervention.starttime}
@@ -151,10 +173,15 @@ class InterventionMapScreen extends React.Component {
                             avghumi = {this.intervention.avghumi}
                             maxhumi = {this.intervention.maxhumi}
                             minhumi = {this.intervention.minhumi}
+                            number_fields = {this.intervention.number_fields}
+                            interventionDeviceId = {this.intervention.deviceid}
+                            updatefields = {this.updatefielsvalues}
+                            produitPhytoClickedIntervention = {this.state.fieldValues[0].phytoproduct}
+                            //produitPhytoClickedIntervention = {this.intervention.phytoproduct}
                             onPress = {(interv) => (interv)}
                             /> 
                     </View>
-                   
+                    </Content>
             ) : (
                     <View style={styles.message}>
                     <Card >
@@ -180,7 +207,8 @@ const styles = StyleSheet.create({
     },
     containerMap :{
         height : Dimensions.get('window').height,
-        width : Dimensions.get('window').width,
+        width : Dimensions.get('window').width-10,
+        justifyContent :"center",
     },
     message :{
         flex: 1,

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Card, CardItem, Left, Right, Body, Icon, View, Text } from 'native-base';
+import { Card, CardItem, Left, Right, Body, Icon, View,Text  } from 'native-base';
 import { StyleSheet, } from 'react-native';
-//import { Text } from 'react-native-elements';
-import { ProductList } from './ProductList';
 
+import { ProductListIntervention } from './ProductListIntervention';
+import { updateIntervention } from '../api/hygoApi'
 
-export default class InterventionResume extends React.Component {
+export default class InterventionResumeMap extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -16,10 +16,14 @@ export default class InterventionResume extends React.Component {
         let diff = new Date (end - start)
         return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString();
     }
-    updatePhyto2 = async (value) => {
-        this.props.updatePhyto(value);
-        await updateUI(value, this.props.deviceid)
+    updatePhytoIntervention = async (value) => {
+        await updateIntervention(value, this.props.interventionDeviceId, this.props.interventionid)
+        this.props.updatefields();
+        
     }
+
+   
+
 
     render() {
         const starttime = new Date(this.props.starttime);
@@ -39,14 +43,14 @@ export default class InterventionResume extends React.Component {
                     onPress = {() => this.props.onPress(this.props.intervention)}
                 >
                     <Body>
-                        <Text>Intervention du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
-                        { (this.props.intervention.number_fields == 1) ? (
-                            <Text note>{this.props.intervention.number_fields} parcelle traitée </Text> 
+                        <Text style={styles.titleIntervention}>Intervention du {`${day}/${month} de ${hoursStart}:${minutesStart} à ${hoursEnd}:${minutesEnd}`}</Text>
+                        { (this.props.number_fields == 1) ? (
+                            <Text note>{this.props.number_fields} parcelle traitée </Text> 
 
                         ):(
-                        <Text note>{this.props.intervention.number_fields} parcelles traitées </Text> 
+                        <Text note>{this.props.number_fields} parcelles traitées </Text> 
                         )}
-                    </Body>     
+                    </Body>
                 </CardItem>
                 <CardItem
                     button 
@@ -68,18 +72,22 @@ export default class InterventionResume extends React.Component {
                             <Text note > max {Math.round(this.props.maxhumi*10)/10}</Text>
                         </View> 
                     </Body>
-                    <Right style={{flexDirection: 'column'}}>
+                    <Right>
                         <Text>Durée : {this.dureeIntervention(this.props.starttime, this.props.endtime)}</Text>
                     </Right>
                 </CardItem>
-                <CardItem
-                    button 
-                    onPress = {() => this.props.onPress(this.props.intervention)}
-                >
-                    <Body style={{flexDirection: 'row'}}>
-                        <Icon type ="Entypo" name="lab-flask" style={{color : '#194769'}}/>
-                        <Text>Phyto : {this.props.intervention.phytoproduct}</Text>
-                    </Body>
+                <CardItem footer bordered>
+                    {/*<View style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769', height: 20}}>*/}
+                        <ProductListIntervention
+                            onProductChangeIntervention={this.updatePhytoIntervention}
+                            // onProductChangeIntervention={ async (value) => { 
+                            //     await this.updatePhytoIntervention(value);
+                            //     }
+                            // }
+                            produitPhytoClicked ={this.props.produitPhytoClickedIntervention}    
+                        />
+                    {/*</View>
+                    */}
                 </CardItem>
             </Card>
         );
@@ -99,6 +107,11 @@ const styles = StyleSheet.create({
     gauge:{
         flex:1,
         alignItems:"flex-start",
+    },
+    titleIntervention:{
+        color: "black",
+        
 
     }
+
 });

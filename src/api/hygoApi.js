@@ -4,7 +4,7 @@ export const trackerApi = axios.create(
 {
     baseURL: 'https://api.alvie.fr',
     //baseURL: 'http://192.168.1.10:3000',
-    timeout: 1000,
+    timeout: 3000,
 });
 /*
 trackerApi.interceptors.request.use(request => {
@@ -162,6 +162,18 @@ export const storePushToken = async (token, deviceid)=> {
 export const updateUI = async (phytoProduct, deviceid) => {
     try {
         const response = await trackerApi.post('/updateUI', {phytoProduct, deviceid});
+        return (response.data);
+    } catch(error) {
+        return ({
+
+        });
+    }
+}
+
+export const updateIntervention = async (phytoProduct, deviceid, interventionid) => {
+
+    try {
+        const response = await trackerApi.post('/updateIntervention', {phytoProduct, deviceid, interventionid });
         return (response.data);
     } catch(error) {
         return ({

@@ -23,7 +23,7 @@ const switchNavigator = createSwitchNavigator({
   mainFlow: createBottomTabNavigator({
     Traitement: SelectPhytoScreen,
     Dashboard: DashboardScreen,
-    interventionFlow: createStackNavigator({
+    Intervention: createStackNavigator({
       Interventions : InterventionsScreen,
       InterventionMapScreen: InterventionMapScreen,
     },
@@ -53,7 +53,7 @@ const switchNavigator = createSwitchNavigator({
         else if (routeName === 'Traitement') {
           iconName = "ios-leaf";
         }
-        else if (routeName === 'interventionFlow') {
+        else if (routeName === 'Intervention') {
           iconName = "ios-map";
         }
 

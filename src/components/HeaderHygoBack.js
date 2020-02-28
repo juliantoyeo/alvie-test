@@ -13,14 +13,14 @@ class HeaderHygoBack extends React.Component {
     render() {
         return (
                 <Header style={styles.header}>
-                    <Left >
+                    
                         <Button transparent 
                             onPress={() => this.props.navigation.navigate('Interventions')}
                         >
-                            <Icon name='arrow-back' />
-                            <Text>Retour</Text>
+                            <Icon name='arrow-back' style={styles.icon} />
+                            <Text style={styles.icon} >Retour</Text>
                         </Button>
-                    </Left>
+                    
                 </Header>
             )
     }
@@ -29,7 +29,14 @@ class HeaderHygoBack extends React.Component {
 const styles = StyleSheet.create({    
     header: {
         backgroundColor: '#F6F6E9',
-        
-    },     
+        alignItems: 'flex-start' ,
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+         
+    }, 
+    icon:{
+        color : '#000000',
+    }
+
 });
 export default withNavigation(HeaderHygoBack);
