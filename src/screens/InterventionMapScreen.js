@@ -7,7 +7,7 @@ import HeaderHygoBack from '../components/HeaderHygoBack';
 import InterventionResumeMap from '../components/InterventionResumeMap';
 import { getLastGeometryFields} from '../api/hygoApi';
 import  MapView, {Polygon} from 'react-native-maps';
-
+import {updatePhytoSelect} from '../store/actions/intervActions';
 
 
 class InterventionMapScreen extends React.Component {
@@ -16,15 +16,15 @@ class InterventionMapScreen extends React.Component {
         super(props);
         this.intervention = this.props.navigation.getParam('intervention')
         this.state = {
-            date: new Date().getDate(),
-            month: new Date().getMonth() + 1,
-            temp: 0,
-            humi: 0,
-            timestamp: '',
+            //date: new Date().getDate(),
+            //month: new Date().getMonth() + 1,
+            //temp: 0,
+            //humi: 0,
+            //timestamp: '',
             fieldValues: [],
             // loop: true,
-            condition : "evaluation",
-            conditionColor : "white",
+            //condition : "evaluation",
+            //conditionColor : "white",
             isLoadingMap: true,
             region: {
                 latitude: '',
@@ -47,8 +47,8 @@ class InterventionMapScreen extends React.Component {
     loop = async () => {
         try {
             const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
-            console.log('fieldvalues 2: ');
-            console.log(fieldValues);
+            //console.log('fieldvalues 2: ');
+            //console.log(fieldValues);
             
             
             if (!!fieldValues) {
@@ -89,11 +89,14 @@ class InterventionMapScreen extends React.Component {
         //this.setState({isLoadingMap: false});
         
     }
-    updatefielsvalues = async ()=>{
+    updatefielsvalues = async (value)=>{
         const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
         this.setState({fieldValues})
         console.log('fieldvalue color UPDATE interventionMapScreen: ');
         console.log(fieldValues);
+        this.props.updatePhytoSelect(value);
+        console.log(' updatePhytoSelect: ');
+        console.log(value);
     }
     
 
@@ -139,8 +142,8 @@ class InterventionMapScreen extends React.Component {
                         {
                         this.state.fieldValues.map(
                             (fieldValue) => {
-                                console.log('fieldvalue color interventionMapScreen: ');
-                                console.log(fieldValue.color_field);
+                                //console.log('fieldvalue color interventionMapScreen: ');
+                                //console.log(fieldValue.color_field);
                                 return (
                                         <Polygon
                                             key={fieldValue.id}
@@ -232,8 +235,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
+    interventionValues: state.interv.interventions
 });
 const mapDispatchToProps = (dispatch, props) => ({
+    updatePhytoSelect: (produitPhytoClicked)=>dispatch(updatePhytoSelect(produitPhytoClicked)),
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionMapScreen);
+
+

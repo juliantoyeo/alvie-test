@@ -5,12 +5,14 @@ const initialState = {
 }
 
 export default pulveReducer =  (state = initialState, action) => {
+    let nextState
     switch (action.type) {
     case 'UPDATE_PHYTO':
-        return {
+        nextState =  {
             ...state,
                 produitPhytoClicked : action.produitPhytoClicked,
             }
+        return nextState || state;  
     default:
       return state
     }

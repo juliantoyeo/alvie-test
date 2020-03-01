@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Left, Right, View } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import InterventionResume from '../components/InterventionResume';
-import VChart from '../components/VChart';
 import { getLastValue, getLastInterventions, evalConditions} from '../api/hygoApi';
+import {updateInterv} from '../store/actions/intervActions';
 
 
 
@@ -16,12 +16,12 @@ class InterventionScreen extends React.Component {
         this.state = {
             date: new Date().getDate(),
             month: new Date().getMonth() + 1,
-            temp: 0,
-            humi: 0,
-            timestamp: '',
-            interventionValues: [],
+            //temp: 0,
+            //humi: 0,
+            //timestamp: '',
+            //interventionValues: [],
             loop: true,
-            condition : "evaluation",
+            //condition : "evaluation",
             //conditionColor : "white",
             isLoading: true,
             
@@ -36,6 +36,7 @@ class InterventionScreen extends React.Component {
             console.log(interventionValues);
             
             if (!!interventionValues) {
+                this.props.updateInterv(interventionValues);
                 this.setState({interventionValues});
                 this.setState({isLoading:false})
             }
@@ -63,6 +64,8 @@ class InterventionScreen extends React.Component {
 
     cardOnPress = (intervention) => {
         this.props.navigation.navigate('InterventionMapScreen',{intervention})
+        console.log('intervention tets valeur passé bouton');
+        console.log(intervention);
     }
 
 
@@ -174,11 +177,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
     token: state.authen.token,
     userName: state.authen.userName,
-    produitPhytoClicked : state.pulve.produitPhytoClicked,
+    //produitPhytoClicked : state.pulve.produitPhytoClicked,
     newSession: state.pulve.newSession,
-    lastSession: state.pulve.lastSession
+    lastSession: state.pulve.lastSession,
+    interventionValues: state.interv.interventions
 });
 const mapDispatchToProps = (dispatch, props) => ({
+    updateInterv: (interventionValues)=>dispatch(updateInterv(interventionValues)),
+
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionScreen);
+
+
+  

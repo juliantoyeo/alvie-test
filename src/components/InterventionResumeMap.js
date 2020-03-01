@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardItem, Left, Right, Body, Icon, View,Text  } from 'native-base';
 import { StyleSheet, } from 'react-native';
-
 import { ProductListIntervention } from './ProductListIntervention';
 import { updateIntervention } from '../api/hygoApi'
 
@@ -9,7 +8,6 @@ export default class InterventionResumeMap extends React.Component {
     constructor(props) {
         super(props);
     }
-
     dureeIntervention = (a,b) => {
         const start = new Date(a)
         const end = new Date(b)
@@ -18,17 +16,13 @@ export default class InterventionResumeMap extends React.Component {
     }
     updatePhytoIntervention = async (value) => {
         await updateIntervention(value, this.props.interventionDeviceId, this.props.interventionid)
-        this.props.updatefields();
+        this.props.updatefields(value);
         
     }
-
-   
-
 
     render() {
         const starttime = new Date(this.props.starttime);
         const endtime = new Date(this.props.endtime);
-
         const day = starttime.getDate().toString().padStart(2, "0")
         const month = (starttime.getMonth()+1).toString().padStart(2, "0")
         const hoursStart = (starttime.getHours()).toString().padStart(2, "0")
@@ -110,7 +104,7 @@ const styles = StyleSheet.create({
     },
     titleIntervention:{
         color: "black",
-        
+
 
     }
 

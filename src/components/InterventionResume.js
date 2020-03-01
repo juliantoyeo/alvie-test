@@ -16,10 +16,10 @@ export default class InterventionResume extends React.Component {
         let diff = new Date (end - start)
         return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString();
     }
-    updatePhyto2 = async (value) => {
-        this.props.updatePhyto(value);
-        await updateUI(value, this.props.deviceid)
-    }
+    // updatePhyto2 = async (value) => {
+    //     this.props.updatePhyto(value);
+    //     await updateUI(value, this.props.deviceid)
+    // }
 
     render() {
         const starttime = new Date(this.props.starttime);
