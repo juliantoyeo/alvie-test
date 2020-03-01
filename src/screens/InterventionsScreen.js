@@ -19,7 +19,7 @@ class InterventionScreen extends React.Component {
             //temp: 0,
             //humi: 0,
             //timestamp: '',
-            //interventionValues: [],
+            interventionValues: this.interventionValues,
             loop: true,
             //condition : "evaluation",
             //conditionColor : "white",
