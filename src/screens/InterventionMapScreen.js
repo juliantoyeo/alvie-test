@@ -92,9 +92,9 @@ class InterventionMapScreen extends React.Component {
     updatefielsvalues = async (value)=>{
         const {fieldValues} = await getLastGeometryFields(this.intervention.deviceid, this.intervention.interventionid);
         this.setState({fieldValues})
-        console.log('fieldvalue color UPDATE interventionMapScreen: ');
-        console.log(fieldValues);
-        this.props.updatePhytoSelect(value);
+        // console.log('fieldvalue color UPDATE interventionMapScreen: ');
+        // console.log(fieldValues);
+        this.props.updatePhytoSelect(value, this.intervention.deviceid, this.intervention.interventionid);
         console.log(' updatePhytoSelect: ');
         console.log(value);
     }
@@ -238,7 +238,7 @@ const mapStateToProps = (state) => ({
     interventionValues: state.interv.interventions
 });
 const mapDispatchToProps = (dispatch, props) => ({
-    updatePhytoSelect: (produitPhytoClicked)=>dispatch(updatePhytoSelect(produitPhytoClicked)),
+    updatePhytoSelect: (produitPhytoClicked, deviceid, interventionid)=>dispatch(updatePhytoSelect(produitPhytoClicked, deviceid, interventionid)),
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionMapScreen);

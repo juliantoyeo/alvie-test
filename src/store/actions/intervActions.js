@@ -6,10 +6,12 @@ export const updateInterv = (interventionValues) => {
     });
 }
 
-export const updatePhytoSelect = (produitPhytoClicked) => {
+export const updatePhytoSelect = (produitPhytoClicked, deviceid, interventionid) => {
     return ({
         type: 'UPDATE_PHYTO_SELECT',
         produitPhytoClicked,
+        deviceid,
+        interventionid,
     });
 }
 
