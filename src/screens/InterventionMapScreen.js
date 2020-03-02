@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Left, Right, View } from 'native-base';
 import HeaderHygoBack from '../components/HeaderHygoBack';
 import InterventionResumeMap from '../components/InterventionResumeMap';
+import LegendMap from '../components/LegendMap';
 import { getLastGeometryFields} from '../api/hygoApi';
 import  MapView, {Polygon} from 'react-native-maps';
 import {updatePhytoSelect} from '../store/actions/intervActions';
@@ -165,24 +166,26 @@ class InterventionMapScreen extends React.Component {
                                 }) 
                         }
                     </MapView>
-                        <InterventionResumeMap 
-                            id = {this.intervention.id}
-                            interventionid = {this.intervention.interventionid}
-                            starttime = {this.intervention.starttime}
-                            endtime = {this.intervention.endtime}
-                            avgtemp = {this.intervention.avgtemp}
-                            maxtemp = {this.intervention.maxtemp}
-                            mintemp = {this.intervention.mintemp}
-                            avghumi = {this.intervention.avghumi}
-                            maxhumi = {this.intervention.maxhumi}
-                            minhumi = {this.intervention.minhumi}
-                            number_fields = {this.intervention.number_fields}
-                            interventionDeviceId = {this.intervention.deviceid}
-                            updatefields = {this.updatefielsvalues}
-                            produitPhytoClickedIntervention = {this.state.fieldValues[0].phytoproduct}
-                            //produitPhytoClickedIntervention = {this.intervention.phytoproduct}
-                            onPress = {(interv) => (interv)}
-                            /> 
+                    <LegendMap>
+                    </LegendMap>
+                    <InterventionResumeMap 
+                        id = {this.intervention.id}
+                        interventionid = {this.intervention.interventionid}
+                        starttime = {this.intervention.starttime}
+                        endtime = {this.intervention.endtime}
+                        avgtemp = {this.intervention.avgtemp}
+                        maxtemp = {this.intervention.maxtemp}
+                        mintemp = {this.intervention.mintemp}
+                        avghumi = {this.intervention.avghumi}
+                        maxhumi = {this.intervention.maxhumi}
+                        minhumi = {this.intervention.minhumi}
+                        number_fields = {this.intervention.number_fields}
+                        interventionDeviceId = {this.intervention.deviceid}
+                        updatefields = {this.updatefielsvalues}
+                        produitPhytoClickedIntervention = {this.state.fieldValues[0].phytoproduct}
+                        //produitPhytoClickedIntervention = {this.intervention.phytoproduct}
+                        onPress = {(interv) => (interv)}
+                        /> 
                     </View>
                     </Content>
             ) : (

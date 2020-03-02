@@ -19,7 +19,7 @@ class InterventionScreen extends React.Component {
             //temp: 0,
             //humi: 0,
             //timestamp: '',
-            interventionValues: this.interventionValues,
+            interventionValues: this.props.interventionValues,
             loop: true,
             //condition : "evaluation",
             //conditionColor : "white",
@@ -37,12 +37,12 @@ class InterventionScreen extends React.Component {
             
             if (!!interventionValues) {
                 this.props.updateInterv(interventionValues);
-                this.setState({interventionValues});
+                //this.setState({interventionValues});
                 this.setState({isLoading:false})
             }
             if(!interventionValues) {
-                interventionValues = [];
-                this.setState({interventionValues});
+                //interventionValues = [];
+                //this.setState({interventionValues});
                 this.setState({isLoading:false})  
             }
         } catch(err)
@@ -97,10 +97,10 @@ class InterventionScreen extends React.Component {
                         paddingBottom: 10,
                         disableKBDismissScroll: true
                     }}>
-                    {(this.state.interventionValues.length >= 1) ? (
+                    {(this.props.interventionValues.length >= 1) ? (
                         <View>
                         {
-                            this.state.interventionValues.map((intervention) => {
+                            this.props.interventionValues.map((intervention) => {
                                 return (
                                     <InterventionResume 
                                         key={intervention.id}

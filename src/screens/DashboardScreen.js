@@ -92,7 +92,7 @@ class DashboardScreen extends React.Component {
         const date = new Date(this.state.timestamp);
         const day = date.getDate().toString().padStart(2, "0")
         const month = (date.getMonth()+1).toString().padStart(2, "0")
-        const hours = (date.getHours()+1).toString().padStart(2, "0")
+        const hours = (date.getHours()).toString().padStart(2, "0")
         const minutes = date.getMinutes().toString().padStart(2, "0")
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
@@ -179,7 +179,7 @@ class DashboardScreen extends React.Component {
                                     x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
                                     y:item.humi
                                 })))}
-                                titleName="Hygrométrie"
+                                titleName="  Hygrométrie" // add to space to avoid the title of the graph to be cover on the side - small quick fix
                                 color="blue"
                             />
                             <VChart
@@ -187,7 +187,7 @@ class DashboardScreen extends React.Component {
                                     x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
                                     y:item.temp
                                 })))}
-                                titleName="Température"
+                                titleName="  Température"// add to space to avoid the title of the graph to be cover on the side - small quick fix
                                 color="green"
                             />
                         </View>

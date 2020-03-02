@@ -21,7 +21,7 @@ export default intervReducer =  (state = initialState, action) => {
                 console.log('reducer UPDATE_PHYTO_SELECT nextState');
                 console.log((intervention));
                 //return intervention.phytoproduct === action.produitPhytoClicked ? {
-                return (intervention.deviceid === action.deviceid)&&(intervention.interventionid === action.interventionid) ? {
+                return ((intervention.deviceid === action.deviceid)&&(intervention.interventionid === action.interventionid)) ? {
                     ...intervention,
                     phytoproduct: action.produitPhytoClicked,
                 } : intervention

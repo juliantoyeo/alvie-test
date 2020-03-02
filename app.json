@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,7 +27,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "config" : {
-        "googleMapsApiKey": "AIzaSyCtac2QV9UVbA8N-9wqF_OZNkS307oj-Is"
+        "googleMapsApiKey": "AIzaSyABnGN0yBmlMhCqZ-nzfSZVxTySEHYHYx8"
       }
     },
     "android": {
@@ -36,7 +36,7 @@
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCtac2QV9UVbA8N-9wqF_OZNkS307oj-Is"
+          "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
         }
       },
       "permissions": [
