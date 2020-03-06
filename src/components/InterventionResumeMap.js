@@ -12,7 +12,7 @@ export default class InterventionResumeMap extends React.Component {
         const start = new Date(a)
         const end = new Date(b)
         let diff = new Date (end - start)
-        return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString();
+        return (diff.getHours()-1).toString() + ":"+ diff.getMinutes().toString().padStart(2, "0");
     }
     updatePhytoIntervention = async (value) => {
         await updateIntervention(value, this.props.interventionDeviceId, this.props.interventionid)

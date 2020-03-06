@@ -37,6 +37,7 @@ export class ProductListIntervention extends React.Component {
                     selectedValue={this.state.produitPhytoClicked}
                     onValueChange={this.onProductChange}
                 >
+                    <Picker.Item label="Autres travaux agricoles" value="Autres travaux agricoles" />    
                     <Picker.Item label="Herbicide foliaire systémique" value="Herbicide foliaire systémique" />
                     <Picker.Item label="Herbicide foliaire de contact" value="Herbicide foliaire de contact" />
                     <Picker.Item label="Herbicide avec hormones" value="Herbicide avec hormones" />

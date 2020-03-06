@@ -82,15 +82,29 @@ export default class InterventionResume extends React.Component {
                             </Body>
                             </CardItem>
                     ):(
-                        <CardItem
+                        (this.props.intervention.phytoproduct=='Autres travaux agricoles')?
+                        (
+                            <CardItem
+                                button 
+                                onPress = {() => this.props.onPress(this.props.intervention)}
+                            >
+                                <Body style={styles.phytoParagraphe}>
+                                    <Icon type ="FontAwesome5" name="tractor" style={styles.iconGeneral}/>
+                                    <Text>  {this.props.intervention.phytoproduct}</Text>
+                                </Body>
+                            </CardItem>
+                        ):
+                        (
+                            <CardItem
                             button 
                             onPress = {() => this.props.onPress(this.props.intervention)}
-                        >
-                            <Body style={styles.phytoParagraphe}>
-                                <Icon type ="Entypo" name="lab-flask" style={styles.iconGeneral}/>
-                                <Text>Phyto : {this.props.intervention.phytoproduct}</Text>
-                            </Body>
-                        </CardItem>
+                            >
+                                <Body style={styles.phytoParagraphe}>
+                                    <Icon type ="Entypo" name="lab-flask" style={styles.iconGeneral}/>
+                                    <Text>Phyto : {this.props.intervention.phytoproduct}</Text>
+                                </Body>
+                            </CardItem>
+                        )
                     )
                 }    
                 

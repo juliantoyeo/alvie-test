@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.6",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -26,13 +26,16 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
+      "infoPlist":{
+        "NSCameraUsageDescription": "L'app HYGO a besoin d'avoir accès à l'appareil photo pour scanner le QR Code sur le capteur HYGO"
+      },
       "config" : {
         "googleMapsApiKey": "AIzaSyABnGN0yBmlMhCqZ-nzfSZVxTySEHYHYx8"
       }
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 7,
+      "versionCode": 9,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {

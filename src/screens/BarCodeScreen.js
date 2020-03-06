@@ -46,7 +46,10 @@ class BarCodeScreen extends React.Component {
     /* Uncomment to use with a simulator
     storedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTc0NjkwNTEwfQ.BMPyYhJeZHnB3YXGTeRGg20COa40OHCkgINoCZ0h5b0";
     errorMessage = null;
-    userName = "test";
+    userName = "Albert";
+    familyName = 'Gall'
+    deviceid ='BE4A68'
+    deviceType ='HYGO Lite'
     //*/
     if(!errorMessage) {
       this.setState({scanned: true});
@@ -56,7 +59,6 @@ class BarCodeScreen extends React.Component {
       this.props.updateDeviceid(deviceid);
       this.props.updateDeviceType(deviceType);
       await this.registerForPushNotificationsAsync(deviceid)
-      //alert(`Bonjour ${userName}`);
       this.props.navigation.navigate('mainFlow');
     }
     else {
