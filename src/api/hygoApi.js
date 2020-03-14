@@ -93,6 +93,19 @@ export const getLastValue = async(token) => {
     }
 }
 
+export const getLastCondition = async(token) => {
+    if (token) {
+        try {
+            const response  = await trackerApi.post('/getLastCondition', {token});
+            const {condition, phytoProduct, conditionColor} = response.data;
+            return ({condition, phytoProduct, conditionColor});
+        } catch(error) {
+            return ({
+            });
+        }
+    }
+}
+
 export const getLastValues = async (token) => {
     if (token) {
         try {

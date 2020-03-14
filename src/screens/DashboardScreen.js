@@ -6,7 +6,7 @@ import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body,
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
-import { getLastValue, getLastValues, evalConditions} from '../api/hygoApi';
+import { getLastValue, getLastValues, getLastCondition} from '../api/hygoApi';
 
 
 class DashboardScreen extends React.Component {
@@ -36,15 +36,18 @@ class DashboardScreen extends React.Component {
                 console.log(values);
             }
             const {temp, humi, timestamp} = await getLastValue(this.props.token)
+            const {condition,phytoProduct, conditionColor} = await getLastCondition(this.props.token)
             if (!!temp && !!humi) {
                 this.setState({
                     ...this.state,
                     temp,
                     humi,
-                    timestamp
+                    timestamp,
+                    condition,
+                    conditionColor,
                 });
 
-                this.onConditionchange(this.props.produitPhytoClicked);
+                
                 this.setState({isLoading:false})
             }
             if(this.state.loop) {
@@ -66,19 +69,20 @@ class DashboardScreen extends React.Component {
         this.setState({isLoading: false});
         
     }
+    
 
 
-    onConditionchange = async (phyto) => {
-        const { condition, conditionColor, error} = await evalConditions(this.props.deviceid, phyto, this.state.humi, this.state.temp);
-        if (!error)
-        {
-            this.setState({
-                ...this.state,
-                condition,
-                conditionColor
-            })
-        }
-    }
+    // onConditionchange = async (phyto) => {
+    //     const { condition, conditionColor, error} = await evalConditions(this.props.deviceid, phyto, this.state.humi, this.state.temp);
+    //     if (!error)
+    //     {
+    //         this.setState({
+    //             ...this.state,
+    //             condition,
+    //             conditionColor
+    //         })
+    //     }
+    // }
 
     render() {
 
