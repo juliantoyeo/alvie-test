@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://bk-7xb.m1ck43l.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.2w-ud5.m1ck43l.hygoclient.exp.direct",
+  "ngrokPid": 867422,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 867154,
   "webpackServerPort": null
 }

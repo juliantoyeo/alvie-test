@@ -20,8 +20,8 @@ class DashboardScreen extends React.Component {
             timestamp: '',
             values: [],
             loop: true,
-            condition : "evaluation",
-            conditionColor : "white",
+            condition: "evaluation",
+            conditionColor: "white",
             isLoading: true,
             
            
