@@ -13,17 +13,17 @@ const sendLocation = async (locations) => {
   let lastSync = await AsyncStorage.getItem('last-geo-sync');
   axios({
     method: 'post',
-    url: 'https://c2232c2a.ngrok.io/test',
+    url: 'https://api.alvie.fr/app/location',
     data: {
       location: locations,
       token: storedToken,
       lastSync: lastSync
     }
   });
-  await AsyncStorage.setItem('last-geo-sync', (new Date()).getTime());
+  await AsyncStorage.setItem('last-geo-sync', ''+(new Date()).getTime());
 }
 
-TaskManager.defineTask(GEO_TASK_NAME, ({ data: { locations }, error }) => {
+TaskManager.defineTask(GEO_TASK_NAME, async ({ data: { locations }, error }) => {
   if (error) {
     // check `error.message` for more details.
     return;
@@ -32,7 +32,7 @@ TaskManager.defineTask(GEO_TASK_NAME, ({ data: { locations }, error }) => {
   await sendLocation(locations)
 });
 
-const getLocationAsync = async () => {
+const getLocationPermissionAsync = async () => {
   const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
   if (status === 'granted') {
     let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true })
@@ -52,5 +52,5 @@ const getLocationAsync = async () => {
 }
 
 export {
-  getLocationAsync
+  getLocationPermissionAsync
 }
