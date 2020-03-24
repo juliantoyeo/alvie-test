@@ -13,28 +13,7 @@ import configureStore from './src/store/configureStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'native-base';
 
-import axios from 'axios'
-
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import * as TaskManager from 'expo-task-manager';
-
-const GEO_TASK_NAME = "hygo-geo"
-
-TaskManager.defineTask(GEO_TASK_NAME, ({ data: { locations }, error }) => {
-  if (error) {
-    // check `error.message` for more details.
-    return;
-  }
-  console.log('Received new locations', locations);
-
-  axios({
-    method: 'post',
-    url: 'https://c2232c2a.ngrok.io/test',
-    data: locations
-  });
-  
-});
+import { getLocationPermissionAsync } from './src/geolocation'
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -98,27 +77,9 @@ const switchNavigator = createSwitchNavigator({
 const AppContainer = createAppContainer(switchNavigator);
 const store = configureStore();
 
-
 export default App = () => {
-  async function getLocationAsync() {
-    // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
-    const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
-    console.log(status)
-    console.log(permissions)
-    if (status === 'granted') {
-      console.log(await Location.getCurrentPositionAsync({ enableHighAccuracy: true }))
-    } else {
-      throw new Error('Location permission not granted');
-    }
-  }
-
   useEffect(() => {
-    Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
-      distanceInterval: 1,
-      accuracy: Location.Accuracy.Highest,
-      activityType: Location.ActivityType.AutomotiveNavigation,
-    })
-    getLocationAsync()
+    getLocationPermissionAsync()
   })
 
   return (
