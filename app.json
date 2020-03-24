@@ -50,6 +50,7 @@
         "VIBRATE",
         "WAKE_LOCK",
         "WRITE_EXTERNAL_STORAGE",
+        "LOCATION",
         "com.anddoes.launcher.permission.UPDATE_COUNT",
         "com.android.launcher.permission.INSTALL_SHORTCUT",
         "com.google.android.c2dm.permission.RECEIVE",

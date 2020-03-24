@@ -13,6 +13,8 @@
     "expo": "^36.0.2",
     "expo-barcode-scanner": "~8.0.0",
     "expo-font": "~8.0.0",
+    "expo-location": "~8.0.0",
+    "expo-task-manager": "~8.0.0",
     "initials": "^3.0.1",
     "native-base": "2.13.8",
     "react": "16.9.0",
