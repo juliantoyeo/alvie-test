@@ -6,24 +6,30 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
 
+import { Platform } from 'react-native';
+
 import getUserAgent from '../api/getUserAgent'
 
 const GEO_TASK_NAME = "hygo-geo"
 const GEO_MAX_DURATION = 8 * 3600 * 1000 // 8 hours in ms
 
 const sendLocation = async (locations) => {
-  // Ensure Geoloc only runs for 8 hours
-  let syncStarted = await AsyncStorage.getItem('start-geo-sync');
-  if (!isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
-    await AsyncStorage.setItem('start-geo-sync', null);
+  // Ensure Geoloc only runs for 8 hours on iOS
+  if (Platform.OS === 'ios') {
+    let syncStarted = await AsyncStorage.getItem('start-geo-sync');
+    if (!isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
+      await AsyncStorage.setItem('start-geo-sync', null);
 
-    try {
-      await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
-    } catch(e) {}
-  }
+      try {
+        await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
+      } catch(e) {}
+      
+      return
+    }
 
-  if (isNaN((new Date(syncStarted)).getTime())) {
-    await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
+    if (isNaN((new Date(syncStarted)).getTime())) {
+      await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
+    }
   }
 
   // Handle location update
