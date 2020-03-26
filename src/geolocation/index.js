@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
+import * as Device from 'expo-device';
 
 const GEO_TASK_NAME = "hygo-geo"
 
@@ -13,7 +14,10 @@ const sendLocation = async (locations) => {
   let lastSync = await AsyncStorage.getItem('last-geo-sync');
   axios({
     method: 'post',
-    url: 'https://api.alvie.fr/app/location',
+    url: 'https://staging.alvie.fr/app/location',
+    headers: { 
+      'User-Agent': `HygoApp/1.0 ${Device.osName}/${Device.osVersion}`
+    },
     data: {
       location: locations,
       token: storedToken,

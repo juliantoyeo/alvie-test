@@ -1,11 +1,17 @@
 import axios from 'axios';
 
+import * as Device from 'expo-device';
+
 export const trackerApi = axios.create(
 {
     baseURL: 'https://api.alvie.fr',
     //baseURL: 'http://192.168.1.10:3000',
     timeout: 3000,
+    headers: { 
+        'User-Agent': `HygoApp/1.0 ${Device.osName}/${Device.osVersion}`
+    },
 });
+
 /*
 trackerApi.interceptors.request.use(request => {
     console.log('Starting Request', request)

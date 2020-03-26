@@ -23,12 +23,16 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "6",
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "infoPlist": {
         "NSCameraUsageDescription": "L'app HYGO a besoin d'avoir accès à l'appareil photo pour scanner le QR Code sur le capteur HYGO",
-        "NSLocationAlwaysUsageDescription": "L'app HYGO a besoin d'avoir accès à la localisation afin de déterminer les parcelles en cours de traitement"
+        "NSLocationAlwaysUsageDescription": "L'app HYGO a besoin d'avoir accès à la localisation afin de déterminer les parcelles en cours de traitement",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       },
       "config": {
         "googleMapsApiKey": "AIzaSyABnGN0yBmlMhCqZ-nzfSZVxTySEHYHYx8"
