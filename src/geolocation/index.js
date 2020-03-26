@@ -18,12 +18,12 @@ const sendLocation = async (locations) => {
   if (Platform.OS === 'ios') {
     let syncStarted = await AsyncStorage.getItem('start-geo-sync');
     if (!isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
-      await AsyncStorage.setItem('start-geo-sync', null);
+      await AsyncStorage.removeItem('start-geo-sync');
 
       try {
         await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
       } catch(e) {}
-      
+
       return
     }
 
