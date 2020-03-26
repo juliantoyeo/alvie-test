@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import * as Device from 'expo-device';
+import getUserAgent from './getUserAgent'
 
 export const trackerApi = axios.create(
 {
@@ -8,7 +8,7 @@ export const trackerApi = axios.create(
     //baseURL: 'http://192.168.1.10:3000',
     timeout: 3000,
     headers: { 
-        'User-Agent': `HygoApp/1.0 ${Device.osName}/${Device.osVersion}`
+        'User-Agent': getUserAgent()
     },
 });
 

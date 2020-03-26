@@ -5,7 +5,8 @@ import { AsyncStorage } from 'react-native'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
-import * as Device from 'expo-device';
+
+import getUserAgent from '../api/getUserAgent'
 
 const GEO_TASK_NAME = "hygo-geo"
 
@@ -16,7 +17,7 @@ const sendLocation = async (locations) => {
     method: 'post',
     url: 'https://staging.alvie.fr/app/location',
     headers: { 
-      'User-Agent': `HygoApp/1.0 ${Device.osName}/${Device.osVersion}`
+      'User-Agent': getUserAgent()
     },
     data: {
       location: locations,
