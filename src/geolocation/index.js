@@ -13,11 +13,11 @@ import getUserAgent from '../api/getUserAgent'
 const GEO_TASK_NAME = "hygo-geo"
 const GEO_MAX_DURATION = 8 * 3600 * 1000 // 8 hours in ms
 
-const sendLocation = async (locations) => {
+const sendLocation = async (locations, isInit) => {
   // Ensure Geoloc only runs for 8 hours on iOS
   if (Platform.OS === 'ios') {
     let syncStarted = await AsyncStorage.getItem('start-geo-sync');
-    if (!isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
+    if (!isInit && !isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
       await AsyncStorage.removeItem('start-geo-sync');
 
       try {
@@ -27,7 +27,7 @@ const sendLocation = async (locations) => {
       return
     }
 
-    if (isNaN((new Date(syncStarted)).getTime())) {
+    if (isInit || isNaN((new Date(syncStarted)).getTime())) {
       await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
     }
   }
@@ -63,14 +63,15 @@ const getLocationPermissionAsync = async () => {
   const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
   if (status === 'granted') {
     let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true })
-    await sendLocation([ location ])
+    await sendLocation([ location ], true)
 
     let isStarted = await Location.hasStartedLocationUpdatesAsync(GEO_TASK_NAME)
     if (!isStarted) {
       Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
-        distanceInterval: 1,
+        distanceInterval: 5,
         accuracy: Location.Accuracy.Highest,
         activityType: Location.ActivityType.AutomotiveNavigation,
+        showsBackgroundLocationIndicator: false,
       })
     }
   } else {
