@@ -1,8 +1,8 @@
 {
   "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://rd-q6g.m1ck43l.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.rd-q6g.m1ck43l.hygoclient.exp.direct",
+  "ngrokPid": 1057175,
   "devToolsPort": 19002,
   "packagerPort": null,
   "packagerPid": null,

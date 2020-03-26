@@ -9,8 +9,24 @@ import * as TaskManager from 'expo-task-manager';
 import getUserAgent from '../api/getUserAgent'
 
 const GEO_TASK_NAME = "hygo-geo"
+const GEO_MAX_DURATION = 8 * 3600 * 1000 // 8 hours in ms
 
 const sendLocation = async (locations) => {
+  // Ensure Geoloc only runs for 8 hours
+  let syncStarted = await AsyncStorage.getItem('start-geo-sync');
+  if (!isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
+    await AsyncStorage.setItem('start-geo-sync', null);
+
+    try {
+      await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
+    } catch(e) {}
+  }
+
+  if (isNaN((new Date(syncStarted)).getTime())) {
+    await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
+  }
+
+  // Handle location update
   let storedToken = await AsyncStorage.getItem('token');
   let lastSync = await AsyncStorage.getItem('last-geo-sync');
   axios({
