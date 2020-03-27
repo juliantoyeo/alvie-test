@@ -1,13 +1,14 @@
 import React from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { Dimensions, Image, StyleSheet,AsyncStorage  } from 'react-native';
+import { RefreshControl, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col, View } from 'native-base';
+import { Container, Spinner, Content, Card, CardItem, Button, Icon, Text, H2, View } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
-import { getLastValue, getLastValues, getLastCondition} from '../api/hygoApi';
+import { getLastValue, getLastValues, getLastCondition } from '../api/hygoApi';
 
+import { useFocusEffect } from '@react-navigation/native';
 
 class DashboardScreen extends React.Component {
     constructor(props) {
@@ -19,200 +20,201 @@ class DashboardScreen extends React.Component {
             humi: 0,
             timestamp: '',
             values: [],
-            loop: true,
             condition: "evaluation",
             conditionColor: "white",
+
             isLoading: true,
-            
-           
+
+            isRefreshing: false,
         }
     }    
 
-    loop = async () => {
+    loop = async (isRefresh) => {
+        if (!isRefresh && this.state.isRefreshing) {
+            return
+        }
+
         try {
             const {values} = await getLastValues(this.props.token);
             if (values) {
                 this.setState({values});
-                console.log(values);
             }
-            const {temp, humi, timestamp} = await getLastValue(this.props.token)
-            const {condition, phytoProduct , conditionColor} = await getLastCondition(this.props.token)
-            if (!!temp && !!humi) {
-                this.setState({
-                    ...this.state,
-                    temp,
-                    humi,
-                    timestamp,
-                    condition,
-                    conditionColor,
-                });
 
-                
-                this.setState({isLoading:false})
+            const {temp, humi, timestamp} = await getLastValue(this.props.token)
+            const {condition , conditionColor} = await getLastCondition(this.props.token)
+            if (!!temp && !!humi) {
+                this.setState(prev => {
+                    return {
+                        ...prev,
+                        temp,
+                        humi,
+                        timestamp,
+                        condition,
+                        conditionColor,
+
+                        isLoading: false,
+                    }
+                });
             }
-            if(this.state.loop) {
-                setTimeout(() => this.loop(),3000);
-            }
-        } catch(err)
-        {
+        } catch(err) {
             console.log(err)
-            return;
         }
     }
 
-    async componentDidMount() {
-        this.loop();            
-    }
+    componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('didFocus', async () => {
+            await this.loop()
+            this.intervalId = setInterval(() => {
+                this.loop()
+            }, 5000)
+        });
 
-    componentWillUnmount() { 
-        this.setState({loop: false});
-        this.setState({isLoading: false});
-        
+        this._unsubscribeBlur = this.props.navigation.addListener('didBlur', () => {
+            clearInterval(this.intervalId); 
+        });
     }
     
+    componentWillUnmount() {
+        this._unsubscribe && this._unsubscribe.remove();
+        this._unsubscribeBlur && this._unsubscribeBlur.remove();
+    }
 
-
-    // onConditionchange = async (phyto) => {
-    //     const { condition, conditionColor, error} = await evalConditions(this.props.deviceid, phyto, this.state.humi, this.state.temp);
-    //     if (!error)
-    //     {
-    //         this.setState({
-    //             ...this.state,
-    //             condition,
-    //             conditionColor
-    //         })
-    //     }
-    // }
-
+    onRefresh = async () => {
+        this.setState({ isRefreshing: true })
+        await this.loop(true);
+        this.setState({ isRefreshing: false })
+    }
+    
     render() {
-
         const date = new Date(this.state.timestamp);
+
         const day = date.getDate().toString().padStart(2, "0")
         const month = (date.getMonth()+1).toString().padStart(2, "0")
         const hours = (date.getHours()).toString().padStart(2, "0")
         const minutes = date.getMinutes().toString().padStart(2, "0")
+
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
-            <Container style={styles.container}>
-                <HeaderHygo/>
-                {this.state.isLoading && (
-                    <Content contentContainerStyle = {{ 
-                        padding: 10,
-                        paddingRight: 10,
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                    }}>
-                        <Spinner color='#194769' />
-                        <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                        <H2 style={styles.ecritures}>Initialisation du capteur Hygo, merci de patienter quelques instants</H2>
-                    </Content> 
-                )}
-                {!this.state.isLoading && (
-            
-                <Content contentContainerStyle = {{ 
-                    padding: 10,
-                    paddingRight: 10,
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    disableKBDismissScroll: true,
-                    
-                }}>
-                    <View style={{
-                        alignItems: 'flex-start' ,
-                        flexDirection: 'row',
-                        marginLeft: 10,
-                        marginRight: 10
-                    }}>
-                        <Text style={styles.ecritures}>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
-                    </View>
-                    <Button large style={{
-                        justifyContent: 'center',
-                        backgroundColor:this.state.conditionColor,
-                        margin: 10
-                    }}
-                    onPress={() => {if(!this.props.produitPhytoClicked) 
-                        {
-                        this.props.navigation.navigate('Traitement')
-                        }
-                        else {
-
-                        }}}
-                    >
-                        <Text>{this.state.condition}</Text>
-                    </Button>
-                    <Text style={styles.ecritures}> Dernière mesure : {
-                        `le ${day}/${month} à ${hours}:${minutes}`
-                    }
-                    </Text>
-                        
-                    <View style={{
-                        justifyContent: 'space-around',
-                        flexDirection: 'row',
-                        height:100}}
-                    >
-                        <Sensor 
-                            name="°C"
-                            color="green"
-                            value={this.state.temp}
-                            max={50.0}
-                            iconName="temperature-low"
-                            iconType="FontAwesome5"
-                            type="Température"
-                        />
-                        <Sensor 
-                            name="%"
-                            color="blue"
-                            value={this.state.humi}
-                            max={100.0}
-                            iconName="drop"
-                            iconType="Entypo"
-                            type="Hygrométrie"
-                        />
-                    </View>
-                    {(this.state.values.length > 1) ? (
-                        <View>
-                            <VChart
-                                values={this.state.values.map((item => ({
-                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                    y:item.humi
-                                })))}
-                                titleName="  Hygrométrie" // add to space to avoid the title of the graph to be cover on the side - small quick fix
-                                color="blue"
-                            />
-                            <VChart
-                                values={this.state.values.map((item => ({
-                                    x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                    y:item.temp
-                                })))}
-                                titleName="  Température"// add to space to avoid the title of the graph to be cover on the side - small quick fix
-                                color="green"
-                            />
-                        </View>
-                    ) : ((this.state.values = []) ? (
-                        <View style={styles.message}>
-                            <Card >
-                                <CardItem>
-                                    <Text style={styles.ecritures}> Aucune information reçue ces 4 dernières heures, si vous voulez consulter les anciennes interventions, cliquez sur l'onglet Interventions </Text>
-                                </CardItem>
-                            </Card>
-                            <Text >{this.state.values} </Text>
-                            <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
-                        </View>
-                        
-                        ): (
-                            <View style={styles.message}>
-                                <Card >
-                                    <CardItem>
-                                        <Text style={styles.ecritures}>1 première mesure, nous attendons la seconde pour commencer à afficher les courbes</Text>
-                                    </CardItem>
-                                </Card>
-                                <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
-                             </View>
-                        )
+                <Container style={styles.container}>
+                    <HeaderHygo/>
+                    { this.state.isLoading && (
+                        <Content contentContainerStyle = {{ 
+                            padding: 10,
+                            paddingRight: 10,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        }}>
+                            <Spinner color='#194769' />
+                            <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
+                            <H2 style={styles.ecritures}>Initialisation du capteur Hygo, merci de patienter quelques instants</H2>
+                        </Content> 
                     )}
-                </Content> 
-                )}   
-            </Container> 
+
+                    { !this.state.isLoading && (
+                        <Content 
+                            refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh.bind(this)} />}
+                            contentContainerStyle = {{ 
+                                padding: 10,
+                                paddingRight: 10,
+                                paddingTop: 10,
+                                paddingBottom: 10,
+                                disableKBDismissScroll: true,
+                                
+                            }}>
+                            <View style={{
+                                alignItems: 'flex-start' ,
+                                flexDirection: 'row',
+                                marginLeft: 10,
+                                marginRight: 10
+                            }}>
+                                <Text style={styles.ecritures}>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
+                            </View>
+
+                            <Button large style={{
+                                justifyContent: 'center',
+                                backgroundColor:this.state.conditionColor,
+                                margin: 10
+                            }} onPress={() => {
+                                if(!this.props.produitPhytoClicked) {
+                                    this.props.navigation.navigate('Traitement')
+                                } 
+                            }}>
+                                <Text>{this.state.condition}</Text>
+                            </Button>
+
+                            <Text style={styles.ecritures}> Dernière mesure : {`le ${day}/${month} à ${hours}:${minutes}`}</Text>
+                                
+                            <View style={{
+                                justifyContent: 'space-around',
+                                flexDirection: 'row',
+                                height:100
+                            }}>
+                                <Sensor 
+                                    name="°C"
+                                    color="green"
+                                    value={this.state.temp}
+                                    max={50.0}
+                                    iconName="temperature-low"
+                                    iconType="FontAwesome5"
+                                    type="Température"
+                                />
+                                <Sensor 
+                                    name="%"
+                                    color="blue"
+                                    value={this.state.humi}
+                                    max={100.0}
+                                    iconName="drop"
+                                    iconType="Entypo"
+                                    type="Hygrométrie"
+                                />
+                            </View>
+
+                            { this.state.values.length > 1 && (
+                                <View>
+                                    <VChart
+                                        values={this.state.values.map((item => ({
+                                            x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                            y:item.humi
+                                        })))}
+                                        titleName="  Hygrométrie" // add to space to avoid the title of the graph to be cover on the side - small quick fix
+                                        color="blue"
+                                    />
+                                    <VChart
+                                        values={this.state.values.map((item => ({
+                                            x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                            y:item.temp
+                                        })))}
+                                        titleName="  Température"// add to space to avoid the title of the graph to be cover on the side - small quick fix
+                                        color="green"
+                                    />
+                                </View>
+                            )}
+                            
+                            { this.state.values.length <= 1 && this.state.values.length === 0 && (
+                                <View style={styles.message}>
+                                    <Card >
+                                        <CardItem>
+                                            <Text style={styles.ecritures}> Aucune information reçue ces 4 dernières heures, si vous voulez consulter les anciennes interventions, cliquez sur l'onglet Interventions </Text>
+                                        </CardItem>
+                                    </Card>
+                                    <Text >{this.state.values} </Text>
+                                    <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                                </View>
+                            )}
+                            
+                            { this.state.values.length <= 1 && this.state.values.length > 0 && (
+                                <View style={styles.message}>
+                                    <Card >
+                                        <CardItem>
+                                            <Text style={styles.ecritures}>1 première mesure, nous attendons la seconde pour commencer à afficher les courbes</Text>
+                                        </CardItem>
+                                    </Card>
+                                    <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                                </View>
+                            )}
+                        </Content> 
+                    )}   
+                </Container> 
             </SafeAreaView>
         );
     }
@@ -232,15 +234,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent :"center",
         flexDirection: 'column',
-        //borderStyle: 'solid',
-        //padding:5
     },
     ecritures :{
         color : '#194769'
     },
     icon :{
         color : '#194769',
-         fontSize: 80
+        fontSize: 80
     },
     container: {
         backgroundColor: '#F6F6E9',
@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
         flex: 1
     } 
 });
+
 const mapStateToProps = (state) => ({
     token: state.authen.token,
     deviceid: state.authen.deviceid,
@@ -258,7 +259,7 @@ const mapStateToProps = (state) => ({
     newSession: state.pulve.newSession,
     lastSession: state.pulve.lastSession
 });
-const mapDispatchToProps = (dispatch, props) => ({
-})
+
+const mapDispatchToProps = (dispatch, props) => ({})
   
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);

@@ -1,14 +1,12 @@
 import React from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { Dimensions, Image, StyleSheet,AsyncStorage  } from 'react-native';
+import { StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Spinner, Content, Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Left, Right, View } from 'native-base';
+import { Container, Spinner, Content, Card, CardItem, Icon, Text, H2, View } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import InterventionResume from '../components/InterventionResume';
-import { getLastValue, getLastInterventions, evalConditions} from '../api/hygoApi';
-import {updateInterv} from '../store/actions/intervActions';
-
-
+import { getLastInterventions } from '../api/hygoApi';
+import { updateInterv } from '../store/actions/intervActions';
 
 class InterventionScreen extends React.Component {
     constructor(props) {
@@ -16,127 +14,129 @@ class InterventionScreen extends React.Component {
         this.state = {
             date: new Date().getDate(),
             month: new Date().getMonth() + 1,
-            //temp: 0,
-            //humi: 0,
-            //timestamp: '',
             interventionValues: this.props.interventionValues,
-            loop: true,
-            //condition : "evaluation",
-            //conditionColor : "white",
             isLoading: true,
-            
-           
+            isRefreshing: false,
         }
     }    
 
-    loop = async () => {
+    loop = async (isRefresh) => {
+        if (!isRefresh && this.state.isRefreshing) {
+            return
+        }
+        
         try {
-            var {interventionValues} = await getLastInterventions(this.props.token);
-            console.log('interventionValues test interventionScreen :');
-            console.log(interventionValues);
-            
+            let {interventionValues} = await getLastInterventions(this.props.token);
             if (!!interventionValues) {
                 this.props.updateInterv(interventionValues);
-                //this.setState({interventionValues});
                 this.setState({isLoading:false})
             }
-            if(!interventionValues) {
-                //interventionValues = [];
-                //this.setState({interventionValues});
+
+            if (!interventionValues) {
                 this.setState({isLoading:false})  
             }
-        } catch(err)
-        {
+        } catch(err) {
             console.log(err)
-            return;
         }
     }
 
-    async componentDidMount() {
-        this.loop();            
-    }
+    componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('didFocus', async () => {
+            await this.loop()
+            this.intervalId = setInterval(() => {
+                this.loop()
+            }, 5000)
+        });
 
-    componentWillUnmount() { 
-        this.setState({loop: false});
-        this.setState({isLoading: true});
-        
+        this._unsubscribeBlur = this.props.navigation.addListener('didBlur', () => {
+            clearInterval(this.intervalId); 
+        });
+    }
+    
+    componentWillUnmount() {
+        this._unsubscribe && this._unsubscribe.remove();
+        this._unsubscribeBlur && this._unsubscribeBlur.remove();
     }
 
     cardOnPress = (intervention) => {
-        this.props.navigation.navigate('InterventionMapScreen',{intervention})
-        console.log('intervention tets valeur passé bouton');
-        console.log(intervention);
+        this.props.navigation.navigate('InterventionMapScreen', {intervention})
     }
 
-
+    onRefresh = async () => {
+        this.setState({ isRefreshing: true })
+        await this.loop(true);
+        this.setState({ isRefreshing: false })
+    }
 
     render() {
-       
         return (
             <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
-            <Container style={styles.container}>
-                <HeaderHygo/>
-                {this.state.isLoading && (
-                    
-                    <Content contentContainerStyle = {{ 
-                        padding: 10,
-                        paddingRight: 10,
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                    }}>
-                        <Spinner color='#194769' />
-                        <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                        <H2 style={styles.ecritures}>Initialisation des données du capteur Hygo, merci de patienter quelques instants</H2>
-                    </Content> 
-                )}
-                {!this.state.isLoading && (
-                    <Content contentContainerStyle = {{ 
-                        padding: 10,
-                        paddingRight: 10,
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        disableKBDismissScroll: true
-                    }}>
-                    {(this.props.interventionValues.length >= 1) ? (
-                        <View>
-                        {
-                            this.props.interventionValues.map((intervention) => {
-                                return (
-                                    <InterventionResume 
-                                        key={intervention.id}
-                                        id = {intervention.id}
-                                        interventionid = {intervention.interventionid}
-                                        starttime = {intervention.starttime}
-                                        endtime = {intervention.endtime}
-                                        avgtemp = {intervention.avgtemp}
-                                        maxtemp = {intervention.maxtemp}
-                                        mintemp = {intervention.mintemp}
-                                        avghumi = {intervention.avghumi}
-                                        maxhumi = {intervention.maxhumi}
-                                        minhumi = {intervention.minhumi}
-                                        intervention = {intervention}
-                                        onPress = {(interv) => this.cardOnPress(interv)}
-                                    /> 
-                                );
-                            })
-                        }
-                        </View>
-
-
-                    ): (
-                        <View style={styles.message}>
-                            <Card >
-                                <CardItem>
-                                    <Text style={styles.ecritures}> Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
-                                </CardItem>
-                            </Card>
-                            
-                            <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
-                        </View>
+                <Container style={styles.container}>
+                    <HeaderHygo/>
+                    { this.state.isLoading && (
+                        <Content contentContainerStyle = {{ 
+                            padding: 10,
+                            paddingRight: 10,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        }}>
+                            <Spinner color='#194769' />
+                            <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
+                            <H2 style={styles.ecritures}>Initialisation des données du capteur Hygo, merci de patienter quelques instants</H2>
+                        </Content> 
                     )}
-                    </Content> 
-                )}   
-            </Container> 
+
+                    { !this.state.isLoading && (
+                        <Content contentContainerStyle = {{ 
+                            padding: 10,
+                            paddingRight: 10,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                            disableKBDismissScroll: true
+                        }} refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh.bind(this)} />}>
+
+                        { this.props.interventionValues.length >= 1 && (
+                            <View>
+                            {
+                                this.props.interventionValues.map((intervention) => {
+                                    return (
+                                        <InterventionResume 
+                                            key={intervention.id}
+                                            id = {intervention.id}
+                                            interventionid = {intervention.interventionid}
+                                            starttime = {intervention.starttime}
+                                            endtime = {intervention.endtime}
+                                            avgtemp = {intervention.avgtemp}
+                                            maxtemp = {intervention.maxtemp}
+                                            mintemp = {intervention.mintemp}
+                                            avghumi = {intervention.avghumi}
+                                            maxhumi = {intervention.maxhumi}
+                                            minhumi = {intervention.minhumi}
+                                            intervention = {intervention}
+                                            onPress = {(interv) => this.cardOnPress(interv)}
+                                        /> 
+                                    );
+                                })
+                            }
+                            </View>
+
+
+                        )}
+                        
+                        { this.props.interventionValues.length < 1 && (
+                            <View style={styles.message}>
+                                <Card >
+                                    <CardItem>
+                                        <Text style={styles.ecritures}> Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
+                                    </CardItem>
+                                </Card>
+                                
+                                <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                            </View>
+                        )}
+                        </Content> 
+                    )}   
+                </Container> 
             </SafeAreaView>
         );
     }

@@ -4,8 +4,7 @@ import getUserAgent from './getUserAgent'
 
 export const trackerApi = axios.create(
 {
-    baseURL: 'https://api.alvie.fr',
-    //baseURL: 'http://192.168.1.10:3000',
+    baseURL: 'https://staging.alvie.fr',
     timeout: 3000,
     headers: { 
         'User-Agent': getUserAgent()
