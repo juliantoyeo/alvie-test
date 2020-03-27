@@ -75,7 +75,7 @@ const getLocationPermissionAsync = async () => {
       })
     }
   } else {
-    throw new Error('Location permission not granted');
+    console.log(new Error('Location permission not granted'));
   }
 }
 
