@@ -8,7 +8,7 @@ import * as TaskManager from 'expo-task-manager';
 
 import { Platform } from 'react-native';
 
-import getUserAgent from '../api/getUserAgent'
+import { storeAppLocation } from '../api/hygoApi'
 
 const GEO_TASK_NAME = "hygo-geo"
 const GEO_MAX_DURATION = 8 * 3600 * 1000 // 8 hours in ms
@@ -35,18 +35,13 @@ const sendLocation = async (locations, isInit) => {
   // Handle location update
   let storedToken = await AsyncStorage.getItem('token');
   let lastSync = await AsyncStorage.getItem('last-geo-sync');
-  axios({
-    method: 'post',
-    url: 'https://staging.alvie.fr/app/location',
-    headers: { 
-      'User-Agent': getUserAgent()
-    },
-    data: {
-      location: locations,
-      token: storedToken,
-      lastSync: lastSync
-    }
-  });
+
+  await storeAppLocation({
+    location: locations,
+    token: storedToken,
+    lastSync: lastSync
+  })
+
   await AsyncStorage.setItem('last-geo-sync', ''+(new Date()).getTime());
 }
 
@@ -68,7 +63,7 @@ const getLocationPermissionAsync = async () => {
     let isStarted = await Location.hasStartedLocationUpdatesAsync(GEO_TASK_NAME)
     if (!isStarted) {
       Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
-        distanceInterval: 5,
+        distanceInterval: 10,
         accuracy: Location.Accuracy.Highest,
         activityType: Location.ActivityType.AutomotiveNavigation,
         showsBackgroundLocationIndicator: false,

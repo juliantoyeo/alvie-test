@@ -2,8 +2,7 @@ import axios from 'axios';
 
 import getUserAgent from './getUserAgent'
 
-export const trackerApi = axios.create(
-{
+export const trackerApi = axios.create({
     baseURL: 'https://staging.alvie.fr',
     timeout: 3000,
     headers: { 
@@ -11,12 +10,24 @@ export const trackerApi = axios.create(
     },
 });
 
-/*
-trackerApi.interceptors.request.use(request => {
-    console.log('Starting Request', request)
-    return request
-   })
-*/
+// Store device position
+export const storeAppLocation = async (data) => {
+    try {
+        await trackerApi.post('/app/location', { ...data });
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+// Store phytoproduct changes
+export const updateUI = async (phytoProduct, deviceid) => {
+    try {
+        await trackerApi.post('/app/ui', { phytoProduct, deviceid });
+    } catch(e) {
+        console.log(e)
+    }
+}
+
 export const signUp = async (email, password) => {
     try
     {
@@ -177,19 +188,7 @@ export const storePushToken = async (token, deviceid)=> {
     }
 }
 
-export const updateUI = async (phytoProduct, deviceid) => {
-    try {
-        const response = await trackerApi.post('/updateUI', {phytoProduct, deviceid});
-        return (response.data);
-    } catch(error) {
-        return ({
-
-        });
-    }
-}
-
 export const updateIntervention = async (phytoProduct, deviceid, interventionid) => {
-
     try {
         const response = await trackerApi.post('/updateIntervention', {phytoProduct, deviceid, interventionid });
         return (response.data);

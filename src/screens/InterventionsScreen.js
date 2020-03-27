@@ -29,11 +29,11 @@ class InterventionScreen extends React.Component {
             let {interventionValues} = await getLastInterventions(this.props.token);
             if (!!interventionValues) {
                 this.props.updateInterv(interventionValues);
-                this.setState({isLoading:false})
+                this.setState({isLoading: false})
             }
 
             if (!interventionValues) {
-                this.setState({isLoading:false})  
+                this.setState({isLoading: false})  
             }
         } catch(err) {
             console.log(err)
@@ -152,19 +152,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5
     },
-    message :{
+    message: {
         flex: 1,
         justifyContent :"center",
         flexDirection: 'column',
-        //borderStyle: 'solid',
-        //padding:5
     },
-    ecritures :{
-        color : '#194769'
+    ecritures: {
+        color: '#194769'
     },
-    icon :{
-        color : '#194769',
-         fontSize: 80
+    icon: {
+        color: '#194769',
+        fontSize: 80
     },
     container: {
         backgroundColor: '#F6F6E9',
@@ -172,19 +170,19 @@ const styles = StyleSheet.create({
     statusbar: {
         backgroundColor: '#F6F6E9',
         flex: 1
-    } 
+    }
 });
+
 const mapStateToProps = (state) => ({
     token: state.authen.token,
     userName: state.authen.userName,
-    //produitPhytoClicked : state.pulve.produitPhytoClicked,
     newSession: state.pulve.newSession,
     lastSession: state.pulve.lastSession,
     interventionValues: state.interv.interventions
 });
+
 const mapDispatchToProps = (dispatch, props) => ({
     updateInterv: (interventionValues)=>dispatch(updateInterv(interventionValues)),
-
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionScreen);

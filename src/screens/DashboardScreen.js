@@ -8,8 +8,6 @@ import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
 import { getLastValue, getLastValues, getLastCondition } from '../api/hygoApi';
 
-import { useFocusEffect } from '@react-navigation/native';
-
 class DashboardScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -27,7 +25,7 @@ class DashboardScreen extends React.Component {
 
             isRefreshing: false,
         }
-    }    
+    }
 
     loop = async (isRefresh) => {
         if (!isRefresh && this.state.isRefreshing) {
@@ -46,6 +44,7 @@ class DashboardScreen extends React.Component {
                 this.setState(prev => {
                     return {
                         ...prev,
+
                         temp,
                         humi,
                         timestamp,
@@ -238,7 +237,7 @@ const styles = StyleSheet.create({
     ecritures :{
         color : '#194769'
     },
-    icon :{
+    icon: {
         color : '#194769',
         fontSize: 80
     },
