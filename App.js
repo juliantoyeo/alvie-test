@@ -12,8 +12,6 @@ import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
 import { Icon } from 'native-base';
 
-import { getLocationPermissionAsync } from './src/geolocation'
-
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     BarCode: BarCodeScreen,
@@ -65,10 +63,6 @@ const AppContainer = createAppContainer(switchNavigator);
 const store = configureStore();
 
 export default App = () => {
-  useEffect(() => {
-    getLocationPermissionAsync()
-  })
-
   return (
     <Provider store={store}>
       <AppContainer />

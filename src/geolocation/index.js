@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 import { AsyncStorage } from 'react-native'
 
 import * as Location from 'expo-location';
@@ -56,6 +54,7 @@ TaskManager.defineTask(GEO_TASK_NAME, async ({ data: { locations }, error }) => 
 
 const getLocationPermissionAsync = async () => {
   const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+
   if (status === 'granted') {
     let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true })
     await sendLocation([ location ], true)
