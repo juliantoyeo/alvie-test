@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://k8-bi5.m1ck43l.hygoclient.exp.direct",
   "packagerNgrokUrl": "https://packager.k8-bi5.m1ck43l.hygoclient.exp.direct",
-  "ngrokPid": 1822735,
+  "ngrokPid": 107152,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 1822605,
+  "packagerPid": 107059,
   "webpackServerPort": null
 }

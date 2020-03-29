@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, Title, Content, View,Card, CardItem, Button, Row, Body, Icon, Text, H1, Grid, H2, H3, Col } from 'native-base';
+import { Container, Content, View, Icon, H1, H2 } from 'native-base';
 import { AsyncStorage,StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';

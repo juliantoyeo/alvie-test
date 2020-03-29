@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { RefreshControl, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Spinner, Content, Card, CardItem, Button, Icon, Text, H2, View } from 'native-base';
+import { Container, Spinner, Content, Card, CardItem, Button, Icon, Text, H2, View, Col, Grid, Row } from 'native-base';
 import HeaderHygo from '../components/HeaderHygo';
 import Sensor from '../components/Sensor';
 import VChart from '../components/VChart';
@@ -118,90 +118,91 @@ class DashboardScreen extends React.Component {
                                 paddingTop: 10,
                                 paddingBottom: 10,
                                 disableKBDismissScroll: true,
-                                
                             }}>
-                            <View style={{
-                                alignItems: 'flex-start' ,
-                                flexDirection: 'row',
-                                marginLeft: 10,
-                                marginRight: 10
-                            }}>
-                                <Text style={styles.ecritures}>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
-                            </View>
-
-                            <Button large style={{
-                                justifyContent: 'center',
-                                backgroundColor:this.state.conditionColor,
-                                margin: 10
-                            }} onPress={() => {
-                                if(!this.props.produitPhytoClicked) {
-                                    this.props.navigation.navigate('Traitement')
-                                } 
-                            }}>
-                                <Text>{this.state.condition}</Text>
-                            </Button>
-
-                            <Text style={styles.ecritures}> Dernière mesure : {`le ${day}/${month} à ${hours}:${minutes}`}</Text>
-                                
-                            <View style={{
-                                justifyContent: 'space-around',
-                                flexDirection: 'row',
-                                height:100
-                            }}>
-                                <Sensor 
-                                    name="°C"
-                                    color="green"
-                                    value={this.state.temp}
-                                    max={50.0}
-                                    iconName="temperature-low"
-                                    iconType="FontAwesome5"
-                                    type="Température"
-                                />
-                                <Sensor 
-                                    name="%"
-                                    color="blue"
-                                    value={this.state.humi}
-                                    max={100.0}
-                                    iconName="drop"
-                                    iconType="Entypo"
-                                    type="Hygrométrie"
-                                />
-                            </View>
 
                             { this.state.values.length > 1 && (
-                                <View>
-                                    <VChart
-                                        values={this.state.values.map((item => ({
-                                            x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                            y:item.humi
-                                        })))}
-                                        titleName="  Hygrométrie" // add to space to avoid the title of the graph to be cover on the side - small quick fix
-                                        color="blue"
-                                    />
-                                    <VChart
-                                        values={this.state.values.map((item => ({
-                                            x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
-                                            y:item.temp
-                                        })))}
-                                        titleName="  Température"// add to space to avoid the title of the graph to be cover on the side - small quick fix
-                                        color="green"
-                                    />
-                                </View>
+                                <>
+                                    <View style={{
+                                        alignItems: 'flex-start' ,
+                                        flexDirection: 'row',
+                                        marginLeft: 10,
+                                        marginRight: 10
+                                    }}>
+                                        <Text style={styles.ecritures}>{this.props.produitPhytoClicked ? "Produit utilisé : " + this.props.produitPhytoClicked : "Sélectionnez un produit"}</Text>
+                                    </View>
+
+                                    <Button large style={{
+                                        justifyContent: 'center',
+                                        backgroundColor:this.state.conditionColor,
+                                        margin: 10
+                                    }} onPress={() => {
+                                        if(!this.props.produitPhytoClicked) {
+                                            this.props.navigation.navigate('Traitement')
+                                        } 
+                                    }}>
+                                        <Text>{this.state.condition}</Text>
+                                    </Button>
+
+                                    <Text style={styles.ecritures}> Dernière mesure : {`le ${day}/${month} à ${hours}:${minutes}`}</Text>
+                                        
+                                    <View style={{
+                                        justifyContent: 'space-around',
+                                        flexDirection: 'row',
+                                        height:100
+                                    }}>
+                                        <Sensor 
+                                            name="°C"
+                                            color="green"
+                                            value={this.state.temp}
+                                            max={50.0}
+                                            iconName="temperature-low"
+                                            iconType="FontAwesome5"
+                                            type="Température"
+                                        />
+                                        <Sensor 
+                                            name="%"
+                                            color="blue"
+                                            value={this.state.humi}
+                                            max={100.0}
+                                            iconName="drop"
+                                            iconType="Entypo"
+                                            type="Hygrométrie"
+                                        />
+                                    </View>
+                                
+                                    <View>
+                                        <VChart
+                                            values={this.state.values.map((item => ({
+                                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                                y:item.humi
+                                            })))}
+                                            titleName="  Hygrométrie" // add to space to avoid the title of the graph to be cover on the side - small quick fix
+                                            color="blue"
+                                        />
+                                        <VChart
+                                            values={this.state.values.map((item => ({
+                                                x: Date.prototype.getTime.bind(new Date(item.timestamp))(),
+                                                y:item.temp
+                                            })))}
+                                            titleName="  Température"// add to space to avoid the title of the graph to be cover on the side - small quick fix
+                                            color="green"
+                                        />
+                                    </View>
+                                </>
                             )}
                             
-                            { this.state.values.length <= 1 && this.state.values.length === 0 && (
-                                <View style={styles.message}>
-                                    <Card >
+                            { this.state.values.length === 0 && (
+                                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
+                                    <Card style={{ flex: 1, marginLeft: 10 }}>
                                         <CardItem>
-                                            <Text style={styles.ecritures}> Aucune information reçue ces 4 dernières heures, si vous voulez consulter les anciennes interventions, cliquez sur l'onglet Interventions </Text>
+                                            <Text style={styles.ecritures}>{`Aucune information reçue ces 4 dernières heures`}</Text>
                                         </CardItem>
                                     </Card>
-                                    <Text >{this.state.values} </Text>
-                                    <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
                                 </View>
                             )}
                             
-                            { this.state.values.length <= 1 && this.state.values.length > 0 && (
+                            { this.state.values.length === 1 && (
                                 <View style={styles.message}>
                                     <Card >
                                         <CardItem>
