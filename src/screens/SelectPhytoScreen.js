@@ -63,9 +63,12 @@ class SelectPhytoScreen extends React.Component {
                                     <ProductList
                                         onProductChange={ async (value) => { 
                                             await this.updatePhyto(value);
-                                            this.props.navigation.navigate('Dashboard')}
+
+                                            if (value) {
+                                                this.props.navigation.navigate('Dashboard')}
+                                            }
                                         }
-                                        produitPhytoClicked ={this.props.produitPhytoClicked}    
+                                        produitPhytoClicked={this.props.produitPhytoClicked}    
                                     />
                                 </View>
                                 

@@ -39,7 +39,7 @@ class DashboardScreen extends React.Component {
             }
 
             const {temp, humi, timestamp} = await getLastValue(this.props.token)
-            const {condition , conditionColor} = await getLastCondition(this.props.token)
+            const {condition, conditionColor} = await getLastCondition(this.props.token)
             if (!!temp && !!humi) {
                 this.setState(prev => {
                     return {
@@ -71,6 +71,8 @@ class DashboardScreen extends React.Component {
         this._unsubscribeBlur = this.props.navigation.addListener('didBlur', () => {
             clearInterval(this.intervalId); 
         });
+
+        this.loop();
     }
     
     componentWillUnmount() {
@@ -133,14 +135,14 @@ class DashboardScreen extends React.Component {
 
                                     <Button large style={{
                                         justifyContent: 'center',
-                                        backgroundColor:this.state.conditionColor,
+                                        backgroundColor: this.props.produitPhytoClicked ? this.state.conditionColor : 'rgba(0, 0, 0, 1)',
                                         margin: 10
                                     }} onPress={() => {
                                         if(!this.props.produitPhytoClicked) {
                                             this.props.navigation.navigate('Traitement')
                                         } 
                                     }}>
-                                        <Text>{this.state.condition}</Text>
+                                        <Text>{this.props.produitPhytoClicked ? this.state.condition : "Sélectionnez un produit"}</Text>
                                     </Button>
 
                                     <Text style={styles.ecritures}> Dernière mesure : {`le ${day}/${month} à ${hours}:${minutes}`}</Text>
