@@ -13,6 +13,8 @@ import {updatePhytoSelect} from '../store/actions/intervActions';
 
 class InterventionMapScreen extends React.Component {
     _isMounted = false;
+    polygons = {};
+
     constructor(props) {
         super(props);
         this.intervention = this.props.navigation.getParam('intervention')
@@ -106,13 +108,14 @@ class InterventionMapScreen extends React.Component {
                                     onRegionChangeComplete={this.onRegionChange}
                                     style={styles.map}>
                                     { this.state.fieldValues.map((fieldValue) => {
+                                        let fid = fieldValue.id
                                         return (
                                             <Polygon
                                                 key={fieldValue.id}
                                                 strokeWidth={1}
                                                 strokeColor={'rgba(89,223,214,1)'}
-                                                ref={ref => (this.polygon = ref)}
-                                                onLayout={() => this.polygon.setNativeProps({
+                                                ref={ref => (this.polygons[fid] = ref)}
+                                                onLayout={() => this.polygons[fid].setNativeProps({
                                                     fillColor: fieldValue.color_field
                                                 })}
                                                 tappable={true}
