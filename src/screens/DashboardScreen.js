@@ -196,7 +196,7 @@ class DashboardScreen extends React.Component {
                                     <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
                                     <Card style={{ flex: 1, marginLeft: 10 }}>
                                         <CardItem>
-                                            <Text style={styles.ecritures}>{`Aucune information reçue ces 4 dernières heures`}</Text>
+                                            <Text style={styles.ecritures}>{`Aucune information reçue ces 4 dernières heures, si vous voulez consulter les anciennes interventions, cliquez sur l’onglet Interventions`}</Text>
                                         </CardItem>
                                     </Card>
                                 </View>
@@ -206,7 +206,7 @@ class DashboardScreen extends React.Component {
                                 <View style={styles.message}>
                                     <Card >
                                         <CardItem>
-                                            <Text style={styles.ecritures}>1 première mesure, nous attendons la seconde pour commencer à afficher les courbes</Text>
+                                            <Text style={styles.ecritures}>{`1 première mesure, nous attendons la seconde pour commencer à afficher les courbes`}</Text>
                                         </CardItem>
                                     </Card>
                                     <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
