@@ -16,7 +16,7 @@ class ProductList extends React.Component {
         })
 
         if (Platform.OS === 'android') {
-            l.unshift(<Picker.Item label="Quel produit utilisez vous ?" value={null} />)
+            l.unshift(<Picker.Item key={0} label="Quel produit utilisez vous ?" value={null} />)
         }
 
         return l
