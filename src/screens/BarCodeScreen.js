@@ -43,6 +43,8 @@ class BarCodeScreen extends React.Component {
   async componentDidMount() {
     await getLocationPermissionAsync()
 
+    this.props.updatePhytoProductList(await getPhytoProducts())
+
     let storedToken = await AsyncStorage.getItem('token');
     let {errorMessage, userName, familyName, deviceid, deviceType} = await checkToken(storedToken);
 
@@ -56,8 +58,6 @@ class BarCodeScreen extends React.Component {
     //*/
 
     if(!errorMessage) {
-      this.props.updatePhytoProductList(await getPhytoProducts())
-
       this.setState({scanned: true});
 
       this.props.updateToken(storedToken);

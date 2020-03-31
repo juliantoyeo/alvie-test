@@ -7,6 +7,20 @@ class ProductList extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    buildList() {
+        let l = this.props.phytoProductList.map(p => {
+            return (
+                <Picker.Item key={p.id} label={p.name} value={p.name} />
+            )
+        })
+
+        if (Platform.OS === 'android') {
+            l.unshift(<Picker.Item label="Quel produit utilisez vous ?" value={null} />)
+        }
+
+        return l
+    }
     
     render() {
         return (
@@ -20,15 +34,7 @@ class ProductList extends React.Component {
                 placeholderIconColor="59DFD6"
                 selectedValue={this.props.produitPhytoClicked}
                 onValueChange={this.props.onProductChange}>
-                { Platform.OS === 'android' &&
-                    <Picker.Item label="Quel produit utilisez vous ?" value={null}/>
-                }
-
-                { this.props.phytoProductList.map(p => {
-                    return (
-                        <Picker.Item key={p.id} label={p.name} value={p.name} />
-                    )
-                }) }
+                { this.buildList() }
             </Picker>
         );
     }
