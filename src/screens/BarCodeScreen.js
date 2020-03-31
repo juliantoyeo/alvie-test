@@ -8,7 +8,8 @@ import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import {updateToken, updateUserName, updateFamilyName, updateDeviceid, updateDeviceType} from '../store/actions/authActions';
-import {signInWithBarCode, checkToken, storePushToken} from '../api/hygoApi';
+import {updatePhytoProductList} from '../store/actions/pulveActions'
+import {signInWithBarCode, checkToken, storePushToken, getPhytoProducts} from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
@@ -55,6 +56,8 @@ class BarCodeScreen extends React.Component {
     //*/
 
     if(!errorMessage) {
+      this.props.updatePhytoProductList(await getPhytoProducts())
+
       this.setState({scanned: true});
 
       this.props.updateToken(storedToken);
@@ -176,7 +179,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   updateFamilyName:(familyName) => dispatch(updateFamilyName(familyName)),
   updateDeviceid:(deviceid) => dispatch(updateDeviceid(deviceid)),
   updateDeviceType:(deviceType) => dispatch(updateDeviceType(deviceType)),
-  checkToken: (token) => dispatch(checkToken(token))
+  checkToken: (token) => dispatch(checkToken(token)),
+  updatePhytoProductList: (l) => dispatch(updatePhytoProductList(l)),
 })
 
 export default connect(null, mapDispatchToProps)(BarCodeScreen);

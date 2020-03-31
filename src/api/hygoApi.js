@@ -28,6 +28,16 @@ export const updateUI = async (phytoProduct, deviceid) => {
     }
 }
 
+// Retrieve phytoproduct list
+export const getPhytoProducts = async () => {
+    try {
+        const { data } = await trackerApi.get('/app/phytoproducts')
+        return data
+    } catch(e) { console.log(e) }
+
+    return []
+}
+
 export const signUp = async (email, password) => {
     try
     {
@@ -75,8 +85,7 @@ export const checkToken = async (token) => {
             errorMessage: 'No Token',
             userName: ''
         });
-    }
-    else {
+    } else {
         try{
             const response = await trackerApi.post('/checkToken', {token});
             return ({
@@ -86,8 +95,7 @@ export const checkToken = async (token) => {
                 deviceid: response.data.deviceid,
                 deviceType: response.data.deviceType,
             });
-        }
-        catch(err) {
+        } catch(err) {
             return ({
                 errorMessage: 'Invalide stored token',
                 userName: ''

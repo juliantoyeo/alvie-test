@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon, Picker } from 'native-base'
 import { Platform } from 'react-native';
+import { connect } from 'react-redux';
 
-export class ProductList extends React.Component {
+class ProductList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -19,19 +20,24 @@ export class ProductList extends React.Component {
                 placeholderIconColor="59DFD6"
                 selectedValue={this.props.produitPhytoClicked}
                 onValueChange={this.props.onProductChange}>
-                {Platform.OS === 'android' &&
+                { Platform.OS === 'android' &&
                     <Picker.Item label="Quel produit utilisez vous ?" value={null}/>
                 }
-                <Picker.Item label="Herbicide foliaire systémique" value="Herbicide foliaire systémique" />
-                <Picker.Item label="Herbicide foliaire de contact" value="Herbicide foliaire de contact" />
-                <Picker.Item label="Herbicide avec hormones" value="Herbicide avec hormones" />
-                <Picker.Item label="Herbicide racinaire" value="Herbicide racinaire" />
-                <Picker.Item label="Fongicide racinaire" value="Fongicide racinaire" />
-                <Picker.Item label="Fongicide de contact" value="Fongicide de contact" />
-                <Picker.Item label="Fongicide systemique" value="Fongicide systemique" />
-                <Picker.Item label="Insecticide systémique" value="Insecticide systémique" />
-                <Picker.Item label="Insecticide de contact" value="Insecticide de contact" />
+
+                { this.props.phytoProductList.map(p => {
+                    return (
+                        <Picker.Item key={p.id} label={p.name} value={p.name} />
+                    )
+                }) }
             </Picker>
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    phytoProductList : state.pulve.phytoProductList,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({})
+  
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

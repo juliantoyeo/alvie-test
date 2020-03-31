@@ -5,3 +5,10 @@ export const updatePhyto = (produitPhytoClicked) => {
         produitPhytoClicked,
     });
 }
+
+export const updatePhytoProductList = (l) => {
+    return {
+        type: 'LIST_PHYTO',
+        content: l
+    }
+}

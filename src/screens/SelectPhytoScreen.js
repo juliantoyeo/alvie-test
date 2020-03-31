@@ -4,7 +4,7 @@ import { AsyncStorage,StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
 import HeaderHygo from '../components/HeaderHygo';
-import { ProductList } from '../components/ProductList';
+import ProductList from '../components/ProductList';
 import {updatePhyto} from '../store/actions/pulveActions';
 import { updateUI } from '../api/hygoApi'
 
@@ -34,47 +34,41 @@ class SelectPhytoScreen extends React.Component {
                 <Container>
                     <HeaderHygo/>    
                     <Content contentContainerStyle = {{flex: 1}}>
-                            <View style = {
-                                {
-                                    flex: 1,
-                                    flexDirection: 'column',
-                                    //alignItems:'center', 
-                                    alignContent:'center',
-                                    justifyContent : 'space-around',
-                                    backgroundColor: '#F6F6E9',
-                                    padding:10,
-                                    
-                                }
-                            }>
-                                <H1 style={{color : '#194769'}}>
-                                    Bonjour {this.props.userName} ! 
-                                </H1>
-                                <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                                <H2 style={{color : '#194769'}}>
-                                    Nous sommes le {
-                                        this.state.date.getDate().toString().padStart(2, "0")}/{
-                                        (this.state.date.getMonth()+1).toString().padStart(2, "0")
-                                    }!
-                                </H2>
-                                <H2 style={ {color : '#194769'}}>
-                                    Quel produit utilisez-vous aujourd'hui?
-                                </H2>
-                                <View style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
-                                    <ProductList
-                                        onProductChange={ async (value) => { 
-                                            await this.updatePhyto(value);
+                        <View style = {{
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignContent:'center',
+                            justifyContent : 'space-around',
+                            backgroundColor: '#F6F6E9',
+                            padding:10,
+                        }}>
+                            <H1 style={{color : '#194769'}}>
+                                Bonjour {this.props.userName} ! 
+                            </H1>
+                            <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
+                            <H2 style={{color : '#194769'}}>
+                                Nous sommes le {
+                                    this.state.date.getDate().toString().padStart(2, "0")}/{
+                                    (this.state.date.getMonth()+1).toString().padStart(2, "0")
+                                }!
+                            </H2>
+                            <H2 style={ {color : '#194769'}}>
+                                Quel produit utilisez-vous aujourd'hui?
+                            </H2>
+                            <View style={{backgroundColor : '#D9EEF6', borderColor: 'B7DAE3',color:'#194769'}}>
+                                <ProductList
+                                    onProductChange={ async (value) => { 
+                                        await this.updatePhyto(value);
 
-                                            if (value) {
-                                                this.props.navigation.navigate('Dashboard')}
-                                            }
+                                        if (value) {
+                                            this.props.navigation.navigate('Dashboard')}
                                         }
-                                        produitPhytoClicked={this.props.produitPhytoClicked}    
-                                    />
-                                </View>
-                                
+                                    }
+                                    produitPhytoClicked={this.props.produitPhytoClicked}    
+                                />
                             </View>
-                </Content>
-                    
+                        </View>
+                    </Content>
                 </Container> 
             </SafeAreaView>
         );
