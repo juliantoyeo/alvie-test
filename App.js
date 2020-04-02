@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import AccountScreen from './src/screens/AccountScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import BarCodeScreen from './src/screens/BarCodeScreen';
@@ -11,6 +11,25 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
 import { Icon } from 'native-base';
+
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
+
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import translations from './src/i18n/i18n.js'
+
+i18n.translations = translations
+i18n.locale = Localization.locale
+i18n.fallbacks = true;
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+  'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+  'nunito-italic': require('./assets/fonts/Nunito-Italic.ttf'),
+  'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf')
+  });
+};
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -63,6 +82,14 @@ const AppContainer = createAppContainer(switchNavigator);
 const store = configureStore();
 
 export default App = () => {
+  const [fontLoaded, setFontLoaded] = useState(false)
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />
+    )
+  }
+
   return (
     <Provider store={store}>
       <AppContainer />

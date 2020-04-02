@@ -13,6 +13,9 @@ import {signInWithBarCode, checkToken, storePushToken, getPhytoProducts} from '.
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
+import COLORS from '../colors'
+import i18n from 'i18n-js';
+
 class BarCodeScreen extends React.Component {
   constructor(props){
     super(props)
@@ -126,42 +129,40 @@ class BarCodeScreen extends React.Component {
         )}
         
         { !this.state.loading && hasCameraPermission && (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center'
-            }}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
+            style={[StyleSheet.absoluteFill, {display: 'flex'}]}>
+              <View style={{ backgroundColor: COLORS.BEIGE, flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Text textAlign="center" style={{
+                  color: COLORS.DARK_GREEN,
+                  textAlign: 'center',
+                  fontSize: 18,
+                  flex: 1,
+                }}>{i18n.t('bar_code.notice')}</Text>
+              </View>
+              <View style={{ height: 300, display: 'flex', flexDirection: 'row' }}>
+                <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
+                <View style={{ backgroundColor: 'transparent', width: 300 }}></View>
+                <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
+              </View>
+              <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}>
+                {scanned && (
+                  <View style={[StyleSheet.absoluteFill, { 
+                    padding: 20, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center' }]}>
 
-            <View style={{ flex: 1, padding: 20, backgroundColor: 'rgba(46, 88, 118, 0.5)', display: 'flex' }}>
-              <Text textAlign="center" style={{
-                color:"white",
-                textAlign: 'center',
-                fontSize: 18,
-              }}>Bonjour, merci de scanner le QR code situé sur votre capteur Hygo </Text>
-              <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
-                style={{ flex: 1 }}
-              />
-
-              {scanned && (
-                <View style={[StyleSheet.absoluteFill, { 
-                  padding: 20, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center' }]}>
-
-                  <Button 
-                    title='Appuyer pour rescanner de nouveau le QR Code'
-                    onPress={() => this.setState({ scanned: false })} 
-                    buttonStyle= {{
-                      backgroundColor:'#59DFD6',
-                    }} />
-                </View>
-              )}
-            </View>
-          </View>
+                    <Button 
+                      title='Appuyer pour rescanner de nouveau le QR Code'
+                      onPress={() => this.setState({ scanned: false })} 
+                      buttonStyle= {{
+                        backgroundColor:'#59DFD6',
+                      }} />
+                  </View>
+                )}
+              </View>
+          </BarCodeScanner>
         )}
       </SafeAreaView>     
     );

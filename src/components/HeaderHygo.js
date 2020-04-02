@@ -4,11 +4,6 @@ import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Bo
 import * as Font from 'expo-font';
 
 export default class HeaderHygo extends React.Component {
-    componentDidMount() {
-        Font.loadAsync({
-          'Roboto_medium': require('../../assets/font/Roboto-Medium.ttf'),
-        });
-      }
     render() {
         return (
                 <Header style={styles.header}>

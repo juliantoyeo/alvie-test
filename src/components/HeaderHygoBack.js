@@ -5,11 +5,6 @@ import * as Font from 'expo-font';
 import { withNavigation } from 'react-navigation';
 
 class HeaderHygoBack extends React.Component {
-    componentDidMount() {
-        Font.loadAsync({
-          'Roboto_medium': require('../../assets/font/Roboto-Medium.ttf'),
-        });
-      }
     render() {
         return (
                 <Header style={styles.header}>
