@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet } from 'react-native';
-import { Text, Button } from 'react-native-elements';
-import { Content, Spinner } from 'native-base';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Text } from 'react-native-elements';
+import { Content, Spinner, Icon, Button } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
@@ -23,6 +23,7 @@ class BarCodeScreen extends React.Component {
       hasCameraPermission: null,
       scanned: false,
       loading: true,
+      tokenLoading: false,
     };
   }
   
@@ -34,11 +35,11 @@ class BarCodeScreen extends React.Component {
   registerForPushNotificationsAsync = async (deviceid) => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status !== 'granted') {
-      alert('No notification permissions!');
       return;
     }
     // Get the token that identifies this device
     const pushToken = await Notifications.getExpoPushTokenAsync();
+
     // POST the token to the backend server
     return storePushToken(pushToken, deviceid)
   }
@@ -51,80 +52,88 @@ class BarCodeScreen extends React.Component {
     let storedToken = await AsyncStorage.getItem('token');
     let {errorMessage, userName, familyName, deviceid, deviceType} = await checkToken(storedToken);
 
-    /* Uncomment to use with a simulator
-    storedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTc0NjkwNTEwfQ.BMPyYhJeZHnB3YXGTeRGg20COa40OHCkgINoCZ0h5b0";
-    errorMessage = null;
-    userName = "Albert";
-    familyName = 'Gall'
-    deviceid ='BE4A68'
-    deviceType ='HYGO Lite'
-    //*/
-
     if(!errorMessage) {
-      this.setState({scanned: true});
-
-      this.props.updateToken(storedToken);
-      this.props.updateUserName(userName);
-      this.props.updateFamilyName(familyName);
-      this.props.updateDeviceid(deviceid);
-      this.props.updateDeviceType(deviceType);
-
-      await this.registerForPushNotificationsAsync(deviceid)
-
-      this.props.navigation.navigate('mainFlow');
+      await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType)
     } else {
       this.setState({ loading: false })
       this.getPermissionsAsync();
     }
   }
 
+  gotoNextScreen = async (storedToken, userName, familyName, deviceid, deviceType) => {
+    this.props.updateToken(storedToken);
+    this.props.updateUserName(userName);
+    this.props.updateFamilyName(familyName);
+    this.props.updateDeviceid(deviceid);
+    this.props.updateDeviceType(deviceType);
+
+    await this.registerForPushNotificationsAsync(deviceid)
+
+    this.props.navigation.navigate('mainFlow');
+  }
+
   handleBarCodeScanned = async ({ type, data }) => {
-    this.setState({ scanned: true });
+    this.setState({ tokenLoading: true });
 
     const {token, errorMessage, userName,familyName, deviceid, deviceType} = await signInWithBarCode(data);
-    if(errorMessage || !token) {
-      alert('QR code non reconnu');
+    if(!errorMessage && token) {
+      await this.gotoNextScreen(data, userName, familyName, deviceid, deviceType)
     } else {
-      alert(`Bonjour ${userName} ${familyName}`);
-
-      this.props.updateToken(token);
-      this.props.updateUserName(userName);
-      this.props.updateFamilyName(familyName);
-      this.props.updateDeviceid(deviceid);
-      this.props.updateDeviceType(deviceType);
-
-      await AsyncStorage.setItem('token', token);
-      
-      await this.registerForPushNotificationsAsync(deviceid)
-      this.props.navigation.navigate('mainFlow');
+      this.setState({ tokenLoading: false });
+      this.setState({ scanned: true });
     }
   };
 
   render() {
-    const { hasCameraPermission, scanned } = this.state;
+    const { hasCameraPermission, scanned, tokenLoading } = this.state;
 
     return (
       <SafeAreaView style={{ flex: 1 }} forceInset={{top:'always'}}>
         { this.state.loading && (
-          <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
-            <Spinner color='#194769' />
+          <Content contentContainerStyle={{ justifyContent: 'center', flex: 1, backgroundColor: COLORS.BEIGE }}>
+            <Spinner color={COLORS.DARK_BLUE} />
           </Content>
         )}
 
         { !this.state.loading && hasCameraPermission === false && (
           <Content contentContainerStyle={{ justifyContent: 'center', flex: 1, padding: 20 }}>
-            <Text style={{
-              textAlign: 'center',
-              fontSize: 18,
-              marginBottom: 20
-            }}>Nous avons besoin d'avoir accès à l'appareil photo du téléphone pour scanner le capteur</Text>
+          <Text style={{
+            color: COLORS.DARK_BLUE,
+            textAlign: 'center',
+            fontSize: 24,
+            fontFamily: 'nunito-regular'
+          }}>{i18n.t('bar_code.camera_description')}</Text>
 
-            <Button 
-              title='Essayer à nouveau'
-              onPress={() => this.getPermissionsAsync()} 
-              buttonStyle= {{
-                backgroundColor:'#59DFD6',
-              }} />
+          <View style={[StyleSheet.absoluteFill, { 
+            display: 'flex', 
+            flexDirection: 'column',
+            alignItems: 'center', 
+            justifyContent: 'flex-end' }]}>
+  
+              <Button transparent style={{ display: 'flex', height: 60, with: Dimensions.get('window').width }}
+                onPress={() => this.getPermissionsAsync()} >
+                <View style= {{
+                  flex: 1,
+                  display: 'flex',
+                  height: 60,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: COLORS.DARK_BLUE,
+                  borderTopRightRadius: 40,
+                  borderTopLeftRadius: 40,
+                }}>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Icon type="EvilIcons" name="refresh" style={{fontSize: 32, color: '#fff'}} />
+                    <Text style={{
+                      color: '#fff',
+                      fontSize: 16,
+                      fontFamily: 'nunito-bold',
+                    }}>{i18n.t('bar_code.retry_camera')}</Text>
+                  </View>
+                </View>
+                </Button>
+          </View>
           </Content>
         )}
         
@@ -132,38 +141,88 @@ class BarCodeScreen extends React.Component {
           <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
             style={[StyleSheet.absoluteFill, {display: 'flex'}]}>
-              <View style={{ backgroundColor: COLORS.BEIGE, flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Text textAlign="center" style={{
-                  color: COLORS.DARK_GREEN,
-                  textAlign: 'center',
-                  fontSize: 18,
-                  flex: 1,
-                }}>{i18n.t('bar_code.notice')}</Text>
+              <View style={{ 
+                backgroundColor: COLORS.BEIGE, 
+                flex: 1, 
+                display: 'flex', 
+                flexDirection:'row',
+                alignItems:'center',
+                padding: 36,
+                paddingTop: 90,
+                justifyContent:'center' }}>
+
+                <View style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                  <Text textAlign="center" style={{
+                    color: COLORS.DARK_BLUE,
+                    textAlign: 'center',
+                    fontSize: 24,
+                    flex: 1,
+                    fontFamily: 'nunito-regular'
+                  }}>{i18n.t('bar_code.welcome')}</Text>
+
+                  <Text textAlign="center" style={{
+                    color: COLORS.DARK_GREEN,
+                    textAlign: 'center',
+                    fontSize: 18,
+                    flex: 1,
+                    fontFamily: 'nunito-regular'
+                  }}>{i18n.t('bar_code.notice')}</Text>
+                </View>
               </View>
               <View style={{ height: 300, display: 'flex', flexDirection: 'row' }}>
                 <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
-                <View style={{ backgroundColor: 'transparent', width: 300 }}></View>
+                <View style={{ backgroundColor: scanned || tokenLoading ? 'rgba(255, 255, 255, .6)' : 'transparent', flexDirection: 'column', width: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  { scanned && (
+                    <Text textAlign="center" style={{
+                      color: COLORS.DARK_BLUE,
+                      textAlign: 'center',
+                      fontSize: 24,
+                      fontFamily: 'nunito-bold'
+                    }}>{i18n.t('bar_code.qr_error')}</Text>
+                  )}
+
+                  { tokenLoading && (
+                    <Spinner color={COLORS.DARK_BLUE} />
+                  )}
+                </View>
                 <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
               </View>
-              <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}>
-                {scanned && (
-                  <View style={[StyleSheet.absoluteFill, { 
-                    padding: 20, 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center' }]}>
-
-                    <Button 
-                      title='Appuyer pour rescanner de nouveau le QR Code'
-                      onPress={() => this.setState({ scanned: false })} 
-                      buttonStyle= {{
-                        backgroundColor:'#59DFD6',
-                      }} />
-                  </View>
-                )}
-              </View>
+              <View style={{ backgroundColor: COLORS.BEIGE, height: 90 }} />
           </BarCodeScanner>
         )}
+
+        <View style={[StyleSheet.absoluteFill, { 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'flex-end' }]}>
+
+          {scanned && (
+            <Button transparent style={{ display: 'flex', height: 60, with: Dimensions.get('window').width }}
+              onPress={() => this.setState({ scanned: false })} >
+              <View style= {{
+                flex: 1,
+                display: 'flex',
+                height: 60,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.DARK_BLUE,
+                borderTopRightRadius: 40,
+                borderTopLeftRadius: 40,
+              }}>
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Icon type="EvilIcons" name="refresh" style={{fontSize: 32, color: '#fff'}} />
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 16,
+                    fontFamily: 'nunito-bold',
+                  }}>{i18n.t('bar_code.retry_barcode')}</Text>
+                </View>
+              </View>
+            </Button>
+          )}
+        </View>
       </SafeAreaView>     
     );
   }

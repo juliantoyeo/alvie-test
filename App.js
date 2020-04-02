@@ -27,7 +27,8 @@ const fetchFonts = () => {
   return Font.loadAsync({
   'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
   'nunito-italic': require('./assets/fonts/Nunito-Italic.ttf'),
-  'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf')
+  'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
+  'nunito-heavy': require('./assets/fonts/Nunito-Black.ttf'),
   });
 };
 
