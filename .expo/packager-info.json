@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://ti-7tc.m1ck43l.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.ti-7tc.m1ck43l.hygoclient.exp.direct",
+  "ngrokPid": 1523367,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 1523277,
   "webpackServerPort": null
 }

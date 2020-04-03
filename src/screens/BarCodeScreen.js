@@ -7,9 +7,9 @@ import { Content, Spinner, Icon, Button } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
-import {updateToken, updateUserName, updateFamilyName, updateDeviceid, updateDeviceType} from '../store/actions/authActions';
-import {updatePhytoProductList} from '../store/actions/pulveActions'
-import {signInWithBarCode, checkToken, storePushToken, getPhytoProducts} from '../api/hygoApi';
+import { updateAuthInfo } from '../store/actions/authActions';
+import { updatePhytoProductList } from '../store/actions/pulveActions'
+import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
@@ -60,14 +60,16 @@ class BarCodeScreen extends React.Component {
     }
   }
 
-  gotoNextScreen = async (storedToken, userName, familyName, deviceid, deviceType) => {
-    this.props.updateToken(storedToken);
-    this.props.updateUserName(userName);
-    this.props.updateFamilyName(familyName);
-    this.props.updateDeviceid(deviceid);
-    this.props.updateDeviceType(deviceType);
+  gotoNextScreen = async (token, userName, familyName, deviceid, deviceType) => {
+    await this.props.updateAuthInfo({
+      token,
+      userName, familyName, deviceid, deviceType
+    })
 
-    await this.registerForPushNotificationsAsync(deviceid)
+    await AsyncStorage.setItem('token', token);
+
+    // TODO debug this
+    // await this.registerForPushNotificationsAsync(deviceid)
 
     this.props.navigation.navigate('mainFlow');
   }
@@ -77,7 +79,7 @@ class BarCodeScreen extends React.Component {
 
     const {token, errorMessage, userName,familyName, deviceid, deviceType} = await signInWithBarCode(data);
     if(!errorMessage && token) {
-      await this.gotoNextScreen(data, userName, familyName, deviceid, deviceType)
+      await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType)
     } else {
       this.setState({ tokenLoading: false });
       this.setState({ scanned: true });
@@ -139,7 +141,7 @@ class BarCodeScreen extends React.Component {
         
         { !this.state.loading && hasCameraPermission && (
           <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
+            onBarCodeScanned={scanned || tokenLoading ? undefined : this.handleBarCodeScanned}
             style={[StyleSheet.absoluteFill, {display: 'flex'}]}>
               <View style={{ 
                 backgroundColor: COLORS.BEIGE, 
@@ -169,7 +171,7 @@ class BarCodeScreen extends React.Component {
                   }}>{i18n.t('bar_code.notice')}</Text>
                 </View>
               </View>
-              <View style={{ height: 300, display: 'flex', flexDirection: 'row' }}>
+              <View style={{ height: 300, display: 'flex', flexDirection: 'row', backgroundColor: tokenLoading ? '#000' : 'transparent' }}>
                 <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
                 <View style={{ backgroundColor: scanned || tokenLoading ? 'rgba(255, 255, 255, .6)' : 'transparent', flexDirection: 'column', width: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   { scanned && (
@@ -235,11 +237,7 @@ BarCodeScreen.navigationOptions = () => {
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
-  updateToken: (token) => dispatch(updateToken(token)),
-  updateUserName: (userName) => dispatch(updateUserName(userName)),
-  updateFamilyName:(familyName) => dispatch(updateFamilyName(familyName)),
-  updateDeviceid:(deviceid) => dispatch(updateDeviceid(deviceid)),
-  updateDeviceType:(deviceType) => dispatch(updateDeviceType(deviceType)),
+  updateAuthInfo: (params) => dispatch(updateAuthInfo(params)),
   checkToken: (token) => dispatch(checkToken(token)),
   updatePhytoProductList: (l) => dispatch(updatePhytoProductList(l)),
 })

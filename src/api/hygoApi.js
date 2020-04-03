@@ -1,19 +1,27 @@
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 import getUserAgent from './getUserAgent'
 
-export const trackerApi = axios.create({
-    baseURL: 'https://api.alvie.fr',
+export const hygoApi = axios.create({
+    baseURL: 'https://087f96a6.ngrok.io',
     timeout: 3000,
     headers: { 
         'User-Agent': getUserAgent()
     },
 });
 
+// Add a request interceptor
+hygoApi.interceptors.request.use(async (config) => {
+    const token = await AsyncStorage.getItem('token');
+    config.headers.Authorization = `Bearer ${token || ''}`;
+    return config;
+});
+
 // Store device position
 export const storeAppLocation = async (data) => {
     try {
-        await trackerApi.post('/app/location', { ...data });
+        await hygoApi.post('/app/location', { ...data });
     } catch(e) {
         console.log(e)
     }
@@ -22,7 +30,7 @@ export const storeAppLocation = async (data) => {
 // Store phytoproduct changes
 export const updateUI = async (phytoProduct, deviceid) => {
     try {
-        await trackerApi.post('/app/ui', { phytoProduct, deviceid });
+        await hygoApi.post('/app/ui', { phytoProduct, deviceid });
     } catch(e) {
         console.log(e)
     }
@@ -31,17 +39,81 @@ export const updateUI = async (phytoProduct, deviceid) => {
 // Retrieve phytoproduct list
 export const getPhytoProducts = async () => {
     try {
-        const { data } = await trackerApi.get('/app/phytoproducts')
+        const { data } = await hygoApi.get('/app/phytoproducts')
         return data
     } catch(e) { console.log(e) }
 
     return []
 }
 
+// Check if token is valid
+export const checkToken = async (token) => {
+    if (!token) {
+        return {
+            errorMessage: 'NO_TOKEN',
+        };
+    } 
+
+    try {
+        const response = await hygoApi.post('/app/auth/token', { token });
+
+        const { userName, familyName, deviceid, deviceType } = response.data
+        return {
+            errorMessage: '',
+            userName, familyName, deviceid, deviceType
+        }
+    } catch(err) {
+        return {
+            errorMessage: 'INVALID_TOKEN',
+        };
+    }
+}
+
+// SignIn using a barcode
+export const signInWithBarCode = async (barcode) => {
+    try {
+        const response =  await hygoApi.post('/app/auth/barcode', {barcode});
+
+        const { token, userName, familyName, deviceid, deviceType } = response.data
+        return {
+            token, userName, familyName, deviceid, deviceType,
+            errorMessage: ''
+        };
+    } catch(err) {
+        console.log(err);
+        return {
+            errorMessage: 'SIGNIN_ERROR'
+        };
+    }
+}
+
+// Store a new pushToken for this device
+export const storePushToken = async (token, deviceid)=> {
+    try {
+        const response = await hygoApi.post('/app/pushtoken', {pushToken: token, deviceid});
+        return response.data;
+    } catch (error) {
+        return {}
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const signUp = async (email, password) => {
     try
     {
-        const response =  await trackerApi.post('/signup', {email, password});
+        const response =  await hygoApi.post('/signup', {email, password});
         return ({
             token: response.data.token,
             errorMessage: ''
@@ -56,58 +128,12 @@ export const signUp = async (email, password) => {
     }
 }
 
-export const signInWithBarCode = async (barcode) => {
-    try
-    {
-        
-        const response =  await trackerApi.post('/signinwithbarcode',{barcode});
-        return ({
-            token: response.data.token,
-            userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
-            familyName: response.data.familyName.charAt(0).toUpperCase()+response.data.familyName.slice(1),
-            deviceid: response.data.deviceid,
-            deviceType: response.data.deviceType,
-            errorMessage: ''
-        });
-    } catch(err)
-    {
-        console.log(err);
-        return ({
-            token: '',
-            errorMessage: 'Erreur lors de l\'enregistrement'
-        });
-    }
-}
 
-export const checkToken = async (token) => {
-    if (!token) {
-        return ({
-            errorMessage: 'No Token',
-            userName: ''
-        });
-    } else {
-        try{
-            const response = await trackerApi.post('/checkToken', {token});
-            return ({
-                errorMessage: '',
-                userName: response.data.userName.charAt(0).toUpperCase()+response.data.userName.slice(1),
-                familyName: response.data.familyName.charAt(0).toUpperCase()+response.data.familyName.slice(1),
-                deviceid: response.data.deviceid,
-                deviceType: response.data.deviceType,
-            });
-        } catch(err) {
-            return ({
-                errorMessage: 'Invalide stored token',
-                userName: ''
-            });
-        }
-    }
-}
 
 export const getLastValue = async(token) => {
     if (token) {
         try {
-            const response  = await trackerApi.post('/getLastValue', {token});
+            const response  = await hygoApi.post('/getLastValue', {token});
             const {id, deviceid, temp, humi, lat, long, timestamp} = response.data;
             return ({id, deviceid, temp, humi, lat, long, timestamp});
         } catch(error) {
@@ -120,7 +146,7 @@ export const getLastValue = async(token) => {
 export const getLastCondition = async(token) => {
     if (token) {
         try {
-            const response  = await trackerApi.post('/getLastCondition', {token});
+            const response  = await hygoApi.post('/getLastCondition', {token});
             const {condition, phytoProduct, conditionColor} = response.data;
             return ({condition, phytoProduct, conditionColor});
         } catch(error) {
@@ -133,7 +159,7 @@ export const getLastCondition = async(token) => {
 export const getLastValues = async (token) => {
     if (token) {
         try {
-            const response = await trackerApi.post('/getLastValues', {token});
+            const response = await hygoApi.post('/getLastValues', {token});
             return ({
                 values: response.data});
         }
@@ -146,7 +172,7 @@ export const getLastValues = async (token) => {
 export const getLastInterventions = async (token) => {
     if (token) {
         try {
-            const response = await trackerApi.post('/getLastInterventions', {token});
+            const response = await hygoApi.post('/getLastInterventions', {token});
             return ({
                 interventionValues: response.data});
         }
@@ -161,7 +187,7 @@ export const getLastGeometryFields = async (deviceid, interventionid) => {
     if (interventionid) {
         try {
         
-            const response = await trackerApi.post('/getLastGeometryFields', {deviceid, interventionid});
+            const response = await hygoApi.post('/getLastGeometryFields', {deviceid, interventionid});
 
             return ({
                 fieldValues: response.data});
@@ -175,7 +201,7 @@ export const getLastGeometryFields = async (deviceid, interventionid) => {
 
 export const evalConditions = async (deviceid, phyto, humi, temp) => {
     try {
-        const response = await trackerApi.post('/evalConditions', {deviceid, phyto, humi, temp});
+        const response = await hygoApi.post('/evalConditions', {deviceid, phyto, humi, temp});
         return (response.data);
     }
     catch(error) {
@@ -184,21 +210,11 @@ export const evalConditions = async (deviceid, phyto, humi, temp) => {
     }
 }
 
-export const storePushToken = async (token, deviceid)=> {
-    try {
-        const response = await trackerApi.post('/storePushToken', {pushToken: token, deviceid});
-        return (response.data);
-    }
-    catch (error) {
-        return ({
 
-        });
-    }
-}
 
 export const updateIntervention = async (phytoProduct, deviceid, interventionid) => {
     try {
-        const response = await trackerApi.post('/updateIntervention', {phytoProduct, deviceid, interventionid });
+        const response = await hygoApi.post('/updateIntervention', {phytoProduct, deviceid, interventionid });
         return (response.data);
     } catch(error) {
         return ({

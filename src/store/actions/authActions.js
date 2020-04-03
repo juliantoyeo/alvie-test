@@ -31,6 +31,13 @@ export const updateDeviceType = (deviceType) => {
     });
 }
 
+export const updateAuthInfo = ({ token, userName, familyName, deviceid, deviceType }) => {
+    return {
+        type: 'UPDATE_INFOS',
+        token, userName, familyName, deviceid, deviceType,
+    }
+}
+
 export const deleteToken = () => {
     return ({
         type: 'DELETE_TOKEN'
