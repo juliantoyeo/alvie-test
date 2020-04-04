@@ -26,6 +26,10 @@ const fetchResources = async () => {
     }),
     Asset.loadAsync([
       require('./assets/blue_back.png'),      
+      require('./assets/ICN-Nav1.png'),      
+      require('./assets/ICN-Nav2.png'),      
+      require('./assets/ICN-Nav3.png'),      
+      require('./assets/ICN-Nav4.png'),      
     ]),
   ]);
 };

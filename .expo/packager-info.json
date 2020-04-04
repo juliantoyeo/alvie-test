@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://ej-uq9.m1ck43l.hygoclient.exp.direct",
   "packagerNgrokUrl": "https://packager.ej-uq9.m1ck43l.hygoclient.exp.direct",
-  "ngrokPid": 1978994,
+  "ngrokPid": 1985526,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 1978863,
+  "packagerPid": 1985445,
   "webpackServerPort": null
 }

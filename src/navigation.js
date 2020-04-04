@@ -3,7 +3,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { Icon } from 'native-base';
+import { Image } from 'react-native';
 
 import TabBar from './components/TabBar'
 
@@ -60,22 +60,27 @@ const Navigator = createSwitchNavigator({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
 
-        let iconName, iconType, fontSize = 18;
-        if (routeName === 'Dashboard') {
-          iconName = "tractor";
-          iconType = "FontAwesome5"
-        } else if (routeName === 'Parametres') {
-          iconType = "FontAwesome5"
-          iconName = "map";
-        } else if (routeName === 'Traitement') {
-          iconName = "ios-partly-sunny";
-          iconType = "Ionicons"
-        } else if (routeName === 'Intervention') {
-          iconType = "Octicons"
-          iconName = "graph";
+        const r = [ 'Traitement', 'Dashboard', 'Intervention', 'Parametres' ]
+        let idx = r.indexOf(routeName)
+
+        let props = {
+          style: {
+            width: 20,
+          },
+          tintColor,
         }
 
-        return <Icon type={iconType} name={iconName} size={25} style={{color : tintColor, fontSize}} />;
+        switch (idx) {
+          case 0:
+            return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
+          case 1:
+            return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
+          case 2:
+            return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
+          case 3:
+            return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+        }
+
       }
     }),
 
