@@ -46,6 +46,10 @@
       "barStyle": "dark-content",
       "backgroundColor": "#f5f3ea"
     },
+    "notification": {
+      "icon": "./assets/icon.png",
+      "color": "#67dee1"
+    },
     "android": {
       "package": "com.alvie.hygo",
       "versionCode": 9,
