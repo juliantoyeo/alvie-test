@@ -74,9 +74,9 @@ export const signInWithBarCode = async (barcode) => {
     try {
         const response =  await hygoApi.post('/app/auth/barcode', {barcode});
 
-        const { token, userName, familyName, deviceid, deviceType } = response.data
+        const { token, userName, familyName, deviceid, deviceType, hasEquipment } = response.data
         return {
-            token, userName, familyName, deviceid, deviceType,
+            token, userName, familyName, deviceid, deviceType, hasEquipment,
             errorMessage: ''
         };
     } catch(err) {
@@ -107,7 +107,15 @@ export const storeEquipmentInformation = async ({ buses, speed, pressure }) => {
     }
 }
 
-
+// Retrieve next 3 hours meteo
+export const getMeteo = async () => {
+    try {
+        const response = await hygoApi.post('/app/meteo', {})
+        return response.data
+    } catch(error) {
+        return {}
+    }
+}
 
 
 

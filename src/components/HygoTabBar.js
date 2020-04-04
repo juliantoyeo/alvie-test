@@ -1,11 +1,66 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 import COLORS from '../colors'
 
-const S = StyleSheet.create({
+const TabBar = props => {
+  const {
+    renderIcon,
+    getLabelText,
+    activeTintColor,
+    inactiveTintColor,
+    onTabPress,
+    onTabLongPress,
+    getAccessibilityLabel,
+    navigation
+  } = props;
+
+  const { routes, index: activeRouteIndex } = navigation.state;
+
+  return (
+    <View style={styles.top}>
+      <View style={styles.container}>
+        {routes.map((route, routeIndex) => {
+          const isRouteActive = routeIndex === activeRouteIndex;
+          const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
+
+          return (
+            <TouchableOpacity
+              activeOpacity={.6}
+              key={routeIndex}
+              style={styles.tabButton}
+              onPress={() => {
+                onTabPress({ route });
+              }}
+              onLongPress={() => {
+                onTabLongPress({ route });
+              }}
+              accessibilityLabel={getAccessibilityLabel({ route })}
+            >
+              { isRouteActive && (
+                <View style={styles.topCircle}>
+                  <View style={styles.circle}>
+                    {renderIcon({ route, focused: isRouteActive, tintColor })}
+                  </View>
+                </View>
+              )}
+
+              { !isRouteActive && renderIcon({ route, focused: isRouteActive, tintColor })}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
   top: {
-    backgroundColor: COLORS.BEIGE
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   container: { 
     flexDirection: "row", 
@@ -45,56 +100,5 @@ const S = StyleSheet.create({
     paddingBottom: 5
   }
 });
-
-const TabBar = props => {
-  const {
-    renderIcon,
-    getLabelText,
-    activeTintColor,
-    inactiveTintColor,
-    onTabPress,
-    onTabLongPress,
-    getAccessibilityLabel,
-    navigation
-  } = props;
-
-  const { routes, index: activeRouteIndex } = navigation.state;
-
-  return (
-    <View style={S.top}>
-      <View style={S.container}>
-        {routes.map((route, routeIndex) => {
-          const isRouteActive = routeIndex === activeRouteIndex;
-          const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
-
-          return (
-            <TouchableOpacity
-              activeOpacity={.6}
-              key={routeIndex}
-              style={S.tabButton}
-              onPress={() => {
-                onTabPress({ route });
-              }}
-              onLongPress={() => {
-                onTabLongPress({ route });
-              }}
-              accessibilityLabel={getAccessibilityLabel({ route })}
-            >
-              { isRouteActive && (
-                <View style={S.topCircle}>
-                  <View style={S.circle}>
-                    {renderIcon({ route, focused: isRouteActive, tintColor })}
-                  </View>
-                </View>
-              )}
-
-              { !isRouteActive && renderIcon({ route, focused: isRouteActive, tintColor })}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </View>
-  );
-};
 
 export default TabBar;

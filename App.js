@@ -21,15 +21,22 @@ const fetchResources = async () => {
     Font.loadAsync({
       'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
       'nunito-italic': require('./assets/fonts/Nunito-Italic.ttf'),
-      'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
-      'nunito-heavy': require('./assets/fonts/Nunito-Black.ttf'), 
+      'nunito-regular': require('./assets/fonts/Nunito-SemiBold.ttf'),
+      'nunito-heavy': require('./assets/fonts/Nunito-ExtraBold.ttf'), 
+      
+      'Roboto_medium': require('./assets/fonts/Nunito-SemiBold.ttf'),
     }),
     Asset.loadAsync([
       require('./assets/blue_back.png'),      
+      require('./assets/meteo_back.png'),      
       require('./assets/ICN-Nav1.png'),      
       require('./assets/ICN-Nav2.png'),      
       require('./assets/ICN-Nav3.png'),      
       require('./assets/ICN-Nav4.png'),      
+      require('./assets/ICN-Temperature.png'),      
+      require('./assets/ICN-Rain.png'),      
+      require('./assets/ICN-Hygro.png'),      
+      require('./assets/ICN-Wind.png'),      
     ]),
   ]);
 };
