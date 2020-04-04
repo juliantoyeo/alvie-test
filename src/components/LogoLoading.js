@@ -73,8 +73,7 @@ const LogoLoading = ({ color, duration }) => {
       viewBox="0 0 130 50" 
       width="140" 
       height="60"
-      fill={color}
-    >
+      fill={color}>
       <Defs>
         <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
           <Stop offset={offset} stopColor={color} stopOpacity={opacity} />

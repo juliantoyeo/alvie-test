@@ -62,5 +62,10 @@ export default {
     'radar': 'Radar',
     'next_3_hours': 'Trois prochaines heures',
     'parcelle_percent': '%{percent}% d\'exploitation possible de traiter',
+  },
+  'intervention': {
+    'header': "Carte de risques",
+    'header_top': 'intervention du %{day} de %{start} à %{end}',
+    'header_bottom': '%{number} parcelle(s) traitée(s)',
   }
 }

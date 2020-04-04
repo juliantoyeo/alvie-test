@@ -1,191 +1,156 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Spinner, Content, Card, CardItem, Icon, Text, H2, View } from 'native-base';
-import HeaderHygo from '../components/HeaderHygo';
-import InterventionResume from '../components/InterventionResume';
+import { Container, Header, Left, Body, Title, Right, Button, Spinner, Content, Card, CardItem, Icon, Text, H2 } from 'native-base';
+import HygoInterventionCard from '../components/HygoInterventionCard';
 import { getLastInterventions } from '../api/hygoApi';
 import { updateInterv } from '../store/actions/intervActions';
 
-class InterventionScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: new Date().getDate(),
-            month: new Date().getMonth() + 1,
-            interventionValues: this.props.interventionValues,
-            isLoading: true,
-            isRefreshing: false,
-        }
-    }    
+import LogoLoading from '../components/LogoLoading'
 
-    loop = async (isRefresh) => {
-        if (!isRefresh && this.state.isRefreshing) {
-            return
-        }
-        
-        try {
-            let {interventionValues} = await getLastInterventions(this.props.token);
-            if (!!interventionValues) {
-                this.props.updateInterv(interventionValues);
-                this.setState({isLoading: false})
-            }
+import i18n from 'i18n-js'
 
-            if (!interventionValues) {
-                this.setState({isLoading: false})  
-            }
-        } catch(err) {
-            console.log(err)
-        }
+import COLORS from '../colors'
+
+const InterventionScreen = ({ navigation, interventionValues, updateInterv, token }) => {
+  const [loading, setLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  useEffect(() => {
+    getInterventions()
+  }, [])
+
+  const getInterventions = async () => {
+    let {interventionValues} = await getLastInterventions(token)
+    if (interventionValues) {
+      updateInterv(interventionValues);
     }
 
-    componentDidMount() {
-        this._unsubscribe = this.props.navigation.addListener('didFocus', async () => {
-            await this.loop()
-            this.intervalId = setInterval(() => {
-                this.loop()
-            }, 5000)
-        });
+    setLoading(false)
+  }
 
-        this._unsubscribeBlur = this.props.navigation.addListener('didBlur', () => {
-            clearInterval(this.intervalId); 
-        });
-    }
-    
-    componentWillUnmount() {
-        this._unsubscribe && this._unsubscribe.remove();
-        this._unsubscribeBlur && this._unsubscribeBlur.remove();
-    }
+  const onRefresh = async () => {
+    setIsRefreshing(true)
+    await getInterventions()
+    setIsRefreshing(false)
+  }
 
-    cardOnPress = (intervention) => {
-        this.props.navigation.navigate('InterventionMapScreen', {intervention})
-    }
+  return (
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
+      <StatusBar translucent backgroundColor="transparent" />
+      <Container style={styles.content}>
+        <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
+          <Left style={{ flex: 1 }}>
+            <Button transparent onPress={() => navigation.toggleDrawer() }>
+              <Icon name='menu' style={{ color: '#fff' }} />
+            </Button>
+          </Left>
+          <Body style={styles.headerBody}>
+            <Title style={styles.headerTitle}>{i18n.t('intervention.header')}</Title>
+          </Body>
+          <Right style={{ flex: 1 }}></Right>
+        </Header>
 
-    onRefresh = async () => {
-        this.setState({ isRefreshing: true })
-        await this.loop(true);
-        this.setState({ isRefreshing: false })
-    }
+        { loading && (
+          <View style={[StyleSheet.absoluteFill, {display: 'flex', alignItems: 'center', justifyContent: 'center'}]}>
+            <LogoLoading color={COLORS.CYAN} duration={1000} />
+          </View>
+        )}
 
-    render() {
-        return (
-            <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
-                <Container style={styles.container}>
-                    <HeaderHygo/>
-                    { this.state.isLoading && (
-                        <Content contentContainerStyle = {{ 
-                            padding: 10,
-                            paddingRight: 10,
-                            paddingTop: 10,
-                            paddingBottom: 10,
-                        }}>
-                            <Spinner color='#194769' />
-                            <Icon type ="FontAwesome5" name="tractor" style={{color : '#194769', fontSize: 65}}/>
-                            <H2 style={styles.ecritures}>Initialisation des données du capteur Hygo, merci de patienter quelques instants</H2>
-                        </Content> 
-                    )}
+        { !loading && (
+            <Content contentContainerStyle={{ backgroundColor: COLORS.BEIGE, padding: 10, paddingLeft: 0, paddingRight: 15, disableKBDismissScroll: true }} 
+              refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}>
+              { interventionValues.length >= 1 && (
+                <View>
+                  { interventionValues.map((intervention) => {
+                    return (
+                      <HygoInterventionCard 
+                        key={intervention.id}
+                        intervention={intervention}
+                        onPress={(interv) => navigation.navigate('InterventionMapScreen', { intervention: interv })}
+                      />
+                    );
+                  })}
 
-                    { !this.state.isLoading && (
-                        <Content contentContainerStyle = {{ 
-                            padding: 10,
-                            paddingRight: 10,
-                            paddingTop: 10,
-                            paddingBottom: 10,
-                            disableKBDismissScroll: true
-                        }} refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh.bind(this)} />}>
-
-                        { this.props.interventionValues.length >= 1 && (
-                            <View>
-                            {
-                                this.props.interventionValues.map((intervention) => {
-                                    return (
-                                        <InterventionResume 
-                                            key={intervention.id}
-                                            id = {intervention.id}
-                                            interventionid = {intervention.interventionid}
-                                            starttime = {intervention.starttime}
-                                            endtime = {intervention.endtime}
-                                            avgtemp = {intervention.avgtemp}
-                                            maxtemp = {intervention.maxtemp}
-                                            mintemp = {intervention.mintemp}
-                                            avghumi = {intervention.avghumi}
-                                            maxhumi = {intervention.maxhumi}
-                                            minhumi = {intervention.minhumi}
-                                            intervention = {intervention}
-                                            onPress = {(interv) => this.cardOnPress(interv)}
-                                        /> 
-                                    );
-                                })
-                            }
-                            </View>
-
-
-                        )}
-                        
-                        { this.props.interventionValues.length < 1 && (
-                            <View style={styles.message}>
-                                <Card >
-                                    <CardItem>
-                                        <Text style={styles.ecritures}> Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83 </Text>
-                                    </CardItem>
-                                </Card>
-                                
-                                <Icon type ="AntDesign" name="aliwangwang-o1" style={styles.icon}/>
-                            </View>
-                        )}
-                        </Content> 
-                    )}   
-                </Container> 
-            </SafeAreaView>
-        );
-    }
+                  <View style={{ height: 50 }}></View>
+                </View>
+              )}
+          
+              { interventionValues.length < 1 && (
+                <>
+                  <View style={{ flex: 2 }} />
+                  <Text textAlign="center" style={styles.text}>Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83</Text>
+                  <View style={{ flex: 2 }} />
+                </>
+              )}
+            </Content> 
+        )}
+      </Container>
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-    progressBar: {
-        flexDirection: 'row',
-        height: 20,
-        width: '100%',
-        backgroundColor: 'white',
-        borderColor: 'grey',
-        borderWidth: 1,
-        borderRadius: 5
-    },
-    message: {
-        flex: 1,
-        justifyContent :"center",
-        flexDirection: 'column',
-    },
-    ecritures: {
-        color: '#194769'
-    },
-    icon: {
-        color: '#194769',
-        fontSize: 80
-    },
-    container: {
-        backgroundColor: '#F6F6E9',
-    },
-    statusbar: {
-        backgroundColor: '#F6F6E9',
-        flex: 1
-    }
+  statusbar: { 
+    flex: 1, 
+    display: 'flex',
+  },
+  container: { 
+    flex: 1, 
+    display: 'flex', 
+  },
+  header: {
+    backgroundColor: COLORS.CYAN
+  },
+  headerBody: {
+    flex: 3,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontFamily: 'nunito-regular',
+    fontSize: 24
+  },  
+  scrollContainer: { 
+    padding: 10,
+    display: 'flex',
+    flex: 1,
+    paddingLeft: 0,
+    paddingRight: 15,
+    backgroundColor: COLORS.BEIGE,
+    flexGrow: 1,
+  },
+  text: {
+    color: COLORS.DARK_GREEN,
+    textAlign: 'center',
+    fontSize: 18,
+    flex: 1,
+    fontFamily: 'nunito-regular'
+  },
+  message: {
+    justifyContent: 'center', 
+    flex: 1, 
+    display: 'flex', 
+    paddingLeft: 38, 
+    paddingRight: 38, 
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = (state) => ({
-    token: state.authen.token,
-    userName: state.authen.userName,
-    newSession: state.pulve.newSession,
-    lastSession: state.pulve.lastSession,
-    interventionValues: state.interv.interventions
+  token: state.authen.token,
+  userName: state.authen.userName,
+  interventionValues: state.interv.interventions
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-    updateInterv: (interventionValues)=>dispatch(updateInterv(interventionValues)),
+  updateInterv: (interventionValues)=>dispatch(updateInterv(interventionValues)),
 })
-  
+
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionScreen);
 
 
-  
+
