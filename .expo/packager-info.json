@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://ti-7tc.m1ck43l.hygoclient.exp.direct",
-  "packagerNgrokUrl": "https://packager.ti-7tc.m1ck43l.hygoclient.exp.direct",
-  "ngrokPid": 1523367,
+  "expoServerNgrokUrl": "https://ej-uq9.m1ck43l.hygoclient.exp.direct",
+  "packagerNgrokUrl": "https://packager.ej-uq9.m1ck43l.hygoclient.exp.direct",
+  "ngrokPid": 1978994,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 1523277,
+  "packagerPid": 1978863,
   "webpackServerPort": null
 }

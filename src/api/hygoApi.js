@@ -97,7 +97,15 @@ export const storePushToken = async (token, deviceid)=> {
     }
 }
 
-
+// Save equipments
+export const storeEquipmentInformation = async ({ buses, speed, pressure }) => {
+    try {
+        const response = await hygoApi.post('/app/equipment', {buses, speed, pressure});
+        return response.data;
+    } catch (error) {
+        return {}
+    }
+}
 
 
 

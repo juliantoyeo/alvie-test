@@ -13,8 +13,8 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F6F6E9"
+      "resizeMode": "cover",
+      "backgroundColor": "#f5f3ea"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -39,6 +39,12 @@
       "config": {
         "googleMapsApiKey": "AIzaSyABnGN0yBmlMhCqZ-nzfSZVxTySEHYHYx8"
       }
+    },
+    "androidStatusBar": {
+      "hidden": false,
+      "translucent": true,
+      "barStyle": "dark-content",
+      "backgroundColor": "#f5f3ea"
     },
     "android": {
       "package": "com.alvie.hygo",
