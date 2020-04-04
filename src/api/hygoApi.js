@@ -57,10 +57,10 @@ export const checkToken = async (token) => {
     try {
         const response = await hygoApi.post('/app/auth/token', { token });
 
-        const { userName, familyName, deviceid, deviceType } = response.data
+        const { userName, familyName, deviceid, deviceType, hasEquipment } = response.data
         return {
             errorMessage: '',
-            userName, familyName, deviceid, deviceType
+            userName, familyName, deviceid, deviceType, hasEquipment
         }
     } catch(err) {
         return {

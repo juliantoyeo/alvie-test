@@ -52,17 +52,17 @@ class BarCodeScreen extends React.Component {
     this.props.updatePhytoProductList(await getPhytoProducts())
 
     let storedToken = await AsyncStorage.getItem('token');
-    let {errorMessage, userName, familyName, deviceid, deviceType} = await checkToken(storedToken);
+    let {errorMessage, userName, familyName, deviceid, deviceType, hasEquipment} = await checkToken(storedToken);
 
     if(!errorMessage) {
-      await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType)
+      await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment)
     } else {
       this.setState({ loading: false })
       this.getPermissionsAsync();
     }
   }
 
-  gotoNextScreen = async (token, userName, familyName, deviceid, deviceType) => {
+  gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
     await this.props.updateAuthInfo({
       token,
       userName, familyName, deviceid, deviceType
@@ -73,16 +73,19 @@ class BarCodeScreen extends React.Component {
     // TODO debug this
     // await this.registerForPushNotificationsAsync(deviceid)
 
-    //this.props.navigation.navigate('mainFlow');
-    this.props.navigation.replace('EquipmentScreen')
+    if (hasEquipment) {
+      this.props.navigation.navigate('mainFlow');
+    } else {
+      this.props.navigation.replace('EquipmentScreen')
+    }
   }
 
   handleBarCodeScanned = async ({ type, data }) => {
     this.setState({ tokenLoading: true });
 
-    const {token, errorMessage, userName,familyName, deviceid, deviceType} = await signInWithBarCode(data);
+    const {token, errorMessage, userName,familyName, deviceid, deviceType, hasEquipment} = await signInWithBarCode(data);
     if(!errorMessage && token) {
-      await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType)
+      await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType, hasEquipment)
     } else {
       this.setState({ tokenLoading: false });
       this.setState({ scanned: true });
