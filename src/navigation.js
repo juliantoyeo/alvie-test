@@ -41,75 +41,76 @@ const Navigator = createSwitchNavigator({
     }
   }),
 
-  mainFlow: createDrawerNavigator({
-    Drawer: {
-      screen: createBottomTabNavigator({
-        MeteoScreen: createStackNavigator({
-          MeteoScreen: {
-            screen: MeteoScreen, 
-            navigationOptions: {
-              header: null,
-            },
-          }
-        }),
-
-        Dashboard: DashboardScreen,
-
-        Intervention: createStackNavigator({
-          Interventions : InterventionsScreen,
-          InterventionMapScreen: InterventionMapScreen,
-        }, {
-          headerMode: 'none',
-          defaultNavigationOptions : {}
-        }),
-
-        Parametres: AccountScreen 
-      }, {
-        defaultNavigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused, horizontal, tintColor }) => {
-            const { routeName } = navigation.state;
-    
-            const r = [ 'MeteoScreen', 'Dashboard', 'Intervention', 'Parametres' ]
-            let idx = r.indexOf(routeName)
-    
-            let props = {
-              style: {
-                height: 20,
-                tintColor,
+  mainFlow: createStackNavigator({
+    main: createDrawerNavigator({
+      Drawer: {
+        screen: createBottomTabNavigator({
+          MeteoScreen: createStackNavigator({
+            MeteoScreen: {
+              screen: MeteoScreen, 
+              navigationOptions: {
+                header: null,
               },
             }
-    
-            switch (idx) {
-              case 0:
-                return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
-              case 1:
-                return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
-              case 2:
-                return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
-              case 3:
-                return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+          }),
+
+          Dashboard: DashboardScreen,
+
+          RealTime: AccountScreen,
+
+          Intervention: createStackNavigator({
+            Interventions : InterventionsScreen,
+          }, {
+            headerMode: 'none',
+            defaultNavigationOptions : {}
+          }),
+        }, {
+          defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+              const { routeName } = navigation.state;
+      
+              const r = [ 'MeteoScreen', 'Dashboard', 'RealTime', 'Intervention' ]
+              let idx = r.indexOf(routeName)
+      
+              let props = {
+                style: {
+                  height: 20,
+                  tintColor,
+                },
+              }
+      
+              switch (idx) {
+                case 0:
+                  return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
+                case 1:
+                  return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
+                case 2:
+                  return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
+                case 3:
+                  return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+              }
+      
             }
-    
-          }
-        }),
-    
-        tabBarComponent: TabBar,
-        tabBarOptions: {
-          activeTintColor: COLORS.DARK_GREEN,
-          inactiveTintColor: '#fff',
-          labelStyle: {
-            fontSize: 14,
+          }),
+      
+          tabBarComponent: TabBar,
+          tabBarOptions: {
+            activeTintColor: COLORS.DARK_GREEN,
+            inactiveTintColor: '#fff',
+            labelStyle: {
+              fontSize: 14,
+            },
           },
-          style: {
-            backgroundColor: '#F6F6E9' // TabBar background
-          }
-        },
-      })
-    }
+        })
+      }
+    }, {
+      contentComponent: DrawerScreen,
+      drawerWidth: 310
+    }),
+    InterventionMapScreen: InterventionMapScreen,
   }, {
-    contentComponent: DrawerScreen,
-    drawerWidth: 310
+    headerMode: 'none'
   })
-});
+})
 
 export default createAppContainer(Navigator)

@@ -1,13 +1,11 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 
 import COLORS from '../colors'
 
 import i18n from 'i18n-js'
 
-const HygoInterventionCard = ({ intervention }) => {
-  console.log(intervention)
-
+const HygoInterventionCard = ({ navigation, intervention }) => {
   const getDay = () => {
     let d = new Date(intervention.starttime)
     return `${d.getDate()}/${("0"+(d.getMonth()+1)).slice(-2)}`
@@ -23,34 +21,55 @@ const HygoInterventionCard = ({ intervention }) => {
     return `${d.getHours()}:${("0"+(d.getMinutes())).slice(-2)}`
   }
 
+  const onCardPressed = () => {
+    navigation.navigate('InterventionMapScreen', {
+      intervention
+    })
+  }
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onCardPressed} style={styles.container}>
       <View style={styles.card}>
         <View style={styles.header}>
           <Text style={styles.headerTopText}>{i18n.t('intervention.header_top', { day: getDay(), start: getStartHour(), end: getEndHour() })}</Text>
-          <Text style={styles.headerBottomText}>{i18n.t('intervention.header_bottom', { number: intervention.number_fields })}</Text>
+          <Text style={styles.headerBottomText}>{i18n.t('intervention.header_bottom', { number: intervention.numberFields })}</Text>
         </View>
         <View style={styles.content}>
           <View style={styles.phytoContainer}>
-            <Text style={styles.phyto}>{intervention.phytoproduct||"Aucun produit selectionné"}</Text>
+            <Image source={require('../../assets/phyto.png')} style={styles.elemIcon} />
+            <Text style={styles.phyto}>{intervention.phytoproduct||i18n.t('intervention.no_phyto_selected')}</Text>
           </View>
-            <View style={styles.metrics}>
+          <View style={styles.metrics}>
+            { typeof intervention.avgwind !== 'undefined' && (
               <View style={styles.elem}>
-                <Image source={require('../../assets/ICN-Temperature.png')} style={styles.elemIcon} />
-                <Text style={styles.big}>{`${intervention.avgtemp.toFixed(1)}°C`}</Text>
-                <Text style={styles.mini}>{`min ${intervention.mintemp.toFixed(1)}°C`}</Text>
-                <Text style={styles.mini}>{`max ${intervention.maxtemp.toFixed(1)}°C`}</Text>
+                <Image source={require('../../assets/ICN-Wind.png')} style={styles.elemIcon} />
+                <Text style={styles.big}>{`${Math.round(intervention.avgwind)} km/h`}</Text>
+                <Text style={styles.mini}>{`min ${Math.round(intervention.minwind)} km/h`}</Text>
+                <Text style={styles.mini}>{`max ${Math.round(intervention.maxwind)} km/h`}</Text>
               </View>
+            )}
+            { typeof intervention.precipitation !== 'undefined' && (
               <View style={styles.elem}>
-                <Image source={require('../../assets/ICN-Hygro.png')} style={styles.elemIcon} />
-                <Text style={styles.big}>{`${Math.round(intervention.avghumi)}%`}</Text>
-                <Text style={styles.mini}>{`min ${Math.round(intervention.minhumi)}%`}</Text>
-                <Text style={styles.mini}>{`max ${Math.round(intervention.maxhumi)}%`}</Text>
+                <Image source={require('../../assets/ICN-Rain.png')} style={styles.elemIcon} />
+                <Text style={styles.big}>{`${Math.round(intervention.precipitation)} mm`}</Text>
               </View>
+            )}
+            <View style={styles.elem}>
+              <Image source={require('../../assets/ICN-Temperature.png')} style={styles.elemIcon} />
+              <Text style={styles.big}>{`${intervention.avgtemp.toFixed(1)}°C`}</Text>
+              <Text style={styles.mini}>{`min ${intervention.mintemp.toFixed(1)}°C`}</Text>
+              <Text style={styles.mini}>{`max ${intervention.maxtemp.toFixed(1)}°C`}</Text>
             </View>
+            <View style={styles.elem}>
+              <Image source={require('../../assets/ICN-Hygro.png')} style={styles.elemIcon} />
+              <Text style={styles.big}>{`${Math.round(intervention.avghumi)}%`}</Text>
+              <Text style={styles.mini}>{`min ${Math.round(intervention.minhumi)}%`}</Text>
+              <Text style={styles.mini}>{`max ${Math.round(intervention.maxhumi)}%`}</Text>
+            </View>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -93,11 +112,15 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     paddingLeft: 5,
     paddingRight: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   phyto: {
     fontFamily: 'nunito-regular',
     fontSize: 16,
-    color: COLORS.DARK_GREEN
+    color: COLORS.DARK_GREEN,
+    marginLeft: 10
   },
   metrics: {
     backgroundColor: COLORS.BEIGE,
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-evenly'
   },
   elem: {

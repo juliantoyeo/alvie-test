@@ -67,5 +67,20 @@ export default {
     'header': "Carte de risques",
     'header_top': 'intervention du %{day} de %{start} à %{end}',
     'header_bottom': '%{number} parcelle(s) traitée(s)',
+    'no_phyto_selected': 'Aucun produit selectionné',
+  },
+  'intervention_map': {
+    'header': 'Intervention du %{date}',
+    'header_phyto': 'Phyto : %{phyto}',
+    'header_clock': 'Début : %{start} - Fin : %{end}',
+    'surface': 'Surface totale pulvérisée : %{surface} ha',
+    'excellent': 'Excellentes conditions',
+    'good': 'Bonnes conditions',
+    'mediocre': 'Médiocres conditions',
+    'bad': 'Mauvaises conditions',
+    'min': 'min %{value}',
+    'max': 'max %{value}',
+    'avg': 'avg %{value}',
+    'rain': 'Pluie : %{value}',
   }
 }

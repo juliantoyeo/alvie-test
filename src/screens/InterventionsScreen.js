@@ -4,7 +4,7 @@ import { StyleSheet, RefreshControl, StatusBar, ScrollView, View } from 'react-n
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Spinner, Content, Card, CardItem, Icon, Text, H2 } from 'native-base';
 import HygoInterventionCard from '../components/HygoInterventionCard';
-import { getLastInterventions } from '../api/hygoApi';
+import { getInterventions } from '../api/hygoApi';
 import { updateInterv } from '../store/actions/intervActions';
 
 import LogoLoading from '../components/LogoLoading'
@@ -13,16 +13,16 @@ import i18n from 'i18n-js'
 
 import COLORS from '../colors'
 
-const InterventionScreen = ({ navigation, interventionValues, updateInterv, token }) => {
+const InterventionScreen = ({ navigation, interventionValues, updateInterv }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   useEffect(() => {
-    getInterventions()
+    loadInterventions()
   }, [])
 
-  const getInterventions = async () => {
-    let {interventionValues} = await getLastInterventions(token)
+  const loadInterventions = async () => {
+    let {interventionValues} = await getInterventions()
     if (interventionValues) {
       updateInterv(interventionValues);
     }
@@ -32,7 +32,7 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv, toke
 
   const onRefresh = async () => {
     setIsRefreshing(true)
-    await getInterventions()
+    await loadInterventions()
     setIsRefreshing(false)
   }
 
@@ -59,7 +59,7 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv, toke
         )}
 
         { !loading && (
-            <Content contentContainerStyle={{ backgroundColor: COLORS.BEIGE, padding: 10, paddingLeft: 0, paddingRight: 15, disableKBDismissScroll: true }} 
+            <Content contentContainerStyle={{ flexGrow: 1, backgroundColor: COLORS.BEIGE, padding: 10, paddingLeft: 0, paddingRight: 15, disableKBDismissScroll: true }} 
               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}>
               { interventionValues.length >= 1 && (
                 <View>
@@ -67,6 +67,7 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv, toke
                     return (
                       <HygoInterventionCard 
                         key={intervention.id}
+                        navigation={navigation}
                         intervention={intervention}
                         onPress={(interv) => navigation.navigate('InterventionMapScreen', { intervention: interv })}
                       />
@@ -141,8 +142,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  token: state.authen.token,
-  userName: state.authen.userName,
   interventionValues: state.interv.interventions
 });
 
