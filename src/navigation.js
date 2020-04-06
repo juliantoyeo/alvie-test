@@ -11,7 +11,7 @@ import TabBar from './components/HygoTabBar'
 import i18n from 'i18n-js'
 
 import AccountScreen from './screens/AccountScreen';
-import DashboardScreen from './screens/DashboardScreen';
+import RealTimeScreen from './screens/RealTimeScreen';
 import BarCodeScreen from './screens/BarCodeScreen';
 import MeteoScreen from './screens/MeteoScreen';
 import InterventionsScreen from './screens/InterventionsScreen';
@@ -54,9 +54,9 @@ const Navigator = createSwitchNavigator({
             }
           }),
 
-          Dashboard: DashboardScreen,
+          Other: AccountScreen,
 
-          RealTime: AccountScreen,
+          RealTime: RealTimeScreen,
 
           Intervention: createStackNavigator({
             Interventions : InterventionsScreen,
@@ -69,7 +69,7 @@ const Navigator = createSwitchNavigator({
             tabBarIcon: ({ focused, horizontal, tintColor }) => {
               const { routeName } = navigation.state;
       
-              const r = [ 'MeteoScreen', 'Dashboard', 'RealTime', 'Intervention' ]
+              const r = [ 'MeteoScreen', 'Other', 'RealTime', 'Intervention' ]
               let idx = r.indexOf(routeName)
       
               let props = {

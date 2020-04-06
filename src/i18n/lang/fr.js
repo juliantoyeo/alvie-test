@@ -68,6 +68,7 @@ export default {
     'header_top': 'intervention du %{day} de %{start} à %{end}',
     'header_bottom': '%{number} parcelle(s) traitée(s)',
     'no_phyto_selected': 'Aucun produit selectionné',
+    'no_data': 'Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83',
   },
   'intervention_map': {
     'header': 'Intervention du %{date}',
@@ -82,5 +83,10 @@ export default {
     'max': 'max %{value}',
     'avg': 'avg %{value}',
     'rain': 'Pluie : %{value}',
+  },
+  'realtime': {
+    'header': 'Temps réel',
+    'no_data': 'Aucune information enregistrée au cours de 4 dernières heures, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83',
+    'last_hour': 'Dernière mesure à %{value}',
   }
 }

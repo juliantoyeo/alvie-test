@@ -12,6 +12,8 @@ import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts } from 
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
+import * as Device from 'expo-device';
+
 import COLORS from '../colors'
 import i18n from 'i18n-js';
 
@@ -32,6 +34,11 @@ class BarCodeScreen extends React.Component {
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
+
+    if (!Device.isDevice) {
+      let code = await BarCodeScanner.scanFromURLAsync('https://alvie-mvp.s3-eu-west-1.amazonaws.com/qr-code8+(1).png')
+      this.handleBarCodeScanned(code[0])
+    }
   };
 
   registerForPushNotificationsAsync = async (deviceid) => {

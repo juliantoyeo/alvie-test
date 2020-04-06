@@ -14,7 +14,8 @@ import translations from './src/i18n/i18n.js'
 
 i18n.translations = translations
 i18n.locale = Localization.locale
-i18n.fallbacks = true;
+i18n.defaultLocale = 'fr'
+i18n.fallbacks = true
 
 const fetchResources = async () => {
   await Promise.all([

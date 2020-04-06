@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, ScrollView, View } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Spinner, Content, Card, CardItem, Icon, Text, H2 } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
 import HygoInterventionCard from '../components/HygoInterventionCard';
 import { getInterventions } from '../api/hygoApi';
 import { updateInterv } from '../store/actions/intervActions';
@@ -81,7 +81,7 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
               { interventionValues.length < 1 && (
                 <>
                   <View style={{ flex: 2 }} />
-                  <Text textAlign="center" style={styles.text}>Aucune information enregistrée sur les anciennes interventions, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83</Text>
+                  <Text textAlign="center" style={styles.text}>{i18n.t('intervention.no_data')}</Text>
                   <View style={{ flex: 2 }} />
                 </>
               )}

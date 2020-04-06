@@ -8,7 +8,7 @@ export default {
   MEDIOCRE: '#d6815e',
   GOOD: '#d4e68c',
   BAD: '#666666',
-  EXCELLENT: '#8bdf8b',
+  EXCELLENT: '#65bb65',
 
   DEFAULT_FIELD: 'rgba(195,195,195,0.4)',
 }

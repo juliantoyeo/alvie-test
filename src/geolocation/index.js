@@ -52,22 +52,26 @@ TaskManager.defineTask(GEO_TASK_NAME, async ({ data: { locations }, error }) => 
   await sendLocation(locations)
 });
 
+const initLocation = async () => {
+  let location = await Location.getLastKnownPositionAsync()
+  await sendLocation([ location ], true)
+
+  let isStarted = await Location.hasStartedLocationUpdatesAsync(GEO_TASK_NAME)
+  if (!isStarted) {
+    Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
+      distanceInterval: 10,
+      accuracy: Location.Accuracy.Highest,
+      activityType: Location.ActivityType.AutomotiveNavigation,
+      showsBackgroundLocationIndicator: false,
+    })
+  }
+}
+
 const getLocationPermissionAsync = async () => {
   const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
 
   if (status === 'granted') {
-    let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true })
-    await sendLocation([ location ], true)
-
-    let isStarted = await Location.hasStartedLocationUpdatesAsync(GEO_TASK_NAME)
-    if (!isStarted) {
-      Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
-        distanceInterval: 10,
-        accuracy: Location.Accuracy.Highest,
-        activityType: Location.ActivityType.AutomotiveNavigation,
-        showsBackgroundLocationIndicator: false,
-      })
-    }
+    initLocation()
   } else {
     console.log(new Error('Location permission not granted'));
   }
