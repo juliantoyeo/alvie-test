@@ -13,10 +13,11 @@ const LoadingScreen = ({ navigation }) => {
   const run = async () => {
     const { action, next, params } = navigation.state.params
 
-    console.log(action, next, params)
-    await action(params)
+    let result = await action(params)
 
-    navigation.navigate(next)
+    navigation.replace(next, {
+      result
+    })
   }
 
   return (

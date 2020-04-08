@@ -25,23 +25,8 @@ import HeaderText from './components/HeaderText'
 import COLORS from './colors'
 
 const Navigator = createSwitchNavigator({
-  loginFlow: createStackNavigator({
-    BarCode: BarCodeScreen,
-    EquipmentScreen: {
-      screen: EquipmentScreen, 
-      navigationOptions: {
-        header: () => <HeaderText text={i18n.t('equipment.header')} />,
-      },
-    },
-    LoadingScreen: {
-      screen: LoadingScreen,
-      navigationOptions: {
-        header: null
-      }
-    }
-  }),
-
   mainFlow: createStackNavigator({
+    BarCode: BarCodeScreen,
     main: createDrawerNavigator({
       Drawer: {
         screen: createBottomTabNavigator({
@@ -51,7 +36,7 @@ const Navigator = createSwitchNavigator({
               navigationOptions: {
                 header: null,
               },
-            }
+            },
           }),
 
           Other: AccountScreen,
@@ -108,6 +93,18 @@ const Navigator = createSwitchNavigator({
       drawerWidth: 310
     }),
     InterventionMapScreen: InterventionMapScreen,
+    EquipmentSettingsScreen: {
+      screen: EquipmentScreen, 
+      navigationOptions: {
+        header: () => <HeaderText text={i18n.t('equipment.header')} />,
+      },
+    },
+    LoadingScreen: {
+      screen: LoadingScreen,
+      navigationOptions: {
+        header: null
+      }
+    }
   }, {
     headerMode: 'none'
   })

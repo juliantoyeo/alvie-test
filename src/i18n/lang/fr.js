@@ -26,6 +26,7 @@ export default {
     'hygo_model': 'Modèle du capteur : %{model}',
     'app_version': 'Version applicative : %{version}',
     'email_subject': 'Demande d\'aide capteur Hygo',
+    'equipment': 'Mes équipements',
   },
   'bar_code': {
     'notice': 'Pour synchroniser votre capteur HYGO, scannez votre QR code :',
@@ -84,9 +85,13 @@ export default {
     'avg': 'avg %{value}',
     'rain': 'Pluie : %{value}',
   },
+  "phyto": {
+    "no_phyto": "Pas de produit sélectionné",
+  },
   'realtime': {
     'header': 'Temps réel',
     'no_data': 'Aucune information enregistrée au cours de 4 dernières heures, en cas de problème, vous pouvez nous contacter au 06 68 48 38 83',
     'last_hour': 'Dernière mesure à %{value}',
+    'next_cuve': 'Planifier une autre cuve',
   }
 }

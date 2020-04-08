@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image, AsyncStorage, Linking } from 'react-native'
+import { StyleSheet, View, Text, Image, AsyncStorage, Linking, TouchableOpacity } from 'react-native'
 import { NavigationActions } from 'react-navigation';
 import { DrawerActions } from 'react-navigation-drawer';
 import { connect } from 'react-redux'
@@ -11,13 +11,16 @@ import pkg from '../../app.json'
 import COLORS from '../colors'
 import i18n from 'i18n-js'
 
+import { getEquipment } from '../api/hygoApi'
+
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
-  const navigateToScreen = (route) => () => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: route
-    });
-    navigation.dispatch(navigateAction);
+  const goToEquipment = () => {
     navigation.dispatch(DrawerActions.closeDrawer())
+    navigation.navigate('LoadingScreen', {
+      next: 'EquipmentSettingsScreen',
+      params: {},
+      action: getEquipment
+    })
   }
 
   const logout = async () => {
@@ -53,6 +56,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
           <Image source={require('../../assets/parcelles.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.parcelles')}</Text>
         </View>
+        <TouchableOpacity style={styles.item} onPress={() => goToEquipment()}>
+          <Image source={require('../../assets/ICN-Nav2.png')} style={styles.itemImage} />
+          <Text style={styles.itemText}>{i18n.t('drawer.equipment')}</Text>
+        </TouchableOpacity>
         <View style={styles.item}>
           <Image source={require('../../assets/contact.png')} style={styles.itemImage} />
           <Text style={styles.itemText} onPress={sendEmail}>{i18n.t('drawer.contact')}</Text>

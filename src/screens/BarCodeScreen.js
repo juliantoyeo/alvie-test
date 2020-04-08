@@ -81,9 +81,9 @@ class BarCodeScreen extends React.Component {
     // await this.registerForPushNotificationsAsync(deviceid)
 
     if (hasEquipment) {
-      this.props.navigation.navigate('mainFlow');
+      this.props.navigation.navigate('MeteoScreen');
     } else {
-      this.props.navigation.replace('EquipmentScreen')
+      this.props.navigation.replace('EquipmentSettingsScreen')
     }
   }
 

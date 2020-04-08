@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
-import { getRealtimeData } from '../api/hygoApi';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Picker } from 'native-base';
+import { getRealtimeData, updateUI } from '../api/hygoApi';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -14,6 +13,7 @@ import i18n from 'i18n-js'
 import COLORS from '../colors'
 
 import HygoChart from '../components/HygoChart';
+import HygoProductList from '../components/HygoProductList'
 
 const RealTimeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true)
@@ -22,6 +22,9 @@ const RealTimeScreen = ({ navigation }) => {
   const [history, setHistory] = useState([])
   const [last, setLast] = useState({})
   const [ui, setUi] = useState({})
+
+  const [color, setColor] = useState(COLORS.GREY)
+  const [secondaryColor, setSecondaryColor] = useState(COLORS.GREY)
 
   useEffect(() => {
     loadRealtimeData()
@@ -33,6 +36,8 @@ const RealTimeScreen = ({ navigation }) => {
     setHistory(history)
     setLast(last)
     setUi(ui)
+
+    updateColors(ui.raw)
 
     setLoading(false)
   }
@@ -46,6 +51,17 @@ const RealTimeScreen = ({ navigation }) => {
     setIsRefreshing(true)
     await loadRealtimeData()
     setIsRefreshing(false)
+  }
+
+  const onProductChange = async (value) => {
+    setUi(await updateUI(value))
+    updateColors(ui.raw)
+    onRefresh()
+  }
+
+  const updateColors = (c) => {
+    setColor(COLORS[c])
+    setSecondaryColor(COLORS[`${c}_SECONDARY`])
   }
 
   return (
@@ -76,18 +92,19 @@ const RealTimeScreen = ({ navigation }) => {
           
           { history.length > 0 && (
             <View>
-              <View style={styles.headerCondition}>
-                <Text style={styles.textCondition}>conditions idéales</Text>
+              <View style={[styles.headerCondition, { backgroundColor: color }]}>
+                <Text style={styles.textCondition}>{ui.condition}</Text>
               </View>
               <View style={styles.lastHour}>
                 <Text style={styles.lastHourText}>{i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
 
               <View style={{ paddingRight: 15}}>
-                <TouchableOpacity style={styles.picker}>
-                  <Text style={styles.pickerText}>Herbicide racinaire</Text>
-                  <Icon name="chevron-thin-down" type="Entypo" style={{ fontSize: 18, color: '#aaa' }} />
-                </TouchableOpacity>
+                <View style={styles.picker}>
+                  <HygoProductList onProductChange={(v) => {
+                    onProductChange(v)
+                  }} />
+                </View>
               </View>
               <View style={styles.gaugeContainer}>
                 <View style={styles.gaugeElement}>
@@ -96,7 +113,7 @@ const RealTimeScreen = ({ navigation }) => {
                     width={8}
                     fill={(last.temp+20)/parseFloat(70)*100}
                     rotation={0}
-                    tintColor={COLORS.EXCELLENT}
+                    tintColor={color}
                     backgroundColor="#fff">{() => (
                       <Image source={require('../../assets/thermo.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
                     )}</AnimatedCircularProgress>
@@ -109,7 +126,7 @@ const RealTimeScreen = ({ navigation }) => {
                     width={8}
                     fill={last.humi}
                     rotation={0}
-                    tintColor={COLORS.EXCELLENT}
+                    tintColor={color}
                     backgroundColor="#fff">{() => (
                       <Image source={require('../../assets/ICN-Hygro.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
                     )}</AnimatedCircularProgress>
@@ -131,15 +148,15 @@ const RealTimeScreen = ({ navigation }) => {
 
               <HygoChart label="Température" data={history.slice(0,8).map(h => {
                 return { x: new Date(h.timestamp), y: h.temp }
-              })} mainColor={COLORS.EXCELLENT} secondaryColor={'#8bdf8b'} />
+              })} mainColor={color} secondaryColor={secondaryColor} />
 
               <HygoChart label="Hygrométrie" data={history.slice(0,8).map(h => {
                 return { x: new Date(h.timestamp), y: h.humi }
-              })} mainColor={COLORS.EXCELLENT} secondaryColor={'#8bdf8b'} />
+              })} mainColor={color} secondaryColor={secondaryColor} />
 
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
                 <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Planifier une autre cuve</Text>
+                  <Text style={styles.buttonText}>{i18n.t('realtime.next_cuve')}</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ height: 60 }} />
@@ -238,9 +255,7 @@ const styles = StyleSheet.create({
     },
     elevation: 3,
     backgroundColor: '#fff',
-    paddingLeft: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingLeft: 15,
     borderTopRightRadius: 20,
     display: 'flex',
     flexDirection: 'row',

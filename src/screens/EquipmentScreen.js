@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { Dimensions, StyleSheet, View, Text, ScrollView } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, ScrollView, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
-import { Content } from 'native-base';
+import { Content, Left, Right, Body, Title, Header, Button, Icon } from 'native-base';
 
 import COLORS from '../colors';
 import i18n from 'i18n-js';
@@ -16,19 +16,30 @@ import HygoSlider from '../components/HygoSlider'
 import { storeEquipmentInformation } from '../api/hygoApi'
 
 const EquipmentScreen = ({ navigation }) => {
-  const [step, setStep] = useState('INIT')
+  let result = navigation.getParam('result')
 
-  const [buses, setBuses] = useState({
+  const [step, setStep] = useState(result ? 'SELECT' : 'INIT')
+
+  const [buses, setBuses] = useState(result ? {
+    validated: true,
+    buses: result.buses
+  } : {
     validated: false,
     buses: {},
   })
 
-  const [speed, setSpeed] = useState({
+  const [speed, setSpeed] = useState(result ? {
+    validated: true,
+    speed: result.speed
+  } : {
     speed: 0,
     validated: false
   })
 
-  const [pressure, setPressure] = useState({
+  const [pressure, setPressure] = useState(result ? { 
+    pressure: result.pressure,
+    validated: true
+  } : {
     pressure: -50,
     validated: false
   })
@@ -54,33 +65,48 @@ const EquipmentScreen = ({ navigation }) => {
     }
 
     navigation.replace('LoadingScreen', {
-      next: 'mainFlow',
+      next: result ? 'main' : 'main',
       params: params,
       action: storeEquipmentInformation
     })
   }
 
   return (
-    <SafeAreaView style={styles.statusbar}>
-      { step === 'INIT' && (
-        <Content contentContainerStyle={styles.container}>
-          <View style={{ flex: 2 }} />
-          <Text textAlign="center" style={styles.title}>{i18n.t('equipment.title_notice')}</Text>
-          <Text textAlign="center" style={styles.text}>{i18n.t('equipment.text_notice')}</Text>
-          <View style={{ flex: 2 }} />
+    <SafeAreaView style={styles.statusbar} forceInset={{top: 'always'}}>
+      <StatusBar translucent backgroundColor="transparent" />
+        <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
+          <Left style={{ flex: 1 }}>
+            { result && (
+              <Button transparent onPress={() => navigation.goBack()}>
+                <Icon name='close' style={{ color: '#fff' }} />
+              </Button>
+            )}
+          </Left>
+          <Body style={styles.headerBody}>
+            <Title style={styles.headerTitle}>{i18n.t('equipment.header')}</Title>
+          </Body>
+          <Right style={{ flex: 1 }}></Right>
+        </Header>
+        
+        { step === 'INIT' && (
+          <Content contentContainerStyle={styles.container}>
+            <View style={{ flex: 2 }} />
+            <Text textAlign="center" style={styles.title}>{i18n.t('equipment.title_notice')}</Text>
+            <Text textAlign="center" style={styles.text}>{i18n.t('equipment.text_notice')}</Text>
+            <View style={{ flex: 2 }} />
 
-          <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
-            <HygoButton onPress={() => setStep('SELECT')} label={i18n.t('button.next')} icon={{
-              type: 'AntDesign',
-              name: 'arrowright',
-              fontSize: 26
-            }} />
-          </View>
-        </Content>
-      )}
+            <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
+              <HygoButton onPress={() => setStep('SELECT')} label={i18n.t('button.next')} icon={{
+                type: 'AntDesign',
+                name: 'arrowright',
+                fontSize: 26
+              }} />
+            </View>
+          </Content>
+        )}
 
       { step === 'SELECT' && (
-        <ScrollView style={{ flex: 1, paddingTop: 10 }}>
+        <ScrollView>
           <Content contentContainerStyle={styles.containerSelect}>
             <HygoCard title={i18n.t('equipment.buses')} validated={buses.validated} content={(
               <View style={{ display: 'flex', flexDirection: 'column', paddingTop: 36, paddingBottom: 16 }}>
@@ -151,7 +177,21 @@ const EquipmentScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  statusbar: { flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: COLORS.BEIGE },
+  header: {
+    backgroundColor: COLORS.CYAN
+  },
+  headerBody: {
+    flex: 4,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontFamily: 'nunito-regular',
+    fontSize: 20
+  },  
+  statusbar: { backgroundColor: COLORS.BEIGE, flex: 1 },
   container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center' },
   containerSelect: { justifyContent: 'flex-start', flex: 1, display: 'flex', paddingLeft: 0, paddingRight: 15, backgroundColor: COLORS.BEIGE },
   title: {
