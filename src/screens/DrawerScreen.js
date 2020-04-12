@@ -11,7 +11,7 @@ import pkg from '../../app.json'
 import COLORS from '../colors'
 import i18n from 'i18n-js'
 
-import { getEquipment } from '../api/hygoApi'
+import { getEquipment, getFields } from '../api/hygoApi'
 
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
   const goToEquipment = () => {
@@ -20,6 +20,15 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
       next: 'EquipmentSettingsScreen',
       params: {},
       action: getEquipment
+    })
+  }
+
+  const goToFields = () => {
+    navigation.dispatch(DrawerActions.closeDrawer())
+    navigation.navigate('LoadingScreen', {
+      next: 'FieldsScreen',
+      params: {},
+      action: getFields
     })
   }
 
@@ -52,22 +61,22 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         <Text style={[styles.topText, { marginTop: 10}]}>{`${userName} ${familyName}`}</Text>
       </View>
       <View style={styles.bottom}>
-        <View style={styles.item}>
+        <TouchableOpacity style={styles.item}  onPress={() => goToFields()}>
           <Image source={require('../../assets/parcelles.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.parcelles')}</Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => goToEquipment()}>
           <Image source={require('../../assets/ICN-Nav2.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.equipment')}</Text>
         </TouchableOpacity>
-        <View style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={sendEmail}>
           <Image source={require('../../assets/contact.png')} style={styles.itemImage} />
-          <Text style={styles.itemText} onPress={sendEmail}>{i18n.t('drawer.contact')}</Text>
-        </View>
-        <View style={styles.item}>
+          <Text style={styles.itemText}>{i18n.t('drawer.contact')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.item} onPress={logout}>
           <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
-          <Text style={styles.itemText} onPress={logout}>{i18n.t('drawer.logout')}</Text>
-        </View>
+          <Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/hygo.png')} style={styles.logo} />

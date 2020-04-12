@@ -19,6 +19,8 @@ import InterventionMapScreen from './screens/InterventionMapScreen';
 import EquipmentScreen from './screens/EquipmentScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import DrawerScreen from './screens/DrawerScreen'
+import FieldsScreen from './screens/FieldsScreen'
+import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 
 import HeaderText from './components/HeaderText'
 
@@ -93,6 +95,8 @@ const Navigator = createSwitchNavigator({
       drawerWidth: 310
     }),
     InterventionMapScreen: InterventionMapScreen,
+    MeteoDetailedDetails: MeteoDetailedDetails,
+    FieldsScreen: FieldsScreen,
     EquipmentSettingsScreen: {
       screen: EquipmentScreen, 
       navigationOptions: {

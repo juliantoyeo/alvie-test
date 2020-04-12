@@ -7,15 +7,24 @@ export default {
 
   MEDIOCRE: '#d6815e',
   MEDIOCRE_SECONDARY: '#ebc4b4',
+  MEDIOCRE_CARDS: '#d6815e',
+  MEDIOCRE_CARDS_BG: '#be7151',
 
   GOOD: '#d4e68c',
   GOOD_SECONDARY: '#f1f6da',
+  GOOD_CARDS: '#d4e68c',
+  GOOD_CARDS_BG: '#babe67',
 
   BAD: '#666666',
   BAD_SECONDARY: '#e8e8e8',
+  BAD_CARDS: '#333333',
+  BAD_CARDS_BG: '#666666',
 
   EXCELLENT: '#65bb65',
   EXCELLENT_SECONDARY: '#8bdf8b',
+  EXCELLENT_CARDS: '#8bdf8b',
+  EXCELLENT_CARDS_BG: '#65bb65',
 
   DEFAULT_FIELD: 'rgba(195,195,195,0.4)',
+  DEFAULT_FIELD_MY: 'rgba(103, 222, 225, 0.5)'
 }

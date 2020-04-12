@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StatusBar, StyleSheet, SafeAreaView, View, ImageBackground } from 'react-native'
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Tabs, Tab } from 'native-base';
 
 import i18n from 'i18n-js'
 
 import MeteoBriefScreen from './MeteoBriefScreen'
+import MeteoRadar from './MeteoRadar'
+import MeteoDetailed from './MeteoDetailed'
+
+import COLORS from '../colors'
 
 const MeteoScreen = ({ navigation }) => {
+  const [currentTab, setCurrentTab] = useState(0)
+
   return (
     <SafeAreaView style={styles.statusbar}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -23,15 +29,15 @@ const MeteoScreen = ({ navigation }) => {
             </Body>
             <Right style={{ flex: 1 }}></Right>
           </Header>
-          <Tabs tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }}>
+          <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({ i }) => setCurrentTab(i) }>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
               <MeteoBriefScreen style={styles.tabBar} />
             </Tab>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
-              <View style={styles.tabBar} />
+              <MeteoDetailed navigation={navigation} style={styles.tabBar} />
             </Tab>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
-              <View style={styles.tabBar} />
+              <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
             </Tab>
           </Tabs>
         </Container>

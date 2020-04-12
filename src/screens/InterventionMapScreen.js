@@ -173,9 +173,9 @@ const InterventionMapScreen = ({ navigation }) => {
                       <Image source={require('../../assets/ICN-Hygro.png')} style={styles.selectedImage} />
                     </View>
                     <View style={styles.selectedTextContainer}>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.avg', { value: `${Math.round(field.avgwind)}%`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.min', { value: `${Math.round(field.minwind)}%`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${Math.round(field.maxwind)}%`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.avg', { value: `${Math.round(field.avghumi)}%`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.min', { value: `${Math.round(field.minhumi)}%`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${Math.round(field.maxhumi)}%`})}</Text>
                     </View>
                   </View>
                 )}
@@ -192,12 +192,12 @@ const InterventionMapScreen = ({ navigation }) => {
                 { typeof field.avgwind === 'undefined' && typeof field.precipitation === 'undefined' && (
                   <View style={[styles.selectedElem]}>
                     <View style={styles.selectedImageContainer}>
-                      <Image source={require('../../assets/ICN-Wind.png')} style={styles.selectedImage} />
+                      <Image source={require('../../assets/ICN-Hygro.png')} style={styles.selectedImage} />
                     </View>
                     <View style={styles.selectedTextContainer}>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.avg', { value: `${field.avgtemp.toFixed(1)} km/h`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.min', { value: `${field.mintemp.toFixed(1)} km/h`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${field.maxtemp.toFixed(1)} km/h`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.avg', { value: `${Math.round(field.avghumi)}%`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.min', { value: `${Math.round(field.minhumi)}%`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${Math.round(field.maxhumi)}%`})}</Text>
                     </View>
                   </View>
                 )}

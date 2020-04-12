@@ -42,10 +42,10 @@ const HygoMap = ({ intervention, handleFieldSelection }) => {
                 key={field.id}
                 strokeWidth={selected === idx ? 4 : 1}
                 strokeColor={selected === idx ? '#fff' : COLORS.DARK_GREEN}
-                fillColor={field.colorField||COLORS.DEFAULT_FIELD}
+                fillColor={field.colorField||COLORS.DEFAULT_FIELD_MY}
                 ref={ref => (polygons.current[idx] = ref)}
                 onLayout={() => polygons.current[idx].setNativeProps({
-                    fillColor: field.colorField||COLORS.DEFAULT_FIELD
+                    fillColor: field.colorField||COLORS.DEFAULT_FIELD_MY
                 })}
                 tappable={true}
                 onPress={() => {

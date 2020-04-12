@@ -21,7 +21,7 @@ const fetchResources = async () => {
   await Promise.all([
     Font.loadAsync({
       'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
-      'nunito-italic': require('./assets/fonts/Nunito-Italic.ttf'),
+      'nunito-italic': require('./assets/fonts/Nunito-BoldItalic.ttf'),
       'nunito-regular': require('./assets/fonts/Nunito-SemiBold.ttf'),
       'nunito-heavy': require('./assets/fonts/Nunito-ExtraBold.ttf'), 
       

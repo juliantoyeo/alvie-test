@@ -14,7 +14,6 @@ const LoadingScreen = ({ navigation }) => {
     const { action, next, params } = navigation.state.params
 
     let result = await action(params)
-
     navigation.replace(next, {
       result
     })

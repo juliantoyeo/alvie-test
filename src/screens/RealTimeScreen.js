@@ -111,7 +111,7 @@ const RealTimeScreen = ({ navigation }) => {
                   <AnimatedCircularProgress
                     size={90}
                     width={8}
-                    fill={(last.temp+20)/parseFloat(70)*100}
+                    fill={(last.temp+5)/parseFloat(55)*100}
                     rotation={0}
                     tintColor={color}
                     backgroundColor="#fff">{() => (
