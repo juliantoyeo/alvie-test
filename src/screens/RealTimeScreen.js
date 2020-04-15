@@ -60,8 +60,8 @@ const RealTimeScreen = ({ navigation }) => {
   }
 
   const updateColors = (c) => {
-    setColor(COLORS[c])
-    setSecondaryColor(COLORS[`${c}_SECONDARY`])
+    setSecondaryColor(COLORS[`${c}_GRADIENT_TOP`])
+    setColor(COLORS[`${c}_GRADIENT_BOTTOM`])
   }
 
   return (
@@ -146,11 +146,11 @@ const RealTimeScreen = ({ navigation }) => {
                 )}
               </View>
 
-              <HygoChart label="Température" data={history.slice(0,8).map(h => {
+              <HygoChart label={i18n.t('realtime.temp')} data={history.slice(0,8).map(h => {
                 return { x: new Date(h.timestamp), y: h.temp }
               })} mainColor={color} secondaryColor={secondaryColor} />
 
-              <HygoChart label="Hygrométrie" data={history.slice(0,8).map(h => {
+              <HygoChart label={i18n.t('realtime.hygro')} data={history.slice(0,8).map(h => {
                 return { x: new Date(h.timestamp), y: h.humi }
               })} mainColor={color} secondaryColor={secondaryColor} />
 

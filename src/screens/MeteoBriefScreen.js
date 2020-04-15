@@ -34,7 +34,10 @@ const MeteoBriefScreen = () => {
   }, [])
 
   const loadMeteo = async () => {
-    setMeteoData(await getMeteo())
+    let meteo = await getMeteo()
+
+    console.log(meteo)
+    setMeteoData(meteo)
     setLoading(false)
   }
 
@@ -56,7 +59,10 @@ const MeteoBriefScreen = () => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <Text style={styles.iconText}>{`ess ${meteoData.windspeed} ${meteoData.units.windspeed}`}</Text>
+            <>
+              <Text style={styles.iconText}>{`${meteoData.next3hours.wind.toFixed(2)} km/h`}</Text>
+              <Text style={styles.iconText}>{`${meteoData.next3hours.gust.toFixed(2)} km/h`}</Text>
+            </>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -65,7 +71,10 @@ const MeteoBriefScreen = () => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-          <Text style={styles.iconText}>{`${meteoData.precipitation} ${meteoData.units.precipitation}`}</Text>
+            <>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.precipitation)} mm`}</Text>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.probability)}%`}</Text>
+            </>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -74,7 +83,10 @@ const MeteoBriefScreen = () => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <Text style={styles.iconText}>{`${meteoData.temperature}${meteoData.units.temperature}`}</Text>
+            <>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.mintemp)}°C`}</Text>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxtemp)}°C`}</Text>
+            </>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -83,7 +95,10 @@ const MeteoBriefScreen = () => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <Text style={styles.iconText}>{`${meteoData.humidity}${meteoData.units.humidity}`}</Text>
+            <>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.minhumi)}%`}</Text>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxhumi)}%`}</Text>
+            </>
           )}
         </View>
       </View>
@@ -135,7 +150,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#fff',
     textAlign: 'center',
-    marginTop: 10
   },
   meteoElement: {
     display: 'flex',
@@ -144,6 +158,9 @@ const styles = StyleSheet.create({
   productList: {
     paddingRight: 15,
     marginTop: 15,
+  },
+  image: {
+    marginBottom: 10,
   }
 })
 

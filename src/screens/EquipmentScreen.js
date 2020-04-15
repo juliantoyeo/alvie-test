@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, ScrollView, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
-import { Content, Left, Right, Body, Title, Header, Button, Icon } from 'native-base';
+import { Content, Left, Right, Body, Title, Header, Button, Icon, Picker } from 'native-base';
 
 import COLORS from '../colors';
 import i18n from 'i18n-js';
@@ -44,6 +44,14 @@ const EquipmentScreen = ({ navigation }) => {
     validated: false
   })
 
+  const [soil, setSoil] = useState(result ? {
+    validated: true,
+    soil: result.soil
+  } : {
+    soil: null,
+    validated: false
+  })
+
   const updateBuses = (val) => {
     setBuses(prev => {
       let ns = { 
@@ -61,14 +69,37 @@ const EquipmentScreen = ({ navigation }) => {
     let params = {
       buses: buses.buses,
       speed: speed.speed,
-      pressure: pressure.pressure
+      pressure: pressure.pressure,
+      soil: soil.soil,
     }
 
     navigation.replace('LoadingScreen', {
-      next: result ? 'main' : 'main',
+      next: 'main',
       params: params,
       action: storeEquipmentInformation
     })
+  }
+
+  const buildList = () => {
+    let soils = [
+      "SABLE",
+      "SABLE_TERREAU",
+      "TERREAU",
+      "TERREAU_ARGILE",
+      "ARGILE"
+    ]
+
+    let l = soils.map(p => {
+      return (
+        <Picker.Item key={p} label={i18n.t(`soils.${p}`)} value={p} />
+      )
+    })
+
+    if (Platform.OS === 'android') {
+      l.unshift(<Picker.Item key={0} label={i18n.t('soils.none')} value={null} />)
+    }
+
+    return l
   }
 
   return (
@@ -156,6 +187,34 @@ const EquipmentScreen = ({ navigation }) => {
               </View>
             )} />
 
+            <HygoCard title={i18n.t('equipment.type_soil')} validated={soil.validated} content={(
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
+                <Picker
+                  mode="dropdown"
+                  iosIcon={<Icon name="arrow-down" />}
+                  placeholder={i18n.t('phyto.no_phyto')}
+                  itemTextStyle={{
+                    flex: 1,
+                    color: '#aaa',
+                    fontSize: 16,
+                    fontFamily: 'nunito-regular',
+                  }}
+                  note={false}
+                  placeholderStyle={{ color: "#194769" }}
+                  headerBackButtonText ='retour'
+                  placeholderIconColor="59DFD6"
+                  selectedValue={soil.soil}
+                  onValueChange={(v) => setSoil(prev => {
+                    return {
+                      validated: !!v,
+                      soil: v,
+                    }
+                  })}>
+                  { buildList() }
+                </Picker>
+              </View>
+            )} />
+
 
           </Content>
           { speed.validated && pressure.validated && buses.validated && (
@@ -181,7 +240,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.CYAN
   },
   headerBody: {
-    flex: 4,
+    flex: 6,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

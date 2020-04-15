@@ -21,6 +21,7 @@ import LoadingScreen from './screens/LoadingScreen';
 import DrawerScreen from './screens/DrawerScreen'
 import FieldsScreen from './screens/FieldsScreen'
 import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
+import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 
 import HeaderText from './components/HeaderText'
 
@@ -94,6 +95,7 @@ const Navigator = createSwitchNavigator({
       contentComponent: DrawerScreen,
       drawerWidth: 310
     }),
+    BarCodeValidationScreen: BarCodeValidationScreen,
     InterventionMapScreen: InterventionMapScreen,
     MeteoDetailedDetails: MeteoDetailedDetails,
     FieldsScreen: FieldsScreen,

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, createRef } from 'react'
 import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native'
-import  MapView, { Overlay} from 'react-native-maps';
-import { getMeteoRadar } from '../api/hygoApi';
+import  MapView, { Overlay, Polygon } from 'react-native-maps';
+import { getMeteoRadar, getLastGeometryFields } from '../api/hygoApi';
 
-import { Spinner, Button, Icon } from 'native-base'
+import { connect } from 'react-redux'
+import { Spinner, Icon, Button } from 'native-base'
 
 import HygoRadarSlider from '../components/HygoRadarSlider'
 
@@ -11,7 +12,7 @@ import COLORS from '../colors'
 
 const factor = 7388/7553
 
-const MeteoRadar = ({ navigation, active }) => {
+const MeteoRadar = ({ navigation, active, parcelles }) => {
   let interval = null
 
   const [loading, setLoading] = useState(true)
@@ -21,6 +22,8 @@ const MeteoRadar = ({ navigation, active }) => {
 
   const [region, setRegion] = useState(null)
   const [currentWeather, setCurrentWeather] = useState(0)
+
+  const mapRef = useRef()
 
   const coords = {
     lon_min: -9.518991999949419,
@@ -36,7 +39,6 @@ const MeteoRadar = ({ navigation, active }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('willBlur', () => {
-      console.log("BLUR1")
       clearInterval(interval)
     });
 
@@ -74,7 +76,7 @@ const MeteoRadar = ({ navigation, active }) => {
     setLoading(false)
   }
 
-  useEffect(() => {
+  const setFranceRegion = () => {
     let center = {
       latitude: (coords.lat_max - coords.lat_min) / 2 + coords.lat_min,
       longitude: (coords.lon_max - coords.lon_min) / 2 + coords.lon_min,
@@ -85,7 +87,20 @@ const MeteoRadar = ({ navigation, active }) => {
       latitudeDelta: Math.abs(center.latitude - coords.lat_min),
       longitudeDelta: Math.abs(center.longitude - coords.lon_min),
     })
+  }
+
+  const updateRegion = (region) => {
+    setTimeout(() => mapRef.current.animateToRegion(region), 10);
+  }
+
+  useEffect(() => {
+    setFranceRegion()
   }, [])
+
+  const polygons = useRef([]);
+  if (polygons.current.length !== parcelles.fields.length) {
+    polygons.current = Array(parcelles.fields.length).fill().map((_, i) => polygons.current[i] || createRef())
+  }
 
   return (
     <View style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -97,11 +112,60 @@ const MeteoRadar = ({ navigation, active }) => {
       )}
       { region && !loading && (
         <View style={styles.mapContainer}>
+          <Button icon transparent style={styles.posButton} onPress={() => {
+            let center = {
+              longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
+              latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
+            }
+        
+            let r = {
+              ...center,
+              longitudeDelta: Math.max(0.0222, Math.abs(parcelles.region.lon_max - center.longitude)),
+              latitudeDelta: Math.max(0.0121, Math.abs(parcelles.region.lat_max - center.latitude)),
+            }
+
+            updateRegion(r)
+          }}><Icon name="my-location" type="MaterialIcons" style={styles.posIcon} /></Button>
+          <Button icon transparent style={[styles.posButton, { top: 50 }]} onPress={() => {
+            let center = {
+              latitude: (coords.lat_max - coords.lat_min) / 2 + coords.lat_min,
+              longitude: (coords.lon_max - coords.lon_min) / 2 + coords.lon_min,
+            }
+        
+            updateRegion({
+              ...center,
+              latitudeDelta: Math.abs(center.latitude - coords.lat_min),
+              longitudeDelta: Math.abs(center.longitude - coords.lon_min),
+            })
+          }}><Icon name="globe" type="FontAwesome" style={styles.posIcon} /></Button>
           <MapView
             provider="google"
             mapType="hybrid"
             initialRegion={region}
+            ref={mapRef}
             style={styles.map}>
+
+            { parcelles.fields.map((field, idx) => {
+              return (
+                <Polygon
+                  key={field.id}
+                  strokeWidth={1}
+                  strokeColor={'#fff'}
+                  fillColor={COLORS.CYAN}
+                  ref={ref => (polygons.current[idx] = ref)}
+                  onLayout={() => polygons.current[idx].setNativeProps({
+                      fillColor: COLORS.CYAN
+                  })}
+                  tappable={false}
+                  coordinates={field.features.coordinates[0].map((coordinate) => {
+                    return {
+                      latitude: coordinate[1],
+                      longitude: coordinate[0],
+                    }
+                  })}
+                />  
+              );
+            })}
 
             <Overlay image={images[currentWeather].url} 
               bounds={[[coords.lat_max * factor, coords.lon_min], [coords.lat_min, coords.lon_max]]} opacity={0.1} />
@@ -133,6 +197,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     display: 'flex', 
     paddingTop: 20,
+    position: 'relative'
   },
   map: {
     width: Dimensions.get('window').width,
@@ -183,7 +248,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     left: 1
+  },
+  posButton: {
+    position: "absolute",
+    right: 5,
+    top: 20,
+    zIndex: 99999,
+  },
+  posIcon: {
+    color: '#fff'
   }
 })
 
-export default MeteoRadar
+
+const mapStateToProps = (state) => ({
+  parcelles: state.authen.parcelles,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeteoRadar);

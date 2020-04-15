@@ -37,7 +37,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
         <Defs>
           <LinearGradient id="gradientFill"
             x1="0%" y1="0%" x2="0%" y2="100%">
-            <Stop offset="20%" stopColor={secondaryColor} stopOpacity="0.4"/>
+            <Stop offset="20%" stopColor={secondaryColor} stopOpacity="0.7"/>
             <Stop offset="100%" stopColor={mainColor} />
           </LinearGradient>
         </Defs>

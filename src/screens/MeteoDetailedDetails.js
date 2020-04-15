@@ -39,7 +39,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
   }
 
   const getBackground = () => {
-    return COLORS[`${getCurrentData().condition}_CARDS_BG`]
+    return COLORS[`${getCurrentData().condition}`]
   }
 
   const getRegion = () => {
@@ -55,6 +55,40 @@ const MeteoDetailedDetails = ({ navigation }) => {
     }
 
     return r
+  }
+
+  const getTextForWhitePanel = () => {
+    let conditions = { EXCELLENT: [], GOOD: [], CORRECT: [], BAD: [], FORBIDDEN: [] }
+    let parcelles = getCurrentParcelles(), pk = Object.keys(parcelles)
+    for (let i = 0; i < pk.length; i++) {
+      conditions[parcelles[pk[i]].condition].push(i)
+    }
+
+    if (getCurrentData().condition === 'EXCELLENT' && conditions.EXCELLENT.length === pk.length) {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_everywhere`)
+    } else if (getCurrentData().condition === 'EXCELLENT') {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_some`, { 
+        value: Math.round(parseFloat(conditions.EXCELLENT.length) / pk.length * 100)
+      })
+    } else if (getCurrentData().condition === 'GOOD' && conditions.GOOD.length === pk.length) {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_everywhere`)
+    } else if (getCurrentData().condition === 'GOOD') {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_some`, { 
+        value: Math.round(parseFloat(conditions.GOOD.length + conditions.EXCELLENT.length) / pk.length * 100)
+      })
+    } else if (getCurrentData().condition === 'CORRECT' && conditions.CORRECT.length === pk.length) {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_everywhere`)
+    } else if (getCurrentData().condition === 'CORRECT') {
+      return i18n.t(`meteo_overlay.white_${getCurrentData().condition}_some`, { 
+        value: Math.round(parseFloat(conditions.CORRECT.length + conditions.GOOD.length + conditions.EXCELLENT.length) / pk.length * 100)
+      })
+    } else if (conditions.FORBIDDEN.length + conditions.BAD.length === pk.length) {
+      if (conditions.BAD.length !== 0) {
+        return i18n.t(`meteo_overlay.white_BAD_everywhere`)
+      } else {
+        return i18n.t(`meteo_overlay.white_FORBIDDEN_everywhere`)
+      }
+    }
   }
 
   return (
@@ -81,8 +115,8 @@ const MeteoDetailedDetails = ({ navigation }) => {
           <View style={styles.conditionContainer}>
             <View style={styles.conditionItemContainer}>
               <Image source={require('../../assets/ICN-Wind.png')} style={styles.conditionItemImage} />
-              <Text style={styles.conditionItemText}>{`${getCurrentHourMetrics().wind} km/h`}</Text>
-              <Text style={styles.conditionItemText}>{`${getCurrentHourMetrics().gust} km/h`}</Text>
+              <Text style={styles.conditionItemText}>{`${getCurrentHourMetrics().winddirection} ${getCurrentHourMetrics().wind} km/h`}</Text>
+              <Text style={styles.conditionItemText}>{`RAF ${getCurrentHourMetrics().gust} km/h`}</Text>
             </View>
             <View style={styles.conditionItemContainer}>
               <Image source={require('../../assets/ICN-Rain.png')} style={styles.conditionItemImage} />
@@ -99,6 +133,13 @@ const MeteoDetailedDetails = ({ navigation }) => {
               <Text style={styles.conditionItemText}>{`${getCurrentHourMetrics().minhumi}%`}</Text>
               <Text style={styles.conditionItemText}>{`${getCurrentHourMetrics().maxhumi}%`}</Text>
             </View>
+            { currentProduct.isRacinaire && (
+              <View style={styles.conditionItemContainer}>
+                <Image source={require('../../assets/sprout.png')} style={styles.conditionItemImage} />
+                <Text style={styles.conditionItemText}>{`${Math.round(getCurrentHourMetrics().soilhumi)}%`}</Text>
+                <Text style={styles.conditionItemText}>{`${Math.round(getCurrentHourMetrics().soiltemp)}°C`}</Text>
+              </View>
+            )}
           </View>
           <View style={styles.sliderContainer}>
             <HygoParcelleSlider start={currentHour} onHourChange={(i) => setCurrentHour(i) } data={result.data[currentDay].hours1[`${currentProduct.id}`].data} width={Dimensions.get('window').width - 30} />
@@ -111,13 +152,22 @@ const MeteoDetailedDetails = ({ navigation }) => {
           </View>
           <View style={styles.topWhiteContainer}>
             <View style={styles.whiteContainer}>
-              <Text style={styles.whiteText}>{"Vous manquez de 5% d'hygrometrie pour les conditions top :)"}</Text>
+              <Text style={styles.whiteText}>{getTextForWhitePanel()}</Text>
             </View>
           </View>
           { selected && (
-            <View style={styles.metricsContainer}>
-              <View style={styles.metricsLine}>
-                <Text style={styles.metricsText}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(getCurrentParcelles()[selected].humi)) })}</Text>
+            <View style={[styles.metricsContainer]}>
+              <View style={[styles.metricsLine, { flexDirection: 'column', justifyContent: 'space-evenly', flex: 1 }]}>
+                <View style={styles.metricsLine}>
+                  <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.temp', { value: Math.round(parseFloat(getCurrentParcelles()[selected].temp)) })}</Text>
+                  <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.delta_temp', { value: Math.round(getCurrentParcelles()[selected].deltatemp) })}</Text>
+                </View>
+                <View style={styles.metricsLine}>
+                  <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(getCurrentParcelles()[selected].humi)) })}</Text>
+                  <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.precipitation', { value: getCurrentParcelles()[selected].precipitation })}</Text>
+                </View>
+              </View>
+              <View style={[styles.metricsLine, {flex:1}]}>
                 <View style={[styles.metricsWind, { marginTop: 10 }]}>
                   <Text style={styles.metricsText}>{i18n.t('meteo_overlay.wind')}</Text>
                   <View style={[styles.metricsWindText]}>
@@ -125,11 +175,16 @@ const MeteoDetailedDetails = ({ navigation }) => {
                     <Text style={styles.metricsText}>{i18n.t('meteo_overlay.wind_gust', { value: getCurrentParcelles()[selected].gust })}</Text>
                   </View>
                 </View>
-              </View>
-              <View style={styles.metricsLine}>
-                <Text style={styles.metricsText}>{i18n.t('meteo_overlay.temp', { value: Math.round(parseFloat(getCurrentParcelles()[selected].temp)) })}</Text>
-                <Text style={[styles.metricsText, { marginTop: 10 }]}>{i18n.t('meteo_overlay.precipitation', { value: getCurrentParcelles()[selected].precipitation })}</Text>
-              </View>
+                { currentProduct.isRacinaire && (
+                  <View style={[styles.metricsWind, { marginTop: 10 }]}>
+                    <Text style={styles.metricsText}>{i18n.t('meteo_overlay.soil')}</Text>
+                    <View style={[styles.metricsWindText]}>
+                      <Text style={styles.metricsText}>{i18n.t('meteo_overlay.soil_humi', { value: Math.round(getCurrentParcelles()[selected].soilhumi) })}</Text>
+                      <Text style={styles.metricsText}>{i18n.t('meteo_overlay.soil_temp', { value: Math.round(getCurrentParcelles()[selected].soiltemp) })}</Text>
+                    </View>
+                  </View>
+                )}  
+                </View>
             </View>
           )}
           { selected === null && (
@@ -184,12 +239,16 @@ const MeteoDetailedDetails = ({ navigation }) => {
               <Text style={styles.legendText}>{i18n.t('meteo_overlay.good')}</Text>
             </View>
             <View style={styles.legendElement}>
-              <View style={[styles.legendColor, {backgroundColor: COLORS.MEDIOCRE}]}></View>
-              <Text style={styles.legendText}>{i18n.t('meteo_overlay.mediocre')}</Text>
+              <View style={[styles.legendColor, {backgroundColor: COLORS.CORRECT}]}></View>
+              <Text style={styles.legendText}>{i18n.t('meteo_overlay.correct')}</Text>
             </View>
             <View style={styles.legendElement}>
               <View style={[styles.legendColor, {backgroundColor: COLORS.BAD}]}></View>
               <Text style={styles.legendText}>{i18n.t('meteo_overlay.bad')}</Text>
+            </View>
+            <View style={styles.legendElement}>
+              <View style={[styles.legendColor, {backgroundColor: COLORS.FORBIDDEN}]}></View>
+              <Text style={styles.legendText}>{i18n.t('meteo_overlay.forbidden')}</Text>
             </View>
           </View>
         </View>
@@ -321,6 +380,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontFamily: 'nunito-bold',
+    flex: 1,
   },
   mapviewContainer: {
 
@@ -354,8 +414,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   metricsLine: {
     display: 'flex',

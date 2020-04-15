@@ -7,6 +7,7 @@ const initialState = {
     familyName:'',
     deviceid:'',
     deviceType:'',
+    parcelles: [],
 }
 
 export default authReducer =  (state = initialState, action) => {  
@@ -63,6 +64,13 @@ export default authReducer =  (state = initialState, action) => {
             nextState = {
                 ...state,
                 token: '',
+            }
+            return nextState || state;
+
+        case 'UPDATE_PARCELLES':
+            nextState= {
+                ...state,
+                parcelles: action.parcelles,
             }
             return nextState || state;
 

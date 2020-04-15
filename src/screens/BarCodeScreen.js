@@ -8,7 +8,8 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import { updateAuthInfo } from '../store/actions/authActions';
 import { updatePhytoProductList } from '../store/actions/pulveActions'
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts } from '../api/hygoApi';
+import { updateParcellesList } from '../store/actions/authActions'
+import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
@@ -74,6 +75,7 @@ class BarCodeScreen extends React.Component {
       token,
       userName, familyName, deviceid, deviceType
     })
+    this.props.updateParcellesList(await getFields())
 
     await AsyncStorage.setItem('token', token);
 
@@ -81,9 +83,9 @@ class BarCodeScreen extends React.Component {
     // await this.registerForPushNotificationsAsync(deviceid)
 
     if (hasEquipment) {
-      this.props.navigation.navigate('MeteoScreen');
+      this.props.navigation.replace('main');
     } else {
-      this.props.navigation.replace('EquipmentSettingsScreen')
+      this.props.navigation.replace('BarCodeValidationScreen')
     }
   }
 
@@ -233,6 +235,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   updateAuthInfo: (params) => dispatch(updateAuthInfo(params)),
   checkToken: (token) => dispatch(checkToken(token)),
   updatePhytoProductList: (l) => dispatch(updatePhytoProductList(l)),
+  updateParcellesList: (l) => dispatch(updateParcellesList(l)),
 })
 
 export default connect(null, mapDispatchToProps)(BarCodeScreen);
