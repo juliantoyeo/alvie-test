@@ -31,6 +31,8 @@ class HygoParcelleSlider extends Component {
     let offset = (Dimensions.get('window').width - this.props.width) / 2
 
     let posInsideBar = Math.round((xpos - offset) / this.props.width * 24)
+    if (posInsideBar > 23) { posInsideBar = 23 }
+    if (posInsideBar < 0) { posInsideBar = 0 }
 
     this.setState({
       left: xpos - offset - 6,

@@ -1,22 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { ScrollView, StyleSheet, View, StatusBar, Image } from 'react-native';
+import { ScrollView, StyleSheet, View, StatusBar, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { Button, Icon, Text, Left, Right, Body, Header, Title } from 'native-base';
-import {updatePhytoSelect} from '../store/actions/intervActions';
 
 import COLORS from '../colors'
 import i18n from 'i18n-js'
 
 import HygoMap from '../components/HygoMap'
+import { updateIntervention } from '../api/hygoApi';
 
-const InterventionMapScreen = ({ navigation }) => {
-  const [intervention, setIntervention] = useState({})
+import { updateProductsInterv } from '../store/actions/intervActions'
+
+const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
+  let intervention = navigation.getParam('intervention')
+
   const [field, setField] = useState(null)
 
-  useEffect(() => {
-    setIntervention(navigation.getParam('intervention'))
-  }, [])
+  const getPhyto = () => {
+    if (intervention.products) {
+      return intervention.products
+    } else if (intervention.phytoproduct) {
+      return phytoProductList.filter(pp => pp.name === intervention.phytoproduct).map(p => p.id)
+    }
+
+    return []
+  }
+
+  const getPhytoText = () => {
+    if (products && products.length > 0) {
+      let ptext = []
+      if (products.indexOf(-1) > -1) {
+        ptext.push(i18n.t('intervention_map.other_farm_work'))
+      }
+
+      ptext = ptext.concat(phytoProductList.filter(pp => products.includes(pp.id)).map(p => p.name))
+      return i18n.t('intervention_map.header_phyto', { phyto: ptext.join(', ') })
+    } else if (intervention.phytoproduct) {
+      return i18n.t('intervention_map.header_phyto', { phyto: intervention.phytoproduct })
+    }
+
+    return i18n.t('intervention_map.header_phyto', { phyto: i18n.t('intervention.no_phyto_selected') })
+  }
+
+  const setProducts = (p) => {
+    updateIntervention(p, intervention.interventionid)
+    updateProductsInterv(p, intervention.id)
+    setCurrentProducts(p)
+  }
+  const [products, setCurrentProducts] = useState(getPhyto())
 
   const getDay = () => {
     let d = new Date(intervention.starttime)
@@ -81,7 +113,9 @@ const InterventionMapScreen = ({ navigation }) => {
         <View style={styles.phytoDetail}>
           <View style={styles.phytoDetailRow}>
             <Image style={[styles.phytoDetailImage, { height: 28 }]} source={require('../../assets/phyto.png')} />
-            <Text style={styles.phytoDetailText}>{i18n.t('intervention_map.header_phyto', { phyto: intervention.phytoproduct || i18n.t('intervention.no_phyto_selected') })}</Text>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker", { source: 'intervention', set: setProducts, initial: products })}>
+              <Text style={styles.phytoDetailText}>{getPhytoText()}</Text>
+            </TouchableWithoutFeedback>
           </View>
           <View style={styles.phytoDetailRow}>
             <Image style={styles.phytoDetailImage} source={require('../../assets/clock.png')} />
@@ -393,13 +427,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     token: state.authen.token,
+    phytoProductList: state.pulve.phytoProductList,
     interventionValues: state.interv.interventions
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-    updatePhytoSelect: (produitPhytoClicked, deviceid, interventionid)=>dispatch(updatePhytoSelect(produitPhytoClicked, deviceid, interventionid)),
+  updateProductsInterv: (products, id) => dispatch(updateProductsInterv(products, id))
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(InterventionMapScreen);
-
-

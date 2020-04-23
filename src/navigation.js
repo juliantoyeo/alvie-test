@@ -10,7 +10,8 @@ import TabBar from './components/HygoTabBar'
 
 import i18n from 'i18n-js'
 
-import AccountScreen from './screens/AccountScreen';
+import HygoProductPicker from './components/HygoProductPicker';
+import HygoCulturePicker from './components/HygoCulturePicker';
 import RealTimeScreen from './screens/RealTimeScreen';
 import BarCodeScreen from './screens/BarCodeScreen';
 import MeteoScreen from './screens/MeteoScreen';
@@ -22,6 +23,8 @@ import DrawerScreen from './screens/DrawerScreen'
 import FieldsScreen from './screens/FieldsScreen'
 import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
+import NextPulverisationScreen from './screens/NextPulverisationScreen'
+import NextPulverisationDetails from './screens/NextPulverisationDetails'
 
 import HeaderText from './components/HeaderText'
 
@@ -42,7 +45,7 @@ const Navigator = createSwitchNavigator({
             },
           }),
 
-          Other: AccountScreen,
+          Pulverisation: NextPulverisationScreen,
 
           RealTime: RealTimeScreen,
 
@@ -57,7 +60,7 @@ const Navigator = createSwitchNavigator({
             tabBarIcon: ({ focused, horizontal, tintColor }) => {
               const { routeName } = navigation.state;
       
-              const r = [ 'MeteoScreen', 'Other', 'RealTime', 'Intervention' ]
+              const r = [ 'MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention' ]
               let idx = r.indexOf(routeName)
       
               let props = {
@@ -98,6 +101,7 @@ const Navigator = createSwitchNavigator({
     BarCodeValidationScreen: BarCodeValidationScreen,
     InterventionMapScreen: InterventionMapScreen,
     MeteoDetailedDetails: MeteoDetailedDetails,
+    NextPulverisationDetails: NextPulverisationDetails,
     FieldsScreen: FieldsScreen,
     EquipmentSettingsScreen: {
       screen: EquipmentScreen, 
@@ -105,6 +109,8 @@ const Navigator = createSwitchNavigator({
         header: () => <HeaderText text={i18n.t('equipment.header')} />,
       },
     },
+    HygoProductPicker: HygoProductPicker,
+    HygoCulturePicker: HygoCulturePicker,
     LoadingScreen: {
       screen: LoadingScreen,
       navigationOptions: {

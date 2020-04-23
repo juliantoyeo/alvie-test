@@ -10,7 +10,7 @@ import COLORS from '../colors'
 
 import { getMeteo } from '../api/hygoApi'
 
-const MeteoBriefScreen = () => {
+const MeteoBriefScreen = ({ navigation }) => {
   const MONTHS = [
     i18n.t('months.january'),
     i18n.t('months.february'),
@@ -36,7 +36,6 @@ const MeteoBriefScreen = () => {
   const loadMeteo = async () => {
     let meteo = await getMeteo()
 
-    console.log(meteo)
     setMeteoData(meteo)
     setLoading(false)
   }
@@ -47,7 +46,7 @@ const MeteoBriefScreen = () => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <View style={styles.textContainer}>
         <Text style={styles.date}>{getDay()}</Text>
         <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours')}</Text>
@@ -60,8 +59,8 @@ const MeteoBriefScreen = () => {
           )}
           { !loading && (
             <>
-              <Text style={styles.iconText}>{`${meteoData.next3hours.wind.toFixed(2)} km/h`}</Text>
-              <Text style={styles.iconText}>{`${meteoData.next3hours.gust.toFixed(2)} km/h`}</Text>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.wind)} km/h`}</Text>
+              <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.gust)} km/h`}</Text>
             </>
           )}
         </View>
@@ -102,19 +101,19 @@ const MeteoBriefScreen = () => {
           )}
         </View>
       </View>
-      <ScrollView style={styles.productList}>
+      <View style={styles.productList}>
         { loading && (
           <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
         )}
 
         { !loading && meteoData.products.map(p => {
             return (
-              <HygoMeteoPhyto key={p.id} product={p} />
+              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} />
             )
         })}
-        <View style={{ height: 200 }}></View>
-      </ScrollView>
-    </View>
+        <View style={{ height: 80 }}></View>
+      </View>
+    </ScrollView>
   )
 }
 

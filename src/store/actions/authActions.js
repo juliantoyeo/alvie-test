@@ -43,10 +43,3 @@ export const deleteToken = () => {
         type: 'DELETE_TOKEN'
     });
 }
-
-export const updateParcellesList = (parcelles) => {
-    return {
-        type: 'UPDATE_PARCELLES',
-        parcelles
-    }
-}

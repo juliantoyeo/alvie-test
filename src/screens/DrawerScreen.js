@@ -25,11 +25,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 
   const goToFields = () => {
     navigation.dispatch(DrawerActions.closeDrawer())
-    navigation.navigate('LoadingScreen', {
-      next: 'FieldsScreen',
-      params: {},
-      action: getFields
-    })
+    navigation.navigate('FieldsScreen')
   }
 
   const logout = async () => {

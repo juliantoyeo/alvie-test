@@ -8,8 +8,8 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import { updateAuthInfo } from '../store/actions/authActions';
 import { updatePhytoProductList } from '../store/actions/pulveActions'
-import { updateParcellesList } from '../store/actions/authActions'
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields } from '../api/hygoApi';
+import { updateParcellesList, updateCulturesList } from '../store/actions/metaActions'
+import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
@@ -75,7 +75,13 @@ class BarCodeScreen extends React.Component {
       token,
       userName, familyName, deviceid, deviceType
     })
-    this.props.updateParcellesList(await getFields())
+
+    let [ fields, cultures ] = await Promise.all([
+      getFields(),
+      getCultures(),
+    ])
+    this.props.updateParcellesList(fields)
+    this.props.updateCulturesList(cultures)
 
     await AsyncStorage.setItem('token', token);
 
@@ -236,6 +242,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   checkToken: (token) => dispatch(checkToken(token)),
   updatePhytoProductList: (l) => dispatch(updatePhytoProductList(l)),
   updateParcellesList: (l) => dispatch(updateParcellesList(l)),
+  updateCulturesList: (l) => dispatch(updateCulturesList(l)),
 })
 
 export default connect(null, mapDispatchToProps)(BarCodeScreen);

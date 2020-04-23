@@ -5,7 +5,9 @@ import COLORS from '../colors'
 
 import i18n from 'i18n-js'
 
-const HygoInterventionCard = ({ navigation, intervention }) => {
+import { connect } from 'react-redux'
+
+const HygoInterventionCard = ({ navigation, intervention, phytoProductList }) => {
   const getDay = () => {
     let d = new Date(intervention.starttime)
     return `${d.getDate()}/${("0"+(d.getMonth()+1)).slice(-2)}`
@@ -27,6 +29,22 @@ const HygoInterventionCard = ({ navigation, intervention }) => {
     })
   }
 
+  const getPhyto = () => {
+    if (intervention.products && intervention.products.length > 0) {
+      let ptext = []
+      if (intervention.products.indexOf(-1) > -1) {
+        ptext.push(i18n.t('intervention_map.other_farm_work'))
+      }
+
+      ptext = ptext.concat(phytoProductList.filter(pp => intervention.products.includes(pp.id)).map(p => p.name))
+      return ptext.join(', ')
+    } else if (intervention.phytoproduct) {
+      return intervention.phytoproduct
+    }
+
+    return i18n.t('intervention.no_phyto_selected')
+  }
+
   return (
     <TouchableOpacity onPress={onCardPressed} style={styles.container}>
       <View style={styles.card}>
@@ -37,7 +55,7 @@ const HygoInterventionCard = ({ navigation, intervention }) => {
         <View style={styles.content}>
           <View style={styles.phytoContainer}>
             <Image source={require('../../assets/phyto.png')} style={styles.elemIcon} />
-            <Text style={styles.phyto}>{intervention.phytoproduct||i18n.t('intervention.no_phyto_selected')}</Text>
+            <Text style={styles.phyto}>{getPhyto()}</Text>
           </View>
           <View style={styles.metrics}>
             { typeof intervention.avgwind !== 'undefined' && (
@@ -163,4 +181,11 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HygoInterventionCard
+const mapStateToProps = (state) => ({
+  phytoProductList: state.pulve.phytoProductList,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HygoInterventionCard);

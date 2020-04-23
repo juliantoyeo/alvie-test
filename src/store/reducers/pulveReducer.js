@@ -3,13 +3,14 @@ const initialState = {
     newSession: undefined,
     lastSession: undefined,
     phytoProductList: [],
+    phytoProductSelected: [],
+    culturesSelected: [],
 }
 
 export default pulveReducer =  (state = initialState, action) => {
     let nextState
     switch (action.type) {
         case 'UPDATE_PHYTO':
-            console.log(action.produitPhytoClicked);
             nextState =  {
                 ...state,
                 produitPhytoClicked : action.produitPhytoClicked,
@@ -20,6 +21,20 @@ export default pulveReducer =  (state = initialState, action) => {
             nextState = {
                 ...state,
                 phytoProductList: action.content
+            }
+            return nextState || state
+
+        case 'UPDATE_SELECTED_PHYTO':
+            nextState = {
+                ...state,
+                phytoProductSelected: action.selected
+            }
+            return nextState || state
+
+        case 'UPDATE_SELECTED_CULTURES':
+            nextState = {
+                ...state,
+                culturesSelected: action.selected
             }
             return nextState || state
 

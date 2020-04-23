@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent'
 
 export const hygoApi = axios.create({
-    baseURL: 'https://65b4624e.ngrok.io',
+    baseURL: 'https://81298f4f.ngrok.io',
     timeout: 3000,
     headers: { 
         'User-Agent': getUserAgent()
@@ -31,6 +31,25 @@ export const storeAppLocation = async (data) => {
 export const updateUI = async (phytoProduct) => {
     try {
         const res = await hygoApi.post('/app/ui', { phytoProduct });
+        return res.data
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+// Store phytoproducts changes
+export const updateUIPhytoProduct = async (phytoProducts) => {
+    try {
+        const res = await hygoApi.post('/app/ui', { phytoProducts, timestamp: (new Date()).getTime() });
+        return res.data
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+export const updateUICultures = async (cultures) => {
+    try {
+        const res = await hygoApi.post('/app/ui', { cultures, timestamp: (new Date()).getTime() });
         return res.data
     } catch(e) {
         console.log(e)
@@ -136,6 +155,26 @@ export const getMeteoDetailed = async ({ day, product }) => {
     }
 }
 
+// Retrieve detailed meteo for intervention planning
+export const getMeteoIntervention = async ({ products, cultures }) => {
+    try {
+        const response = await hygoApi.post('/app/meteo/intervention', { products, cultures })
+        return response.data
+    } catch(error) {
+        return {}
+    }
+}
+
+// Retrieve modulation
+export const getModulationValue = async (data) => {
+    try {
+        const response = await hygoApi.post('/app/modulation', { ...data })
+        return response.data
+    } catch(error) {
+        return {}
+    }
+}
+
 // Retrive interventions
 export const getInterventions = async () => {
     try {
@@ -166,6 +205,16 @@ export const getFields = async () => {
     }
 }
 
+// Get cultures
+export const getCultures = async () => {
+    try {
+        const response = await hygoApi.get('/app/cultures');
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
+
 // Get Meteo Radar
 export const getMeteoRadar = async () => {
     try {
@@ -175,6 +224,19 @@ export const getMeteoRadar = async () => {
         return { }
     }
 }
+
+// Update intervention products
+export const updateIntervention = async (products, interventionid) => {
+    try {
+        const response = await hygoApi.post('/app/interventions/update', {products, interventionid });
+        return (response.data);
+    } catch(error) {
+        return ({
+
+        });
+    }
+}
+
 
 
 
@@ -262,19 +324,6 @@ export const evalConditions = async (deviceid, phyto, humi, temp) => {
     }
     catch(error) {
         return ({
-        });
-    }
-}
-
-
-
-export const updateIntervention = async (phytoProduct, deviceid, interventionid) => {
-    try {
-        const response = await hygoApi.post('/updateIntervention', {phytoProduct, deviceid, interventionid });
-        return (response.data);
-    } catch(error) {
-        return ({
-
         });
     }
 }

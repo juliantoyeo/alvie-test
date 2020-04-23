@@ -73,8 +73,8 @@ const MeteoDetailed = ({ navigation }) => {
             <View style={styles.dayWeather}>
               <View style={styles.dayWeatherItemContainer}>
                 <Image source={require('../../assets/ICN-Wind.png')} style={styles.dayWeatherItemImage} />
-                <Text style={styles.dayWeatherItemText}>{`${detailed.data[currentDay].data.wind} km/h`}</Text>
-                <Text style={styles.dayWeatherItemText}>{`${detailed.data[currentDay].data.gust} km/h`}</Text>
+                <Text style={styles.dayWeatherItemText}>{`${Math.round(detailed.data[currentDay].data.wind)} km/h`}</Text>
+                <Text style={styles.dayWeatherItemText}>{`${Math.round(detailed.data[currentDay].data.gust)} km/h`}</Text>
               </View>
               <View style={styles.dayWeatherItemContainer}>
                 <Image source={require('../../assets/ICN-Rain.png')} style={styles.dayWeatherItemImage} />
@@ -119,8 +119,8 @@ const MeteoDetailed = ({ navigation }) => {
                     <View style={styles.productContainer}>
                       <Text style={styles.productName}>{p.name}</Text>
                       <View style={styles.productCondition}>
-                        { [...Array(23).keys()].map(i => {
-                          let padded = `${i+1}`.padStart(2, '0')
+                        { [...Array(24).keys()].map(i => {
+                          let padded = `${i}`.padStart(2, '0')
                           return (
                             <View key={i} style={[styles.parcelle, {
                               backgroundColor: COLORS[dayProduct[padded].condition]

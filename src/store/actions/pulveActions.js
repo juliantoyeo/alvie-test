@@ -12,3 +12,17 @@ export const updatePhytoProductList = (l) => {
         content: l
     }
 }
+
+export const updatePhytoProductSelected = (selected) => {
+    return {
+        type: 'UPDATE_SELECTED_PHYTO',
+        selected,
+    }
+}
+
+export const updateCulturesSelected = (selected) => {
+    return {
+        type: 'UPDATE_SELECTED_CULTURES',
+        selected,
+    }
+}

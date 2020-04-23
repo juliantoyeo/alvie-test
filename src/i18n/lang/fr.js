@@ -17,6 +17,15 @@ export default {
     'november': 'novembre',
     'december': 'décembre'
   },
+  'days': {
+    'monday': 'lundi',
+    'tuesday': 'mardi',
+    'wednesday': 'mercredi',
+    'thursday': 'jeudi',
+    'friday': 'vendredi',
+    'saturday': 'samedi',
+    'sunday': 'dimanche',
+  },
   'soils': {
     'SABLE': 'Sable',
     'SABLE_TERREAU': 'Sable / Terreau',
@@ -82,6 +91,7 @@ export default {
     'condition_CORRECT': 'Bonnes conditions',
     'condition_EXCELLENT': 'Excellentes ou bonnes conditions',
     'condition_GOOD': 'Excellentes ou bonnes conditions',
+    'plan': 'planifier traitement',
   },
   'intervention': {
     'header': "Carte de risques",
@@ -105,6 +115,7 @@ export default {
     'max': 'max %{value}',
     'avg': 'avg %{value}',
     'rain': 'Pluie : %{value}',
+    'other_farm_work': 'Autres travaux agricoles',
   },
   "phyto": {
     "no_phyto": "Pas de produit sélectionné",
@@ -160,4 +171,18 @@ export default {
     'white_BAD_everywhere': 'Nous vous déconseillons de pulvériser avec ce type de produit dans ces créneaux, mais des fois, nous n\'avons pas le choix :( ',
     'white_FORBIDDEN_everywhere': 'Attention ! Il est interdit de pulvériser dans ces conditions',
   },
+  'pulverisation': {
+    'header': 'Prochaine pulvérisation',
+    'culture_type': 'Type de culture',
+    'select_text': 'Commencez par le choix de la culture et du type de produit pour votre pulvérisation.',
+    'select_hours_text': 'Choisissez votre créneau de pulvérisation des prochaines 48h',
+    'product_type': 'TYPE DE PRODUIT',
+    'culture_type': 'TYPE DE CULTURE',
+    'start': 'Commencer',
+    'computation_hint': '* Calculé sur la base de vos choix de cultures/produits',
+    'reduce_dosage': 'Diminution de la dose* ',
+  },
+  'picker': {
+    'header': 'Sélectionner une valeur',
+  }
 }

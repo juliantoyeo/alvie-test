@@ -4,17 +4,28 @@ import i18n from 'i18n-js'
 
 import COLORS from '../colors'
 
-const HygoMeteoPhyto = ({ product }) => {
+import { updateUIPhytoProduct } from '../api/hygoApi'
+
+import { connect } from 'react-redux'
+import { updatePhytoProductSelected } from '../store/actions/pulveActions'
+
+const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected }) => {
+  const handleProductClick = async () => {
+    updateUIPhytoProduct([ product.id ])
+    await updatePhytoProductSelected([ product.id ])
+    navigation.navigate("Pulverisation")
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.left, { backgroundColor: COLORS[product.condition] }]}></View>
       <View style={styles.right}>
         <Text style={styles.cardTitle}>{product.name}</Text>
         <Text style={styles.cardCondition}>{i18n.t(`meteo.condition_${product.condition}`)}</Text>
-        <Text style={styles.cardParcelle}>{i18n.t('meteo.parcelle_percent', { percent: product.treatable_percent })}</Text>
+        <Text style={styles.cardParcelle}>{i18n.t('meteo.parcelle_percent', { percent: Math.round(100*product.treatable_percent) })}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: COLORS[product.condition.raw]}]}>
-            <Text style={styles.buttonText}>planifier traitement</Text>
+          <TouchableOpacity style={[styles.button, {backgroundColor: COLORS[product.condition]}]} onPress={handleProductClick}>
+            <Text style={styles.buttonText}>{i18n.t('meteo.plan')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -81,4 +92,11 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HygoMeteoPhyto
+const mapStateToProps = (state) => ({
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  updatePhytoProductSelected: (selected) => dispatch(updatePhytoProductSelected(selected)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HygoMeteoPhyto);

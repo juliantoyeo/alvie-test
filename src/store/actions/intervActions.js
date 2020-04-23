@@ -1,17 +1,15 @@
 
 export const updateInterv = (interventionValues) => {
-    return ({
+    return {
         type: 'UPDATE_INTERV',
         interventionValues,
-    });
+    }
 }
 
-export const updatePhytoSelect = (produitPhytoClicked, deviceid, interventionid) => {
-    return ({
+export const updateProductsInterv = (products, id) => {
+    return {
         type: 'UPDATE_PHYTO_SELECT',
-        produitPhytoClicked,
-        deviceid,
-        interventionid,
-    });
+        products,
+        id,
+    }
 }
-

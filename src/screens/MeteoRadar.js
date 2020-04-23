@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => ({
-  parcelles: state.authen.parcelles,
+  parcelles: state.metadata.parcelles,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({})

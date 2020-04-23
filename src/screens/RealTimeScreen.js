@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Picker } from 'native-base';
 import { getRealtimeData, updateUI } from '../api/hygoApi';
 
@@ -13,9 +13,10 @@ import i18n from 'i18n-js'
 import COLORS from '../colors'
 
 import HygoChart from '../components/HygoChart';
-import HygoProductList from '../components/HygoProductList'
 
-const RealTimeScreen = ({ navigation }) => {
+import { connect } from 'react-redux'
+
+const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -61,7 +62,7 @@ const RealTimeScreen = ({ navigation }) => {
 
   const updateColors = (c) => {
     setSecondaryColor(COLORS[`${c}_GRADIENT_TOP`])
-    setColor(COLORS[`${c}_GRADIENT_BOTTOM`])
+    setColor(COLORS[`${c}_GRADIENT_BOT`])
   }
 
   return (
@@ -99,13 +100,17 @@ const RealTimeScreen = ({ navigation }) => {
                 <Text style={styles.lastHourText}>{i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
 
-              <View style={{ paddingRight: 15}}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker")}>
                 <View style={styles.picker}>
-                  <HygoProductList onProductChange={(v) => {
-                    onProductChange(v)
-                  }} />
+                  { phytoProductSelected.length === 0 && (
+                    <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>
+                  )}
+                  { phytoProductSelected.length > 0 && (
+                    <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
+                  )}
+                  <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
                 </View>
-              </View>
+              </TouchableWithoutFeedback>
               <View style={styles.gaugeContainer}>
                 <View style={styles.gaugeElement}>
                   <AnimatedCircularProgress
@@ -155,7 +160,7 @@ const RealTimeScreen = ({ navigation }) => {
               })} mainColor={color} secondaryColor={secondaryColor} />
 
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pulverisation')}>
                   <Text style={styles.buttonText}>{i18n.t('realtime.next_cuve')}</Text>
                 </TouchableOpacity>
               </View>
@@ -178,6 +183,41 @@ const RealTimeScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+  pulveContainer: {
+    backgroundColor: COLORS.CYAN,
+    paddingRight: 15,
+    paddingTop: 30,
+    paddingBottom: 40,
+  },
+  picker: {
+    shadowColor: '#000',
+    shadowOpacity: .2,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    elevation: 3,
+    backgroundColor: '#fff',
+    paddingLeft: 20,
+    borderTopRightRadius: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingRight: 20,
+    paddingVertical: 10,
+  },
+  pickerText: {
+    flex: 1,
+    color: COLORS.DARK_BLUE,
+    fontSize: 16,
+    fontFamily: 'nunito-bold',
+  },
+  pickerIcon: {
+    marginLeft: 5,
+    fontSize: 20,
+    color: COLORS.DARK_BLUE
+  },
   statusbar: { 
     flex: 1, 
     display: 'flex',
@@ -246,29 +286,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#aaaaaa',
   },
-  picker: {
-    shadowColor: '#000',
-    shadowOpacity: .2,
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-    elevation: 3,
-    backgroundColor: '#fff',
-    paddingLeft: 15,
-    borderTopRightRadius: 20,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingRight: 20,
-  },
-  pickerText: {
-    flex: 1,
-    color: '#aaa',
-    fontSize: 16,
-    fontFamily: 'nunito-regular',
-  },
   gaugeElement: {
     display: 'flex',
     alignItems: 'center'
@@ -295,4 +312,12 @@ const styles = StyleSheet.create({
   }
 })
 
-export default RealTimeScreen
+const mapStateToProps = (state) => ({
+  phytoProductList: state.pulve.phytoProductList,
+  phytoProductSelected: state.pulve.phytoProductSelected,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RealTimeScreen);

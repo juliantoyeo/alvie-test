@@ -9,22 +9,20 @@ import { Left, Right, Body, Title, Header, Button, Icon } from 'native-base';
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
-const FieldsScreen = ({ navigation }) => {
-  let result = navigation.getParam('result')
-
+const FieldsScreen = ({ navigation, parcelles }) => {
   const [selected, setSelected] = useState(null)
-  const [legend, setLegend] = useState(i18n.t('fields.parcelles', { value: result.fields.length }))
+  const [legend, setLegend] = useState(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
 
   const getRegion = () => {
     let center = {
-      longitude: (result.region.lon_max - result.region.lon_min) / 2 + result.region.lon_min,
-      latitude: (result.region.lat_max - result.region.lat_min) / 2 + result.region.lat_min,
+      longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
+      latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
     }
 
     let r = {
       ...center,
-      longitudeDelta: Math.max(0.0222, Math.abs(result.region.lon_max - center.longitude)),
-      latitudeDelta: Math.max(0.0121, Math.abs(result.region.lat_max - center.latitude)),
+      longitudeDelta: Math.max(0.0222, Math.abs(parcelles.region.lon_max - center.longitude)),
+      latitudeDelta: Math.max(0.0121, Math.abs(parcelles.region.lat_max - center.latitude)),
     }
 
     return r
@@ -32,15 +30,15 @@ const FieldsScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (selected !== null) {
-      setLegend(i18n.t('fields.culture', { value: result.fields[selected].culture_name||i18n.t('fields.unknown') }))
+      setLegend(i18n.t('fields.culture', { value: parcelles.fields[selected].culture_name||i18n.t('fields.unknown') }))
     } else {
-      setLegend(i18n.t('fields.parcelles', { value: result.fields.length }))
+      setLegend(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
     }
   }, [selected])
 
   const polygons = useRef([]);
-  if (polygons.current.length !== result.length) {
-    polygons.current = Array(result.length).fill().map((_, i) => polygons.current[i] || createRef())
+  if (polygons.current.length !== parcelles.length) {
+    polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
   }
 
   return (
@@ -48,7 +46,7 @@ const FieldsScreen = ({ navigation }) => {
       <StatusBar translucent backgroundColor="transparent" />
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            { result && (
+            { parcelles && (
               <Button transparent onPress={() => navigation.goBack()}>
                 <Icon name='close' style={{ color: '#fff' }} />
               </Button>
@@ -67,7 +65,7 @@ const FieldsScreen = ({ navigation }) => {
             initialRegion={getRegion()}
             style={styles.map}>
 
-            { result.fields.map((field, idx) => {
+            { parcelles.fields.map((field, idx) => {
               return (
                 <Polygon
                   key={field.id}
@@ -149,9 +147,11 @@ const styles = StyleSheet.create({
   }
 });
 
+
 const mapStateToProps = (state) => ({
+  parcelles: state.metadata.parcelles,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({})
-  
+
 export default connect(mapStateToProps, mapDispatchToProps)(FieldsScreen);

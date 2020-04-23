@@ -31,7 +31,7 @@ const MeteoScreen = ({ navigation }) => {
           </Header>
           <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({ i }) => setCurrentTab(i) }>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
-              <MeteoBriefScreen style={styles.tabBar} />
+              <MeteoBriefScreen style={styles.tabBar} navigation={navigation} />
             </Tab>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
               <MeteoDetailed navigation={navigation} style={styles.tabBar} />
