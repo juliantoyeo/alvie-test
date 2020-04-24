@@ -157,7 +157,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
           </View>
           { selected && (
             <>
-            <View style={[styles.metricsContainer, { backgroundColor: COLORS[`${getCurrentData().condition}_CARDS`]}]}>
+            <View style={[styles.metricsContainer, { backgroundColor: COLORS[`${getCurrentParcelles()[selected].condition}_CARDS`]}]}>
               <View style={styles.metricsLine}>
                 <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(getCurrentParcelles()[selected].humi)) })}</Text>
                 <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.precipitation', { value: getCurrentParcelles()[selected].precipitation })}</Text>

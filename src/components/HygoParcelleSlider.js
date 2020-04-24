@@ -5,7 +5,7 @@ import COLORS from '../colors'
 
 import _ from 'lodash';
 
-const CURSOR_WIDTH = 24
+const CURSOR_WIDTH = 36
 const CURSOR_HEIGHT = 36
 
 class HygoParcelleSlider extends Component {
@@ -42,16 +42,20 @@ class HygoParcelleSlider extends Component {
     this.onHourChangeDebounce(posInsideBar)
   }
 
-  getColor = (i) => {
-    let padded = `${i}`.padStart(2, '0')
-    return COLORS[`${this.props.data[padded].condition}_CARDS`];
-  }
-  
-  getItemWidth = () => {
+  getItemWidth = (i, isSub) => {
     const w = this.props.width, margin = parseFloat(w) / 24 * 0.14
+
+    const { selected } = this.state
+
+    if (isSub) {
+      return {
+        width: parseFloat(w) / 24 - 2*(i === selected ? 0 : (i === selected - 1 || i === selected + 1 ? 1 : margin)),
+      }
+    }
+
     return {
-      width: parseFloat(w) / 24 - 2*margin,
-      marginHorizontal: margin,
+      width: parseFloat(w) / 24 - 2*(i === selected ? (-1) : (i === selected - 1 || i === selected + 1 ? 1 : 0)),
+      paddingHorizontal: i === selected ? 0 : (i === selected - 1 || i === selected + 1 ? 1 : margin),
     }
   }
 
@@ -70,20 +74,29 @@ class HygoParcelleSlider extends Component {
       <View style={[ styles.container, { width: this.props.width }]}>
         <View style={[styles.parcelleCursor, { 
           left: left, 
-          width: this.props.cursorWidth||CURSOR_WIDTH,
+          width: this.props.width/8,
           height: this.props.cursorHeight||CURSOR_HEIGHT
         }]} 
           {...this.panResponder.panHandlers}></View>
 
         { [...Array(24).keys()].map(i => {
+          let padded = `${i}`.padStart(2, '0')
           return (
             <TouchableWithoutFeedback key={i} onPress={() => this.onPressParcelle(i)}>
               <View style={[styles.parcelle, {
-                backgroundColor: this.getColor(i), 
-                ...this.getItemWidth()}, 
-                i === selected ? styles.selected : {}, 
-                i === selected - 1 || i === selected + 1 ? styles.selectedNext : {}
-              ]}></View>
+                ...this.getItemWidth(i)}, 
+              ]}>
+                <View style={[styles.subTile,  
+                  i === selected ? styles.selected : {}, 
+                  i === selected - 1 || i === selected + 1 ? styles.selectedNext : {},
+                  { backgroundColor: COLORS[`${this.props.data[padded].condition}_CARDS`], 
+                  ...this.getItemWidth(i, true)
+                }]}>
+                { this.props.data[padded].conflict && (
+                  <Text style={styles.parcelleExclamation}>!</Text>
+                )}
+                </View>
+              </View>
             </TouchableWithoutFeedback>
           )
         }) }
@@ -101,8 +114,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },  
   parcelle: {
+    height: 40,
+    zIndex: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subTile: {
     height: 20,
     zIndex: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   parcelleCursor: {
     position: 'absolute',
@@ -111,16 +134,17 @@ const styles = StyleSheet.create({
   },
   selected: {
     height: 30,
-    width: 14,
-    marginHorizontal: 0,
     borderWidth: 2,
     borderColor: '#fff',
   },
   selectedNext: {
     height: 25,
-    width: 12,
-    marginHorizontal: 1,
   },
+  parcelleExclamation: {
+    fontFamily: 'nunito-heavy',
+    fontSize: 16,
+    color: '#fff',
+  }
 })
 
 export default HygoParcelleSlider

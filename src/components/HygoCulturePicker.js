@@ -15,13 +15,15 @@ import { updateCulturesSelected } from '../store/actions/pulveActions'
 import { updateUICultures } from '../api/hygoApi'
 
 const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCulturesSelected }) => {
+  let back = navigation.getParam('back')
+
   return (
     <SafeAreaView style={[styles.statusbar]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => navigation.goBack()}>
+            <Button transparent onPress={() => back ? navigation.navigate(back) : navigation.goBack()}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>
@@ -32,6 +34,20 @@ const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCultu
         </Header>
         <Content contentContainerStyle={[styles.container]}>
           <View style={styles.listContent}>
+            <TouchableOpacity key={"all"} style={styles.elemContainer} onPress={() => {
+              let p = []
+              if (cultures.length !== culturesSelected.length) {
+                p = JSON.parse(JSON.stringify(cultures.map(c => c.id)))
+              }
+              updateUICultures(p)
+              updateCulturesSelected(p)
+            }}>
+              <Text style={styles.elemText}>{i18n.t('pulverisation.all_cultures')}</Text>
+              { culturesSelected.length === cultures.length && (
+                <Icon name="check" type="AntDesign" style={styles.elemIcon} />
+              )}
+            </TouchableOpacity>
+
             { cultures.map(d => {
               return (
                 <TouchableOpacity key={d.id} style={styles.elemContainer} onPress={() => {
@@ -39,13 +55,13 @@ const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCultu
                   
                   let p = JSON.parse(JSON.stringify(culturesSelected))
                   if (culturesSelected.indexOf(i) > -1) {
-                    updateCulturesSelected(p.filter(e => e !== i))
+                    p = p.filter(e => e !== i)
                   } else {
                     p.push(i)
-
-                    updateUICultures(p)
-                    updateCulturesSelected(p)
                   }
+
+                  updateUICultures(p)
+                  updateCulturesSelected(p)
                 }}>
                   <Text style={styles.elemText}>{d.name}</Text>
                   { culturesSelected.indexOf(d.id) > -1 && (

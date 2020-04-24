@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, TouchableWithoutFeedback, PanResponder, Text, Dimensions } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native'
 
 import COLORS from '../colors'
 
@@ -24,14 +24,21 @@ const HygoParcelleIntervention = ({ from, data, width, onHourChange }) => {
     return COLORS[`${data[padded].condition}_CARDS`];
   }
   
-  const getItemWidth = (i) => {
+  const getItemWidth = (i, isSub) => {
     const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14, isSelected = i <= selected.max && selected.min <= i
+    if (isSub) {
+      return {
+        borderWidth: isSelected ? margin : 0,
+        borderColor: isSelected ? 'transparent' : '#fff',
+        height: 45 + (isSelected ? margin : 0),
+      }
+    }
+
     return {
-      width: parseFloat(w) / NUM_ITEMS - (!isSelected ? 2*margin : 0),
-      marginHorizontal: isSelected ? 0 : margin,
-      borderWidth: isSelected ? margin : 0,
-      borderColor: isSelected ? 'transparent' : '#fff',
-      height: 45 + (isSelected ? margin : 0),
+      width: parseFloat(w) / NUM_ITEMS,
+      paddingHorizontal: isSelected ? 0 : margin,
+      paddingVertical: 5,
+      height: 55 + (isSelected ? margin : 0),
     }
   }
 
@@ -116,9 +123,10 @@ const HygoParcelleIntervention = ({ from, data, width, onHourChange }) => {
         return (
           <TouchableWithoutFeedback key={i} onPress={() => onPressParcelle(i)}>
             <View style={[styles.parcelle, {
-              backgroundColor: getColor(i), 
               ...getItemWidth(i)}, 
-            ]}></View>
+            ]}>
+              <View style={[styles.subTile, { backgroundColor: getColor(i), }]}></View>
+            </View>
           </TouchableWithoutFeedback>
         )
       }) }
@@ -137,6 +145,10 @@ const styles = StyleSheet.create({
   parcelle: {
     height: 45,
     zIndex: 5,
+  },
+  subTile: {
+    height: 45,
+    zIndex: 5
   },
   selected: {
     height: 45,

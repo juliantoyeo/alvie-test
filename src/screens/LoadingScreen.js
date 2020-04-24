@@ -11,10 +11,12 @@ const LoadingScreen = ({ navigation }) => {
   }, [navigation.state.params])
 
   const run = async () => {
-    const { action, next, params } = navigation.state.params
+    const { action, next, params, raw } = navigation.state.params
 
     let result = await action(params)
-    navigation.replace(next, {
+    navigation.replace(next, raw ? {
+      ...result
+    } : {
       result
     })
   }

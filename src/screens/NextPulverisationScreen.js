@@ -120,7 +120,10 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
               { culturesSelected.length === 0 && (
                 <Text style={styles.pickerText}>{i18n.t('pulverisation.culture_type')}</Text>
               )}
-              { culturesSelected.length > 0 && (
+              { culturesSelected.length === cultures.length && (
+                <Text style={styles.pickerText}>{i18n.t('pulverisation.all_cultures')}</Text>
+              )}
+              { culturesSelected.length < cultures.length && culturesSelected.length > 0 && (
                 <Text style={styles.pickerText}>{ cultures.filter(pp => culturesSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
               )}
               <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />

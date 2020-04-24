@@ -181,6 +181,7 @@ export default {
     'start': 'Commencer',
     'computation_hint': '* Calculé sur la base de vos choix de cultures/produits',
     'reduce_dosage': 'Diminution de la dose* ',
+    'all_cultures': 'Toutes les cultures',
   },
   'picker': {
     'header': 'Sélectionner une valeur',

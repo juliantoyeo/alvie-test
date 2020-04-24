@@ -71,6 +71,8 @@ class BarCodeScreen extends React.Component {
   }
 
   gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
+    await AsyncStorage.setItem('token', token);
+    
     await this.props.updateAuthInfo({
       token,
       userName, familyName, deviceid, deviceType
@@ -82,8 +84,6 @@ class BarCodeScreen extends React.Component {
     ])
     this.props.updateParcellesList(fields)
     this.props.updateCulturesList(cultures)
-
-    await AsyncStorage.setItem('token', token);
 
     // TODO debug this
     // await this.registerForPushNotificationsAsync(deviceid)

@@ -49,7 +49,8 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
 
   const openPicker = (screen) => {
     navigation.replace(screen, {
-      next: 'Pulverisation'
+      next: 'Pulverisation',
+      back: 'Pulverisation'
     })
   }
 
@@ -108,6 +109,7 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
     reloadCurrentMetrics()
     setBackgroundColor()
   }, [])
+
   useEffect(() => {
     if (selected.max < selected.min) {
       return
@@ -204,7 +206,7 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
       <ScrollView style={[styles.container, { backgroundColor: background }]}>
         <Header hasTabs style={[styles.header, { backgroundColor: background }]} androidStatusBarColor={background} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => navigation.goBack()}>
+            <Button transparent onPress={() => navigation.navigate("Pulverisation")}>
               <Icon name='close' style={{ color: '#fff' }} />
             </Button>
           </Left>
@@ -220,7 +222,10 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
             { culturesSelected.length === 0 && (
               <Text style={styles.pickerText}>{i18n.t('pulverisation.culture_type')}</Text>
             )}
-            { culturesSelected.length > 0 && (
+            { culturesSelected.length === cultures.length && (
+              <Text style={styles.pickerText}>{i18n.t('pulverisation.all_cultures')}</Text>
+            )}
+            { culturesSelected.length < cultures.length && culturesSelected.length > 0 && (
               <Text style={styles.pickerText}>{ cultures.filter(pp => culturesSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
             )}
             <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />

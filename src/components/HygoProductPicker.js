@@ -15,6 +15,8 @@ import { connect } from 'react-redux'
 import { updatePhytoProductSelected } from '../store/actions/pulveActions'
 
 const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSelected, phytoProductSelected }) => {
+  let back = navigation.getParam('back')
+
   let source = navigation.getParam('source')
   let initial = navigation.getParam('initial')
   let set = navigation.getParam('set')
@@ -37,12 +39,12 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
     if (!source || source !== 'intervention') {
       let p = JSON.parse(JSON.stringify(phytoProductSelected))
       if (phytoProductSelected.indexOf(i) > -1) {
-        updatePhytoProductSelected(p.filter(e => e !== i))
+        p = p.filter(e => e !== i)
       } else {
         p.push(i)
-        updateUIPhytoProduct(p)
-        updatePhytoProductSelected(p)
       }
+      updateUIPhytoProduct(p)
+      updatePhytoProductSelected(p)
     }
   }
 
@@ -52,7 +54,7 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => navigation.goBack()}>
+            <Button transparent onPress={() => back ? navigation.navigate(back) : navigation.goBack()}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>

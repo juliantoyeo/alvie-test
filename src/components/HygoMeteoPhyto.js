@@ -4,16 +4,42 @@ import i18n from 'i18n-js'
 
 import COLORS from '../colors'
 
-import { updateUIPhytoProduct } from '../api/hygoApi'
+import { updateUIPhytoProduct, updateUICultures, getMeteoIntervention } from '../api/hygoApi'
 
 import { connect } from 'react-redux'
-import { updatePhytoProductSelected } from '../store/actions/pulveActions'
+import { updatePhytoProductSelected, updateCulturesSelected } from '../store/actions/pulveActions'
 
-const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected }) => {
+const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, hour, cultures, phytoProductSelected, culturesSelected, updateCulturesSelected }) => {
   const handleProductClick = async () => {
     updateUIPhytoProduct([ product.id ])
+    updateUICultures(cultures.map(c => c.id))
+
     await updatePhytoProductSelected([ product.id ])
-    navigation.navigate("Pulverisation")
+    await updateCulturesSelected(cultures.map(c => c.id))
+
+    navigation.navigate('LoadingScreen', {
+      next: 'NextPulverisationDetails',
+      params: {
+        phytoProductSelected, 
+        culturesSelected, 
+        day, 
+        hour,
+      },
+      raw: true,
+      action: async ({ phytoProductSelected, culturesSelected, day, hour }) => {
+        let data = await getMeteoIntervention({
+          products: phytoProductSelected,
+          cultures: culturesSelected
+        })
+
+        return {
+          day,
+          hour,
+          data,
+          r: 3,
+        }
+      }
+    })
   }
 
   return (
@@ -93,10 +119,14 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
+  cultures: state.metadata.cultures,
+  culturesSelected: state.pulve.culturesSelected,
+  phytoProductSelected: state.pulve.phytoProductSelected,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   updatePhytoProductSelected: (selected) => dispatch(updatePhytoProductSelected(selected)),
+  updateCulturesSelected: (selected) => dispatch(updateCulturesSelected(selected)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HygoMeteoPhyto);

@@ -8,6 +8,8 @@ import i18n from 'i18n-js'
 import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
 
+import moment from 'moment'
+
 import { getMeteo } from '../api/hygoApi'
 
 const MeteoBriefScreen = ({ navigation }) => {
@@ -108,7 +110,7 @@ const MeteoBriefScreen = ({ navigation }) => {
 
         { !loading && meteoData.products.map(p => {
             return (
-              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} />
+              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={moment().format('hh')} />
             )
         })}
         <View style={{ height: 80 }}></View>
