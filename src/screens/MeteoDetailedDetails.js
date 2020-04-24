@@ -167,7 +167,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
               </View>
               <View style={styles.metricsLine}>
                 <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.temp', { value: Math.round(parseFloat(getCurrentParcelles()[selected].temp)) })}</Text>
-                <Text style={styles.metricsText}>{`${i18n.t('meteo_overlay.wind')} ${i18n.t('meteo_overlay.wind_speed', { value: Math.round(getCurrentParcelles()[selected].wind) })}`}</Text>
+                <Text style={styles.metricsText}>{`${i18n.t('meteo_overlay.wind')} ${i18n.t('meteo_overlay.wind_speed', { winddir: getCurrentParcelles()[selected].winddirection, value: Math.round(getCurrentParcelles()[selected].wind) })}`}</Text>
                 { currentProduct.isRacinaire && (
                   <Text style={styles.metricsText}>{`${i18n.t('meteo_overlay.soil')} ${i18n.t('meteo_overlay.soil_humi', { value: Math.round(getCurrentParcelles()[selected].soilhumi) })}`}</Text>
                 )}
@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     padding: 15,
+    top: -20
   },
   legendElement: {
     display: 'flex',

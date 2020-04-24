@@ -37,7 +37,6 @@ const MeteoBriefScreen = ({ navigation }) => {
 
   const loadMeteo = async () => {
     let meteo = await getMeteo()
-
     setMeteoData(meteo)
     setLoading(false)
   }
@@ -110,7 +109,7 @@ const MeteoBriefScreen = ({ navigation }) => {
 
         { !loading && meteoData.products.map(p => {
             return (
-              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={moment().format('hh')} />
+              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={parseInt(moment().format('HH'))} />
             )
         })}
         <View style={{ height: 80 }}></View>

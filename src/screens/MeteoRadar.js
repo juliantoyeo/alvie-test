@@ -76,17 +76,42 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
     setLoading(false)
   }
 
-  const setFranceRegion = () => {
+  const setFranceRegion = (init) => {
     let center = {
       latitude: (coords.lat_max - coords.lat_min) / 2 + coords.lat_min,
       longitude: (coords.lon_max - coords.lon_min) / 2 + coords.lon_min,
     }
 
-    setRegion({
+    let r = {
       ...center,
       latitudeDelta: Math.abs(center.latitude - coords.lat_min),
       longitudeDelta: Math.abs(center.longitude - coords.lon_min),
-    })
+    }
+
+    if (init) {
+      setRegion(r)
+    } else {
+      updateRegion(r)
+    }
+  }
+
+  const setAgriRegion = (init) => {
+    let center = {
+      longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
+      latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
+    }
+
+    let r = {
+      ...center,
+      longitudeDelta: Math.max(0.0222, Math.abs(parcelles.region.lon_max - center.longitude)),
+      latitudeDelta: Math.max(0.0121, Math.abs(parcelles.region.lat_max - center.latitude)),
+    }
+
+    if (init) {
+      setRegion(r)
+    } else {
+      updateRegion(r)
+    }
   }
 
   const updateRegion = (region) => {
@@ -94,7 +119,7 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
   }
 
   useEffect(() => {
-    setFranceRegion()
+    setAgriRegion(true)
   }, [])
 
   const polygons = useRef([]);
@@ -112,32 +137,12 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
       )}
       { region && !loading && (
         <View style={styles.mapContainer}>
-          <Button icon transparent style={styles.posButton} onPress={() => {
-            let center = {
-              longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
-              latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
-            }
-        
-            let r = {
-              ...center,
-              longitudeDelta: Math.max(0.0222, Math.abs(parcelles.region.lon_max - center.longitude)),
-              latitudeDelta: Math.max(0.0121, Math.abs(parcelles.region.lat_max - center.latitude)),
-            }
-
-            updateRegion(r)
-          }}><Icon name="my-location" type="MaterialIcons" style={styles.posIcon} /></Button>
-          <Button icon transparent style={[styles.posButton, { top: 50 }]} onPress={() => {
-            let center = {
-              latitude: (coords.lat_max - coords.lat_min) / 2 + coords.lat_min,
-              longitude: (coords.lon_max - coords.lon_min) / 2 + coords.lon_min,
-            }
-        
-            updateRegion({
-              ...center,
-              latitudeDelta: Math.abs(center.latitude - coords.lat_min),
-              longitudeDelta: Math.abs(center.longitude - coords.lon_min),
-            })
-          }}><Icon name="globe" type="FontAwesome" style={styles.posIcon} /></Button>
+          <Button icon transparent style={styles.posButton} onPress={() => setAgriRegion()}>
+            <Icon name="my-location" type="MaterialIcons" style={styles.posIcon} />
+          </Button>
+          <Button icon transparent style={[styles.posButton, { top: 50 }]} onPress={() => setFranceRegion()}>
+            <Icon name="globe" type="FontAwesome" style={styles.posIcon} />
+          </Button>
           <MapView
             provider="google"
             mapType="hybrid"

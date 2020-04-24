@@ -9,10 +9,10 @@ const NUM_ITEMS = 12
 
 const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
-const HygoParcelleIntervention = ({ from, data, width, onHourChange }) => {
+const HygoParcelleIntervention = ({ from, data, width, onHourChange, initialMax }) => {
   const [selected, setSelected] = useState({
     min: parseInt(0),
-    max: parseInt(0)
+    max: parseInt(initialMax?initialMax:0)
   })
 
   const getColor = (i) => {

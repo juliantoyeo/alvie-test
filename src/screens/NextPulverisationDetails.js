@@ -22,6 +22,7 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
   let result = navigation.getParam('data')
   let day = navigation.getParam('day')
   let hour = navigation.getParam('hour')
+  let ra = navigation.getParam('r')
 
   const [modulationParams, setModulationParams] = useState({
     selected: { min: -1, max: -1 }
@@ -58,7 +59,7 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
 
   const [selected, setSelected] = useState({
     min: 0,
-    max: 0,
+    max: ra ? parseInt(ra) : 0,
   })
 
   const polygons = useRef([]);
@@ -278,7 +279,7 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
             )}
           </View>
           <View style={styles.sliderContainer}>
-            <HygoParcelleIntervention from={parseInt(hour)} onHourChange={(h) => {       
+            <HygoParcelleIntervention from={parseInt(hour)} initialMax={selected.max} onHourChange={(h) => {       
               setModulationChanged(true)
               setSelected(h);
             }} data={next12HoursData} width={Dimensions.get('window').width - 30} />

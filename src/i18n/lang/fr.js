@@ -156,7 +156,7 @@ export default {
     'temp': 'Temp : %{value}°C',
     'delta_temp': 'Ampl 48h : %{value}°C',
     'wind': 'Vent : ',
-    'wind_speed': 'ESS %{value} km/h',
+    'wind_speed': '%{winddir} %{value} km/h',
     'wind_gust': 'RAF %{value} km/h',
     'precipitation': 'Pluie : %{value} mm',
     'soil': 'Sol : ',

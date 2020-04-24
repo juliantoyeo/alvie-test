@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent'
 
 export const hygoApi = axios.create({
-    baseURL: 'https://staging.alvie.fr',
+    baseURL: 'https://81298f4f.ngrok.io',
     timeout: 3000,
     headers: { 
         'User-Agent': getUserAgent()

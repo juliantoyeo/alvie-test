@@ -20,8 +20,8 @@ const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, 
     navigation.navigate('LoadingScreen', {
       next: 'NextPulverisationDetails',
       params: {
-        phytoProductSelected, 
-        culturesSelected, 
+        phytoProductSelected: [ product.id ], 
+        culturesSelected: cultures.map(c => c.id), 
         day, 
         hour,
       },
@@ -36,7 +36,7 @@ const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, 
           day,
           hour,
           data,
-          r: 3,
+          r: 2,
         }
       }
     })
