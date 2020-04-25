@@ -5,6 +5,9 @@ export default {
   DARK_BLUE: '#009fb3',
   DARK_GREEN: '#2C6465',
 
+  CYAN_GRADIENT_BOT: '#67dee1',
+  CYAN_GRADIENT_TOP: '#aaa',
+
   CORRECT: '#D5BB69',
   CORRECT_CARDS: '#FFDC6E',
   CORRECT_GRADIENT_TOP: '#FFEEB7',

@@ -127,6 +127,11 @@ export default {
     'next_cuve': 'Planifier une autre cuve',
     'hygro': 'Hygrométrie',
     'temp': 'Température',
+    'no_parcelle': 'HORS DE L\'EXPLOITATION',
+    'no_product': 'PAS DE PRODUIT SÉLECTIONNÉ',
+    'no_data_3_hours': 'Pas de mesure dans les trois dernières heures',
+    'waiting_for_data': 'En attente des données du capteur',
+    'goto_cuve': 'VERS la planification'
   },
   'fields': {
     'parcelles': 'Parcelles totales : %{value}',

@@ -186,9 +186,9 @@ export const getInterventions = async () => {
 }
 
 // Get Realtime data
-export const getRealtimeData = async () => {
+export const getRealtimeData = async (phytoProductSelected) => {
     try {
-        const response = await hygoApi.post('/app/realtime', {});
+        const response = await hygoApi.post('/app/realtime', { products: phytoProductSelected });
         return response.data
     } catch(error) {
         return { }

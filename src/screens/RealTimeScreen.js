@@ -16,6 +16,8 @@ import HygoChart from '../components/HygoChart';
 
 import { connect } from 'react-redux'
 
+import moment from 'moment-timezone'
+
 const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -23,6 +25,8 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   const [history, setHistory] = useState([])
   const [last, setLast] = useState({})
   const [ui, setUi] = useState({})
+  const [currentMeteo, setCurrentMeteo] = useState({})
+  const [currentCondition, setCurrentCondition] = useState({})
 
   const [color, setColor] = useState(COLORS.GREY)
   const [secondaryColor, setSecondaryColor] = useState(COLORS.GREY)
@@ -30,22 +34,42 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   useEffect(() => {
     loadRealtimeData()
   }, [])
+  
+  useEffect(() => {
+    const unsubscribeFocus = navigation.addListener('willFocus', () => {
+      setIsRefreshing(true)
+      loadRealtimeData()
+    });
 
+    return () => {
+      unsubscribeFocus.remove()
+    };
+  }, [navigation, loadRealtimeData, phytoProductSelected])
+  
   const loadRealtimeData = async () => {
-    let { history, last, ui } = await getRealtimeData()
+    let { history, last, ui, parcelleMeteo, parcelleMeteoProduct } = await getRealtimeData(phytoProductSelected)
 
-    setHistory(history)
-    setLast(last)
+    setHistory(history || [])
+    setLast(history.length > 0 ? history[history.length-1] : {})
     setUi(ui)
+    setCurrentMeteo(parcelleMeteo)
+    setCurrentCondition(parcelleMeteoProduct)
 
-    updateColors(ui.raw)
+    console.log(history, last, ui, parcelleMeteo, parcelleMeteoProduct)
+
+    if (phytoProductSelected.length === 0 || !parcelleMeteoProduct.condition) {
+      updateColors('CYAN')
+    } else {
+      updateColors(parcelleMeteoProduct.condition)
+    }
 
     setLoading(false)
+    setIsRefreshing(false)
   }
 
   const getLastHour = (dt, separator) => {
-    let d = new Date(dt || last.timestamp)
-    return `${d.getHours()}${separator||':'}${("0"+(d.getMinutes())).slice(-2)}`
+    let d = moment.utc(dt || parseInt(last.timestamp)).tz('Europe/Paris').format('HH:mm')
+    return `${d}`
   }
 
   const onRefresh = async () => {
@@ -91,13 +115,38 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
           <Content contentContainerStyle={{ flexGrow: 1, backgroundColor: COLORS.BEIGE, padding: 0, disableKBDismissScroll: true }} 
               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}>
           
-          { history.length > 0 && (
             <View>
-              <View style={[styles.headerCondition, { backgroundColor: color }]}>
-                <Text style={styles.textCondition}>{ui.condition}</Text>
-              </View>
+              { history.length === 0 && (
+                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
+                  <Text style={styles.textCondition}>{i18n.t('realtime.waiting_for_data')}</Text>
+                </View>
+              )}
+
+              { history.length > 0 && phytoProductSelected.length === 0 && !currentMeteo.timestamp && (
+                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
+                  <Text style={styles.textCondition}>{i18n.t('realtime.no_product')}</Text>
+                  <Text style={styles.textCondition}>{i18n.t('realtime.no_parcelle')}</Text>
+                </View>
+              )}
+              { history.length > 0 && phytoProductSelected.length === 0 && currentMeteo.timestamp && (
+                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
+                  <Text style={styles.textCondition}>{i18n.t('realtime.no_product')}</Text>
+                  <Text style={styles.textCondition}>{""}</Text>
+                </View>
+              )}
+              { history.length > 0 && phytoProductSelected.length > 0 && !currentMeteo.timestamp && (
+                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
+                  <Text style={styles.textCondition}>{i18n.t('realtime.no_parcelle')}</Text>
+                  <Text style={styles.textCondition}>{""}</Text>
+                </View>
+              )}
+              { history.length > 0 && phytoProductSelected.length > 0 && currentMeteo.timestamp && (
+                <View style={[styles.headerCondition, { backgroundColor: color }]}>
+                  <Text style={styles.textCondition}>{ui.condition}</Text>
+                </View>
+              )}
               <View style={styles.lastHour}>
-                <Text style={styles.lastHourText}>{i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
+                <Text style={styles.lastHourText}>{history.length === 0 ? i18n.t('realtime.no_data_3_hours') : i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
 
               <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker")}>
@@ -116,65 +165,70 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                   <AnimatedCircularProgress
                     size={90}
                     width={8}
-                    fill={(last.temp+5)/parseFloat(55)*100}
+                    fill={last && typeof last.temp !== 'undefined' ? (last.temp+5)/parseFloat(55)*100 : 0}
                     rotation={0}
                     tintColor={color}
                     backgroundColor="#fff">{() => (
                       <Image source={require('../../assets/thermo.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
                     )}</AnimatedCircularProgress>
-                  <Text style={styles.gaugeText}>{`${last.temp}°C`}</Text>
+                  { last && typeof last.temp !== 'undefined' && (
+                    <Text style={styles.gaugeText}>{`${last.temp}°C`}</Text>
+                  )}
                 </View>
 
                 <View style={styles.gaugeElement}>
                   <AnimatedCircularProgress
                     size={90}
                     width={8}
-                    fill={last.humi}
+                    fill={last && typeof last.humi !== 'undefined' ? last.humi : 0}
                     rotation={0}
                     tintColor={color}
                     backgroundColor="#fff">{() => (
                       <Image source={require('../../assets/ICN-Hygro.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
                     )}</AnimatedCircularProgress>
-                  <Text style={styles.gaugeText}>{`${last.humi}%`}</Text>
+                    { last && typeof last.humi !== 'undefined' && (
+                      <Text style={styles.gaugeText}>{`${last.humi}%`}</Text>
+                    )}
                 </View>
 
-                { typeof last.wind !== 'undefined' && (
-                  <AnimatedCircularProgress
-                    size={90}
-                    width={8}
-                    fill={30}
-                    rotation={0}
-                    tintColor={COLORS.EXCELLENT}
-                    backgroundColor="#fff">{() => (
-                      <Image source={require('../../assets/ICN-Wind.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
-                    )}</AnimatedCircularProgress>
-                )}
+                  <View style={styles.gaugeElement}>
+                    <AnimatedCircularProgress
+                      size={90}
+                      width={8}
+                      fill={typeof currentMeteo.windspeed !== 'undefined' ? currentMeteo.windspeed/parseFloat(50)*100 : 0}
+                      rotation={0}
+                      tintColor={color}
+                      backgroundColor="#fff">{() => (
+                        <Image source={require('../../assets/ICN-Wind.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
+                      )}</AnimatedCircularProgress>
+                    { typeof currentMeteo.windspeed !== 'undefined' && (
+                      <View>
+                      <Text style={[styles.gaugeText, {fontSize: 16} ]}>{`${Math.round(currentMeteo.windspeed)} km/h ${currentMeteo.winddirection_nesw}`}</Text>
+                      <Text style={[styles.gaugeText, {marginTop: 0, fontSize: 16} ]}>{`raf. ${Math.round(currentMeteo.gust)} km/h`}</Text>
+                      </View>
+                    )}
+                  </View>
               </View>
 
-              <HygoChart label={i18n.t('realtime.temp')} data={history.slice(0,8).map(h => {
-                return { x: new Date(h.timestamp), y: h.temp }
-              })} mainColor={color} secondaryColor={secondaryColor} />
+              { history.length > 1 && (
+                <HygoChart label={i18n.t('realtime.temp')} data={history.map(h => {
+                  return { x: new Date(h.timestamp), y: h.temp }
+                })} mainColor={color} secondaryColor={secondaryColor} />
+              )}
 
-              <HygoChart label={i18n.t('realtime.hygro')} data={history.slice(0,8).map(h => {
-                return { x: new Date(h.timestamp), y: h.humi }
-              })} mainColor={color} secondaryColor={secondaryColor} />
+              { history.length > 1 && (
+                <HygoChart label={i18n.t('realtime.hygro')} data={history.map(h => {
+                  return { x: new Date(h.timestamp), y: h.humi }
+                })} mainColor={color} secondaryColor={secondaryColor} />
+              )}
 
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pulverisation')}>
-                  <Text style={styles.buttonText}>{i18n.t('realtime.next_cuve')}</Text>
+                  <Text style={styles.buttonText}>{history.length > 0 ? i18n.t('realtime.next_cuve') : i18n.t('realtime.goto_cuve')}</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ height: 60 }} />
             </View>
-          )}
-
-          { history.length === 0 && (
-            <>
-              <View style={{ flex: 2 }} />
-              <Text textAlign="center" style={styles.text}>{i18n.t('realtime.no_data')}</Text>
-              <View style={{ flex: 2 }} />
-            </>
-          )}
           </Content>
         )}
       </Container>
@@ -255,6 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   headerCondition: {
+    height: 82,
     padding: 15,
     backgroundColor: COLORS.EXCELLENT,
     display: 'flex',
@@ -275,6 +330,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'nunito-heavy',
     fontSize: 14,
+    padding: 2,
   },
   lastHour: {
     padding: 10,
