@@ -131,7 +131,12 @@ export default {
     'no_product': 'PAS DE PRODUIT SÉLECTIONNÉ',
     'no_data_3_hours': 'Pas de mesure dans les trois dernières heures',
     'waiting_for_data': 'En attente des données du capteur',
-    'goto_cuve': 'VERS la planification'
+    'goto_cuve': 'VERS la planification',
+    'status_conditions_EXCELLENT': 'Conditions Idéales',
+    'status_conditions_GOOD': 'Bonnes Conditions',
+    'status_conditions_CORRECT': 'Conditions Moyennes',
+    'status_conditions_BAD': 'Mauvaises Conditions',
+    'status_conditions_FORBIDDEN': 'Très Mauvaises Conditions',
   },
   'fields': {
     'parcelles': 'Parcelles totales : %{value}',

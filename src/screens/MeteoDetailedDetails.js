@@ -199,6 +199,8 @@ const MeteoDetailedDetails = ({ navigation }) => {
               style={styles.map}>
 
               { Object.values(result.parcelles).map((field, idx) => {
+                console.log(getCurrentParcelles())
+                console.log(field)
                 return (
                   <Polygon
                     key={field.id}

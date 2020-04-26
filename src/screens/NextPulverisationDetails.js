@@ -16,37 +16,14 @@ import _ from 'lodash'
 import HygoParcelleIntervention from '../components/HygoParcelleIntervention'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
+import { PADDED, CONDITIONS_ORDERING } from '../constants'
 
-const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSelected, cultures, phytoProductList }) => {
-  let result = navigation.getParam('data')
-  let day = navigation.getParam('day')
-  let hour = navigation.getParam('hour')
-  let ra = navigation.getParam('r')
-
-  const [modulationParams, setModulationParams] = useState({
-    selected: { min: -1, max: -1 }
-  })
+const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navigation, culturesSelected, phytoProductSelected, cultures, phytoProductList }) => {
   const [modulationValue, setModulationValue] = useState()
   const [modulationLoading, setModulationLoading] = useState(false)
   const [modulationChanged, setModulationChanged] = useState(true)
 
-  const getNext12HoursData = () => {
-    let start = parseInt(hour), output = {}
-
-    for (let i = start; i < start + 12; i++) {
-      let h = i % 24, r = parseInt(i / 24)
-
-      let d = day
-      if (r > 0) {
-        d = result.days[result.days.indexOf(day) + r]
-      }
-
-      output[`${i}`.padStart(2, '0')] = result.data[d].hours1[`${h}`.padStart(2, '0')]
-    }
-
-    return output
-  }
+  const [loading, setLoading] = useState(false)
 
   const openPicker = (screen) => {
     navigation.replace(screen, {
@@ -54,8 +31,6 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
       back: 'Pulverisation'
     })
   }
-
-  const [next12HoursData] = useState(getNext12HoursData())
 
   const [selected, setSelected] = useState({
     min: 0,
@@ -69,13 +44,13 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
 
   const [currentHourMetrics, setCurrentHourMetrics] = useState({})
   const [background, setBackground] = useState(COLORS.GREY)
+  const [fieldColors, setFieldColors] = useState({})
 
-  const reloadCurrentMetrics = () => {
-    let data = next12HoursData
-
+  const reloadCurrentMetrics = (selected) => {
     const minval = -99999, maxval = 99999
     let chd = {}, dir = []
-    _.forOwn(data, (v, k) => {
+    _.forOwn(next12HoursData, (v, k) => {
+      if (k === 'ready') { return }
       if (parseInt(k) - parseInt(hour) > selected.max || parseInt(k) - parseInt(hour) < selected.min) {
         return
       }
@@ -107,32 +82,29 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
   }
 
   useEffect(() => {
-    reloadCurrentMetrics()
-    setBackgroundColor()
-  }, [])
-
-  useEffect(() => {
-    if (selected.max < selected.min) {
-      return
-    }
-    reloadCurrentMetrics()
-    setBackgroundColor()
-  }, [selected])
+    reloadCurrentMetrics(selected)
+    setBackgroundColor(selected)
+  }, [next12HoursData])
 
   const hasRacinaire = () => {
     return result.products.filter(p => p.isRacinaire).length > 0
   }
 
-  const setBackgroundColor = () => {
+  const setBackgroundColor = (selected) => {
     let curCond = null
     for (let i = selected.min; i <= selected.max; i++) {
-      let padded = `${i+parseInt(hour)}`.padStart(2, '0')
-      if (!curCond || conditionsOrdering.indexOf(curCond) >= conditionsOrdering.indexOf(next12HoursData[padded].condition)) {
-        curCond = next12HoursData[padded].condition
+      if (!curCond || CONDITIONS_ORDERING[curCond] >= CONDITIONS_ORDERING[next12HoursData[PADDED[i+parseInt(hour)]].condition]) {
+        curCond = next12HoursData[PADDED[i+parseInt(hour)]].condition
       }
     }
 
     setBackground(COLORS[`${curCond}`])
+
+    let fc = {}
+    Object.values(result.parcelles).map((field, idx) => {
+      fc[field.id] = getFieldColor(selected, field.id)
+    })
+    setFieldColors(fc)
   }
 
   const getRegion = () => {
@@ -150,11 +122,11 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
     return r
   }
 
-  const getFieldColor = (fieldId) => {
+  const getFieldColor = (selected, fieldId) => {
     let curCond = null
     for (let i = selected.min; i <= selected.max; i++) {
-      let padded = `${i+parseInt(hour)}`.padStart(2, '0')
-      if (!curCond || conditionsOrdering.indexOf(curCond) >= conditionsOrdering.indexOf(next12HoursData[padded].parcelle[fieldId].condition)) {
+      let padded = PADDED[i+parseInt(hour)]
+      if (!curCond || CONDITIONS_ORDERING[curCond] >= CONDITIONS_ORDERING[next12HoursData[padded].parcelle[fieldId].condition]) {
         if (next12HoursData[padded].parcelle[fieldId]) {
           curCond = next12HoursData[padded].parcelle[fieldId].condition
         }
@@ -194,9 +166,6 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
 
     setModulationValue(res.value)
 
-    setModulationParams({
-      ...params
-    })
     setModulationChanged(false)
     setModulationLoading(false)
   }
@@ -252,8 +221,16 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
           <View style={styles.conditionContainer}>
             <View style={styles.conditionItemContainer}>
               <Image source={require('../../assets/ICN-Wind.png')} style={styles.conditionItemImage} />
-              <Text style={styles.conditionItemText}>{`${currentHourMetrics.winddirection} ${Math.round(currentHourMetrics.wind)} km/h`}</Text>
-              <Text style={styles.conditionItemText}>{`RAF ${Math.round(currentHourMetrics.gust)} km/h`}</Text>
+              { loading && (
+                <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
+              )}
+
+              { !loading && (
+                <View>
+                  <Text style={styles.conditionItemText}>{`${currentHourMetrics.winddirection} ${Math.round(currentHourMetrics.wind)} km/h`}</Text>
+                  <Text style={styles.conditionItemText}>{`RAF ${Math.round(currentHourMetrics.gust)} km/h`}</Text>
+                </View>
+              )}
             </View>
             <View style={styles.conditionItemContainer}>
               <Image source={require('../../assets/ICN-Rain.png')} style={styles.conditionItemImage} />
@@ -279,9 +256,16 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
             )}
           </View>
           <View style={styles.sliderContainer}>
-            <HygoParcelleIntervention from={parseInt(hour)} initialMax={selected.max} onHourChange={(h) => {       
+            <HygoParcelleIntervention from={parseInt(hour)} initialMax={selected.max} onHourChangeEnd={(h) => {
               setModulationChanged(true)
               setSelected(h);
+
+              if (h.max < h.min) {
+                return
+              }
+              reloadCurrentMetrics(h)
+              setBackgroundColor(h)
+              setLoading(false)
             }} data={next12HoursData} width={Dimensions.get('window').width - 30} />
           </View>
           <View style={styles.hoursDetailsContainer}>
@@ -321,10 +305,10 @@ const NextPulverisationDetails = ({ navigation, culturesSelected, phytoProductSe
                     key={field.id}
                     strokeWidth={1}
                     strokeColor={COLORS.DARK_GREEN}
-                    fillColor={getFieldColor(field.id)}
+                    fillColor={fieldColors[field.id]}
                     ref={ref => (polygons.current[idx] = ref)}
                     onLayout={() => polygons.current[idx].setNativeProps({
-                        fillColor: getFieldColor(field.id)
+                        fillColor: fieldColors[field.id]
                     })}
                     coordinates={field.features.coordinates[0].map((coordinate) => {
                       return {

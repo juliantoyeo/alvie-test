@@ -5,7 +5,6 @@ import COLORS from '../colors'
 
 import _ from 'lodash';
 
-const CURSOR_WIDTH = 36
 const CURSOR_HEIGHT = 36
 
 class HygoParcelleSlider extends Component {

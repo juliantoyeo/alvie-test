@@ -8,8 +8,6 @@ import MeteoBriefScreen from './MeteoBriefScreen'
 import MeteoRadar from './MeteoRadar'
 import MeteoDetailed from './MeteoDetailed'
 
-import COLORS from '../colors'
-
 const MeteoScreen = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState(0)
 

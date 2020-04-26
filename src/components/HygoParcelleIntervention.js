@@ -1,31 +1,94 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native'
+import React, { useState, Component } from 'react'
+import { StyleSheet, View, TouchableWithoutFeedback, PanResponder, Dimensions } from 'react-native'
 
 import COLORS from '../colors'
 
 import _ from 'lodash';
 
 const NUM_ITEMS = 12
+const CURSOR_HEIGHT = 120
 
 const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
-const HygoParcelleIntervention = ({ from, data, width, onHourChange, initialMax }) => {
-  const [selected, setSelected] = useState({
-    min: parseInt(0),
-    max: parseInt(initialMax?initialMax:0)
+class HygoParcelleIntervention extends Component { 
+  constructor(props) {
+    super(props);
+
+    this.onHourChangeDelayed = _.debounce((h) => { props.onHourChange(h) }, 100);
+
+    this.state = {
+      selected: {
+        min: parseInt(0),
+        max: parseInt(props.initialMax?props.initialMax:0)
+      },
+    }
+  }
+
+  panResponder = PanResponder.create({
+    onMoveShouldSetPanResponderCapture: () => true,
+    onPanResponderMove: (evt, gestureState) => this.onMove(evt, gestureState),
+    onPanResponderRelease: () => {
+      if (this.props.onHourChangeEnd) {
+        this.props.onHourChangeEnd(this.state.selected)
+      }
+    }
   })
 
-  const getColor = (i) => {
-    let isSelected = i <= selected.max && selected.min <= i
+  onMove = (evt, gestureState) => {
+    let xpos = gestureState.x0 + gestureState.dx
+
+    let offset = (Dimensions.get('window').width - this.props.width) / 2
+
+    let fv = (xpos - offset) / this.props.width * NUM_ITEMS, dv = fv % 1
+
+    if (gestureState.vx > 0) {
+      if (dv >= 0.65) { fv = parseInt(fv) + 1 }
+      else { fv = parseInt(fv) }
+    } else if (gestureState.vx < 0) {
+      if (dv <= 0.35) { fv = parseInt(fv) }
+      else { fv = parseInt(fv) + 1 }
+    }
+
+
+    let posInsideBar = fv
+    if (posInsideBar > NUM_ITEMS - 1) { posInsideBar = NUM_ITEMS - 1 }
+    if (posInsideBar < 0) { posInsideBar = 0 }
+
+    let { min, max } = this.state.selected
+
+    if (gestureState.vx > 0) {
+      if (posInsideBar === max + 1) {
+        max = posInsideBar
+      } else if (posInsideBar === min && max !== posInsideBar) {
+        min = posInsideBar + 1
+      }
+    } else {
+      if (posInsideBar === min - 1) {
+        min = posInsideBar
+      } else if (posInsideBar === max && posInsideBar !== min) {
+        max = posInsideBar - 1
+      }
+    }
+
+    this.setState({
+      selected: {
+        min,
+        max
+      }
+    })
+  }
+
+  getColor = (i) => {
+    let isSelected = i <= this.state.selected.max && this.state.selected.min <= i
     if (isSelected) 
       return 'transparent'
 
-    let padded = `${i+from}`.padStart(2, '0')
-    return COLORS[`${data[padded].condition}_CARDS`];
+    let padded = `${i+this.props.from}`.padStart(2, '0')
+    return COLORS[`${this.props.data[padded].condition}_CARDS`];
   }
   
-  const getItemWidth = (i, isSub) => {
-    const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14, isSelected = i <= selected.max && selected.min <= i
+  getItemWidth = (i, isSub) => {
+    const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14, isSelected = i <= this.state.selected.max && this.state.selected.min <= i
     if (isSub) {
       return {
         borderWidth: isSelected ? margin : 0,
@@ -42,8 +105,8 @@ const HygoParcelleIntervention = ({ from, data, width, onHourChange, initialMax 
     }
   }
 
-  const getSelectedWidth = () => {
-    if (selected.max < selected.min) {
+  getSelectedWidth = () => {
+    if (this.state.selected.max < this.state.selected.min) {
       return {
         width: 0,
         boderWidth: 0,
@@ -51,32 +114,32 @@ const HygoParcelleIntervention = ({ from, data, width, onHourChange, initialMax 
     }
 
     let curCond = null
-    for (let i = selected.min; i <= selected.max; i++) {
-      let padded = `${i+from}`.padStart(2, '0')
-      if (!curCond || conditionsOrdering.indexOf(curCond) >= conditionsOrdering.indexOf(data[padded].condition)) {
-        curCond = data[padded].condition
+    for (let i = this.state.selected.min; i <= this.state.selected.max; i++) {
+      let padded = `${i+this.props.from}`.padStart(2, '0')
+      if (!curCond || conditionsOrdering.indexOf(curCond) >= conditionsOrdering.indexOf(this.props.data[padded].condition)) {
+        curCond = this.props.data[padded].condition
       }
     }
 
-    const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14
+    const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14
     return {
-      width: (selected.max-selected.min+1) * (parseFloat(w) / NUM_ITEMS),
+      width: (this.state.selected.max-this.state.selected.min+1) * (parseFloat(w) / NUM_ITEMS),
       marginHorizontal: 0,
       borderWidth: margin,
       borderColor: '#fff',
       height: 45 + margin,
       position: 'absolute',
-      left: selected.min * width / NUM_ITEMS,
+      left: this.state.selected.min * this.props.width / NUM_ITEMS,
       backgroundColor: COLORS[`${curCond}_CARDS`],
     }
   }
 
-  const getContainerHeight = () => {
-    const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14
+  getContainerHeight = () => {
+    const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14
     return 45 + margin
   }
 
-  const computeSelected = (prev, idx) => {
+  computeSelected = (prev, idx) => {
     let i = idx, isSelected = i <= prev.max && prev.min <= i
 
     if (isSelected) {
@@ -107,31 +170,33 @@ const HygoParcelleIntervention = ({ from, data, width, onHourChange, initialMax 
     }
   }
 
-  const onPressParcelle = (idx) => {
-    let newselected = computeSelected(selected, idx)
-    
-    setSelected(newselected)
-    onHourChange(newselected)
-  }
+  render() {
+    return (
+      <View style={[ styles.container, { width: this.props.width, height: this.getContainerHeight() }]}>
+        <View style={[styles.parcelleCursor, { 
+          left: -1 * parseFloat(Dimensions.get('window').width - this.props.width) / 2, 
+          width: Dimensions.get('window').width,
+          height: this.props.cursorHeight||CURSOR_HEIGHT,
+        }]} 
+          {...this.panResponder.panHandlers}></View>
 
-  return (
-    <View style={[ styles.container, { width: width, height: getContainerHeight() }]}>
-      <View style={[styles.selected, {
-        ...getSelectedWidth()
-      }]}></View>
-      { [...Array(NUM_ITEMS).keys()].map(i => {
-        return (
-          <TouchableWithoutFeedback key={i} onPress={() => onPressParcelle(i)}>
-            <View style={[styles.parcelle, {
-              ...getItemWidth(i)}, 
-            ]}>
-              <View style={[styles.subTile, { backgroundColor: getColor(i), }]}></View>
-            </View>
-          </TouchableWithoutFeedback>
-        )
-      }) }
-    </View>
-  )
+        <View style={[styles.selected, {
+          ...this.getSelectedWidth()
+        }]}></View>
+        { [...Array(NUM_ITEMS).keys()].map(i => {
+          return (
+            <TouchableWithoutFeedback key={i} onPress={() => this.onPressParcelle(i)}>
+              <View style={[styles.parcelle, {
+                ...this.getItemWidth(i)}, 
+              ]}>
+                <View style={[styles.subTile, { backgroundColor: this.getColor(i), }]}></View>
+              </View>
+            </TouchableWithoutFeedback>
+          )
+        }) }
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -142,6 +207,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },  
+  parcelleCursor: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    zIndex: 10,
+  },
   parcelle: {
     height: 45,
     zIndex: 5,

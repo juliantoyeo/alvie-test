@@ -157,6 +157,10 @@ export const getMeteoDetailed = async ({ day, product }) => {
 
 // Retrieve detailed meteo for intervention planning
 export const getMeteoIntervention = async ({ products, cultures }) => {
+    if (products.length === 0 || cultures.length === 0) {
+        return {}
+    }
+    
     try {
         const response = await hygoApi.post('/app/meteo/intervention', { products, cultures })
         return response.data

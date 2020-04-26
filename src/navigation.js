@@ -24,7 +24,7 @@ import FieldsScreen from './screens/FieldsScreen'
 import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
-import NextPulverisationDetails from './screens/NextPulverisationDetails'
+import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
 
 import HeaderText from './components/HeaderText'
 

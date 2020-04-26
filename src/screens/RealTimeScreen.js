@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Picker } from 'native-base';
-import { getRealtimeData, updateUI } from '../api/hygoApi';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
+import { getRealtimeData } from '../api/hygoApi';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -55,8 +55,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     setCurrentMeteo(parcelleMeteo)
     setCurrentCondition(parcelleMeteoProduct)
 
-    console.log(history, last, ui, parcelleMeteo, parcelleMeteoProduct)
-
     if (phytoProductSelected.length === 0 || !parcelleMeteoProduct.condition) {
       updateColors('CYAN')
     } else {
@@ -76,12 +74,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     setIsRefreshing(true)
     await loadRealtimeData()
     setIsRefreshing(false)
-  }
-
-  const onProductChange = async (value) => {
-    setUi(await updateUI(value))
-    updateColors(ui.raw)
-    onRefresh()
   }
 
   const updateColors = (c) => {
@@ -142,7 +134,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
               )}
               { history.length > 0 && phytoProductSelected.length > 0 && currentMeteo.timestamp && (
                 <View style={[styles.headerCondition, { backgroundColor: color }]}>
-                  <Text style={styles.textCondition}>{ui.condition}</Text>
+                  <Text style={styles.textCondition}>{i18n.t(`realtime.status_conditions_${currentCondition.condition}`)}</Text>
                 </View>
               )}
               <View style={styles.lastHour}>
