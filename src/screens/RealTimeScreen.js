@@ -13,6 +13,7 @@ import i18n from 'i18n-js'
 import COLORS from '../colors'
 
 import HygoChart from '../components/HygoChart';
+import HygoGauge from '../components/HygoGauge';
 
 import { connect } from 'react-redux'
 
@@ -153,53 +154,9 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 </View>
               </TouchableWithoutFeedback>
               <View style={styles.gaugeContainer}>
-                <View style={styles.gaugeElement}>
-                  <AnimatedCircularProgress
-                    size={90}
-                    width={8}
-                    fill={last && typeof last.temp !== 'undefined' ? (last.temp+5)/parseFloat(55)*100 : 0}
-                    rotation={0}
-                    tintColor={color}
-                    backgroundColor="#fff">{() => (
-                      <Image source={require('../../assets/thermo.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
-                    )}</AnimatedCircularProgress>
-                  { last && typeof last.temp !== 'undefined' && (
-                    <Text style={styles.gaugeText}>{`${last.temp}°C`}</Text>
-                  )}
-                </View>
-
-                <View style={styles.gaugeElement}>
-                  <AnimatedCircularProgress
-                    size={90}
-                    width={8}
-                    fill={last && typeof last.humi !== 'undefined' ? last.humi : 0}
-                    rotation={0}
-                    tintColor={color}
-                    backgroundColor="#fff">{() => (
-                      <Image source={require('../../assets/ICN-Hygro.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
-                    )}</AnimatedCircularProgress>
-                    { last && typeof last.humi !== 'undefined' && (
-                      <Text style={styles.gaugeText}>{`${last.humi}%`}</Text>
-                    )}
-                </View>
-
-                  <View style={styles.gaugeElement}>
-                    <AnimatedCircularProgress
-                      size={90}
-                      width={8}
-                      fill={typeof currentMeteo.windspeed !== 'undefined' ? currentMeteo.windspeed/parseFloat(50)*100 : 0}
-                      rotation={0}
-                      tintColor={color}
-                      backgroundColor="#fff">{() => (
-                        <Image source={require('../../assets/ICN-Wind.png')} style={{ width: 30 ,height: 60, resizeMode: 'contain', tintColor: '#aaa' }}/>
-                      )}</AnimatedCircularProgress>
-                    { typeof currentMeteo.windspeed !== 'undefined' && (
-                      <View>
-                      <Text style={[styles.gaugeText, {fontSize: 16} ]}>{`${Math.round(currentMeteo.windspeed)} km/h ${currentMeteo.winddirection_nesw}`}</Text>
-                      <Text style={[styles.gaugeText, {marginTop: 0, fontSize: 16} ]}>{`raf. ${Math.round(currentMeteo.gust)} km/h`}</Text>
-                      </View>
-                    )}
-                  </View>
+                <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-5} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
+                <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={-5} max={50} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
+                <HygoGauge value={currentMeteo && typeof currentMeteo.windspeed !== 'undefined' ? Math.round(currentMeteo.windspeed) : null} min={0} max={50} color={color} img={require('../../assets/ICN-Wind.png')} unit=" km/h" />
               </View>
 
               { history.length > 1 && (
@@ -333,16 +290,6 @@ const styles = StyleSheet.create({
     fontFamily: 'nunito-heavy',
     fontSize: 12,
     color: '#aaaaaa',
-  },
-  gaugeElement: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  gaugeText: {
-    marginTop: 10,
-    fontFamily: 'nunito-regular',
-    fontSize: 24,
-    color: '#aaa',
   },
   button: {
     borderRadius: 40,

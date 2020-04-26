@@ -149,6 +149,7 @@ export const getMeteo = async () => {
 export const getMeteoDetailed = async ({ day, product }) => {
     try {
         const response = await hygoApi.post('/app/meteo/detailed', { day, product })
+        console.log(day, product, response.data)
         return response.data
     } catch(error) {
         return {}

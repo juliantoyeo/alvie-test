@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StatusBar, StyleSheet, SafeAreaView, View, ImageBackground, TouchableOpacity, Dimensions } from 'react-native'
 import { Content, Header, Left, Body, Right, Button, Icon, Title, Text, Spinner } from 'native-base';
 import { connect } from 'react-redux'
@@ -13,36 +13,15 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { getMeteoIntervention } from '../api/hygoApi'
 import capitalize from '../utils/capitalize'
 
+import { MONTHS, DAYS } from '../constants'
+
 const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, culturesSelected, phytoProductSelected }) => {
-  const MONTHS = [
-    i18n.t('months.january'),
-    i18n.t('months.february'),
-    i18n.t('months.march'),
-    i18n.t('months.april'),
-    i18n.t('months.may'),
-    i18n.t('months.june'),
-    i18n.t('months.july'),
-    i18n.t('months.august'),
-    i18n.t('months.september'),
-    i18n.t('months.october'),
-    i18n.t('months.november'),
-    i18n.t('months.december'),
-  ]
-
-  const DAYS = [
-    i18n.t('days.sunday'),
-    i18n.t('days.monday'),
-    i18n.t('days.tuesday'),
-    i18n.t('days.wednesday'),
-    i18n.t('days.thursday'),
-    i18n.t('days.friday'),
-    i18n.t('days.saturday'),
-  ]
-
   const [loading, setLoading] = useState(false)
 
   const [data, setData] = useState({})
   const [blurred, setBlurred] = useState(false)
+
+  const [currentParams, setCurrentParams] = useState("")
 
   const openPicker = (screen) => {
     navigation.navigate(screen)
@@ -68,10 +47,22 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
       unsubscribe.remove()
       unsubscribeFocus.remove()
     };
-  }, [navigation, loadMeteoIntervention, culturesSelected, phytoProductSelected])
+  }, [navigation, loadMeteoIntervention, culturesSelected, phytoProductSelected, currentParams])
 
-  const loadMeteoIntervention = async () => {
+  const loadMeteoIntervention = useCallback(async () => {
     setLoading(true)
+
+    let js = JSON.stringify({
+      products: phytoProductSelected,
+      cultures: culturesSelected
+    })
+
+    if (currentParams === js) {
+      setLoading(false)
+      return
+    }
+    setCurrentParams(js)
+
     let result = await getMeteoIntervention({
       products: phytoProductSelected,
       cultures: culturesSelected
@@ -79,7 +70,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
 
     setData(result)
     setLoading(false)
-  }
+  }, [setCurrentParams, currentParams, phytoProductSelected, culturesSelected])
 
   const goToDetails = ({ day, hour, data }) => {
     navigation.navigate('NextPulverisationDetails', {

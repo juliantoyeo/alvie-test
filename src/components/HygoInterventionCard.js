@@ -7,20 +7,19 @@ import i18n from 'i18n-js'
 
 import { connect } from 'react-redux'
 
+import moment from 'moment-timezone'
+
 const HygoInterventionCard = ({ navigation, intervention, phytoProductList }) => {
   const getDay = () => {
-    let d = new Date(intervention.starttime)
-    return `${d.getDate()}/${("0"+(d.getMonth()+1)).slice(-2)}`
+    return moment.utc(intervention.starttime).tz('Europe/Paris').format('DD/MM')
   }
 
   const getStartHour = () => {
-    let d = new Date(intervention.starttime)
-    return `${d.getHours()}:${("0"+(d.getMinutes())).slice(-2)}`
+    return moment.utc(intervention.starttime).tz('Europe/Paris').format('HH:mm')
   }
 
   const getEndHour = () => {
-    let d = new Date(intervention.endtime)
-    return `${d.getHours()}:${("0"+(d.getMinutes())).slice(-2)}`
+    return moment.utc(intervention.endtime).tz('Europe/Paris').format('HH:mm')
   }
 
   const onCardPressed = () => {

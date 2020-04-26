@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, TouchableWithoutFeedback, PanResponder, Text, Dimensions } from 'react-native'
 
-import COLORS from '../colors'
+import COLORS from '../../colors'
 
 import _ from 'lodash';
 

@@ -1,10 +1,10 @@
 {
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://hj-b6p.m1ck43l.hygoclient.exp.direct",
-  "packagerNgrokUrl": "https://packager.hj-b6p.m1ck43l.hygoclient.exp.direct",
-  "ngrokPid": 1404206,
+  "expoServerPort": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 1404098,
+  "packagerPort": null,
+  "packagerPid": null,
   "webpackServerPort": null
 }

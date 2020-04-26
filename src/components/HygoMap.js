@@ -39,7 +39,7 @@ const HygoMap = ({ intervention, handleFieldSelection }) => {
           { intervention.fields.map((field, idx) => {
             return (
               <Polygon
-                key={field.id}
+                key={idx}
                 strokeWidth={selected === idx ? 4 : 1}
                 strokeColor={selected === idx ? '#fff' : COLORS.DARK_GREEN}
                 fillColor={field.colorField||COLORS.DEFAULT_FIELD_MY}

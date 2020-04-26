@@ -100,8 +100,18 @@ const Navigator = createSwitchNavigator({
     }),
     BarCodeValidationScreen: BarCodeValidationScreen,
     InterventionMapScreen: InterventionMapScreen,
-    MeteoDetailedDetails: MeteoDetailedDetails,
-    NextPulverisationDetails: NextPulverisationDetails,
+    MeteoDetailedDetails: {
+      screen: MeteoDetailedDetails,
+      navigationOptions: {
+        gesturesEnabled: false,
+      }
+    },
+    NextPulverisationDetails: {
+      screen: NextPulverisationDetails,
+      navigationOptions: {
+        gesturesEnabled: false,
+      }
+    },
     FieldsScreen: FieldsScreen,
     EquipmentSettingsScreen: {
       screen: EquipmentScreen, 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { ScrollView, StyleSheet, View, StatusBar, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
@@ -11,6 +11,8 @@ import HygoMap from '../components/HygoMap'
 import { updateIntervention } from '../api/hygoApi';
 
 import { updateProductsInterv } from '../store/actions/intervActions'
+
+import moment from 'moment-timezone'
 
 const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
   let intervention = navigation.getParam('intervention')
@@ -50,20 +52,17 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
   }
   const [products, setCurrentProducts] = useState(getPhyto())
 
-  const getDay = () => {
-    let d = new Date(intervention.starttime)
-    return `${d.getDate()}/${("0"+(d.getMonth()+1)).slice(-2)}`
-  }
+  const getDay = useCallback(() => {
+    return moment.utc(intervention.starttime).tz('Europe/Paris').format('DD/MM')
+  }, [intervention.starttime])
 
-  const getStartHour = () => {
-    let d = new Date(intervention.starttime)
-    return `${d.getHours()}:${("0"+(d.getMinutes())).slice(-2)}`
-  }
+  const getStartHour = useCallback(() => {
+    return moment.utc(intervention.starttime).tz('Europe/Paris').format('HH:mm')
+  }, [intervention.starttime])
 
-  const getEndHour = () => {
-    let d = new Date(intervention.endtime)
-    return `${d.getHours()}:${("0"+(d.getMinutes())).slice(-2)}`
-  }
+  const getEndHour = useCallback(() => {
+    return moment.utc(intervention.endtime).tz('Europe/Paris').format('HH:mm')
+  }, [intervention.endtime])
 
   const getTotalArea = () => {
     let fields = intervention.fields
@@ -164,11 +163,14 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
             <View style={[styles.legendLine, { backgroundColor: COLORS.GOOD }]}>
               <Text style={styles.legendText}>{i18n.t('intervention_map.good')}</Text>
             </View>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.MEDIOCRE }]}>
+            <View style={[styles.legendLine, { backgroundColor: COLORS.CORRECT }]}>
               <Text style={styles.legendText}>{i18n.t('intervention_map.mediocre')}</Text>
             </View>
             <View style={[styles.legendLine, { backgroundColor: COLORS.BAD }]}>
               <Text style={styles.legendText}>{i18n.t('intervention_map.bad')}</Text>
+            </View>
+            <View style={[styles.legendLine, { backgroundColor: COLORS.FORBIDDEN }]}>
+              <Text style={styles.legendText}>{i18n.t('intervention_map.forbidden')}</Text>
             </View>
           </View>
         )}
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 16,
-    paddingRight: 16,
+    paddingRight: 42,
     paddingTop: 7,
     paddingBottom: 7
   },
@@ -292,7 +294,7 @@ const styles = StyleSheet.create({
   phytoDetailText: {
     fontSize: 16,
     fontFamily: 'nunito-regular',
-    color: COLORS.DARK_BLUE
+    color: COLORS.DARK_BLUE,
   },
   metrics: {
     backgroundColor: COLORS.BEIGE,

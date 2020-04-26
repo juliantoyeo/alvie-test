@@ -12,22 +12,9 @@ import moment from 'moment'
 
 import { getMeteo } from '../api/hygoApi'
 
-const MeteoBriefScreen = ({ navigation }) => {
-  const MONTHS = [
-    i18n.t('months.january'),
-    i18n.t('months.february'),
-    i18n.t('months.march'),
-    i18n.t('months.april'),
-    i18n.t('months.may'),
-    i18n.t('months.june'),
-    i18n.t('months.july'),
-    i18n.t('months.august'),
-    i18n.t('months.september'),
-    i18n.t('months.october'),
-    i18n.t('months.november'),
-    i18n.t('months.december'),
-  ]
+import { MONTHS } from '../constants'
 
+const MeteoBriefScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true)
   const [meteoData, setMeteoData] = useState({})
 

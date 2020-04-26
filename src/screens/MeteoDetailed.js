@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Dimensions, ScrollView, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, View, Dimensions, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Spinner, Text, Content } from 'native-base'
 
 import i18n from 'i18n-js'
