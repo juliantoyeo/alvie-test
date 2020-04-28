@@ -16,7 +16,35 @@ import MeteoSlider from '../components/meteo-detailed/MeteoSlider';
 
 import { PADDED } from '../constants'
 
+import moment from 'moment'
+import capitalize from '../utils/capitalize'
+
 const MeteoDetailedDetails = ({ navigation }) => {
+  const MONTHS = [
+    i18n.t('months.january'),
+    i18n.t('months.february'),
+    i18n.t('months.march'),
+    i18n.t('months.april'),
+    i18n.t('months.may'),
+    i18n.t('months.june'),
+    i18n.t('months.july'),
+    i18n.t('months.august'),
+    i18n.t('months.september'),
+    i18n.t('months.october'),
+    i18n.t('months.november'),
+    i18n.t('months.december'),
+  ]
+  
+  const DAYS = [
+    i18n.t('days.sunday'),
+    i18n.t('days.monday'),
+    i18n.t('days.tuesday'),
+    i18n.t('days.wednesday'),
+    i18n.t('days.thursday'),
+    i18n.t('days.friday'),
+    i18n.t('days.saturday'),
+  ]
+
   let { days, products, data, region, parcelles } = navigation.getParam('result')
 
   const [selected, setSelected] = useState(null)
@@ -43,6 +71,12 @@ const MeteoDetailedDetails = ({ navigation }) => {
     return COLORS[`${getCurrentData().condition}`]
   }, [currentHour])
 
+  const getDay = useCallback(() => {
+    let md = moment.utc(days[0])
+
+    return `${capitalize(DAYS[md.day()])} ${md.date()} ${capitalize(MONTHS[md.month()])}`
+  }, [days[0]])
+
   return (
     <SafeAreaView style={[styles.statusbar, { backgroundColor: getBackground() }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -54,6 +88,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
             </Button>
           </Left>
           <Body style={styles.headerBody}>
+            <Title style={styles.headerTitle}>{getDay()}</Title>
             <Title style={styles.headerTitle}>{i18n.t('meteo_overlay.header', { from: currentHour, to: currentHour+1 })}</Title>
           </Body>
           <Right style={{ flex: 1 }}></Right>
@@ -61,7 +96,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
 
         <View style={styles.details}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Text style={styles.productName}>{ products[0].name }</Text>
+            <Text style={styles.productName}>{ i18n.t(`products.${products[0].name}`) }</Text>
             <Text style={styles.currentCondition}>{i18n.t(`intervention_map.${getCurrentData().condition.toLowerCase()}`)}</Text>
           </View>
           <MeteoMetrics data={getCurrentHourMetrics()} currentProduct={products[0]} />
@@ -73,7 +108,7 @@ const MeteoDetailedDetails = ({ navigation }) => {
           </View>
 
           { selected && (
-            <MeteoMapHeaderSelected selected={selected} data={getCurrentData().parcelle[selected]} isRacinaire={products[0].isRacinaire} currentCondition={getCurrentData().condition} />
+            <MeteoMapHeaderSelected selected={selected} data={getCurrentData().parcelle[selected]} productId={products[0].id} isRacinaire={products[0].isRacinaire} currentCondition={getCurrentData().condition} />
           )}
           { !selected && (
             <MeteoMapHeader selected={selected} data={getCurrentData().parcelle} isRacinaire={products[0].isRacinaire} currentCondition={getCurrentData().condition} />

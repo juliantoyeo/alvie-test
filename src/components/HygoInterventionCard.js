@@ -35,7 +35,7 @@ const HygoInterventionCard = ({ navigation, intervention, phytoProductList }) =>
         ptext.push(i18n.t('intervention_map.other_farm_work'))
       }
 
-      ptext = ptext.concat(phytoProductList.filter(pp => intervention.products.includes(pp.id)).map(p => p.name))
+      ptext = ptext.concat(phytoProductList.filter(pp => intervention.products.includes(pp.id)).map(p => i18n.t(`products.${p.name}`)))
       return ptext.join(', ')
     } else if (intervention.phytoproduct) {
       return intervention.phytoproduct

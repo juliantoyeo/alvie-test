@@ -16,11 +16,40 @@ import { PADDED, CONDITIONS_ORDERING } from '../constants'
 import Map from '../components/pulverisation-detailed/Map';
 import Modulation from '../components/pulverisation-detailed/Modulation';
 import Metrics from '../components/pulverisation-detailed/Metrics';
+import ExtraMetrics from '../components/pulverisation-detailed/ExtraMetrics';
 import Cultures from '../components/pulverisation-detailed/Cultures';
 import Products from '../components/pulverisation-detailed/Products';
 import HourScale from '../components/pulverisation-detailed/HourScale';
+import moment from 'moment';
+
+import capitalize from '../utils/capitalize'
 
 const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navigation }) => {
+  const MONTHS = [
+    i18n.t('months.january'),
+    i18n.t('months.february'),
+    i18n.t('months.march'),
+    i18n.t('months.april'),
+    i18n.t('months.may'),
+    i18n.t('months.june'),
+    i18n.t('months.july'),
+    i18n.t('months.august'),
+    i18n.t('months.september'),
+    i18n.t('months.october'),
+    i18n.t('months.november'),
+    i18n.t('months.december'),
+  ]
+  
+  const DAYS = [
+    i18n.t('days.sunday'),
+    i18n.t('days.monday'),
+    i18n.t('days.tuesday'),
+    i18n.t('days.wednesday'),
+    i18n.t('days.thursday'),
+    i18n.t('days.friday'),
+    i18n.t('days.saturday'),
+  ]
+
   const [selected, setSelected] = useState({
     min: 0,
     max: ra ? parseInt(ra) : 0,
@@ -56,6 +85,17 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
       chd.maxsoilhumi = Math.max((chd.maxsoilhumi || minval), v.data.soilhumi)
 
       dir.push(v.data.winddirection)
+
+      _.forOwn(v.parcelle, (v0, k0) => {
+        if (parseInt(k) - parseInt(hour) === selected.max) {
+          chd.r2 = Math.max((chd.r2 || minval), v0.r2)
+          chd.r3 = Math.max((chd.r3 || minval), v0.r3)
+          chd.r6 = Math.max((chd.r6 || minval), v0.r6)
+        }
+
+        chd.deltatemp = Math.max((chd.deltatemp||minval), v0.deltatemp)
+        chd.t3 = Math.min((chd.t3||maxval), v0.t3)
+      })
     })
 
     chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
@@ -84,6 +124,12 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
     return result.products.filter(p => p.isRacinaire).length > 0
   }, [result.products])
 
+  const getDay = useCallback(() => {
+    let md = moment.utc(day)
+
+    return `${capitalize(DAYS[md.day()])} ${md.date()} ${capitalize(MONTHS[md.month()])}`
+  }, [day])
+
   return (
     <SafeAreaView style={[styles.statusbar, { backgroundColor: background }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -95,6 +141,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
             </Button>
           </Left>
           <Body style={styles.headerBody}>
+            <Title style={styles.headerTitle}>{getDay()}</Title>
             <Title style={styles.headerTitle}>{i18n.t('meteo_overlay.header', { from: (parseInt(hour)+selected.min)%24, to: (parseInt(hour)+selected.max+1)%24 })}</Title>
           </Body>
           <Right style={{ flex: 1 }}></Right>
@@ -123,6 +170,8 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
           </View>
 
           <HourScale hour={hour} />
+
+          <ExtraMetrics currentHourMetrics={currentHourMetrics} />
 
           <Modulation day={day} hour={hour} selected={selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} />
           <View style={styles.mapviewContainer}>

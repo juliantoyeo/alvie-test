@@ -6,7 +6,7 @@ import HygoSliderItem from './HygoSliderItem';
 
 import COLORS from '../colors'
 
-const HygoSlider = ({ sliderLength, min, max, updateValue, steps, value }) => {
+const HygoSlider = ({ sliderLength, min, max, updateValue, steps, value, increment }) => {
   const onValuesChange = values => {
     updateValue(values[0])
   }
@@ -20,8 +20,8 @@ const HygoSlider = ({ sliderLength, min, max, updateValue, steps, value }) => {
           onValuesChange={onValuesChange}
           min={min}
           max={max}
-          step={1}
-          allowOverlap={false}
+          step={increment||1}
+          allowOverlap={true}
           snapped={true}
           enableLabel
           customLabel={HygoSliderLabel}
@@ -35,6 +35,7 @@ const HygoSlider = ({ sliderLength, min, max, updateValue, steps, value }) => {
             backgroundColor: COLORS.DARK_BLUE,
             width: 20,
             height: 20,
+            zIndex: 90,
           }}
           touchDimensions={{
             height: 80, width: 80, borderRadius: 15
@@ -46,7 +47,7 @@ const HygoSlider = ({ sliderLength, min, max, updateValue, steps, value }) => {
           value={min}
           i={value}
           display
-          pointStyle={{ left: -10 }}
+          pointStyle={{ left: 0 }}
         />
         { steps && [...Array(9).keys()].map(i => {
           let k = i+1

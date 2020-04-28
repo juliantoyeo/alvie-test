@@ -46,9 +46,9 @@ const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, 
     <View style={styles.container}>
       <View style={[styles.left, { backgroundColor: COLORS[product.condition] }]}></View>
       <View style={styles.right}>
-        <Text style={styles.cardTitle}>{product.name}</Text>
+        <Text style={styles.cardTitle}>{i18n.t(`products.${product.name}`)}</Text>
         <Text style={styles.cardCondition}>{i18n.t(`meteo.condition_${product.condition}`)}</Text>
-        <Text style={styles.cardParcelle}>{i18n.t('meteo.parcelle_percent', { percent: Math.round(100*product.treatable_percent) })}</Text>
+        <Text style={styles.cardParcelle}>{/*i18n.t('meteo.parcelle_percent', { percent: Math.round(100*product.treatable_percent) })*/}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, {backgroundColor: COLORS[product.condition]}]} onPress={handleProductClick}>
             <Text style={styles.buttonText}>{i18n.t('meteo.plan')}</Text>

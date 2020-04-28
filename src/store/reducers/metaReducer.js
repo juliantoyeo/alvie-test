@@ -2,6 +2,7 @@
 const initialState = {
   parcelles: [],
   cultures: [],
+  lastMeteoLoad: null,
 }
 
 export default authReducer = (state = initialState, action) => {
@@ -15,10 +16,16 @@ export default authReducer = (state = initialState, action) => {
       return nextState || state;
     
     case 'UPDATE_CULTURES':
-      console.log(action.cultures)
       nextState = {
         ...state,
         cultures: action.cultures,
+      }
+      return nextState || state;
+
+    case 'METEO_SYNCED':
+      nextState = {
+        ...state,
+        lastMeteoLoad: action.now,
       }
       return nextState || state;
 

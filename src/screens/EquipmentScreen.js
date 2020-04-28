@@ -25,7 +25,7 @@ const EquipmentScreen = ({ navigation }) => {
     buses: result.buses
   } : {
     validated: false,
-    buses: {},
+    buses: null,
   })
 
   const [speed, setSpeed] = useState(result ? {
@@ -52,13 +52,18 @@ const EquipmentScreen = ({ navigation }) => {
     validated: false
   })
 
+  const [family, setFamily] = useState(result ? {
+    validated: true,
+    family: result.family
+  } : {
+    family: null,
+    validated: false
+  })
+
   const updateBuses = (val) => {
     setBuses(prev => {
       let ns = { 
-        buses: {
-          ...prev.buses,
-          [val]: !prev.buses[val]
-        }, 
+        buses: val, 
       }
       ns.validated = Object.values(ns.buses).filter(p => p).length > 0
       return ns
@@ -71,6 +76,7 @@ const EquipmentScreen = ({ navigation }) => {
       speed: speed.speed,
       pressure: pressure.pressure,
       soil: soil.soil,
+      family: family.family,
     }
 
     navigation.replace('LoadingScreen', {
@@ -92,6 +98,27 @@ const EquipmentScreen = ({ navigation }) => {
     let l = soils.map(p => {
       return (
         <Picker.Item key={p} label={i18n.t(`soils.${p}`)} value={p} />
+      )
+    })
+
+    if (Platform.OS === 'android') {
+      l.unshift(<Picker.Item key={0} label={i18n.t('soils.none')} value={null} />)
+    }
+
+    return l
+  }
+
+  const buildFamilyList = () => {
+    let soils = [
+      "CLASSIC_STD",
+      "CLASSIC_LOW",
+      "CALIBRATE",
+      "INJECTION",
+    ]
+
+    let l = soils.map(p => {
+      return (
+        <Picker.Item key={p} label={i18n.t(`equipment.buses_${p}`)} value={p} />
       )
     })
 
@@ -139,19 +166,47 @@ const EquipmentScreen = ({ navigation }) => {
       { step === 'SELECT' && (
         <ScrollView>
           <Content contentContainerStyle={styles.containerSelect}>
+            <HygoCard title={i18n.t('equipment.buses_family')} validated={family.validated} content={(
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
+                <Picker
+                  mode="dropdown"
+                  iosIcon={<Icon name="arrow-down" />}
+                  placeholder={i18n.t('phyto.no_phyto')}
+                  itemTextStyle={{
+                    flex: 1,
+                    color: '#aaa',
+                    fontSize: 16,
+                    fontFamily: 'nunito-regular',
+                  }}
+                  note={false}
+                  placeholderStyle={{ color: "#194769" }}
+                  headerBackButtonText='retour'
+                  placeholderIconColor="59DFD6"
+                  selectedValue={family.family}
+                  onValueChange={(v) => setFamily(prev => {
+                    return {
+                      validated: !!v,
+                      family: v,
+                    }
+                  })}>
+                  { buildFamilyList() }
+                </Picker>
+              </View>
+            )} />
+
             <HygoCard title={i18n.t('equipment.buses')} validated={buses.validated} content={(
               <View style={{ display: 'flex', flexDirection: 'column', paddingTop: 36, paddingBottom: 16 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  <HygoPastille onPress={() => updateBuses('orange')} style={{ flex: 1}} color='#fc9a02' colorText={i18n.t('equipment.orange')} checked={buses.buses.orange || false} />
-                  <HygoPastille onPress={() => updateBuses('green')} style={{ flex: 1}} color='#03cb01' colorText={i18n.t('equipment.green')} checked={buses.buses.green || false} />
-                  <HygoPastille onPress={() => updateBuses('yellow')} style={{ flex: 1}} color='#feff02' colorText={i18n.t('equipment.yellow')} checked={buses.buses.yellow || false} dark />
-                  <HygoPastille onPress={() => updateBuses('blue')} style={{ flex: 1}} color='#33339d' colorText={i18n.t('equipment.blue')} checked={buses.buses.blue || false} />
+                  <HygoPastille onPress={() => updateBuses('orange')} style={{ flex: 1}} color='#fc9a02' colorText={i18n.t('equipment.orange')} checked={buses.buses === 'orange'} />
+                  <HygoPastille onPress={() => updateBuses('green')} style={{ flex: 1}} color='#03cb01' colorText={i18n.t('equipment.green')} checked={buses.buses === 'green'} />
+                  <HygoPastille onPress={() => updateBuses('yellow')} style={{ flex: 1}} color='#feff02' colorText={i18n.t('equipment.yellow')} checked={buses.buses === 'yellow'} dark />
+                  <HygoPastille onPress={() => updateBuses('lilas')} style={{ flex: 1}} color='#9955bb' colorText={i18n.t('equipment.lilas')} checked={buses.buses === 'lilas'} />
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                  <HygoPastille onPress={() => updateBuses('red')} style={{ flex: 1}} color='#fd0000' colorText={i18n.t('equipment.red')} checked={buses.buses.red || false} />
-                  <HygoPastille onPress={() => updateBuses('brown')} style={{ flex: 1}} color='#9a6700' colorText={i18n.t('equipment.brown')} checked={buses.buses.brown || false} />
-                  <HygoPastille onPress={() => updateBuses('grey')} style={{ flex: 1}} color='#969696' colorText={i18n.t('equipment.grey')} checked={buses.buses.grey || false} />
-                  <HygoPastille onPress={() => updateBuses('white')} style={{ flex: 1}} color='#ffffff' colorText={i18n.t('equipment.white')} checked={buses.buses.white || false} dark />
+                  <HygoPastille onPress={() => updateBuses('blue')} style={{ flex: 1}} color='#33339d' colorText={i18n.t('equipment.blue')} checked={buses.buses === 'blue'} />
+                  <HygoPastille onPress={() => updateBuses('red')} style={{ flex: 1}} color='#fd0000' colorText={i18n.t('equipment.red')} checked={buses.buses === 'red'} />
+                  <HygoPastille onPress={() => updateBuses('brown')} style={{ flex: 1}} color='#9a6700' colorText={i18n.t('equipment.brown')} checked={buses.buses === 'brown'} />
+                  <HygoPastille onPress={() => updateBuses('grey')} style={{ flex: 1}} color='#969696' colorText={i18n.t('equipment.grey')} checked={buses.buses === 'grey'} />
                 </View>
               </View>
             )} />
@@ -173,15 +228,16 @@ const EquipmentScreen = ({ navigation }) => {
             )} />
 
             <HygoCard title={i18n.t('equipment.pressure')} validated={pressure.validated} content={(
-              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0 }}>
                 <HygoSlider
-                  min={-50}
-                  max={100}
-                  sliderLength={Dimensions.get('window').width - 36 - 15 - 20}
+                  min={1}
+                  max={6}
+                  increment={0.5}
+                  sliderLength={Dimensions.get('window').width - 36 - 20}
                   value={pressure.pressure}
                   updateValue={(v) => setPressure({
                     pressure: v,
-                    validated: v > -50
+                    validated: true
                   })}
                 />
               </View>

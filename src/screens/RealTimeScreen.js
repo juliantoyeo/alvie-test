@@ -4,16 +4,15 @@ import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, T
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
 import { getRealtimeData } from '../api/hygoApi';
 
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-
 import LogoLoading from '../components/LogoLoading'
 
 import i18n from 'i18n-js'
 
 import COLORS from '../colors'
 
-import HygoChart from '../components/HygoChart';
-import HygoGauge from '../components/HygoGauge';
+import HygoChart from '../components/realtime/HygoChart';
+import HygoGauge from '../components/realtime/HygoGauge';
+import ConditionHeader from '../components/realtime/ConditionHeader'
 
 import { connect } from 'react-redux'
 
@@ -109,35 +108,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}>
           
             <View>
-              { history.length === 0 && (
-                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
-                  <Text style={styles.textCondition}>{i18n.t('realtime.waiting_for_data')}</Text>
-                </View>
-              )}
-
-              { history.length > 0 && phytoProductSelected.length === 0 && !currentMeteo.timestamp && (
-                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
-                  <Text style={styles.textCondition}>{i18n.t('realtime.no_product')}</Text>
-                  <Text style={styles.textCondition}>{i18n.t('realtime.no_parcelle')}</Text>
-                </View>
-              )}
-              { history.length > 0 && phytoProductSelected.length === 0 && currentMeteo.timestamp && (
-                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
-                  <Text style={styles.textCondition}>{i18n.t('realtime.no_product')}</Text>
-                  <Text style={styles.textCondition}>{""}</Text>
-                </View>
-              )}
-              { history.length > 0 && phytoProductSelected.length > 0 && !currentMeteo.timestamp && (
-                <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
-                  <Text style={styles.textCondition}>{i18n.t('realtime.no_parcelle')}</Text>
-                  <Text style={styles.textCondition}>{""}</Text>
-                </View>
-              )}
-              { history.length > 0 && phytoProductSelected.length > 0 && currentMeteo.timestamp && (
-                <View style={[styles.headerCondition, { backgroundColor: color }]}>
-                  <Text style={styles.textCondition}>{i18n.t(`realtime.status_conditions_${currentCondition.condition}`)}</Text>
-                </View>
-              )}
+              <ConditionHeader isRefreshing={isRefreshing} history={history} currentMeteo={currentMeteo} currentCondition={currentCondition} />
               <View style={styles.lastHour}>
                 <Text style={styles.lastHourText}>{history.length === 0 ? i18n.t('realtime.no_data_3_hours') : i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
@@ -148,26 +119,26 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                     <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>
                   )}
                   { phytoProductSelected.length > 0 && (
-                    <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
+                    <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => i18n.t(`products.${pp.name}`)).join(', ') }</Text>
                   )}
                   <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
                 </View>
               </TouchableWithoutFeedback>
               <View style={styles.gaugeContainer}>
                 <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-5} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
-                <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={-5} max={50} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
+                <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={0} max={100} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
                 <HygoGauge value={currentMeteo && typeof currentMeteo.windspeed !== 'undefined' ? Math.round(currentMeteo.windspeed) : null} min={0} max={50} color={color} img={require('../../assets/ICN-Wind.png')} unit=" km/h" />
               </View>
 
               { history.length > 1 && (
-                <HygoChart label={i18n.t('realtime.temp')} data={history.map(h => {
-                  return { x: new Date(h.timestamp), y: h.temp }
+                <HygoChart label={i18n.t('realtime.hygro')} data={history.map(h => {
+                  return { x: new Date(h.timestamp), y: h.humi }
                 })} mainColor={color} secondaryColor={secondaryColor} />
               )}
 
               { history.length > 1 && (
-                <HygoChart label={i18n.t('realtime.hygro')} data={history.map(h => {
-                  return { x: new Date(h.timestamp), y: h.humi }
+                <HygoChart label={i18n.t('realtime.temp')} data={history.map(h => {
+                  return { x: new Date(h.timestamp), y: h.temp }
                 })} mainColor={color} secondaryColor={secondaryColor} />
               )}
 
@@ -256,30 +227,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 40,
     justifyContent: 'space-around',
-  },
-  headerCondition: {
-    height: 82,
-    padding: 15,
-    backgroundColor: COLORS.EXCELLENT,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#888',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  textCondition: {
-    textTransform: 'uppercase',
-    color: '#fff',
-    fontFamily: 'nunito-heavy',
-    fontSize: 14,
-    padding: 2,
   },
   lastHour: {
     padding: 10,

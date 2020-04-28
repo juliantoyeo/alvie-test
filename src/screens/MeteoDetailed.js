@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Dimensions, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { RefreshControl, StyleSheet, View, Dimensions, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Spinner, Text, Content } from 'native-base'
 
 import i18n from 'i18n-js'
 import { getMeteoDetailed } from '../api/hygoApi'
+import { meteoSynced } from '../store/actions/metaActions'
+
+import { connect } from 'react-redux'
 
 import COLORS from '../colors'
 
@@ -15,8 +18,9 @@ const PICTO_MAP = {
   'SNOW': require('../../assets/snowy.png'),
 }
 
-const MeteoDetailed = ({ navigation }) => {
+const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
   const [loading, setLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [detailed, setDetailed] = useState({})
   const [currentDay, setCurrentDay] = useState()
 
@@ -24,14 +28,39 @@ const MeteoDetailed = ({ navigation }) => {
     loadMeteoDetailed()
   }, [])
 
-  const loadMeteoDetailed = async () => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      setLoading(true)
+      loadMeteoDetailed()
+    });
+
+    return () => {
+      unsubscribe.remove()
+    };
+  }, [navigation])
+
+  const loadMeteoDetailed = async (force) => {
+    if (!force && (new Date()).getTime() - lastMeteoLoad <= 3600*1000) {
+      setLoading(false)
+      return
+    }
+
     let result = await getMeteoDetailed({
       day: null,
       product: null,
     })
     setDetailed(result)
     setCurrentDay(result.days[0])
+
+    meteoSynced((new Date()).getTime())
+
     setLoading(false)
+  }
+
+  const onRefresh = async () => {
+    setIsRefreshing(true)
+    await loadMeteoDetailed(true)
+    setIsRefreshing(false)
   }
 
   const goToDetails = ({ day, product }) => {
@@ -46,7 +75,7 @@ const MeteoDetailed = ({ navigation }) => {
   }
 
   return (
-    <Content contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <Content refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       { loading && (
         <View style={styles.container}>
           <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
@@ -117,7 +146,7 @@ const MeteoDetailed = ({ navigation }) => {
                     })
                   }} key={p.id}>
                     <View style={styles.productContainer}>
-                      <Text style={styles.productName}>{p.name}</Text>
+                      <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
                       <View style={styles.productCondition}>
                         { [...Array(24).keys()].map(i => {
                           let padded = `${i}`.padStart(2, '0')
@@ -131,6 +160,13 @@ const MeteoDetailed = ({ navigation }) => {
                             </View>
                           )
                         }) }
+                      </View>
+                      <View style={styles.hoursContainer}>
+                        <Text style={styles.hours}>00H</Text>
+                        <Text style={styles.hours}>06H</Text>
+                        <Text style={styles.hours}>12H</Text>
+                        <Text style={styles.hours}>18H</Text>
+                        <Text style={styles.hours}>24H</Text>
                       </View>
                     </View>
                   </TouchableWithoutFeedback>
@@ -150,6 +186,17 @@ const styles = StyleSheet.create({
     display: 'flex', 
     paddingBottom: 80,
     paddingTop: 20,
+  },
+  hoursContainer: { 
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+  },
+  hours: {
+    color: '#aaa',
+    fontSize: 12,
+    fontFamily: 'nunito-regular'
   },
   tabBar: {
     display: 'flex',
@@ -297,4 +344,12 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MeteoDetailed
+const mapStateToProps = (state) => ({
+  lastMeteoLoad: state.metadata.lastMeteoLoad,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  meteoSynced: (d) => dispatch(meteoSynced(d))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeteoDetailed);

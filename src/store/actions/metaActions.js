@@ -11,3 +11,10 @@ export const updateCulturesList = (cultures) => {
       cultures
   }
 }
+
+export const meteoSynced = (d) => {
+  return {
+    type: 'METEO_SYNCED',
+    now: d
+  }
+}

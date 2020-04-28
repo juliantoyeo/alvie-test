@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent'
 
 export const hygoApi = axios.create({
-    baseURL: 'https://81298f4f.ngrok.io',
+    baseURL: 'https://staging.alvie.fr',
     timeout: 3000,
     headers: { 
         'User-Agent': getUserAgent()
@@ -118,9 +118,9 @@ export const storePushToken = async (token, deviceid)=> {
 }
 
 // Save equipments
-export const storeEquipmentInformation = async ({ buses, speed, pressure, soil }) => {
+export const storeEquipmentInformation = async ({ buses, speed, pressure, soil, family }) => {
     try {
-        const response = await hygoApi.post('/app/equipment', {buses, speed, pressure, soil});
+        const response = await hygoApi.post('/app/equipment', {buses, speed, pressure, soil, family });
         return response.data;
     } catch (error) {
         return {}
@@ -149,7 +149,6 @@ export const getMeteo = async () => {
 export const getMeteoDetailed = async ({ day, product }) => {
     try {
         const response = await hygoApi.post('/app/meteo/detailed', { day, product })
-        console.log(day, product, response.data)
         return response.data
     } catch(error) {
         return {}

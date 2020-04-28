@@ -1,33 +1,49 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 import i18n from 'i18n-js'
 
 import COLORS from '../../colors'
 
-const MeteoMapHeaderSelected = ({ isRacinaire, data, currentCondition }) => {
+const MeteoMapHeaderSelected = ({ productId, isRacinaire, data, currentCondition }) => {
+  const getRFromProduct = useCallback(() => {
+    switch(productId) {
+      case 1:
+      case 7:
+        return "r6"
+
+      case 11:
+        return "r3"
+
+      default:
+        return "r2"
+    }
+  }, [productId])
+
   return (
     <>
       <View style={[styles.metricsContainer, { backgroundColor: COLORS[`${data.condition}_CARDS`]}]}>
         <View style={styles.metricsLine}>
-          <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(data.humi)) })}</Text>
-          <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.precipitation', { value: data.precipitation })}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(data.humi)) })}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>
+            {i18n.t('meteo_overlay.precipitation_'+getRFromProduct(), { value: data[getRFromProduct()] })}
+          </Text>
           { isRacinaire && (
-            <Text style={[styles.metricsText]}>{""}</Text>
+            <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{""}</Text>
           )}
         </View>
         <View style={styles.metricsLine}>
-          <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.temp', { value: Math.round(parseFloat(data.temp)) })}</Text>
-          <Text style={styles.metricsText}>{`${i18n.t('meteo_overlay.wind')} ${i18n.t('meteo_overlay.wind_speed', { winddir: data.winddirection, value: Math.round(data.wind) })}`}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.temp', { value: Math.round(parseFloat(data.temp)) })}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{`${i18n.t('meteo_overlay.wind')} ${i18n.t('meteo_overlay.wind_speed', { winddir: data.winddirection, value: Math.round(data.wind) })}`}</Text>
           { isRacinaire && (
-            <Text style={styles.metricsText}>{`${i18n.t('meteo_overlay.soil')} ${i18n.t('meteo_overlay.soil_humi', { value: Math.round(data.soilhumi) })}`}</Text>
+            <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{`${i18n.t('meteo_overlay.soil')} ${i18n.t('meteo_overlay.soil_humi', { value: Math.round(data.soilhumi) })}`}</Text>
           )}
         </View>
         <View style={[styles.metricsLine, {flex:1}]}>
-          <Text style={[styles.metricsText]}>{i18n.t('meteo_overlay.delta_temp', { value: Math.round(data.deltatemp) })}</Text>
-          <Text style={styles.metricsText}>{i18n.t('meteo_overlay.wind_gust', { value: Math.round(data.gust) })}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.delta_temp', { value: Math.round(data.deltatemp) })}</Text>
+          <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.wind_gust', { value: Math.round(data.gust) })}</Text>
           { isRacinaire && (
-            <Text style={styles.metricsText}>{i18n.t('meteo_overlay.soil_temp', { value: Math.round(data.soiltemp) })}</Text>
+            <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.soil_temp', { value: Math.round(data.soiltemp) })}</Text>
           )}  
           </View>
       </View>
@@ -74,9 +90,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   metricsText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#fff',
-    fontFamily: 'nunito-bold',
+    fontFamily: 'nunito-regular',
     paddingVertical: 5
   },
   metricsWind: {

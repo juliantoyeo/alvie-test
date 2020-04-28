@@ -91,14 +91,15 @@ const styles = StyleSheet.create({
   modulationTextInfo: {
     color: COLORS.DARK_BLUE,
     fontFamily: 'nunito-bold',
-    fontSize: 16
+    fontSize: 16,
+    flex: 1,
   },
   modulationBlock: {
     height: 60,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    width: 150,
   },
   modulationTextValue: {
     marginLeft: 27,

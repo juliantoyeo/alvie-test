@@ -14,7 +14,7 @@ const Metrics = ({ currentHourMetrics, hasRacinaire }) => {
       </View>
       <View style={styles.conditionItemContainer}>
         <Image source={require('../../../assets/ICN-Rain.png')} style={styles.conditionItemImage} />
-        <Text style={styles.conditionItemText}>{`${currentHourMetrics.precipitation} mm`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.precipitation)} mm`}</Text>
         <Text style={styles.conditionItemText}>{`${Math.round(parseFloat(currentHourMetrics.probability))}%`}</Text>
       </View>
       <View style={styles.conditionItemContainer}>
@@ -24,8 +24,8 @@ const Metrics = ({ currentHourMetrics, hasRacinaire }) => {
       </View>
       <View style={styles.conditionItemContainer}>
         <Image source={require('../../../assets/ICN-Hygro.png')} style={styles.conditionItemImage} />
-        <Text style={styles.conditionItemText}>{`${currentHourMetrics.minhumi}%`}</Text>
-        <Text style={styles.conditionItemText}>{`${currentHourMetrics.maxhumi}%`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.minhumi)}%`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.maxhumi)}%`}</Text>
       </View>
       { hasRacinaire && (
         <View style={styles.conditionItemContainer}>

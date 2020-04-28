@@ -30,7 +30,7 @@ const FieldsScreen = ({ navigation, parcelles }) => {
 
   useEffect(() => {
     if (selected !== null) {
-      setLegend(i18n.t('fields.culture', { value: parcelles.fields[selected].culture_name||i18n.t('fields.unknown') }))
+      setLegend(i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selected].culture_name}`)||i18n.t('fields.unknown') }))
     } else {
       setLegend(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
     }

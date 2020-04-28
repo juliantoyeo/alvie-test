@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Dimensions } from 'react-native'
-import formatTime from '../utils/formatTime'
+import formatTime from '../../utils/formatTime'
 import { Defs, LinearGradient, Stop } from "react-native-svg";
 import { VictoryArea, VictoryChart, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel } from "victory-native";
 

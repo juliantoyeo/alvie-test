@@ -24,7 +24,7 @@ const Products = ({ navigation, phytoProductSelected, phytoProductList}) => {
           <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>
         )}
         { phytoProductSelected.length > 0 && (
-          <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
+          <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => i18n.t(`products.${pp.name}`)).join(', ') }</Text>
         )}
         <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
       </View>

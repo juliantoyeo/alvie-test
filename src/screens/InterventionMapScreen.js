@@ -36,7 +36,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
         ptext.push(i18n.t('intervention_map.other_farm_work'))
       }
 
-      ptext = ptext.concat(phytoProductList.filter(pp => products.includes(pp.id)).map(p => p.name))
+      ptext = ptext.concat(phytoProductList.filter(pp => products.includes(pp.id)).map(p => i18n.t(`products.${p.name}`)))
       return i18n.t('intervention_map.header_phyto', { phyto: ptext.join(', ') })
     } else if (intervention.phytoproduct) {
       return i18n.t('intervention_map.header_phyto', { phyto: intervention.phytoproduct })
@@ -113,7 +113,10 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
           <View style={styles.phytoDetailRow}>
             <Image style={[styles.phytoDetailImage, { height: 28 }]} source={require('../../assets/phyto.png')} />
             <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker", { source: 'intervention', set: setProducts, initial: products })}>
-              <Text style={styles.phytoDetailText}>{getPhytoText()}</Text>
+              <View style={styles.picker}>
+                <Text style={styles.phytoDetailText}>{getPhytoText()}</Text>
+                <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
+              </View>
             </TouchableWithoutFeedback>
           </View>
           <View style={styles.phytoDetailRow}>
@@ -275,6 +278,19 @@ const styles = StyleSheet.create({
     display: 'flex',
     paddingTop: 7,
     paddingBottom: 7,
+  },
+  picker: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingRight: 30
+  },  
+  pickerIcon: {
+    marginLeft: 5,
+    fontSize: 20,
+    color: COLORS.DARK_BLUE
   },
   phytoDetailRow: {
     display: 'flex',

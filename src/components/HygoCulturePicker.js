@@ -42,9 +42,9 @@ const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCultu
               updateUICultures(p)
               updateCulturesSelected(p)
             }}>
-              <Text style={styles.elemText}>{i18n.t('pulverisation.all_cultures')}</Text>
+              <Text style={[styles.elemText, { fontWeight: culturesSelected.length === cultures.length ? 'bold' : 'normal'} ]}>{i18n.t('pulverisation.all_cultures')}</Text>
               { culturesSelected.length === cultures.length && (
-                <Icon name="check" type="AntDesign" style={styles.elemIcon} />
+                <Icon name="check" type="AntDesign" style={[styles.elemIcon, { color: culturesSelected.length === cultures.length ? COLORS.DARK_GREEN : COLORS.GREY } ]} />
               )}
             </TouchableOpacity>
 
@@ -63,9 +63,9 @@ const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCultu
                   updateUICultures(p)
                   updateCulturesSelected(p)
                 }}>
-                  <Text style={styles.elemText}>{d.name}</Text>
+                  <Text style={[styles.elemText, { fontWeight: culturesSelected.indexOf(d.id) > -1 ? 'bold' : 'normal'} ]}>{i18n.t(`cultures.${d.name}`)}</Text>
                   { culturesSelected.indexOf(d.id) > -1 && (
-                    <Icon name="check" type="AntDesign" style={styles.elemIcon} />
+                    <Icon name="check" type="AntDesign" style={[styles.elemIcon, { color: culturesSelected.indexOf(d.id) > -1 ? COLORS.DARK_GREEN : COLORS.GREY } ]} />
                   )}
                 </TouchableOpacity>
               )

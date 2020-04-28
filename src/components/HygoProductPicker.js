@@ -69,9 +69,9 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
               <TouchableOpacity style={styles.elemContainer} onPress={() => {
                 handleClick(-1)
               }}>
-                <Text style={styles.elemText}>{i18n.t('intervention_map.other_farm_work')}</Text>
+                <Text style={[styles.elemText, { fontWeight: selected.indexOf(-1) > -1 ? 'bold' : 'normal'} ]}>{i18n.t('intervention_map.other_farm_work')}</Text>
                 { selected.indexOf(-1) > -1 && (
-                  <Icon name="check" type="AntDesign" style={styles.elemIcon} />
+                  <Icon name="check" type="AntDesign" style={[styles.elemIcon, {color: selected.indexOf(-1) > -1 ? COLORS.DARK_GREEN : COLORS.GREY }]} />
                 )}
               </TouchableOpacity>
             )}
@@ -82,9 +82,9 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
                   let i = d.id
                   handleClick(i)
                 }}>
-                  <Text style={styles.elemText}>{d.name}</Text>
+                  <Text style={[styles.elemText, { fontWeight: selected.indexOf(d.id) > -1 ? 'bold' : 'normal'} ]}>{i18n.t(`products.${d.name}`)}</Text>
                   { selected.indexOf(d.id) > -1 && (
-                    <Icon name="check" type="AntDesign" style={styles.elemIcon} />
+                    <Icon name="check" type="AntDesign" style={[styles.elemIcon, { color: selected.indexOf(d.id) > -1 ? COLORS.DARK_GREEN : COLORS.GREY } ]} />
                   )}
                 </TouchableOpacity>
               )
