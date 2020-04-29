@@ -26,7 +26,7 @@ const MeteoMapHeaderSelected = ({ productId, isRacinaire, data, currentCondition
         <View style={styles.metricsLine}>
           <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{i18n.t('meteo_overlay.hygro', { value: Math.round(parseFloat(data.humi)) })}</Text>
           <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>
-            {i18n.t('meteo_overlay.precipitation_'+getRFromProduct(), { value: data[getRFromProduct()] })}
+            {i18n.t('meteo_overlay.precipitation_'+getRFromProduct(), { value: Math.round(parseFloat(data[getRFromProduct()])) })}
           </Text>
           { isRacinaire && (
             <Text style={[styles.metricsText, { color: currentCondition === 'CORRECT' ? COLORS.DARK_GREEN : '#fff'}]}>{""}</Text>

@@ -11,7 +11,7 @@ const MeteoMetrics = ({ data, currentProduct }) => {
       </View>
       <View style={styles.conditionItemContainer}>
         <Image source={require('../../../assets/ICN-Rain.png')} style={styles.conditionItemImage} />
-        <Text style={styles.conditionItemText}>{`${data.precipitation} mm`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(parseFloat(data.precipitation))} mm`}</Text>
         <Text style={styles.conditionItemText}>{`${Math.round(parseFloat(data.probability))}%`}</Text>
       </View>
       <View style={styles.conditionItemContainer}>
@@ -21,8 +21,8 @@ const MeteoMetrics = ({ data, currentProduct }) => {
       </View>
       <View style={styles.conditionItemContainer}>
         <Image source={require('../../../assets/ICN-Hygro.png')} style={styles.conditionItemImage} />
-        <Text style={styles.conditionItemText}>{`${data.minhumi}%`}</Text>
-        <Text style={styles.conditionItemText}>{`${data.maxhumi}%`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(parseFloat(data.minhumi))}%`}</Text>
+        <Text style={styles.conditionItemText}>{`${Math.round(parseFloat(data.maxhumi))}%`}</Text>
       </View>
       { currentProduct.isRacinaire && (
         <View style={styles.conditionItemContainer}>

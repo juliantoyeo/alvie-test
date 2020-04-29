@@ -30,8 +30,8 @@ const Metrics = ({ currentHourMetrics, hasRacinaire }) => {
       { hasRacinaire && (
         <View style={styles.conditionItemContainer}>
           <Image source={require('../../../assets/sprout.png')} style={styles.conditionItemImage} />
-          <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.soilhumi)}%`}</Text>
-          <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.soiltemp)}°C`}</Text>
+          <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.minsoilhumi)}%`}</Text>
+          <Text style={styles.conditionItemText}>{`${Math.round(currentHourMetrics.maxsoilhumi)}%`}</Text>
         </View>
       )}
     </View>

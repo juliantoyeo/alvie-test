@@ -77,12 +77,12 @@ const ConditionHeader = ({ isRefreshing, history, phytoProductList, phytoProduct
           </View>
           <View style={styles.metrics}>
             <View style={styles.metricsColumn}>
-              <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.precipitation_${getRFromProduct()}`, { value: currentCondition[getRFromProduct()] })}</Text>
+              <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.precipitation_${getRFromProduct()}`, { value: Math.round(parseFloat(currentCondition[getRFromProduct()])) })}</Text>
               <Text style={styles.metricsText}>{i18n.t(`realtime.gel_${currentCondition.t3 <= -2 ? 'risky' : 'none'}`)}</Text>
             </View>
             <View style={styles.metricsColumn}>
-              <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.delta_temp`, { value: currentCondition.dt })}</Text>
-              <Text style={styles.metricsText}>{hasRacinaire() ? i18n.t(`realtime.soil_humi`, { value: currentCondition.hs } ) : ''}</Text>
+              <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.delta_temp`, { value: Math.round(parseFloat(currentCondition.dt)) })}</Text>
+              <Text style={styles.metricsText}>{hasRacinaire() ? i18n.t(`realtime.soil_humi`, { value: Math.round(parseFloat(currentCondition.hs)) } ) : ''}</Text>
             </View>
           </View>
         </View>

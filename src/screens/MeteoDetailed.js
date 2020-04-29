@@ -24,25 +24,43 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
   const [detailed, setDetailed] = useState({})
   const [currentDay, setCurrentDay] = useState()
 
-  useEffect(() => {
-    loadMeteoDetailed()
-  }, [])
+  const [lastLoad, setLastLoad] = useState(-1)
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('didFocus', () => {
-      setLoading(true)
-      loadMeteoDetailed()
+    let interval
+
+    const u1 = navigation.addListener('didFocus', () => {
+      interval = setInterval(() => {
+        setCounter(new Date().getTime());
+      }, 30000);
+      setCounter(new Date().getTime());
     });
 
-    return () => {
-      unsubscribe.remove()
-    };
-  }, [navigation])
+    const u2 = navigation.addListener('willBlur', () => {
+      clearInterval(interval);
+    });
 
-  const loadMeteoDetailed = async (force) => {
-    if (!force && (new Date()).getTime() - lastMeteoLoad <= 3600*1000) {
-      setLoading(false)
-      return
+    interval = setInterval(() => {
+      setCounter(new Date().getTime());
+    }, 30000);
+    setCounter(new Date().getTime());
+
+    return () => {
+      u1.remove()
+      u2.remove()
+    };
+  }, []);
+
+  useEffect(() => {
+    if (counter - lastLoad >= 60000) {
+      loadMeteoDetailed()
+    }
+  }, [counter])
+
+  const loadMeteoDetailed = async () => {
+    if (!loading) {
+      setIsRefreshing(true)
     }
 
     let result = await getMeteoDetailed({
@@ -55,6 +73,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
     meteoSynced((new Date()).getTime())
 
     setLoading(false)
+    setIsRefreshing(false)
   }
 
   const onRefresh = async () => {
@@ -107,7 +126,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
               </View>
               <View style={styles.dayWeatherItemContainer}>
                 <Image source={require('../../assets/ICN-Rain.png')} style={styles.dayWeatherItemImage} />
-                <Text style={styles.dayWeatherItemText}>{`${detailed.data[currentDay].data.precipitation} mm`}</Text>
+                <Text style={styles.dayWeatherItemText}>{`${Math.round(parseFloat(detailed.data[currentDay].data.precipitation))} mm`}</Text>
                 <Text style={styles.dayWeatherItemText}>{`${Math.round(parseFloat(detailed.data[currentDay].data.probability))}%`}</Text>
               </View>
               <View style={styles.dayWeatherItemContainer}>
@@ -117,8 +136,8 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
               </View>
               <View style={styles.dayWeatherItemContainer}>
                 <Image source={require('../../assets/ICN-Hygro.png')} style={styles.dayWeatherItemImage} />
-                <Text style={styles.dayWeatherItemText}>{`${detailed.data[currentDay].data.minhumi}%`}</Text>
-                <Text style={styles.dayWeatherItemText}>{`${detailed.data[currentDay].data.maxhumi}%`}</Text>
+                <Text style={styles.dayWeatherItemText}>{`${Math.round(parseFloat(detailed.data[currentDay].data.minhumi))}%`}</Text>
+                <Text style={styles.dayWeatherItemText}>{`${Math.round(parseFloat(detailed.data[currentDay].data.maxhumi))}%`}</Text>
               </View>
             </View>
             <View style={styles.hour4Weather}>

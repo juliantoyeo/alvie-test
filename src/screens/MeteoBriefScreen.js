@@ -8,7 +8,7 @@ import i18n from 'i18n-js'
 import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
 
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 import { getMeteo } from '../api/hygoApi'
 
@@ -30,14 +30,24 @@ const MeteoBriefScreen = ({ navigation }) => {
 
   const [loading, setLoading] = useState(true)
   const [meteoData, setMeteoData] = useState({})
-
-  useEffect(() => {
-    loadMeteo()
-  }, [])
+  const [lastLoad, setLastLoad] = useState(-1)
+  const [counter, setCounter] = useState(0);
+  const [hourRange, setHourRange] = useState({
+    start: '',
+    end: ''
+  })
 
   const loadMeteo = async () => {
     let meteo = await getMeteo()
     setMeteoData(meteo)
+
+    setHourRange({
+      start: getHour(),
+      end: getHour(true),
+    })
+
+    setLastLoad(new Date().getTime())
+
     setLoading(false)
   }
 
@@ -46,11 +56,56 @@ const MeteoBriefScreen = ({ navigation }) => {
     return `${now.getDate()} ${capitalize(MONTHS[now.getMonth()])}`
   }
 
+  const getHour = (isEnd) => {
+    let now = moment.utc()
+    if (now.minutes() >= 30) {
+        now.hours(now.hours() + 1)
+    }
+    if (isEnd) {
+      now.hours(now.hours() + 3)
+    }
+    now = now.startOf('hour')
+    now = now.tz('Europe/Paris').format('HH')
+
+    return now
+  }
+
+  useEffect(() => {
+    let interval
+
+    const u1 = navigation.addListener('didFocus', () => {
+      interval = setInterval(() => {
+        setCounter(new Date().getTime());
+      }, 30000);
+      setCounter(new Date().getTime());
+    });
+
+    const u2 = navigation.addListener('willBlur', () => {
+      clearInterval(interval);
+    });
+
+    interval = setInterval(() => {
+      setCounter(new Date().getTime());
+    }, 30000);
+    setCounter(new Date().getTime());
+
+    return () => {
+      u1.remove()
+      u2.remove()
+    };
+  }, []);
+
+  useEffect(() => {
+    if (counter - lastLoad >= 60000) {
+      loadMeteo()
+    }
+  }, [counter])
+
   return (
     <ScrollView>
       <View style={styles.textContainer}>
         <Text style={styles.date}>{getDay()}</Text>
-        <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours')}</Text>
+        <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours', { from: hourRange.start, to: hourRange.end })}</Text>
       </View>
       <View style={styles.iconContainer}>
         <View style={styles.meteoElement}>
@@ -127,7 +182,8 @@ const styles = StyleSheet.create({
   next_3hours: {
     fontFamily: 'nunito-regular',
     fontSize: 18,
-    color: '#fff'
+    color: '#fff',
+    textAlign: 'center'
   },
   textContainer: {
     display: 'flex', 

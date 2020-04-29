@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 150,
+    width: 120,
   },
   modulationTextValue: {
-    marginLeft: 27,
+    marginLeft: 0,
     color: '#8bdf8b',
     fontFamily: 'nunito-bold',
     fontSize: 48,
