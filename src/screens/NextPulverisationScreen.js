@@ -138,7 +138,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
                 <Text style={styles.pickerText}>{i18n.t('pulverisation.all_cultures')}</Text>
               )}
               { culturesSelected.length < cultures.length && culturesSelected.length > 0 && (
-                <Text style={styles.pickerText}>{ cultures.filter(pp => culturesSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
+                <Text style={styles.pickerText}>{ cultures.filter(pp => culturesSelected.indexOf(pp.id) > -1).map(pp => i18n.t(`cultures.${pp.name}`)).join(', ') }</Text>
               )}
               <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
               </View>
@@ -152,7 +152,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
                   <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>
                 )}
                 { phytoProductSelected.length > 0 && (
-                  <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => pp.name).join(', ') }</Text>
+                  <Text style={styles.pickerText}>{ phytoProductList.filter(pp => phytoProductSelected.indexOf(pp.id) > -1).map(pp => i18n.t(`products.${pp.name}`)).join(', ') }</Text>
                 )}
                 <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
               </View>

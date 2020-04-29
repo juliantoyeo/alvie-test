@@ -58,12 +58,26 @@ const initLocation = async () => {
 
   let isStarted = await Location.hasStartedLocationUpdatesAsync(GEO_TASK_NAME)
   if (!isStarted) {
-    Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
-      distanceInterval: 10,
-      accuracy: Location.Accuracy.Highest,
-      activityType: Location.ActivityType.AutomotiveNavigation,
-      showsBackgroundLocationIndicator: false,
-    })
+    if (Platform.OS === 'ios') {
+      Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
+        distanceInterval: 10,
+        accuracy: Location.Accuracy.Highest,
+        activityType: Location.ActivityType.AutomotiveNavigation,
+        showsBackgroundLocationIndicator: false,
+      })
+    } else {
+      Location.startLocationUpdatesAsync(GEO_TASK_NAME, {
+        distanceInterval: 10,
+        accuracy: Location.Accuracy.Highest,
+        activityType: Location.ActivityType.AutomotiveNavigation,
+        showsBackgroundLocationIndicator: false,
+        foregroundService: {
+          notificationTitle: 'Hygo',
+          notificationBody: 'Hygo position tracker'
+        },
+        pausesUpdatesAutomatically: false,
+      })
+    }
   }
 }
 
