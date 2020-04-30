@@ -3,6 +3,9 @@ export default {
     'next': 'POKRAČOVAT',
     'validate': 'POTVRDIT',
   },
+  'geolocation': {
+    'text': 'HYGO neslyšně běží v pozadí :)',
+  },
   'months': {
     'january': 'leden',
     'february': 'únor',

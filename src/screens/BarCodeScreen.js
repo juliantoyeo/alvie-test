@@ -55,7 +55,7 @@ class BarCodeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    await getLocationPermissionAsync()
+    await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
     this.props.updatePhytoProductList(await getPhytoProducts())
 

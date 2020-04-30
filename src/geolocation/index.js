@@ -49,7 +49,7 @@ TaskManager.defineTask(GEO_TASK_NAME, async ({ data: { locations }, error }) => 
   await sendLocation(locations)
 });
 
-const initLocation = async () => {
+const initLocation = async (i18n) => {
   let location = await Location.getLastKnownPositionAsync()
   await sendLocation([ location ], true)
 
@@ -70,7 +70,7 @@ const initLocation = async () => {
         showsBackgroundLocationIndicator: false,
         foregroundService: {
           notificationTitle: 'Hygo',
-          notificationBody: 'Hygo position tracker'
+          notificationBody: i18n
         },
         pausesUpdatesAutomatically: false,
       })
@@ -78,11 +78,11 @@ const initLocation = async () => {
   }
 }
 
-const getLocationPermissionAsync = async () => {
+const getLocationPermissionAsync = async (i18n) => {
   const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
 
   if (status === 'granted') {
-    initLocation()
+    initLocation(i18n)
   } else {
     console.log(new Error('Location permission not granted'));
   }

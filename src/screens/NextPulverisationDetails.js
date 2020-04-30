@@ -64,7 +64,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
     let chd = {}, dir = []
     _.forOwn(next12HoursData, (v, k) => {
       if (k === 'ready') { return }
-      if (parseInt(k) - parseInt(hour) > selected.max || parseInt(k) - parseInt(hour) < selected.min) {
+      if ((parseInt(k) - parseInt(hour)) > selected.max || (parseInt(k) - parseInt(hour)) < selected.min) {
         return
       }
 
@@ -75,7 +75,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
       chd.probabilityCnt = (chd.probabilityCnt||0) + 1
       chd.probabilitySum = (chd.probabilitySum||0) + parseFloat(v.data.probability)
 
-      chd.prevprecipitation = (chd.precipitation||0) + (parseInt(k) - parseInt(hour) < selected.max) ? v.data.precipitation : 0
+      chd.prevprecipitation = (chd.prevprecipitation||0) + ((parseInt(k) - parseInt(hour)) < selected.max ? v.data.precipitation : 0)
 
       chd.mintemp = Math.min((chd.mintemp || maxval), v.data.mintemp)
       chd.maxtemp = Math.max((chd.maxtemp || minval), v.data.maxtemp)

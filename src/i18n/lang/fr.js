@@ -3,6 +3,9 @@ export default {
     'next': 'CONTINUER',
     'validate': 'VALIDER',
   },
+  'geolocation': {
+    'text': 'HYGO en arrière-plan :)',
+  },
   'months': {
     'january': 'janvier',
     'february': 'février',
