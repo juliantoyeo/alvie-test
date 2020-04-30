@@ -71,6 +71,7 @@ export default {
     'saving_info': 'Enregistrement des informations...',
 
     'buses_family': 'Type de buse',
+    'no_buse': 'Pas de type de buse sélectionné',
 
     'buses_CLASSIC_STD': 'Buses fente classique standard',
     'buses_CLASSIC_LOW': 'Buses fente classique basse pression',

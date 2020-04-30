@@ -75,6 +75,8 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
       chd.probabilityCnt = (chd.probabilityCnt||0) + 1
       chd.probabilitySum = (chd.probabilitySum||0) + parseFloat(v.data.probability)
 
+      chd.prevprecipitation = (chd.precipitation||0) + (parseInt(k) - parseInt(hour) < selected.max) ? v.data.precipitation : 0
+
       chd.mintemp = Math.min((chd.mintemp || maxval), v.data.mintemp)
       chd.maxtemp = Math.max((chd.maxtemp || minval), v.data.maxtemp)
 

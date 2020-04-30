@@ -34,7 +34,7 @@ const ExtraMetrics = ({ currentHourMetrics, phytoProductSelected }) => {
 
   return (
     <View style={styles.metrics}>
-      <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.precipitation_${getRFromProduct()}`, { value: Math.round(currentHourMetrics.precipitation + currentHourMetrics[getRFromProduct()]) })}</Text>
+      <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.precipitation_${getRFromProduct()}`, { value: Math.round(currentHourMetrics.prevprecipitation + currentHourMetrics[getRFromProduct()]) })}</Text>
       <Text style={styles.metricsText}>{i18n.t(`realtime.gel_${currentHourMetrics.t3 <= -2 ? 'risky' : 'none'}`)}</Text>
       <Text style={styles.metricsText}>{i18n.t(`meteo_overlay.delta_temp`, { value: Math.round(currentHourMetrics.deltatemp) })}</Text>
     </View>

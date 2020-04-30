@@ -171,7 +171,7 @@ const EquipmentScreen = ({ navigation }) => {
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon name="arrow-down" />}
-                  placeholder={i18n.t('phyto.no_phyto')}
+                  placeholder={i18n.t('equipment.no_buse')}
                   itemTextStyle={{
                     flex: 1,
                     color: '#aaa',

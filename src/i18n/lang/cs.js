@@ -70,6 +70,14 @@ export default {
 
     'saving_info': 'Ukládám Vaše informace...',
 
+    'buses_family': 'Druh postřikovací trysky',
+    'no_buse': 'Druh trysky nevybrán',
+
+    'buses_CLASSIC_STD': 'Štěrbinové standardní trysky',
+    'buses_CLASSIC_LOW': 'Štěrbinové nízkotlakové trysky',
+    'buses_CALIBRATE': 'Anti-driftové trysky',
+    'buses_INJECTION': 'Trysky s přisáváním vzduchu',
+
     'orange': 'Oranžová 01',
     'green': 'Zelená 02',
     'yellow': 'Žlutá 03',
@@ -185,7 +193,7 @@ export default {
     'culture_type': 'Typ plodiny',
     'select_text': 'Vyberte typ produktu a plodiny, které plánujete ošetřit při Vašem příštím postřiku.',
     'select_hours_text': 'Vyberte preferovaný čas postřiku v příštích 48 hodinách',
-    'product_type': 'TYP PRODKTU',
+    'product_type': 'TYP PRODUKTU',
     'culture_type': 'TYPE PLODINY',
     'start': 'Začít',
     'computation_hint': '* Výpočet na základě Vašeho výběru produktu, plodiny a času',

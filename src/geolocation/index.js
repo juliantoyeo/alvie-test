@@ -12,22 +12,19 @@ const GEO_TASK_NAME = "hygo-geo"
 const GEO_MAX_DURATION = 8 * 3600 * 1000 // 8 hours in ms
 
 const sendLocation = async (locations, isInit) => {
-  // Ensure Geoloc only runs for 8 hours on iOS
-  if (Platform.OS === 'ios') {
-    let syncStarted = await AsyncStorage.getItem('start-geo-sync');
-    if (!isInit && !isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
-      await AsyncStorage.removeItem('start-geo-sync');
+  let syncStarted = await AsyncStorage.getItem('start-geo-sync');
+  if (!isInit && !isNaN((new Date(syncStarted)).getTime()) && (new Date(syncStarted)).getTime() < (new Date().getTime() - GEO_MAX_DURATION)) {
+    await AsyncStorage.removeItem('start-geo-sync');
 
-      try {
-        await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
-      } catch(e) {}
+    try {
+      await Location.stopLocationUpdatesAsync(GEO_TASK_NAME);
+    } catch(e) {}
 
-      return
-    }
+    return
+  }
 
-    if (isInit || isNaN((new Date(syncStarted)).getTime())) {
-      await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
-    }
+  if (isInit || isNaN((new Date(syncStarted)).getTime())) {
+    await AsyncStorage.setItem('start-geo-sync', ''+(new Date().getTime()));
   }
 
   // Handle location update
