@@ -37,6 +37,9 @@ export default {
     'ARGILE': 'Argile',
     'none': 'Aucun type séléctionné'
   },
+  'modulation': {
+    'dose_computation': 'Calcul de la diminution de la dose',
+  },
   'drawer': {
     'account': 'mon compte',
     'parcelles': 'mes parcelles',

@@ -53,6 +53,9 @@ export default {
     'text_notice_1': 'Nyní prosím nastavte svůj uživatelský profil',
     'text_notice_2': 'Vaše zemědělská předpověď počasí na míru je připravena',
   },
+  'modulation': {
+    'dose_computation': 'Výpočet možného snížení dávky produktu',
+  },
   'bar_code': {
     'notice': 'Pro spárování Vaší mobilní aplikace oskenujte QR kód na Vašem senzoru HYGO',
     'welcome': 'Vítejte!',

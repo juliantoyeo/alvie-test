@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native'
 import { Spinner, Icon } from 'native-base'
@@ -11,10 +11,14 @@ import i18n from 'i18n-js'
 
 import { connect } from 'react-redux'
 
-const Modulation = ({ day, hour, selected, setModulationChanged, modulationChanged, phytoProductSelected, culturesSelected }) => {
+const Modulation = ({ day, hour, selected, setModulationChanged, modulationChanged, phytoProductSelected, culturesSelected, phytoProductList }) => {
   const [modulationValue, setModulationValue] = useState()
   const [modulationLoading, setModulationLoading] = useState(false)
   const [cSelected, setCSelected] = useState({...selected})
+
+  useEffect(() => {
+    updateModulation()
+  }, [])
 
   useEffect(() => {
     if (selected.min !== cSelected.min || selected.max !== cSelected.max) {
@@ -38,31 +42,41 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
       hour,
     })
 
-    setModulationValue(res.value)
+    setModulationValue(res)
 
     setModulationChanged(false)
     setModulationLoading(false)
   }
 
+  const getPhytoName = (pid) => {
+    return i18n.t(`products.${phytoProductList.filter(p => p.id === pid)[0].name}`)
+  }
+
   return (
     <View style={styles.modulation}>
-      <View style={styles.modulationContainer}>
-        <View style={styles.modulationTextContaier}>
-          <Text style={styles.modulationTextInfo}>{i18n.t('pulverisation.reduce_dosage')}</Text>
-          <View style={styles.modulationBlock}>
-            { modulationChanged && modulationLoading && (
-                <Spinner style={styles.modulationSpinner} />
-            )}
-            { modulationChanged && !modulationLoading && (
-                <TouchableWithoutFeedback onPress={updateModulation}><Icon type="MaterialCommunityIcons" name="refresh" style={styles.modulationRefresh} /></TouchableWithoutFeedback>
-            )}
-            { !modulationChanged && (
-              <Text style={styles.modulationTextValue}>{`${modulationValue}%`}</Text>
-            )}
-          </View>
-        </View>
-        <Text style={styles.modulationTextStar}>{i18n.t('pulverisation.computation_hint')}</Text>
+      <View style={styles.headerView}>
+        <Text style={styles.headerText}>Calcul de la diminution de la dose</Text>
       </View>
+      { phytoProductSelected.map(p => {
+        return (
+          <View style={styles.modulationContainer} key={p}>
+            <View style={styles.modulationTextContaier}>
+              <View style={styles.modulationBlock}>
+                { modulationChanged && modulationLoading && (
+                  <Spinner style={styles.modulationSpinner} />
+                )}
+                { modulationChanged && (!modulationLoading || !modulationValue) && (
+                  <TouchableWithoutFeedback onPress={updateModulation}><Icon type="MaterialCommunityIcons" name="refresh" style={styles.modulationRefresh} /></TouchableWithoutFeedback>
+                )}
+                { !modulationChanged && (
+                  <Text style={styles.modulationTextValue}>{`${modulationValue[p]}%`}</Text>
+                )}
+              </View>
+              <Text style={styles.modulationTextInfo}>{getPhytoName(p)}</Text>
+            </View>
+          </View>
+        )
+      })}
     </View>
   )
 }
@@ -71,6 +85,16 @@ const styles = StyleSheet.create({
   modulation: {
     backgroundColor: COLORS.BEIGE,
     paddingRight: 15,
+    paddingBottom: 10,
+  },
+  headerView: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontFamily: 'nunito-bold',
+    fontSize: 16,
+    color: COLORS.DARK_BLUE,
   },
   modulationContainer: {
     backgroundColor: '#fff',
@@ -79,8 +103,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 30,
-    paddingHorizontal: 15,
+    paddingVertical: 15,
+    paddingBottom: 12,
+    paddingHorizontal: 20,
+    marginBottom: 5,
   },
   modulationTextContaier: {
     display: 'flex',
@@ -121,6 +147,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
+  phytoProductList: state.pulve.phytoProductList,
   culturesSelected: state.pulve.culturesSelected,
   phytoProductSelected: state.pulve.phytoProductSelected,
 });
