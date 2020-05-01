@@ -4,7 +4,7 @@ import  MapView, {Polygon} from 'react-native-maps';
 
 import COLORS from '../colors'
 
-const HygoMap = ({ intervention, handleFieldSelection }) => {
+const HygoMap = ({ intervention, byParcelle, handleFieldSelection }) => {
   const [region, setRegion] = useState(null)
   const [selected, setSelected] = useState(null)
 
@@ -42,10 +42,10 @@ const HygoMap = ({ intervention, handleFieldSelection }) => {
                 key={idx}
                 strokeWidth={selected === idx ? 4 : 1}
                 strokeColor={selected === idx ? '#fff' : COLORS.DARK_GREEN}
-                fillColor={field.colorField||COLORS.DEFAULT_FIELD_MY}
+                fillColor={byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField||COLORS.DEFAULT_FIELD_MY)}
                 ref={ref => (polygons.current[idx] = ref)}
                 onLayout={() => polygons.current[idx].setNativeProps({
-                    fillColor: field.colorField||COLORS.DEFAULT_FIELD_MY
+                    fillColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField||COLORS.DEFAULT_FIELD_MY)
                 })}
                 tappable={true}
                 onPress={() => {

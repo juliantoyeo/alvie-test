@@ -6,6 +6,7 @@ import COLORS from '../colors'
 import i18n from 'i18n-js'
 
 import { connect } from 'react-redux'
+import { getInterventionByID } from '../api/hygoApi'
 
 import moment from 'moment-timezone'
 
@@ -23,8 +24,12 @@ const HygoInterventionCard = ({ navigation, intervention, phytoProductList }) =>
   }
 
   const onCardPressed = () => {
-    navigation.navigate('InterventionMapScreen', {
-      intervention
+    navigation.navigate('LoadingScreen', {
+      next: 'InterventionMapScreen', 
+      params: {
+        id: intervention.id
+      },
+      action: getInterventionByID,
     })
   }
 

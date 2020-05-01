@@ -189,6 +189,16 @@ export const getInterventions = async () => {
     }
 }
 
+// Retrive intervention ID
+export const getInterventionByID = async ({ id }) => {
+    try {
+        const response = await hygoApi.post('/app/interventions/details', { id });
+        return response.data
+    } catch(error) {
+        return { intervention: {} }
+    }
+}
+
 // Get Realtime data
 export const getRealtimeData = async (phytoProductSelected) => {
     try {

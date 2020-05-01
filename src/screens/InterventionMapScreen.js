@@ -8,14 +8,14 @@ import COLORS from '../colors'
 import i18n from 'i18n-js'
 
 import HygoMap from '../components/HygoMap'
-import { updateIntervention } from '../api/hygoApi';
+import { updateIntervention, getInterventionByID } from '../api/hygoApi';
 
 import { updateProductsInterv } from '../store/actions/intervActions'
 
 import moment from 'moment-timezone'
 
 const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
-  let intervention = navigation.getParam('intervention')
+  let { intervention, byParcelle, data } = navigation.getParam('result')
 
   const [field, setField] = useState(null)
 
@@ -45,8 +45,8 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
     return i18n.t('intervention_map.header_phyto', { phyto: i18n.t('intervention.no_phyto_selected') })
   }
 
-  const setProducts = (p) => {
-    updateIntervention(p, intervention.interventionid)
+  const setProducts = async (p) => {
+    await updateIntervention(p, intervention.interventionid)
     updateProductsInterv(p, intervention.id)
     setCurrentProducts(p)
   }
@@ -89,6 +89,33 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
     setField(field)
   }
 
+  const getAreaPerCondition = () => {
+    let conditions = ['EXCELLENT', 'GOOD', 'CORRECT', 'BAD', 'FORBIDDEN']
+    let result = {}
+    for (let i = 0; i < intervention.fields.length; i++) {
+      if (!intervention.fields[i].Parcelle) {
+        continue
+      }
+
+      let p = byParcelle[intervention.fields[i].parcelleId]
+      if (!p) { continue }
+      result[p.condition] = (result[p.condition]||0) + intervention.fields[i].Parcelle.area
+    }
+
+    let output = [], total = getTotalArea()
+    for (let i = 0; i < conditions.length; i++) {
+      if (result[conditions[i]]) {
+        output.push({
+          condition: conditions[i],
+          area: (result[conditions[i]] / 10000).toFixed(1),
+          percent: Math.round((result[conditions[i]] / 10000) / total * 100)
+        })
+      }
+    }
+
+    return output
+  }
+
   if (!intervention.avgtemp) {
     return (<View></View>)
   }
@@ -112,7 +139,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
         <View style={styles.phytoDetail}>
           <View style={styles.phytoDetailRow}>
             <Image style={[styles.phytoDetailImage, { height: 28 }]} source={require('../../assets/phyto.png')} />
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker", { source: 'intervention', set: setProducts, initial: products })}>
+            <TouchableWithoutFeedback onPress={() => navigation.replace("HygoProductPicker", { source: 'intervention', set: setProducts, initial: products })}>
               <View style={styles.picker}>
                 <Text style={styles.phytoDetailText}>{getPhytoText()}</Text>
                 <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
@@ -127,18 +154,18 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
         <View style={styles.metricsContainer}>
           <View style={styles.metrics}>
-            { typeof intervention.avgwind !== 'undefined' && (
+            { typeof data.minwind !== 'undefined' && (
               <View style={styles.elem}>
                 <Image source={require('../../assets/ICN-Wind.png')} style={styles.elemIcon} />
-                <Text style={styles.big}>{`${Math.round(intervention.avgwind)} km/h`}</Text>
-                <Text style={styles.mini}>{`min ${Math.round(intervention.minwind)} km/h`}</Text>
-                <Text style={styles.mini}>{`max ${Math.round(intervention.maxwind)} km/h`}</Text>
+                <Text style={styles.big}>{`${Math.round(data.avgwind)} km/h`}</Text>
+                <Text style={styles.mini}>{`min ${Math.round(data.minwind)} km/h`}</Text>
+                <Text style={styles.mini}>{`max ${Math.round(data.maxwind)} km/h`}</Text>
               </View>
             )}
-            { typeof intervention.precipitation !== 'undefined' && (
+            { typeof data.precipitation !== 'undefined' && (
               <View style={styles.elem}>
                 <Image source={require('../../assets/ICN-Rain.png')} style={styles.elemIcon} />
-                <Text style={styles.big}>{`${Math.round(intervention.precipitation)} mm`}</Text>
+                <Text style={styles.big}>{`${Math.round(data.precipitation)} mm`}</Text>
               </View>
             )}
             <View style={styles.elem}>
@@ -160,27 +187,21 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
         { field === null && (
           <View style={styles.legend}>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.EXCELLENT }]}>
-              <Text style={styles.legendText}>{i18n.t('intervention_map.excellent')}</Text>
-            </View>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.GOOD }]}>
-              <Text style={styles.legendText}>{i18n.t('intervention_map.good')}</Text>
-            </View>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.CORRECT }]}>
-              <Text style={styles.legendText}>{i18n.t('intervention_map.mediocre')}</Text>
-            </View>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.BAD }]}>
-              <Text style={styles.legendText}>{i18n.t('intervention_map.bad')}</Text>
-            </View>
-            <View style={[styles.legendLine, { backgroundColor: COLORS.FORBIDDEN }]}>
-              <Text style={styles.legendText}>{i18n.t('intervention_map.forbidden')}</Text>
-            </View>
+            { getAreaPerCondition().map(c => {
+              return (
+                <View  key={c.condition} style={[styles.legendLine, { backgroundColor: COLORS[c.condition] }]}>
+                  <Text style={[styles.legendText, {flex: 2}]}>{i18n.t(`intervention_map.${c.condition.toLowerCase()}`)}</Text>
+                  <Text style={[styles.legendText, {flex: 1}]}>{`${c.area} ha`}</Text>
+                  <Text style={[styles.legendText, {flex: 1}]}>{`${c.percent}%`}</Text>
+                </View>
+              )
+            })}
           </View>
         )}
 
         { field !== null && (
           <>
-            <View style={[styles.selected, { backgroundColor: field.colorField === COLORS.DEFAULT_FIELD ? COLORS.BAD : field.colorField }]}>
+            <View style={[styles.selected, { backgroundColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField === COLORS.DEFAULT_FIELD ? COLORS.CYAN : field.colorField) }]}>
               <View style={styles.selectedLine}>
                 <View style={styles.selectedElem}>
                   <View style={styles.selectedImageContainer}>
@@ -192,21 +213,20 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${field.maxtemp.toFixed(1)}°C`})}</Text>
                   </View>
                 </View>
-                { (typeof field.avgwind !== 'undefined' || typeof field.precipitation !== 'undefined') && (
+                { (byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].wind !== 'undefined' || typeof field.precipitation !== 'undefined') && (
                   <View style={[styles.selectedElem, { marginTop: 20 }]}>
                     <View style={styles.selectedImageContainer}>
                       <Image source={require('../../assets/ICN-Wind.png')} style={styles.selectedImage} />
                     </View>
                     <View style={styles.selectedTextContainer}>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.avg', { value: `${field.avgtemp.toFixed(1)} km/h`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.min', { value: `${field.mintemp.toFixed(1)} km/h`})}</Text>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.max', { value: `${field.maxtemp.toFixed(1)} km/h`})}</Text>
+                      <Text style={styles.selectedText}>{`${byParcelle[field.parcelleId].winddirection} ${byParcelle[field.parcelleId].wind.toFixed(0)} km/h`}</Text>
+                      <Text style={styles.selectedText}>{`raf ${byParcelle[field.parcelleId].gust.toFixed(0)} km/h`})}</Text>
                     </View>
                   </View>
                 )}
               </View>
               <View style={[styles.selectedLine]}>
-                { typeof field.avgwind !== 'undefined' && (
+                { byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].wind !== 'undefined' && (
                   <View style={[styles.selectedElem, { marginBottom: 20 }]}>
                     <View style={styles.selectedImageContainer}>
                       <Image source={require('../../assets/ICN-Hygro.png')} style={styles.selectedImage} />
@@ -218,17 +238,17 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     </View>
                   </View>
                 )}
-                { typeof field.precipitation !== 'undefined' && (
+                { byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].precipitation !== 'undefined' && (
                   <View style={[styles.selectedElem]}>
                     <View style={styles.selectedImageContainer}>
                       <Image source={require('../../assets/ICN-Rain.png')} style={styles.selectedImage} />
                     </View>
                     <View style={styles.selectedTextContainer}>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.rain', { value: `${Math.round(field.precipitation)} mm`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t('intervention_map.rain', { value: `${Math.round(byParcelle[field.parcelleId].precipitation)} mm`})}</Text>
                     </View>
                   </View>
                 )}
-                { typeof field.avgwind === 'undefined' && typeof field.precipitation === 'undefined' && (
+                { (!byParcelle[field.parcelleId] || typeof byParcelle[field.parcelleId].wind === 'undefined') && (! byParcelle[field.parcelleId] || typeof field.precipitation === 'undefined') && (
                   <View style={[styles.selectedElem]}>
                     <View style={styles.selectedImageContainer}>
                       <Image source={require('../../assets/ICN-Hygro.png')} style={styles.selectedImage} />
@@ -243,14 +263,14 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
               </View>
             </View>
             <View style={styles.carretContainer}>
-              <View style={[styles.triangle, { borderBottomColor: field.colorField === COLORS.DEFAULT_FIELD ? COLORS.BAD : field.colorField }]} />
+              <View style={[styles.triangle, { borderBottomColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField === COLORS.DEFAULT_FIELD ? COLORS.CYAN : field.colorField) }]} />
             </View>
           </>
         )}
 
         <View style={[styles.mapContainer, { top: field != null ? -20 : 0 }]}>
           { intervention.id && (
-            <HygoMap intervention={intervention} handleFieldSelection={handleFieldSelection} />
+            <HygoMap intervention={intervention} byParcelle={byParcelle} handleFieldSelection={handleFieldSelection} />
           )}
         </View>
       </ScrollView>
