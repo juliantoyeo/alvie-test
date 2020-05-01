@@ -103,8 +103,8 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
 
     let r = {
       ...center,
-      longitudeDelta: Math.max(0.0452, Math.abs(parcelles.region.lon_max - center.longitude)),
-      latitudeDelta: Math.max(0.0351, Math.abs(parcelles.region.lat_max - center.latitude)),
+      longitudeDelta: Math.max(0.1502, Math.abs(parcelles.region.lon_max - center.longitude)),
+      latitudeDelta: Math.max(0.1501, Math.abs(parcelles.region.lat_max - center.latitude)),
     }
 
     if (init) {
