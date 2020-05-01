@@ -55,7 +55,7 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
   return (
     <View style={styles.modulation}>
       <View style={styles.headerView}>
-        <Text style={styles.headerText}>Calcul de la diminution de la dose</Text>
+        <Text style={styles.headerText}>{i18n.t('modulation.dose_computation')}</Text>
       </View>
       { phytoProductSelected.map(p => {
         return (
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   modulationTextValue: {
     marginLeft: 0,
-    color: '#8bdf8b',
+    color: COLORS.DARK_BLUE,
     fontFamily: 'nunito-bold',
     fontSize: 48,
   },

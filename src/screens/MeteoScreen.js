@@ -8,6 +8,8 @@ import MeteoBriefScreen from './MeteoBriefScreen'
 import MeteoRadar from './MeteoRadar'
 import MeteoDetailed from './MeteoDetailed'
 
+import * as Localization from 'expo-localization';
+
 const MeteoScreen = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState(0)
 
@@ -34,9 +36,11 @@ const MeteoScreen = ({ navigation }) => {
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
               <MeteoDetailed navigation={navigation} style={styles.tabBar} />
             </Tab>
-            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
-              <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
-            </Tab>
+            { Localization.locale.indexOf('cs') === -1 && (
+              <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
+                <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
+              </Tab>
+            )}
           </Tabs>
         </Container>
       </ImageBackground>

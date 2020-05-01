@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
     padding: 15,
     top: -20
   },
+  legendText: {
+    fontSize: 11,
+    color: '#aaa',
+    fontFamily: 'nunito-bold'
+  },  
   legendElement: {
     display: 'flex',
     flexDirection: 'row',

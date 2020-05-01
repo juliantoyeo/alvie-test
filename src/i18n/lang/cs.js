@@ -46,7 +46,7 @@ export default {
     'hygo_model': 'Model senzoru : %{model}',
     'app_version': 'Verze aplikace : %{version}',
     'email_subject': 'HYGO: Potřebuji asistenci',
-    'equipment': 'Moje zemědělské vybavení',
+    'equipment': 'Moje vybavení',
   },
   'barcode_validation': {
     'title_notice': 'Spárování aplikace a senzoru HYGO proběhlo úspěšně!',
@@ -65,7 +65,7 @@ export default {
     'qr_error': 'QR kód nebyl rozpoznán',
   },
   'equipment': {
-    'header': 'Moje zemědělské vybavení',
+    'header': 'Moje vybavení',
     'title_notice': 'Vaše zemědělské vybavení',
     'text_notice': 'Prosím, vyplňte několik důležitých informací',
 
@@ -182,6 +182,9 @@ export default {
     'wind_speed': '%{winddir} %{value} km/h',
     'wind_gust': 'RAF %{value} km/h',
     'precipitation': 'Déšť : %{value} mm',
+    'precipitation_r2': 'Déšť 2h : %{value} mm',
+    'precipitation_r3': 'Déšť 3h : %{value} mm',
+    'precipitation_r6': 'Déšť 6h : %{value} mm',
     'soil': 'Půda : ',
     'soil_humi': 'V %{value}%',
     'soil_temp': 'T %{value}°C',
