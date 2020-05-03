@@ -215,7 +215,7 @@ const EquipmentScreen = ({ navigation }) => {
               <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
                 <HygoSlider
                   min={0}
-                  max={100}
+                  max={35}
                   sliderLength={Dimensions.get('window').width - 36 - 15 - 20}
                   value={speed.speed}
                   updateValue={(v) => setSpeed({

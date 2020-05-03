@@ -31,9 +31,9 @@ export default {
   },
   'soils': {
     'SABLE': 'Sable',
-    'SABLE_TERREAU': 'Sable / Terreau',
-    'TERREAU': 'Terreau',
-    'TERREAU_ARGILE': 'Terreau / Argile',
+    'SABLE_TERREAU': 'Sable / Limon',
+    'TERREAU': 'Limon',
+    'TERREAU_ARGILE': 'Limon / Argile',
     'ARGILE': 'Argile',
     'none': 'Aucun type séléctionné'
   },
