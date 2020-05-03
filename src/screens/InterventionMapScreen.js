@@ -220,7 +220,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     </View>
                     <View style={styles.selectedTextContainer}>
                       <Text style={styles.selectedText}>{`${byParcelle[field.parcelleId].winddirection} ${byParcelle[field.parcelleId].wind.toFixed(0)} km/h`}</Text>
-                      <Text style={styles.selectedText}>{`raf ${byParcelle[field.parcelleId].gust.toFixed(0)} km/h`})}</Text>
+                      <Text style={styles.selectedText}>{`raf ${byParcelle[field.parcelleId].gust.toFixed(0)} km/h`}</Text>
                     </View>
                   </View>
                 )}
