@@ -39,6 +39,10 @@ const MeteoWhiteStatus = ({ parcelles, currentCondition }) => {
       } else {
         return i18n.t(`meteo_overlay.white_FORBIDDEN_everywhere`)
       }
+    } else if (currentCondition === 'BAD' || currentCondition === 'FORBIDDEN') {
+      return i18n.t(`meteo_overlay.white_CORRECT_some`, { 
+        value: Math.round(parseFloat(conditions.CORRECT.length + conditions.GOOD.length + conditions.EXCELLENT.length) / pk.length * 100)
+      })
     }
   }, [parcelles, currentCondition])
 
