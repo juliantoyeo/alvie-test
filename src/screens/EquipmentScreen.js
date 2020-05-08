@@ -212,17 +212,16 @@ const EquipmentScreen = ({ navigation }) => {
             )} />
 
             <HygoCard title={i18n.t('equipment.speed')} validated={speed.validated} content={(
-              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0 }}>
                 <HygoSlider
                   min={0}
                   max={35}
-                  sliderLength={Dimensions.get('window').width - 36 - 15 - 20}
+                  sliderLength={Dimensions.get('window').width - 36 - 20}
                   value={speed.speed}
                   updateValue={(v) => setSpeed({
                     speed: v,
                     validated: v > 0
                   })}
-                  steps
                 />
               </View>
             )} />

@@ -4,8 +4,8 @@ import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent'
 
 export const hygoApi = axios.create({
-    baseURL: 'https://staging.alvie.fr',
-    timeout: 3000,
+    baseURL: 'https://hygo-api.alvie.fr',
+    timeout: 30000,
     headers: { 
         'User-Agent': getUserAgent()
     },
@@ -247,97 +247,6 @@ export const updateIntervention = async (products, interventionid) => {
     } catch(error) {
         return ({
 
-        });
-    }
-}
-
-
-
-
-
-export const signUp = async (email, password) => {
-    try
-    {
-        const response =  await hygoApi.post('/signup', {email, password});
-        return ({
-            token: response.data.token,
-            errorMessage: ''
-        });
-    } catch(err)
-    {
-        console.log(err)
-        return ({
-            token: '',
-            errorMessage: 'Error while signing up'
-        });
-    }
-}
-
-
-
-export const getLastValue = async(token) => {
-    if (token) {
-        try {
-            const response  = await hygoApi.post('/getLastValue', {token});
-            const {id, deviceid, temp, humi, lat, long, timestamp} = response.data;
-            return ({id, deviceid, temp, humi, lat, long, timestamp});
-        } catch(error) {
-            return ({
-            });
-        }
-    }
-}
-
-export const getLastCondition = async(token) => {
-    if (token) {
-        try {
-            const response  = await hygoApi.post('/getLastCondition', {token});
-            const {condition, phytoProduct, conditionColor} = response.data;
-            return ({condition, phytoProduct, conditionColor});
-        } catch(error) {
-            return ({
-            });
-        }
-    }
-}
-
-export const getLastValues = async (token) => {
-    if (token) {
-        try {
-            const response = await hygoApi.post('/getLastValues', {token});
-            return ({
-                values: response.data});
-        }
-        catch(error) {
-            return ({
-            });
-        }
-    }
-}
-
-export const getLastGeometryFields = async (deviceid, interventionid) => {
-    if (interventionid) {
-        try {
-        
-            const response = await hygoApi.post('/getLastGeometryFields', {deviceid, interventionid});
-
-            return ({
-                fieldValues: response.data});
-        }
-        catch(error) {
-            return ({
-            });
-        }
-    }
-}
-
-export const evalConditions = async (deviceid, phyto, humi, temp) => {
-    try {
-        const response = await hygoApi.post('/evalConditions', {deviceid, phyto, humi, temp});
-        return (response.data);
-    }
-    catch(error) {
-        return ({
         });
     }
 }

@@ -3,12 +3,12 @@ import { View, StyleSheet, Text } from 'react-native'
 
 import COLORS from '../colors'
 
-const HygoSliderLabel = ({ oneMarkerLeftPosition, oneMarkerValue, oneMarkerPressed }) => {
+const HygoSliderLabel = ({ value }) => {
   return (
-    <View style={{ left: oneMarkerLeftPosition - 15, bottom: -20, width: 30 }}>
+    <View style={{ left: 9, top: -5, width: 30 }}>
       <View style={[styles.triangle]} />
       <View style={styles.circle}>
-        <Text style={styles.text}>{oneMarkerValue}</Text>
+        <Text style={styles.text}>{value}</Text>
       </View>
     </View>
   )
