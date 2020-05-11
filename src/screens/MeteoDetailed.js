@@ -22,7 +22,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [detailed, setDetailed] = useState({})
-  const [currentDay, setCurrentDay] = useState()
+  const [currentDay, setCurrentDay] = useState(null)
 
   const [lastLoad, setLastLoad] = useState(-1)
   const [counter, setCounter] = useState(0);
@@ -53,7 +53,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
   }, []);
 
   useEffect(() => {
-    if (counter - lastLoad >= 60000) {
+    if (counter - lastLoad >= 300000) {
       loadMeteoDetailed()
     }
   }, [counter])
@@ -68,7 +68,13 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
       product: null,
     })
     setDetailed(result)
-    setCurrentDay(result.days[0])
+
+    setCurrentDay(prev => {
+      if (prev === null) {
+        return result.days[0]
+      }
+      return prev
+    })
 
     meteoSynced((new Date()).getTime())
 
