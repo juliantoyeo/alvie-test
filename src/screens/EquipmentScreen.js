@@ -40,7 +40,7 @@ const EquipmentScreen = ({ navigation }) => {
     pressure: result.pressure,
     validated: true
   } : {
-    pressure: -50,
+    pressure: 1,
     validated: false
   })
 
