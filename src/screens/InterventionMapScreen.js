@@ -15,7 +15,7 @@ import { updateProductsInterv } from '../store/actions/intervActions'
 import moment from 'moment-timezone'
 
 const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
-  let { intervention, byParcelle, data } = navigation.getParam('result')
+  let { intervention, byParcelle, data, region } = navigation.getParam('result')
 
   const [field, setField] = useState(null)
 
@@ -139,7 +139,22 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
         <View style={styles.phytoDetail}>
           <View style={styles.phytoDetailRow}>
             <Image style={[styles.phytoDetailImage, { height: 28 }]} source={require('../../assets/phyto.png')} />
-            <TouchableWithoutFeedback onPress={() => navigation.replace("HygoProductPicker", { source: 'intervention', set: setProducts, initial: products })}>
+            <TouchableWithoutFeedback onPress={() => {
+              navigation.replace("HygoProductPicker", 
+                {  
+                  source: 'intervention', 
+                  set: setProducts, 
+                  initial: products,
+                  back: 'LoadingScreen',
+                  backParams: {
+                    next: 'InterventionMapScreen', 
+                    params: {
+                      id: intervention.id
+                    },
+                    action: getInterventionByID,
+                  }
+              }) 
+            }}>
               <View style={styles.picker}>
                 <Text style={styles.phytoDetailText}>{getPhytoText()}</Text>
                 <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
@@ -270,7 +285,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
         <View style={[styles.mapContainer, { top: field != null ? -20 : 0 }]}>
           { intervention.id && (
-            <HygoMap intervention={intervention} byParcelle={byParcelle} handleFieldSelection={handleFieldSelection} />
+            <HygoMap intervention={intervention} region={region} byParcelle={byParcelle} handleFieldSelection={handleFieldSelection} />
           )}
         </View>
       </ScrollView>
