@@ -77,7 +77,7 @@ export default {
     'saving_info': 'Ukládám Vaše informace...',
 
     'buses_family': 'Druh postřikovací trysky',
-    'no_buse': 'Druh trysky nevybrán',
+    'no_buse': 'Žádný typ trysky nevybrán',
 
     'buses_CLASSIC_STD': 'Štěrbinové standardní trysky',
     'buses_CLASSIC_LOW': 'Štěrbinové nízkotlakové trysky',

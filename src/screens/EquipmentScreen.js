@@ -123,7 +123,7 @@ const EquipmentScreen = ({ navigation }) => {
     })
 
     if (Platform.OS === 'android') {
-      l.unshift(<Picker.Item key={0} label={i18n.t('soils.none')} value={null} />)
+      l.unshift(<Picker.Item key={0} label={i18n.t('equipment.no_buse')} value={null} />)
     }
 
     return l
@@ -247,7 +247,7 @@ const EquipmentScreen = ({ navigation }) => {
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon name="arrow-down" />}
-                  placeholder={i18n.t('phyto.no_phyto')}
+                  placeholder={i18n.t('soils.none')}
                   itemTextStyle={{
                     flex: 1,
                     color: '#aaa',
