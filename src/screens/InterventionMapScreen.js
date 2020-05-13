@@ -19,6 +19,45 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
   const [field, setField] = useState(null)
 
+  const isRacinaire = () => {
+    if (intervention.products) {
+      return phytoProductList.filter(pp => intervention.products.includes(pp.id) && pp.isRacinaire).length > 0
+    } else if (intervention.phytoproduct) {
+      return intervention.phytoproduct && intervention.phytoproduct.indexOf('acinaire') > -1
+    }
+    return false
+  }
+
+  const getRFromProduct = useCallback(() => {
+    if (intervention.products) {
+      let p = []
+      for (let i = 0; i < intervention.products.length; i++) {
+        let productId = intervention.products[i]
+        switch(productId) {
+          case 1:
+          case 7:
+            p.push("r6")
+
+          case 11:
+            p.push("r3")
+
+          default:
+            p.push("r2")
+        }
+      }
+
+      if (p.includes("r6")) {
+        return "r6"
+      } else if (p.includes("r3")) {
+        return "r3"
+      } else {
+        return "r2"
+      }
+    }
+
+    return "r2"
+  }, [intervention.products])
+
   const getPhyto = () => {
     if (intervention.products) {
       return intervention.products
@@ -239,6 +278,20 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     </View>
                   </View>
                 )}
+                { (byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].t3 !== 'undefined') && (
+                  <View style={[styles.selectedElem, { marginTop: 20 }]}>
+                    <View style={styles.selectedTextContainer}>
+                      <Text style={styles.selectedText}>{i18n.t(`realtime.gel_${byParcelle[field.parcelleId].t3 <= -2 ? 'risky' : 'none'}`)}</Text>
+                    </View>
+                  </View>
+                )}
+                { isRacinaire() && byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].deltatemp !== 'undefined' && (
+                  <View style={[styles.selectedElem]}>
+                    <View style={styles.selectedTextContainer}>
+                      <Text style={styles.selectedText}>{i18n.t(`meteo_overlay.delta_temp`, { value: byParcelle[field.parcelleId].deltatemp })}</Text>
+                    </View>
+                  </View>
+                )}
               </View>
               <View style={[styles.selectedLine]}>
                 { byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].wind !== 'undefined' && (
@@ -259,7 +312,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                       <Image source={require('../../assets/ICN-Rain.png')} style={styles.selectedImage} />
                     </View>
                     <View style={styles.selectedTextContainer}>
-                      <Text style={styles.selectedText}>{i18n.t('intervention_map.rain', { value: `${Math.round(byParcelle[field.parcelleId].precipitation)} mm`})}</Text>
+                      <Text style={styles.selectedText}>{i18n.t(`meteo_overlay.precipitation_${getRFromProduct()}`, { value: Math.round(parseFloat(byParcelle[field.parcelleId][getRFromProduct()])) })}</Text>
                     </View>
                   </View>
                 )}
@@ -275,6 +328,23 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     </View>
                   </View>
                 )}
+                { !isRacinaire() && byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].deltatemp !== 'undefined' && (
+                  <View style={[styles.selectedElem, { marginTop: 32 }]}>
+                    <View style={styles.selectedTextContainer}>
+                      <Text style={styles.selectedText}>{i18n.t(`meteo_overlay.delta_temp`, { value: byParcelle[field.parcelleId].deltatemp })}</Text>
+                    </View>
+                  </View>
+                )}
+                { isRacinaire() && byParcelle[field.parcelleId] && typeof byParcelle[field.parcelleId].soilhumi !== 'undefined' && (
+                  <View style={[styles.selectedElem, { marginTop: 32, marginLeft: 20 }]}>
+                    <View style={styles.selectedImageContainer}>
+                      <Image source={require('../../assets/sprout.png')} style={styles.selectedImage} />
+                    </View>
+                    <View style={styles.selectedTextContainer}>
+                      <Text style={styles.selectedText}>{i18n.t(`realtime.soil_humi`, { value: byParcelle[field.parcelleId].soilhumi })}</Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </View>
             <View style={styles.carretContainer}>
@@ -285,7 +355,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
         <View style={[styles.mapContainer, { top: field != null ? -20 : 0 }]}>
           { intervention.id && (
-            <HygoMap intervention={intervention} region={region} byParcelle={byParcelle} handleFieldSelection={handleFieldSelection} />
+            <HygoMap intervention={intervention} byParcelle={byParcelle} handleFieldSelection={handleFieldSelection} />
           )}
         </View>
       </ScrollView>

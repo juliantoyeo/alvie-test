@@ -129,7 +129,7 @@ export default {
     'forbidden': 'Très mauvaises conditions',
     'min': 'min %{value}',
     'max': 'max %{value}',
-    'avg': 'avg %{value}',
+    'avg': 'Moyenne %{value}',
     'rain': 'Pluie : %{value}',
     'other_farm_work': 'Autres travaux agricoles',
   },

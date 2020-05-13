@@ -4,7 +4,7 @@ import  MapView, {Polygon} from 'react-native-maps';
 
 import COLORS from '../colors'
 
-const HygoMap = ({ intervention, byParcelle, handleFieldSelection, region }) => {
+const HygoMap = ({ intervention, byParcelle, handleFieldSelection }) => {
   const [mapregion, setRegion] = useState(null)
   const [selected, setSelected] = useState(null)
 
@@ -16,27 +16,12 @@ const HygoMap = ({ intervention, byParcelle, handleFieldSelection, region }) => 
   useEffect(() => {
     if (!intervention.id) { return } 
 
-    if (region.agri_id) {
-      let center = {
-        longitude: (region.lon_max - region.lon_min) / 2 + region.lon_min,
-        latitude: (region.lat_max - region.lat_min) / 2 + region.lat_min,
-      }
-  
-      let r = {
-        ...center,
-        longitudeDelta: Math.max(0.1502, Math.abs(region.lon_max - center.longitude)),
-        latitudeDelta: Math.max(0.1501, Math.abs(region.lat_max - center.latitude)),
-      }
-
-      setRegion(r)
-    } else {
-      setRegion({
-        latitude: intervention.avglatCentroid || intervention.fields[0].latCentroid,
-        longitude: intervention.avglonCentroid || intervention.fields[0].lonCentroid,
-        latitudeDelta: intervention.lat_delta || 0.0222,
-        longitudeDelta: intervention.lon_delta || 0.0121,
-      })
-    }
+    setRegion({
+      latitude: intervention.avglatCentroid || intervention.fields[0].latCentroid,
+      longitude: intervention.avglonCentroid || intervention.fields[0].lonCentroid,
+      latitudeDelta: intervention.lat_delta || 0.0222,
+      longitudeDelta: intervention.lon_delta || 0.0121,
+    })
   }, [intervention])
 
   const onRegionChange = () => {}
@@ -47,8 +32,7 @@ const HygoMap = ({ intervention, byParcelle, handleFieldSelection, region }) => 
         <MapView
           provider="google"
           mapType="hybrid"
-          region={mapregion}
-          onRegionChangeComplete={onRegionChange}
+          initialRegion={mapregion}
           style={styles.map}>
 
           { intervention.fields.map((field, idx) => {
