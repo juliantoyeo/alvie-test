@@ -219,6 +219,8 @@ export default {
     'header': 'Sélectionner une valeur',
   },
   'cultures': {
+    'Mix de grandes cultures': 'Mix de grandes cultures',
+    'Smíšené plodiny': 'Mix de grandes cultures',
     'Blé tendre d’hiver': 'Blé tendre (hiver)',
     'Blé tendre de printemps': 'Blé tendre (printemps)',
     'Maïs doux': 'Maïs doux',

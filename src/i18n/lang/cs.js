@@ -213,6 +213,8 @@ export default {
     'header': 'Vyberte jednu hodnotu',
   },
   'cultures': {
+    'Mix de grandes cultures': 'Smíšené plodiny',
+    'Smíšené plodiny': 'Smíšené plodiny',
     'Blé tendre d’hiver': 'Pšenice (ozimná)',
     'Blé tendre de printemps': 'Pšenice (jarní)',
     'Maïs doux': 'Kukuřice sladká',
