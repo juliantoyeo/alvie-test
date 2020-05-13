@@ -53,10 +53,10 @@ const EquipmentScreen = ({ navigation }) => {
   })
 
   const [family, setFamily] = useState(result ? {
-    validated: true,
+    validated: !!result.family,
     family: result.family
   } : {
-    family: null,
+    family: 0,
     validated: false
   })
 
@@ -272,7 +272,7 @@ const EquipmentScreen = ({ navigation }) => {
 
 
           </Content>
-          { speed.validated && pressure.validated && buses.validated && (
+          { speed.validated && pressure.validated && buses.validated && family.validated && (
             <View>
               <View style={{ height: 80 }} />
               <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
