@@ -77,7 +77,7 @@ export default {
     'saving_info': 'Ukládám Vaše informace...',
 
     'buses_family': 'Druh postřikovací trysky',
-    'no_buse': 'Druh trysky nevybrán',
+    'no_buse': 'Žádný typ trysky nevybrán',
 
     'buses_CLASSIC_STD': 'Štěrbinové standardní trysky',
     'buses_CLASSIC_LOW': 'Štěrbinové nízkotlakové trysky',
@@ -213,6 +213,8 @@ export default {
     'header': 'Vyberte jednu hodnotu',
   },
   'cultures': {
+    'Mix de grandes cultures': 'Smíšené plodiny',
+    'Smíšené plodiny': 'Smíšené plodiny',
     'Blé tendre d’hiver': 'Pšenice (ozimná)',
     'Blé tendre de printemps': 'Pšenice (jarní)',
     'Maïs doux': 'Kukuřice sladká',

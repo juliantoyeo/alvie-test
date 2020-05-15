@@ -16,6 +16,7 @@ import { updatePhytoProductSelected } from '../store/actions/pulveActions'
 
 const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSelected, phytoProductSelected }) => {
   let back = navigation.getParam('back')
+  let backParams = navigation.getParam('backParams')
 
   let source = navigation.getParam('source')
   let initial = navigation.getParam('initial')
@@ -54,7 +55,7 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => back ? navigation.navigate(back) : navigation.goBack()}>
+            <Button transparent onPress={() => back ? navigation.replace(back, backParams||{}) : navigation.goBack()}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>

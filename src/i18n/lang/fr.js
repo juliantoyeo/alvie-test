@@ -129,7 +129,7 @@ export default {
     'forbidden': 'Très mauvaises conditions',
     'min': 'min %{value}',
     'max': 'max %{value}',
-    'avg': 'avg %{value}',
+    'avg': 'Moyenne %{value}',
     'rain': 'Pluie : %{value}',
     'other_farm_work': 'Autres travaux agricoles',
   },
@@ -219,6 +219,8 @@ export default {
     'header': 'Sélectionner une valeur',
   },
   'cultures': {
+    'Mix de grandes cultures': 'Mix de grandes cultures',
+    'Smíšené plodiny': 'Mix de grandes cultures',
     'Blé tendre d’hiver': 'Blé tendre (hiver)',
     'Blé tendre de printemps': 'Blé tendre (printemps)',
     'Maïs doux': 'Maïs doux',

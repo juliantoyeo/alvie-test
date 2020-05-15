@@ -5,7 +5,7 @@ import  MapView, {Polygon} from 'react-native-maps';
 import COLORS from '../colors'
 
 const HygoMap = ({ intervention, byParcelle, handleFieldSelection }) => {
-  const [region, setRegion] = useState(null)
+  const [mapregion, setRegion] = useState(null)
   const [selected, setSelected] = useState(null)
 
   const polygons = useRef([]);
@@ -28,12 +28,11 @@ const HygoMap = ({ intervention, byParcelle, handleFieldSelection }) => {
 
   return (
     <View>
-      { region && (
+      { mapregion && (
         <MapView
           provider="google"
           mapType="hybrid"
-          region={region}
-          onRegionChangeComplete={onRegionChange}
+          initialRegion={mapregion}
           style={styles.map}>
 
           { intervention.fields.map((field, idx) => {

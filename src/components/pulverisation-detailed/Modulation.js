@@ -65,7 +65,7 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
                 { modulationChanged && modulationLoading && (
                   <Spinner style={styles.modulationSpinner} />
                 )}
-                { modulationChanged && (!modulationLoading || !modulationValue) && (
+                { (modulationChanged || !modulationValue) && !modulationLoading && (
                   <TouchableWithoutFeedback onPress={updateModulation}><Icon type="MaterialCommunityIcons" name="refresh" style={styles.modulationRefresh} /></TouchableWithoutFeedback>
                 )}
                 { !modulationChanged && (
