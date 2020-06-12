@@ -51,11 +51,6 @@
     "socket.io-client": "^2.3.0",
     "victory-native": "^34.1.0"
   },
-  "rnpm": {
-    "assets": [
-      "./assets/font/"
-    ]
-  },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0"
   },
