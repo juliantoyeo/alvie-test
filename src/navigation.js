@@ -25,6 +25,7 @@ import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
+import WaitActivationScreen from './screens/WaitActivationScreen'
 
 import HeaderText from './components/HeaderText'
 
@@ -33,6 +34,7 @@ import COLORS from './colors'
 const Navigator = createSwitchNavigator({
   mainFlow: createStackNavigator({
     BarCode: BarCodeScreen,
+    WaitActivation: WaitActivationScreen,
     main: createDrawerNavigator({
       Drawer: {
         screen: createBottomTabNavigator({
