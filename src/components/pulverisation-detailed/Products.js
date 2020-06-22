@@ -11,10 +11,7 @@ import {connect } from 'react-redux'
 
 const Products = ({ navigation, phytoProductSelected, phytoProductList}) => {
   const openPicker = (screen) => {
-    navigation.replace(screen, {
-      next: 'Pulverisation',
-      back: 'Pulverisation'
-    })
+    navigation.replace(screen)
   }
 
   return (

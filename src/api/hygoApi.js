@@ -4,7 +4,8 @@ import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent'
 
 export const hygoApi = axios.create({
-    baseURL: 'https://hygo-api.alvie.fr',
+    baseURL: 'http://192.168.1.32:3000', //'https://hygo-api.alvie.fr',
+    //port: 3000,
     timeout: 30000,
     headers: { 
         'User-Agent': getUserAgent()
@@ -93,7 +94,7 @@ export const checkToken = async (token) => {
 export const signInWithBarCode = async (barcode) => {
     try {
         const response =  await hygoApi.post('/app/auth/barcode', {barcode});
-
+        
         const { token, userName, familyName, deviceid, deviceType, hasEquipment } = response.data
         return {
             token, userName, familyName, deviceid, deviceType, hasEquipment,

@@ -113,7 +113,7 @@ class BarCodeScreen extends React.Component {
     return (
       <SafeAreaView style={{ flex: 1, display: 'flex' }}>
         { this.state.loading && (
-          <>
+          <React.Fragment>
           <StatusBar translucent backgroundColor="transparent" />
           <ImageBackground source={require('../../assets/blue_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
@@ -121,7 +121,7 @@ class BarCodeScreen extends React.Component {
               <LogoLoading duration={1000} color={"#fff"} />
             </View>
           </ImageBackground>
-          </>
+          </React.Fragment>
         )}
 
         { !this.state.loading && hasCameraPermission === false && (

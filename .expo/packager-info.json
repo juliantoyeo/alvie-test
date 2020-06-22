@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
+  "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://uq-dc2.morganitos.hygoclient.exp.direct",
   "packagerNgrokUrl": "https://packager.uq-dc2.morganitos.hygoclient.exp.direct",
-  "ngrokPid": 62397,
+  "ngrokPid": 8905,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 8893,
   "webpackServerPort": null
 }

@@ -11,10 +11,7 @@ import {connect } from 'react-redux'
 
 const Cultures = ({ navigation, cultures, culturesSelected }) => {
   const openPicker = (screen) => {
-    navigation.replace(screen, {
-      next: 'Pulverisation',
-      back: 'Pulverisation'
-    })
+    navigation.replace(screen)
   }
 
   return (
