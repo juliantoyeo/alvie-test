@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { updateAuthInfo } from '../store/actions/authActions';
 import { updatePhytoProductList } from '../store/actions/pulveActions'
 import { updateParcellesList, updateCulturesList } from '../store/actions/metaActions'
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures } from '../api/hygoApi';
+import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
 
@@ -78,22 +78,29 @@ class BarCodeScreen extends React.Component {
       userName, familyName, deviceid, deviceType
     })
 
-    let [ fields, cultures ] = await Promise.all([
-      getFields(),
-      getCultures(),
-    ])
-    this.props.updateParcellesList(fields)
-    this.props.updateCulturesList(cultures)
-
-    // TODO debug this
-    // await this.registerForPushNotificationsAsync(deviceid)
-
-    if (hasEquipment) {
-      this.props.navigation.replace('main');
-    } else {
-      this.props.navigation.replace('BarCodeValidationScreen')
+    const {result} = await checkSetup()
+    if (!result)
+      this.props.navigation.navigate('WaitActivation');
+      
+    else {
+      let [ fields, cultures ] = await Promise.all([
+        getFields(),
+        getCultures(),
+      ])
+      this.props.updateParcellesList(fields)
+      this.props.updateCulturesList(cultures)
+  
+      // TODO debug this
+      // await this.registerForPushNotificationsAsync(deviceid)
+  
+      if (hasEquipment) {
+        this.props.navigation.replace('main');
+      } else {
+        this.props.navigation.replace('BarCodeValidationScreen')
+      }
     }
   }
+    
 
   handleBarCodeScanned = async ({ type, data }) => {
     this.setState({ tokenLoading: true });

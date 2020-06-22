@@ -251,3 +251,14 @@ export const updateIntervention = async (products, interventionid) => {
         });
     }
 }
+
+// Check if the database is ready (parcels and meteo datas loaded => 24h)
+export const checkSetup = async () => {
+    try {
+        const response = await hygoApi.get('/app/checkSetup')
+        return (response.data);
+    } catch(error) {
+        console.log(error)
+        return ({})
+    }
+}
