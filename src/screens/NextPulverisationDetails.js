@@ -59,6 +59,11 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
   const [background, setBackground] = useState(COLORS.GREY)
   const [modulationChanged, setModulationChanged] = useState(true)
 
+  const openPicker = (screen) => {
+    setModulationChanged(true)
+    navigation.navigate(screen, {notifyUpdate: ()=>setModulationChanged(true)})
+  }
+
   const reloadCurrentMetrics = useCallback((selected) => {
     const minval = -99999, maxval = 99999
     let chd = {}, dir = []
@@ -150,9 +155,9 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
         </Header>
 
         <View style={styles.pulveContainer}>
-          <Cultures navigation={navigation} />
+          <Cultures navigation={navigation} onPress={() => openPicker("HygoCulturePicker")}/>
           <View style={{ height: 10 }}></View>
-          <Products navigation={navigation} />
+          <Products navigation={navigation} onPress={() => openPicker("HygoProductPicker")}/>
         </View>
 
         <View style={styles.details}>

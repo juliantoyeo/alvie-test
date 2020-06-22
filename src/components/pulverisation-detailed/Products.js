@@ -9,13 +9,10 @@ import COLORS from '../../colors'
 
 import {connect } from 'react-redux'
 
-const Products = ({ navigation, phytoProductSelected, phytoProductList}) => {
-  const openPicker = (screen) => {
-    navigation.replace(screen)
-  }
+const Products = ({ navigation, phytoProductSelected, phytoProductList, onPress}) => {
 
   return (
-    <TouchableWithoutFeedback onPress={() => openPicker("HygoProductPicker")}>
+    <TouchableWithoutFeedback onPress={() => onPress("HygoProductPicker")}>
       <View style={styles.picker}>
         { phytoProductSelected.length === 0 && (
           <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>

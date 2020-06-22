@@ -15,9 +15,7 @@ import { connect } from 'react-redux'
 import { updatePhytoProductSelected } from '../store/actions/pulveActions'
 
 const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSelected, phytoProductSelected }) => {
-  let back = navigation.getParam('back')
-  let backParams = navigation.getParam('backParams')
-
+  let notifyUpdate = navigation.getParam('notifyUpdate')
   let source = navigation.getParam('source')
   let initial = navigation.getParam('initial')
   let set = navigation.getParam('set')
@@ -46,6 +44,7 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
       }
       updateUIPhytoProduct(p)
       updatePhytoProductSelected(p)
+      if (notifyUpdate) notifyUpdate();
     }
   }
 
@@ -55,7 +54,8 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => back ? navigation.replace(back, backParams||{}) : navigation.goBack()}>
+            {/*<Button transparent onPress={() => back ? navigation.replace(back, backParams||{}) : navigation.goBack()}>*/}
+            <Button transparent onPress={() => navigation.goBack()}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>

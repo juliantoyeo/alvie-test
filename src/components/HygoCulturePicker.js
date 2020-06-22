@@ -15,7 +15,6 @@ import { updateCulturesSelected } from '../store/actions/pulveActions'
 import { updateUICultures } from '../api/hygoApi'
 
 const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCulturesSelected }) => {
-  let back = navigation.getParam('back')
 
   return (
     <SafeAreaView style={[styles.statusbar]} forceInset={{top:'always'}}>
@@ -23,7 +22,7 @@ const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCultu
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={() => back ? navigation.navigate(back) : navigation.goBack()}>
+            <Button transparent onPress={() => navigation.goBack()}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>

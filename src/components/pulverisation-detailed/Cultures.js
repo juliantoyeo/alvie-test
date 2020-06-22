@@ -9,13 +9,10 @@ import COLORS from '../../colors'
 
 import {connect } from 'react-redux'
 
-const Cultures = ({ navigation, cultures, culturesSelected }) => {
-  const openPicker = (screen) => {
-    navigation.replace(screen)
-  }
+const Cultures = ({ navigation, cultures, culturesSelected, onPress }) => {
 
   return (
-    <TouchableWithoutFeedback onPress={() => openPicker("HygoCulturePicker")}>
+    <TouchableWithoutFeedback onPress={() => onPress("HygoCulturePicker")}>
       <View style={styles.picker}>
       { culturesSelected.length === 0 && (
         <Text style={styles.pickerText}>{i18n.t('pulverisation.culture_type')}</Text>

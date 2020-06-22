@@ -16,17 +16,6 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
   const [modulationLoading, setModulationLoading] = useState(false)
   const [cSelected, setCSelected] = useState({...selected})
 
-  useEffect(() => {
-    updateModulation()
-  }, [])
-
-  useEffect(() => {
-    if (selected.min !== cSelected.min || selected.max !== cSelected.max) {
-      setModulationChanged(true)
-    }
-    setCSelected(selected)
-  }, [selected])
-
   const updateModulation = async () => {
     setModulationLoading(true)
 
@@ -47,6 +36,17 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
     setModulationChanged(false)
     setModulationLoading(false)
   }
+
+  useEffect(() => {
+    updateModulation()
+  }, [])
+
+  useEffect(() => {
+    if (selected.min !== cSelected.min || selected.max !== cSelected.max) {
+      setModulationChanged(true)
+    }
+    setCSelected(selected)
+  }, [selected])
 
   const getPhytoName = (pid) => {
     return i18n.t(`products.${phytoProductList.filter(p => p.id === pid)[0].name}`)
