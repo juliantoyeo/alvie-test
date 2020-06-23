@@ -5,7 +5,8 @@ import { Text } from 'react-native-elements';
 import LogoLoading from '../components/LogoLoading';
 import i18n from 'i18n-js'
 
-const WaitActivationScreen = () => {
+const WaitActivationScreen = ({navigation}) => {
+    const error = navigation.getParam('error')
     return (
       <SafeAreaView style={{ flex: 1, display: 'flex' }}>
        
@@ -15,8 +16,8 @@ const WaitActivationScreen = () => {
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
             <View style={{ display: 'flex', alignItems: 'center' }}>
                 <LogoLoading duration={1000} color={"#fff"} />
-                <Text style= {styles.subtitle}>{i18n.t('wait_screen.subtitle')}</Text>
-                <Text style= {styles.title}>{i18n.t('wait_screen.title')}</Text>
+                <Text style= {styles.subtitle}>{i18n.t(`wait_screen.${error}.msg1`)}</Text>
+                <Text style= {styles.title}>{i18n.t(`wait_screen.${error}.msg2`)}</Text>
             </View>
           </ImageBackground>
           </React.Fragment>

@@ -65,8 +65,14 @@ export default {
     'qr_error': 'QR code non reconnu',
   },
   'wait_screen': {
-    'subtitle': 'Nous semons les données dans nos serveurs.',
-    'title': 'La récolte sera bientôt prête !'
+    'wait': {
+      'msg1': 'Nous semons les données dans nos serveurs.',
+      'msg2': 'La récolte sera bientôt prête !'
+    },
+    'no_parcels': {
+      'msg1': 'Nous n\'avons pas reçu vos données parcellaires.',
+      'msg2' : 'Merci de nous contacter.'
+    },
   },
   'equipment': {
     'header': 'Mes équipements agricoles',

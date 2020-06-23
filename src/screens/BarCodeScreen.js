@@ -78,9 +78,9 @@ class BarCodeScreen extends React.Component {
       userName, familyName, deviceid, deviceType
     })
 
-    const {result, diff} = await checkSetup()
+    const {result, error} = await checkSetup()
     if (!result)
-      this.props.navigation.navigate('WaitActivation');
+      this.props.navigation.navigate('WaitActivation', {error});
 
     else {
       let [ fields, cultures ] = await Promise.all([
