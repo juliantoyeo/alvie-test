@@ -16,7 +16,7 @@ import moment from 'moment-timezone'
 
 const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
   let { intervention, byParcelle, data, region } = navigation.getParam('result')
-
+  console.log(data)
   const [field, setField] = useState(null)
 
   const isRacinaire = () => {
@@ -192,7 +192,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                     },
                     action: getInterventionByID,
                   },
-                  backScreen: 'InterventionMapScreen'
+                  backScreen: 'Intervention'
               }) 
             }}>
               <View style={styles.picker}>
