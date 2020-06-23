@@ -64,6 +64,10 @@ export default {
     'retry_camera': 'Zkusit znovu',
     'qr_error': 'QR kód nebyl rozpoznán',
   },
+  'wait_screen': {
+    'subtitle': 'Nous semons les données dans nos serveurs.',
+    'title': 'La récolte sera bientôt prête !'
+  },
   'equipment': {
     'header': 'Moje vybavení',
     'title_notice': 'Vaše zemědělské vybavení',

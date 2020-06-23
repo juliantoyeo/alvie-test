@@ -3,7 +3,7 @@ import { StyleSheet, StatusBar, ImageBackground, View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Text } from 'react-native-elements';
 import LogoLoading from '../components/LogoLoading';
-
+import i18n from 'i18n-js'
 
 const WaitActivationScreen = () => {
     return (
@@ -15,8 +15,8 @@ const WaitActivationScreen = () => {
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
             <View style={{ display: 'flex', alignItems: 'center' }}>
                 <LogoLoading duration={1000} color={"#fff"} />
-                <Text style= {styles.text1}>Nous semons les données dans nos serveurs.</Text>
-                <Text style= {styles.text2}>La récolte sera bientôt prête !</Text>
+                <Text style= {styles.subtitle}>{i18n.t('wait_screen.subtitle')}</Text>
+                <Text style= {styles.title}>{i18n.t('wait_screen.title')}</Text>
             </View>
           </ImageBackground>
           </React.Fragment>
@@ -25,14 +25,14 @@ const WaitActivationScreen = () => {
     )
 }
 const styles = StyleSheet.create({
-    text1: { 
+    subtitle: { 
         paddingTop: 30,
         fontFamily: 'nunito-bold',
         textAlign: 'center',
         fontSize: 20,
         color: '#fff'
     },
-    text2: { 
+    title: { 
         paddingTop: 10,
         fontFamily: 'nunito-bold',
         fontSize: 26,

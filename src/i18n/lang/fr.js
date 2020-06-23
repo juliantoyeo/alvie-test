@@ -64,6 +64,10 @@ export default {
     'retry_camera': 'Réessayer',
     'qr_error': 'QR code non reconnu',
   },
+  'wait_screen': {
+    'subtitle': 'Nous semons les données dans nos serveurs.',
+    'title': 'La récolte sera bientôt prête !'
+  },
   'equipment': {
     'header': 'Mes équipements agricoles',
     'title_notice': 'Vos équipements agricoles',
