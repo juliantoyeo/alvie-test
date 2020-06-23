@@ -44,7 +44,9 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
       }
       updateUIPhytoProduct(p)
       updatePhytoProductSelected(p)
-      if (notifyUpdate) notifyUpdate();
+      if (notifyUpdate) {
+        notifyUpdate()
+      }
     }
   }
 

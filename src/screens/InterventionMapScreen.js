@@ -179,7 +179,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
           <View style={styles.phytoDetailRow}>
             <Image style={[styles.phytoDetailImage, { height: 28 }]} source={require('../../assets/phyto.png')} />
             <TouchableWithoutFeedback onPress={() => {
-              navigation.replace("HygoProductPicker", 
+              navigation.navigate("HygoProductPicker", 
                 {  
                   source: 'intervention', 
                   set: setProducts, 
