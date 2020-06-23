@@ -113,7 +113,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 <Text style={styles.lastHourText}>{history.length === 0 ? i18n.t('realtime.no_data_3_hours') : i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
 
-              <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker")}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker", {backScreen: 'RealTime'})}>
                 <View style={styles.picker}>
                   { phytoProductSelected.length === 0 && (
                     <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>

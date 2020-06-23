@@ -47,7 +47,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   const [currentParams, setCurrentParams] = useState("")
 
   const openPicker = (screen) => {
-    navigation.navigate(screen)
+    navigation.navigate(screen, {backScreen: 'Pulverisation'})
   }
 
   useEffect(() => {

@@ -191,7 +191,8 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
                       id: intervention.id
                     },
                     action: getInterventionByID,
-                  }
+                  },
+                  backScreen: 'InterventionMapScreen'
               }) 
             }}>
               <View style={styles.picker}>

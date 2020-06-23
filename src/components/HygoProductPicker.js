@@ -19,6 +19,7 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
   let source = navigation.getParam('source')
   let initial = navigation.getParam('initial')
   let set = navigation.getParam('set')
+  const backScreen = navigation.getParam('backScreen')
 
   const [selected, setSelected] = useState(source === 'intervention' ? initial : phytoProductSelected)
 
@@ -57,7 +58,7 @@ const HygoProductPicker = ({ navigation, phytoProductList, updatePhytoProductSel
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             {/*<Button transparent onPress={() => back ? navigation.replace(back, backParams||{}) : navigation.goBack()}>*/}
-            <Button transparent onPress={() => navigation.goBack()}>
+            <Button transparent onPress={() => navigation.navigate(backScreen)}>
               <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
             </Button>
           </Left>

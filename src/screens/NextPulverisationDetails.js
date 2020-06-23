@@ -61,7 +61,10 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
 
   const openPicker = (screen) => {
     setModulationChanged(true)
-    navigation.navigate(screen, {notifyUpdate: ()=>setModulationChanged(true)})
+    navigation.navigate(screen, {
+      notifyUpdate: ()=>setModulationChanged(true),
+      backScreen: 'NextPulverisationDetails'
+    })
   }
 
   const reloadCurrentMetrics = useCallback((selected) => {
