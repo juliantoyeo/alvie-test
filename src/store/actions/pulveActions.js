@@ -6,6 +6,17 @@ export const updatePhyto = (produitPhytoClicked) => {
     });
 }
 
+export const updatePhyto = ({
+    phytoProductSelected, 
+    culturesSelected
+  }) => {
+    return ({
+        type: 'UPDATE_PULV_INFO',
+        phytoProductSelected, 
+        culturesSelected
+    });
+}
+
 export const updatePhytoProductList = (l) => {
     return {
         type: 'LIST_PHYTO',
