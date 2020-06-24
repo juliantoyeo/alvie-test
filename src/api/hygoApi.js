@@ -254,7 +254,7 @@ export const updateIntervention = async (products, interventionid) => {
 
 export const deleteIntervention = async (interventionid) => {
     try {
-        const response = await hygoApi.post('/app/interventions/delete', {interventionid });
+        const response = await hygoApi.post('/app/interventions/delete', {id: interventionid});
         return (response.data);
     } catch(error) {
         return ({
