@@ -154,6 +154,10 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
     return output
   }
 
+  const deleteIntervention = async () => {
+    
+  }
+
   if (!intervention.avgtemp) {
     return (<View></View>)
   }
@@ -171,7 +175,11 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
           <Body style={styles.headerBody}>
             <Title style={styles.headerTitle}>{i18n.t('intervention_map.header', { date: getDay()})}</Title>
           </Body>
-          <Right style={{ flex: 1 }}></Right>
+          <Right style={{ flex: 1 }}>
+            <Button transparent onPress={() => deleteIntervention()}>
+              <Icon name='trash' style={{ color: '#fff' }} />
+            </Button>
+          </Right>
         </Header>
 
         <View style={styles.phytoDetail}>
