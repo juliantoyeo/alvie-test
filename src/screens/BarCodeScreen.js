@@ -7,7 +7,7 @@ import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
 import { updateAuthInfo } from '../store/actions/authActions';
-import { updatePhytoProductList } from '../store/actions/pulveActions'
+import { updatePhytoProductList, updatePulvInfo } from '../store/actions/pulveActions'
 import { updateParcellesList, updateCulturesList } from '../store/actions/metaActions'
 import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
 import { Notifications } from 'expo';
@@ -72,16 +72,19 @@ class BarCodeScreen extends React.Component {
 
   gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
     await AsyncStorage.setItem('token', token);
-    
+    const phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
+    const culturesSelected = await AsyncStorage.getItem('culturesSelected');
     await this.props.updateAuthInfo({
       token,
       userName, familyName, deviceid, deviceType
     })
-
+    await this.props.updatePulvInfo({
+      phytoProductSelected, 
+      culturesSelected
+    })
     const {result, error} = await checkSetup()
     if (!result)
       this.props.navigation.navigate('WaitActivation', {error});
-
     else {
       let [ fields, cultures ] = await Promise.all([
         getFields(),
@@ -246,6 +249,7 @@ BarCodeScreen.navigationOptions = () => {
 
 const mapDispatchToProps = (dispatch, props) => ({
   updateAuthInfo: (params) => dispatch(updateAuthInfo(params)),
+  updatePulvInfo: (params) => dispatch(updatePulvInfo(params)),
   checkToken: (token) => dispatch(checkToken(token)),
   updatePhytoProductList: (l) => dispatch(updatePhytoProductList(l)),
   updateParcellesList: (l) => dispatch(updateParcellesList(l)),
