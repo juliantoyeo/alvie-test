@@ -6,7 +6,7 @@ export const updatePhyto = (produitPhytoClicked) => {
     });
 }
 
-export const updatePhyto = ({
+export const updatePulvInfo = ({
     phytoProductSelected, 
     culturesSelected
   }) => {

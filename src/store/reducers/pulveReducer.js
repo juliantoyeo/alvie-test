@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native';
 const initialState = {
     produitPhytoClicked: undefined,
     newSession: undefined,
@@ -25,7 +26,8 @@ export default pulveReducer =  (state = initialState, action) => {
             return nextState || state
 
         case 'UPDATE_SELECTED_PHYTO':
-            await AsyncStorage.setItem('phytoProductSelected', action.selected);
+            console.log(action.selected)
+            AsyncStorage.setItem('phytoProductSelected', JSON.stringify(action.selected));
             nextState = {
                 ...state,
                 phytoProductSelected: action.selected
@@ -33,7 +35,8 @@ export default pulveReducer =  (state = initialState, action) => {
             return nextState || state
 
         case 'UPDATE_SELECTED_CULTURES':
-            await AsyncStorage.setItem('culturesSelected', action.selected);
+            console.log(action.selected)
+            AsyncStorage.setItem('culturesSelected', JSON.stringify(action.selected));
             nextState = {
                 ...state,
                 culturesSelected: action.selected
@@ -41,6 +44,7 @@ export default pulveReducer =  (state = initialState, action) => {
             return nextState || state
 
         case 'UPDATE_PULV_INFO':
+            console.log("pulv info => ", action)
             nextState = {
                 ...state,
                 phytoProductSelected: action.phytoProductSelected,

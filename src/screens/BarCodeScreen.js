@@ -72,16 +72,20 @@ class BarCodeScreen extends React.Component {
 
   gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
     await AsyncStorage.setItem('token', token);
-    const phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
-    const culturesSelected = await AsyncStorage.getItem('culturesSelected');
+    let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
+    let culturesSelected = await AsyncStorage.getItem('culturesSelected');
     await this.props.updateAuthInfo({
       token,
       userName, familyName, deviceid, deviceType
     })
+    phytoProductSelected = phytoProductSelected == null ? [] : JSON.parse(phytoProductSelected)
+    culturesSelected = culturesSelected == null ? [] : JSON.parse(culturesSelected)
+    
     await this.props.updatePulvInfo({
       phytoProductSelected, 
       culturesSelected
     })
+    
     const {result, error} = await checkSetup()
     if (!result)
       this.props.navigation.navigate('WaitActivation', {error});
