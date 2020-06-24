@@ -25,6 +25,7 @@ export default pulveReducer =  (state = initialState, action) => {
             return nextState || state
 
         case 'UPDATE_SELECTED_PHYTO':
+            await AsyncStorage.setItem('phytoProductSelected', action.selected);
             nextState = {
                 ...state,
                 phytoProductSelected: action.selected
@@ -32,11 +33,13 @@ export default pulveReducer =  (state = initialState, action) => {
             return nextState || state
 
         case 'UPDATE_SELECTED_CULTURES':
+            await AsyncStorage.setItem('culturesSelected', action.selected);
             nextState = {
                 ...state,
                 culturesSelected: action.selected
             }
             return nextState || state
+
         case 'UPDATE_PULV_INFO':
             nextState = {
                 ...state,
