@@ -37,7 +37,13 @@ export default pulveReducer =  (state = initialState, action) => {
                 culturesSelected: action.selected
             }
             return nextState || state
-
+        case 'UPDATE_PULV_INFO':
+            nextState = {
+                ...state,
+                phytoProductSelected: action.phytoProductSelected,
+                culturesSelected: action.culturesSelected
+            }
+            return nextState || state
         default:
             return state
     }
