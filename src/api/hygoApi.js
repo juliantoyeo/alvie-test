@@ -252,6 +252,17 @@ export const updateIntervention = async (products, interventionid) => {
     }
 }
 
+export const deleteIntervention = async (interventionid) => {
+    try {
+        const response = await hygoApi.post('/app/interventions/delete', {interventionid });
+        return (response.data);
+    } catch(error) {
+        return ({
+
+        });
+    }
+} 
+
 // Check if the database is ready (parcels and meteo datas loaded => 24h)
 export const checkSetup = async () => {
     try {

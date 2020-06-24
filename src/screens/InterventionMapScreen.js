@@ -8,7 +8,7 @@ import COLORS from '../colors'
 import i18n from 'i18n-js'
 
 import HygoMap from '../components/HygoMap'
-import { updateIntervention, getInterventionByID } from '../api/hygoApi';
+import { updateIntervention, getInterventionByID, deleteIntervention } from '../api/hygoApi';
 
 import { updateProductsInterv } from '../store/actions/intervActions'
 
@@ -154,8 +154,9 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
     return output
   }
 
-  const deleteIntervention = async () => {
-    
+  const onDelete = async () => {
+      const {result} = await deleteIntervention();
+      (result == 'deleted') && navigation.goBack()
   }
 
   if (!intervention.avgtemp) {
@@ -176,7 +177,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
             <Title style={styles.headerTitle}>{i18n.t('intervention_map.header', { date: getDay()})}</Title>
           </Body>
           <Right style={{ flex: 1 }}>
-            <Button transparent onPress={() => deleteIntervention()}>
+            <Button transparent onPress={onDelete}>
               <Icon name='trash' style={{ color: '#fff' }} />
             </Button>
           </Right>
