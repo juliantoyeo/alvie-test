@@ -30,6 +30,7 @@ export default {
     'sunday': 'dimanche',
   },
   'soils': {
+    'SOIL_TEST': 'Soil Test',
     'SABLE': 'Sable',
     'SABLE_TERREAU': 'Sable / Limon',
     'TERREAU': 'Limon',

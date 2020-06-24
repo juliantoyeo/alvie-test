@@ -88,6 +88,7 @@ const EquipmentScreen = ({ navigation }) => {
 
   const buildList = () => {
     let soils = [
+      "SOIL_TEST"
       "SABLE",
       "SABLE_TERREAU",
       "TERREAU",
