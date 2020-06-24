@@ -19,6 +19,10 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
 
   useEffect(() => {
     loadInterventions()
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      loadInterventions()
+    });
+    return (() => unsubscribe())
   }, [])
 
   const loadInterventions = async () => {

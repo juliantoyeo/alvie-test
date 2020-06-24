@@ -156,7 +156,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
 
   const onDelete = async () => {
       const res = await deleteIntervention(intervention.id);
-      (res == 'OK') && navigation.goBack()
+      (res == 'OK') && navigation.navigate("Intervention")
   }
 
   if (!intervention.avgtemp) {
