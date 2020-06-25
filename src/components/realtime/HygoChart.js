@@ -5,10 +5,8 @@ import { Defs, LinearGradient, Stop } from "react-native-svg";
 import { VictoryArea, VictoryChart, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel } from "victory-native";
 
 const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
-  console.log("========> ", data);
   const getDomain = () => {
     let min = Math.min(...data.map(d => d.y)), max = Math.max(...data.map(d => d.y))
-    console.log("minmmax => ", min, max)
     return (min == max) ? { 
       y: [
         min - 1,
