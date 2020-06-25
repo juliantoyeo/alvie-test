@@ -126,6 +126,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
               </TouchableWithoutFeedback>
               <View style={styles.gaugeContainer}>
                 <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
+                <HygoGauge value={last && typeof last.dewpoint !== 'undefined' ? Math.round(last.dewpoint, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
                 <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={0} max={100} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
                 <HygoGauge value={currentMeteo && typeof currentMeteo.windspeed !== 'undefined' ? Math.round(currentMeteo.windspeed) : null} min={0} max={50} color={color} img={require('../../assets/ICN-Wind.png')} unit=" km/h" />
               </View>
