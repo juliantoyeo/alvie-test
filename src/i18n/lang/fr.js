@@ -167,6 +167,7 @@ export default {
     'soil_humi': 'Humidité du sol : %{value}%',
     'gel_risky': 'Risque de gel',
     'gel_none': 'Pas de gel',
+    'dewpoint': 'Point de rosée'
   },
   'fields': {
     'parcelles': 'Parcelles totales : %{value}',

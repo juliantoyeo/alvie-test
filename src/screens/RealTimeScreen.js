@@ -126,7 +126,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
               </TouchableWithoutFeedback>
               <View style={styles.gaugeContainer}>
                 <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
-                <HygoGauge value={last && typeof last.dewpoint !== 'undefined' ? Math.round(last.dewpoint, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
                 <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={0} max={100} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
                 <HygoGauge value={currentMeteo && typeof currentMeteo.windspeed !== 'undefined' ? Math.round(currentMeteo.windspeed) : null} min={0} max={50} color={color} img={require('../../assets/ICN-Wind.png')} unit=" km/h" />
               </View>
@@ -142,7 +141,11 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                   return { x: new Date(h.timestamp), y: h.temp }
                 })} mainColor={color} secondaryColor={secondaryColor} />
               )}
-
+              {last && typeof last.dewpoint !== 'undefined' &&
+                <View style={styles.dewpoint}>
+                  <Text style={styles.dewpointText}>{i18n.t('realtime.dewpoint') + ' : ' + Math.round(last.dewpoint, 1).toString() + ' °C'}</Text>
+                </View>
+              }
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pulverisation')}>
                   <Text style={styles.buttonText}>{history.length > 0 ? i18n.t('realtime.next_cuve') : i18n.t('realtime.goto_cuve')}</Text>
@@ -252,7 +255,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'nunito-heavy',
     textTransform: 'uppercase'
-  }
+  },
+  dewpoint: {
+    paddingLeft: 20,
+    paddingTop: 10,
+  },
+  dewpointText: {
+    flex: 1,
+    color: COLORS.DARK_BLUE,
+    fontSize: 16,
+    fontFamily: 'nunito-bold',
+  },
 })
 
 const mapStateToProps = (state) => ({
