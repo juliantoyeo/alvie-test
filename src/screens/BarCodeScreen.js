@@ -29,9 +29,9 @@ class BarCodeScreen extends React.Component {
       scanned: false,
       loading: true,
       tokenLoading: false,
+      qrError: null
     };
   }
-  
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
@@ -65,7 +65,7 @@ class BarCodeScreen extends React.Component {
     if(!errorMessage) {
       await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment)
     } else {
-      this.setState({ loading: false })
+      this.setState({ loading: false, qrError: errorMessage})
       this.getPermissionsAsync();
     }
   }
@@ -116,8 +116,10 @@ class BarCodeScreen extends React.Component {
     if(!errorMessage && token) {
       await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType, hasEquipment)
     } else {
+      this.setState({ qrError: errorMessage})
       this.setState({ tokenLoading: false });
       this.setState({ scanned: true });
+
     }
   };
 
@@ -202,7 +204,7 @@ class BarCodeScreen extends React.Component {
                       textAlign: 'center',
                       fontSize: 24,
                       fontFamily: 'nunito-bold'
-                    }}>{i18n.t('bar_code.qr_error')}</Text>
+                    }}>{i18n.t(`bar_code.qr_error.${this.state.qrError == 'SIGNIN_ERROR' ? 'signin' : 'network' }`)}</Text>
                   )}
 
                   { tokenLoading && (

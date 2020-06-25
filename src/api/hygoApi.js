@@ -102,9 +102,16 @@ export const signInWithBarCode = async (barcode) => {
         };
     } catch(err) {
         console.log(err);
-        return {
-            errorMessage: 'SIGNIN_ERROR'
-        };
+        if (err.message.trim().match(/^Network Error/)) {
+            return {
+                errorMessage: 'NETWORK_ERROR'
+            }
+        } else {
+            return {
+                errorMessage: 'SIGNIN_ERROR'
+            };
+        }
+        
     }
 }
 

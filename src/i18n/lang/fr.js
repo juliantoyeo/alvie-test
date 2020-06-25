@@ -63,7 +63,10 @@ export default {
     'retry_barcode': 'Rescanner le QR code',
     'camera_description': 'Nous avons besoin d\'avoir accès à l\'appareil photo du téléphone pour scanner le capteur',
     'retry_camera': 'Réessayer',
-    'qr_error': 'QR code non reconnu',
+    'qr_error': {
+      'signin': 'QR code non reconnu',
+      'network': 'Erreur de réseau'
+    }
   },
   'wait_screen': {
     'wait': {

@@ -62,7 +62,10 @@ export default {
     'retry_barcode': 'Oskenovat QR kód znovu',
     'camera_description': 'Pro oskenování QR kódu na senzoru HYGO potřebujeme přístup k fotoaparátu Vašeho mobilního telefonu ',
     'retry_camera': 'Zkusit znovu',
-    'qr_error': 'QR kód nebyl rozpoznán',
+    'qr_error': {
+      'signin': 'QR kód nebyl rozpoznán',
+      'network': 'Erreur de réseau'
+    }
   },
   'wait_screen': {
     'wait': {
