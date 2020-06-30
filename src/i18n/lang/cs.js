@@ -30,6 +30,7 @@ export default {
     'sunday': 'neděle',
   },
   'soils': {
+    'SOIL_TEST': 'Soil Test',
     'SABLE': 'Pískovitá',
     'SABLE_TERREAU': 'Pískovitá hlína',
     'TERREAU': 'Hlína',
