@@ -64,17 +64,17 @@ export default {
     'retry_camera': 'Zkusit znovu',
     'qr_error': {
       'signin': 'QR kód nebyl rozpoznán',
-      'network': 'Erreur de réseau'
+      'network': 'Chyba datové sítě'
     }
   },
   'wait_screen': {
     'wait': {
-      'msg1': 'Nous semons les données dans nos serveurs.',
-      'msg2': 'La récolte sera bientôt prête !'
+      'msg1': 'Zasíváme data na našich serverových polích.',
+      'msg2': 'Úroda bude brzy hotová !'
     },
     'no_parcels': {
-      'msg1': 'Nous n\'avons pas reçu vos données parcellaires.',
-      'msg2' : 'Merci de nous contacter'
+      'msg1': 'Zatím jsme neobdrželi data o Vašich polích.',
+      'msg2' : 'Prosím, kontaktujte nás'
     },
   },
   'equipment': {
@@ -163,7 +163,7 @@ export default {
     'status_conditions_CORRECT': 'Dobré počasí pro postřik',
     'status_conditions_BAD': 'Špatné počasí pro postřik',
     'status_conditions_FORBIDDEN': 'Velmi špatné počasí pro postřik',
-    'dewpoint': 'Point de rosée'
+    'dewpoint': 'Rosný bod'
   },
   'fields': {
     'parcelles': 'Celková plocha polí : %{value}',
