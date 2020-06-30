@@ -8,7 +8,7 @@ const HygoGauge = ({ value, min, max, color, img, unit }) => {
   return (
     <View style={styles.gaugeElement}>
       <AnimatedCircularProgress
-        size={80}
+        size={90}
         width={8}
         fill={value !== null ? (value - min)/parseFloat(max - min) * 100 : 0}
         rotation={0}

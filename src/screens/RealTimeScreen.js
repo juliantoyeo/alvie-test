@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     fontFamily: 'nunito-regular'
   },
   gaugeContainer: {
-    padding: 10,
+    padding: 25,
     display: 'flex',
     flexDirection: 'row',
     paddingTop: 40,
