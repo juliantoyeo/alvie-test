@@ -1,23 +1,40 @@
 import * as React from 'react';
-import { StyleSheet, StatusBar, ImageBackground, View } from 'react-native';
+import { StyleSheet, StatusBar, ImageBackground, View, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import { Text } from 'react-native-elements';
+import { Text, Button, Icon } from 'native-base';
 import LogoLoading from '../components/LogoLoading';
 import i18n from 'i18n-js'
+import { deleteToken } from '../store/actions/authActions'
+
 
 const WaitActivationScreen = ({navigation}) => {
     const error = navigation.getParam('error')
+    const logout = async () => {
+        await AsyncStorage.removeItem('token');
+    
+        deleteToken();
+        
+        navigation.navigate('BarCode');
+      }
+    
     return (
       <SafeAreaView style={{ flex: 1, display: 'flex' }}>
-       
+        
           <React.Fragment>
           <StatusBar translucent backgroundColor="transparent" />
           <ImageBackground source={require('../../assets/blue_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
+
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
+            <View style={[StyleSheet.absoluteFill]}>
+            <Button transparent onPress={() => logout()} style ={{paddingTop:50}}>
+                    <Icon name='close' style={{ color: '#fff' }} />
+            </Button>
+            </View>
             <View style={{ display: 'flex', alignItems: 'center' }}>
                 <LogoLoading duration={1000} color={"#fff"} />
                 <Text style= {styles.subtitle}>{i18n.t(`wait_screen.${error}.msg1`)}</Text>
                 <Text style= {styles.title}>{i18n.t(`wait_screen.${error}.msg2`)}</Text>
+                
             </View>
           </ImageBackground>
           </React.Fragment>
