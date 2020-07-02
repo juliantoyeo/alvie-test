@@ -23,7 +23,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "4",
+      "buildNumber": "120",
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "infoPlist": {
@@ -52,7 +52,7 @@
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 17,
+      "versionCode": 120,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
