@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, ScrollView, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
@@ -14,6 +14,9 @@ import HygoPastille from '../components/HygoPastille'
 import HygoSlider from '../components/HygoSlider'
 
 import { storeEquipmentInformation } from '../api/hygoApi'
+
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {equipmentScreen: ampEvent} = AMPLITUDE_EVENTS
 
 const EquipmentScreen = ({ navigation }) => {
   let result = navigation.getParam('result')
@@ -59,6 +62,13 @@ const EquipmentScreen = ({ navigation }) => {
     family: 0,
     validated: false
   })
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+  }, [])
 
   const updateBuses = (val) => {
     setBuses(prev => {
