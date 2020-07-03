@@ -18,21 +18,20 @@ const MeteoScreen = ({ navigation }) => {
   const tabs = ["meteoBriefScreen", "meteoDetailedScreen", "meteoRadarScreen"]
   const switchTab = (i) => {
     setCurrentTab(i);
-    console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[i]].render)
-    Amplitude.logEventWithProperties(AMPLITUDE_EVENTS[tabs[i]].render, {
-      timestamp: Date.now()
-     })
   }
   useEffect( () => {
-    console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[currentTab]].render)
-    Amplitude.logEventWithProperties(AMPLITUDE_EVENTS[tabs[currentTab]].render, {
-      timestamp: Date.now()
-    })
     const unsubscribe = navigation.addListener('didFocus', () => {
       setCurrentTab(0)
     })
     return () => unsubscribe()
   }, [])
+
+  useEffect( () => {
+    console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[currentTab]].render)
+    Amplitude.logEventWithProperties(AMPLITUDE_EVENTS[tabs[currentTab]].render, {
+      timestamp: Date.now()
+    })
+  }, [currentTab])
 
   return (
     <SafeAreaView style={styles.statusbar}>
