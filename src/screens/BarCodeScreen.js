@@ -55,7 +55,9 @@ class BarCodeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
     })
     await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
