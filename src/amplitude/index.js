@@ -3,12 +3,15 @@ import * as Ampli from 'expo-analytics-amplitude';
 export const Amplitude = Ampli
 Amplitude.initialize("08c9ee18dfdbde19c858b154c6ee0787")
 
-export const EVENTS = {
+export const AMPLITUDE_EVENTS = {
     bottomTabMenu: {
         click_meteo: "click_bottomtabmenu_meteo",
         click_pulv: "click_bottomtabmenu_pulverisation",
         click_realtime: 'click_bottomtabmenu_realtime',
         click_interv: "click_bottomtabmenu_intervention"
+    },
+    barCodeScreen: {
+        render: "render_barcodescreen",
     },
     waitActivationScreen : {
         render: "render_waitactivationscreen",
