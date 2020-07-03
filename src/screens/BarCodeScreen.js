@@ -12,14 +12,14 @@ import { updateParcellesList, updateCulturesList } from '../store/actions/metaAc
 import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
-
 import * as Device from 'expo-device';
-
 import COLORS from '../colors'
 import i18n from 'i18n-js';
-
 import HygoButton from '../components/HygoButton'
 import LogoLoading from '../components/LogoLoading'
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+
+const {barCodeScreen: ampEvent} = AMPLITUDE_EVENTS
 
 class BarCodeScreen extends React.Component {
   constructor(props){
@@ -55,6 +55,8 @@ class BarCodeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    Amplitude.logEventWithProperties(ampEvent.render, {
+    })
     await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
     this.props.updatePhytoProductList(await getPhytoProducts())

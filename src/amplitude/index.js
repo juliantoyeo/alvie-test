@@ -1,7 +1,8 @@
-import * as Ampli from 'expo-analytics-amplitude';
+import * as Amplitude from 'expo-analytics-amplitude';
 
-export const Amplitude = Ampli
+
 Amplitude.initialize("08c9ee18dfdbde19c858b154c6ee0787")
+export {Amplitude}
 
 export const AMPLITUDE_EVENTS = {
     bottomTabMenu: {
