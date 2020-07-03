@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { ScrollView, StyleSheet, View, StatusBar } from 'react-native';
 import { Button, Icon, Text, Left, Right, Body, Header, Title } from 'native-base';
@@ -18,6 +18,9 @@ import { PADDED } from '../constants'
 
 import moment from 'moment'
 import capitalize from '../utils/capitalize'
+
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {meteoDetailedDetailsScreen: ampEvent} = AMPLITUDE_EVENTS
 
 const MeteoDetailedDetails = ({ navigation }) => {
   const MONTHS = [
@@ -76,6 +79,13 @@ const MeteoDetailedDetails = ({ navigation }) => {
 
     return `${capitalize(DAYS[md.day()])} ${md.date()} ${capitalize(MONTHS[md.month()])}`
   }, [days[0]])
+
+  useEffect(()=> {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+  }, [])
 
   return (
     <SafeAreaView style={[styles.statusbar, { backgroundColor: getBackground() }]} forceInset={{top:'always'}}>
