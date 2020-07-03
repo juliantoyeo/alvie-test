@@ -18,6 +18,9 @@ import { connect } from 'react-redux'
 
 import moment from 'moment-timezone'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {realTimeScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -35,6 +38,20 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     loadRealtimeData()
   }, [])
   
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      console.log("Amplitude : ", ampEvent.render)
+      Amplitude.logEventWithProperties(ampEvent.render, {
+        timestamp: Date.now()
+      })
+    })
+    return () => unsubscribe()
+  }, [])
+
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('willFocus', () => {
       setIsRefreshing(true)
