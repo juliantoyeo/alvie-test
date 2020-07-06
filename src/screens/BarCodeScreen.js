@@ -12,14 +12,14 @@ import { updateParcellesList, updateCulturesList } from '../store/actions/metaAc
 import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
 import { Notifications } from 'expo';
 import { getLocationPermissionAsync } from '../geolocation'
-
 import * as Device from 'expo-device';
-
 import COLORS from '../colors'
 import i18n from 'i18n-js';
-
 import HygoButton from '../components/HygoButton'
 import LogoLoading from '../components/LogoLoading'
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+
+const {barCodeScreen: ampEvent} = AMPLITUDE_EVENTS
 
 class BarCodeScreen extends React.Component {
   constructor(props){
@@ -72,6 +72,19 @@ class BarCodeScreen extends React.Component {
 
   gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
     await AsyncStorage.setItem('token', token);
+
+    Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
+    console.log("Amplitude : ", ampEvent.loggedin)
+    Amplitude.logEventWithProperties(ampEvent.loggedin, {
+      timestamp: Date.now(),
+      token,
+      userName,
+      familyName,
+      deviceid,
+      deviceType,
+      hasEquipment
+    })
+
     let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
     let culturesSelected = await AsyncStorage.getItem('culturesSelected');
     await this.props.updateAuthInfo({

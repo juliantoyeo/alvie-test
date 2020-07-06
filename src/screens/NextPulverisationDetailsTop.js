@@ -4,11 +4,21 @@ import NextPulverisationDetails from './NextPulverisationDetails'
 
 import { PADDED } from '../constants'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {PulvDetailsScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const NextPulverisationDetailsTop = ({ navigation }) => {
   let result = navigation.getParam('data')
   let day = navigation.getParam('day')
   let hour = navigation.getParam('hour')
   let ra = navigation.getParam('r')
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+  }, [])
 
   const getNext12HoursData = () => {
     let start = parseInt(hour), output = {}

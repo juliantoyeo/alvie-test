@@ -24,6 +24,9 @@ import moment from 'moment';
 
 import capitalize from '../utils/capitalize'
 
+import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
+const { PulvDetailsScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navigation }) => {
   const MONTHS = [
     i18n.t('months.january'),
@@ -59,7 +62,20 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
   const [background, setBackground] = useState(COLORS.GREY)
   const [modulationChanged, setModulationChanged] = useState(true)
 
+  const notifyAmplitude = () => {
+    console.log("Amplitude : ", ampEvent.click_toRealTimeScreen)
+    Amplitude.logEventWithProperties(ampEvent.click_toRealTimeScreen, {
+      timestamp: Date.now()
+    })
+  }
+
   const openPicker = (screen) => {
+    const event = (screen == "HygoCulturePicker") ? ampEvent.click_culturePicker : ampEvent.click_productPicker
+    console.log("Amplitude : ", event)
+    Amplitude.logEventWithProperties(event, {
+      timestamp: Date.now()
+    })
+
     setModulationChanged(true)
     navigation.navigate(screen, {
       notifyUpdate: ()=>setModulationChanged(true),
@@ -140,6 +156,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
     return `${capitalize(DAYS[md.day()])} ${md.date()} ${capitalize(MONTHS[md.month()])}`
   }, [day])
 
+
   return (
     <SafeAreaView style={[styles.statusbar, { backgroundColor: background }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -187,7 +204,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
           <View style={styles.mapviewContainer}>
             <Map parcelles={result.parcelles} region={result.region} min={selected.min} max={selected.max} hour={hour} data={next12HoursData} />
           </View>
-          <HygoButton navigation={navigation} />
+          <HygoButton navigation={navigation} action={notifyAmplitude}/>
         </View>
       </ScrollView>
     </SafeAreaView>

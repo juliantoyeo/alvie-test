@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, ScrollView, Text, Image } from 'react-native'
 import { Spinner } from 'native-base'
-
 import HygoMeteoPhyto from '../components/HygoMeteoPhyto'
-
 import i18n from 'i18n-js'
 import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
-
 import moment from 'moment-timezone'
-
 import { getMeteo } from '../api/hygoApi'
 
 const MeteoBriefScreen = ({ navigation }) => {
+
   const MONTHS = [
     i18n.t('months.january'),
     i18n.t('months.february'),
@@ -114,10 +111,10 @@ const MeteoBriefScreen = ({ navigation }) => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <>
+            <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.wind)} km/h`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.gust)} km/h`}</Text>
-            </>
+            </React.Fragment>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -126,10 +123,10 @@ const MeteoBriefScreen = ({ navigation }) => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <>
+            <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.precipitation)} mm`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.probability)}%`}</Text>
-            </>
+            </React.Fragment>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -138,10 +135,10 @@ const MeteoBriefScreen = ({ navigation }) => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <>
+            <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.mintemp)}°C`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxtemp)}°C`}</Text>
-            </>
+            </React.Fragment>
           )}
         </View>
         <View style={styles.meteoElement}>
@@ -150,10 +147,10 @@ const MeteoBriefScreen = ({ navigation }) => {
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
           { !loading && (
-            <>
+            <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.minhumi)}%`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxhumi)}%`}</Text>
-            </>
+            </React.Fragment>
           )}
         </View>
       </View>

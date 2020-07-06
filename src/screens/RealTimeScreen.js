@@ -18,6 +18,9 @@ import { connect } from 'react-redux'
 
 import moment from 'moment-timezone'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {realTimeScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -35,6 +38,20 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     loadRealtimeData()
   }, [])
   
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      console.log("Amplitude : ", ampEvent.render)
+      Amplitude.logEventWithProperties(ampEvent.render, {
+        timestamp: Date.now()
+      })
+    })
+    return () => unsubscribe()
+  }, [])
+
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('willFocus', () => {
       setIsRefreshing(true)
@@ -81,6 +98,21 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     setColor(COLORS[`${c}_GRADIENT_BOT`])
   }
 
+  const onProductPicker = () => {
+    console.log("Amplitude : ", ampEvent.click_productPicker)
+    Amplitude.logEventWithProperties(ampEvent.click_productPicker, {
+      timestamp: Date.now()
+    })
+    navigation.navigate("HygoProductPicker", {backScreen: 'RealTime'})
+  }
+
+  const onGoToNextPulv = () => {
+    console.log("Amplitude : ", ampEvent.click_toNextPulvScreen)
+    Amplitude.logEventWithProperties(ampEvent.click_toNextPulvScreen, {
+      timestamp: Date.now()
+    })
+    navigation.navigate('Pulverisation')
+  }
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -113,7 +145,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 <Text style={styles.lastHourText}>{history.length === 0 ? i18n.t('realtime.no_data_3_hours') : i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
               </View>
 
-              <TouchableWithoutFeedback onPress={() => navigation.navigate("HygoProductPicker", {backScreen: 'RealTime'})}>
+              <TouchableWithoutFeedback onPress={onProductPicker}>
                 <View style={styles.picker}>
                   { phytoProductSelected.length === 0 && (
                     <Text style={styles.pickerText}>{i18n.t('pulverisation.product_type')}</Text>
@@ -147,7 +179,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 </View>
               }
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pulverisation')}>
+                <TouchableOpacity style={styles.button} onPress={onGoToNextPulv}>
                   <Text style={styles.buttonText}>{history.length > 0 ? i18n.t('realtime.next_cuve') : i18n.t('realtime.goto_cuve')}</Text>
                 </TouchableOpacity>
               </View>

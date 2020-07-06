@@ -9,8 +9,18 @@ import { updateUIPhytoProduct, updateUICultures, getMeteoIntervention } from '..
 import { connect } from 'react-redux'
 import { updatePhytoProductSelected, updateCulturesSelected } from '../store/actions/pulveActions'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const { meteoBriefScreen } = AMPLITUDE_EVENTS
+
 const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, hour, cultures, phytoProductSelected, culturesSelected, updateCulturesSelected }) => {
+
   const handleProductClick = async () => {
+
+    console.log("Amplitude : ", meteoBriefScreen.click_hygoMeteoPhyto)
+    Amplitude.logEventWithProperties(meteoBriefScreen.click_hygoMeteoPhyto, {
+      timestamp: Date.now()
+    })
+
     updateUIPhytoProduct([ product.id ])
     updateUICultures(cultures.map(c => c.id))
 

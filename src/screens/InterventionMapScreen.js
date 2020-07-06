@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { ScrollView, StyleSheet, View, StatusBar, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
@@ -14,9 +14,19 @@ import { updateProductsInterv } from '../store/actions/intervActions'
 
 import moment from 'moment-timezone'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {interventionMapScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInterv }) => {
   let { intervention, byParcelle, data, region } = navigation.getParam('result')
   const [field, setField] = useState(null)
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+  }, [])
 
   const isRacinaire = () => {
     if (intervention.products) {

@@ -13,6 +13,8 @@ import i18n from 'i18n-js'
 
 import { getEquipment, getFields } from '../api/hygoApi'
 
+import { Amplitude } from '../amplitude'
+
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
   const goToEquipment = () => {
     navigation.dispatch(DrawerActions.closeDrawer())
@@ -32,7 +34,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     await AsyncStorage.removeItem('token');
 
     deleteToken();
-    
+    Amplitude.setUserId(null)
     navigation.navigate('BarCode');
   }
 

@@ -13,6 +13,9 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { getMeteoIntervention } from '../api/hygoApi'
 import capitalize from '../utils/capitalize'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {nextPulvScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, culturesSelected, phytoProductSelected }) => {
   const MONTHS = [
     i18n.t('months.january'),
@@ -49,6 +52,20 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   const openPicker = (screen) => {
     navigation.navigate(screen, {backScreen: 'Pulverisation'})
   }
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      console.log("Amplitude : ", ampEvent.render)
+      Amplitude.logEventWithProperties(ampEvent.render, {
+        timestamp: Date.now()
+      })
+    })
+    return () => unsubscribe()
+  }, [])
 
   useEffect(() => {
     if (culturesSelected.length > 0 && phytoProductSelected.length > 0 && !blurred) {
@@ -96,6 +113,11 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   }, [setCurrentParams, currentParams, phytoProductSelected, culturesSelected])
 
   const goToDetails = ({ day, hour, data }) => {
+    console.log("Amplitude : ", ampEvent.click_goToPulvDetails)
+    Amplitude.logEventWithProperties(ampEvent.click_goToPulvDetails, {
+      timestamp: Date.now()
+    })
+
     navigation.navigate('NextPulverisationDetails', {
       day,
       hour,

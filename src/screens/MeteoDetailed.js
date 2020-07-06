@@ -10,6 +10,9 @@ import { connect } from 'react-redux'
 
 import COLORS from '../colors'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const { meteoDetailedScreen } = AMPLITUDE_EVENTS
+
 const PICTO_MAP = {
   'SUN': require('../../assets/sunny.png'),
   'CLOUD': require('../../assets/cloudy.png'),
@@ -89,6 +92,12 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
   }
 
   const goToDetails = ({ day, product }) => {
+
+    console.log("Amplitude : ", meteoDetailedScreen.click_goToPulvDetails)
+    Amplitude.logEventWithProperties(meteoDetailedScreen.click_goToPulvDetails, {
+      timestamp: Date.now()
+    })
+
     navigation.navigate('LoadingScreen', {
       next: 'MeteoDetailedDetails',
       params: {

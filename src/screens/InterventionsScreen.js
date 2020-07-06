@@ -13,6 +13,9 @@ import i18n from 'i18n-js'
 
 import COLORS from '../colors'
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {interventionScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const InterventionScreen = ({ navigation, interventionValues, updateInterv }) => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -23,6 +26,20 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
       loadInterventions()
     });
     return (() => unsubscribe())
+  }, [])
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      console.log("Amplitude : ", ampEvent.render)
+      Amplitude.logEventWithProperties(ampEvent.render, {
+        timestamp: Date.now()
+      })
+    })
+    return () => unsubscribe()
   }, [])
 
   const loadInterventions = async () => {

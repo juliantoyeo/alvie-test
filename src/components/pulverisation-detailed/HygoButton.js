@@ -7,10 +7,14 @@ import i18n from 'i18n-js'
 
 import COLORS from '../../colors'
 
-const HygoButton = ({ navigation }) => {
+const HygoButton = ({ navigation, action }) => {
+  const onPress = () => {
+    action && action()
+    navigation.navigate('RealTime')
+  }
   return (
     <View style={styles.buttonContainer}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RealTime')}>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
         <Icon type='AntDesign' name='arrowright' style={styles.buttonIcon} />
         <Text style={styles.buttonText}>{i18n.t('pulverisation.start')}</Text>
       </TouchableOpacity>

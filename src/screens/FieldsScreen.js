@@ -9,9 +9,19 @@ import { Left, Right, Body, Title, Header, Button, Icon } from 'native-base';
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+const {fieldsScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const FieldsScreen = ({ navigation, parcelles }) => {
   const [selected, setSelected] = useState(null)
   const [legend, setLegend] = useState(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
+
+  useEffect( () => {
+    console.log("Amplitude : ", ampEvent.render)
+    Amplitude.logEventWithProperties(ampEvent.render, {
+      timestamp: Date.now()
+    })
+  }, [])
 
   const getRegion = () => {
     let center = {

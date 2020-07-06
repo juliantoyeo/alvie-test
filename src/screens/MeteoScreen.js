@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StatusBar, StyleSheet, SafeAreaView, View, ImageBackground } from 'react-native'
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Tabs, Tab } from 'native-base';
 
@@ -10,8 +10,28 @@ import MeteoDetailed from './MeteoDetailed'
 
 import * as Localization from 'expo-localization';
 
+import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
+import { now } from 'lodash';
+
 const MeteoScreen = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState(0)
+  const tabs = ["meteoBriefScreen", "meteoDetailedScreen", "meteoRadarScreen"]
+  const switchTab = (i) => {
+    setCurrentTab(i);
+  }
+  useEffect( () => {
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      setCurrentTab(0)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  useEffect( () => {
+    console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[currentTab]].render)
+    Amplitude.logEventWithProperties(AMPLITUDE_EVENTS[tabs[currentTab]].render, {
+      timestamp: Date.now()
+    })
+  }, [currentTab])
 
   return (
     <SafeAreaView style={styles.statusbar}>
@@ -29,7 +49,7 @@ const MeteoScreen = ({ navigation }) => {
             </Body>
             <Right style={{ flex: 1 }}></Right>
           </Header>
-          <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({ i }) => setCurrentTab(i) }>
+          <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({i}) => switchTab(i)  }>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
               <MeteoBriefScreen style={styles.tabBar} navigation={navigation} />
             </Tab>
