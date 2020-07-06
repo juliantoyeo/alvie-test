@@ -140,6 +140,13 @@ const EquipmentScreen = ({ navigation }) => {
     return l
   }
 
+  const notifyAmplitude = () => {
+    console.log("Amplitude : ", ampEvent.click_validate)
+    Amplitude.logEventWithProperties(ampEvent.click_validate, {
+      timestamp: Date.now()
+    })
+  }
+  
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top: 'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -287,7 +294,7 @@ const EquipmentScreen = ({ navigation }) => {
             <View>
               <View style={{ height: 80 }} />
               <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
-                <HygoButton onPress={() => submitEquipment()} label={i18n.t('button.validate')} icon={{
+                <HygoButton action = {notifyAmplitude} onPress={() => submitEquipment()} label={i18n.t('button.validate')} icon={{
                   type: 'AntDesign',
                   name: 'arrowright',
                   fontSize: 26

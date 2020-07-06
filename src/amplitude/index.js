@@ -55,15 +55,9 @@ export const AMPLITUDE_EVENTS = {
     },
     fieldsScreen : {
         render: "render_fieldsscreen",
-        click_map: "click_fieldsscreen_map"
     },
     equipmentScreen : {
         render: "render_equipmentscreen",
         click_validate :"click_equipmentscreen_validate",
-        click_family: "click_equipmentscreen_busefamily",
-        click_size: "click_equipmentscreen_busesize",
-        click_speed: "click_equipmentscreen_speed",
-        click_pressure: "click_equipmentscreen_pressure",
-        click_soil: "click_equipmentscreen_soil"
     }
 }
