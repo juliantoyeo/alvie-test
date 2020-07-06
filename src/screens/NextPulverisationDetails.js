@@ -70,7 +70,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
   }
 
   const openPicker = (screen) => {
-    const event = screen = "HygoCulturePicker" ? ampEvent.click_culturePicker : ampEvent.click_productPicker
+    const event = (screen == "HygoCulturePicker") ? ampEvent.click_culturePicker : ampEvent.click_productPicker
     console.log("Amplitude : ", event)
     Amplitude.logEventWithProperties(event, {
       timestamp: Date.now()
