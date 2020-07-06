@@ -24,6 +24,9 @@ import moment from 'moment';
 
 import capitalize from '../utils/capitalize'
 
+import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
+const { PulvDetailsScreen: ampEvent} = AMPLITUDE_EVENTS
+
 const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navigation }) => {
   const MONTHS = [
     i18n.t('months.january'),
@@ -60,6 +63,13 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
   const [modulationChanged, setModulationChanged] = useState(true)
 
   const openPicker = (screen) => {
+
+    const event = screen = "HygoCulturePicker" ? ampEvent.click_culturePicker : ampEvent.click_productPicker
+    console.log("Amplitude : ", event)
+    Amplitude.logEventWithProperties(event, {
+      timestamp: Date.now()
+    })
+
     setModulationChanged(true)
     navigation.navigate(screen, {
       notifyUpdate: ()=>setModulationChanged(true),
