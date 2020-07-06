@@ -12,7 +12,7 @@ export const AMPLITUDE_EVENTS = {
         click_interv: "click_bottomtabmenu_intervention"
     },
     barCodeScreen: {
-        render: "render_barcodescreen",
+        loggedin: "loggedin_barcodescreen",
     },
     waitActivationScreen : {
         render: "render_waitactivationscreen",

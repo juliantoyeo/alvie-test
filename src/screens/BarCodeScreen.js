@@ -55,10 +55,6 @@ class BarCodeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("Amplitude : ", ampEvent.render)
-    Amplitude.logEventWithProperties(ampEvent.render, {
-      timestamp: Date.now()
-    })
     await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
     this.props.updatePhytoProductList(await getPhytoProducts())
@@ -76,6 +72,19 @@ class BarCodeScreen extends React.Component {
 
   gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
     await AsyncStorage.setItem('token', token);
+
+    Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
+    console.log("Amplitude : ", ampEvent.loggedin)
+    Amplitude.logEventWithProperties(ampEvent.loggedin, {
+      timestamp: Date.now(),
+      token,
+      userName,
+      familyName,
+      deviceid,
+      deviceType,
+      hasEquipment
+    })
+
     let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
     let culturesSelected = await AsyncStorage.getItem('culturesSelected');
     await this.props.updateAuthInfo({
