@@ -100,12 +100,19 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
 
   const onProductPicker = () => {
     console.log("Amplitude : ", ampEvent.click_productPicker)
-      Amplitude.logEventWithProperties(ampEvent.click_productPicker, {
-        timestamp: Date.now()
-      })
+    Amplitude.logEventWithProperties(ampEvent.click_productPicker, {
+      timestamp: Date.now()
+    })
     navigation.navigate("HygoProductPicker", {backScreen: 'RealTime'})
   }
 
+  const onGoToNextPulv = () => {
+    console.log("Amplitude : ", ampEvent.click_toNextPulvScreen)
+    Amplitude.logEventWithProperties(ampEvent.click_toNextPulvScreen, {
+      timestamp: Date.now()
+    })
+    navigation.navigate('Pulverisation')
+  }
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -172,7 +179,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 </View>
               }
               <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pulverisation')}>
+                <TouchableOpacity style={styles.button} onPress={onGoToNextPulv}>
                   <Text style={styles.buttonText}>{history.length > 0 ? i18n.t('realtime.next_cuve') : i18n.t('realtime.goto_cuve')}</Text>
                 </TouchableOpacity>
               </View>
