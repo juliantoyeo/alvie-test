@@ -23,7 +23,6 @@ export const AMPLITUDE_EVENTS = {
     },
     meteoDetailedScreen: {
         render: "render_meteodetailedscreen",
-        click_tabBar: "click_meteodetailedscreen_tabbar",
         click_goToPulvDetails: "click_meteodetailedscreen_gotodetails"
     },
     meteoDetailedDetailsScreen: {
