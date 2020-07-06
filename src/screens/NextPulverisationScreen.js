@@ -113,6 +113,11 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   }, [setCurrentParams, currentParams, phytoProductSelected, culturesSelected])
 
   const goToDetails = ({ day, hour, data }) => {
+    console.log("Amplitude : ", ampEvent.click_goToPulvDetails)
+    Amplitude.logEventWithProperties(ampEvent.click_goToPulvDetails, {
+      timestamp: Date.now()
+    })
+
     navigation.navigate('NextPulverisationDetails', {
       day,
       hour,
