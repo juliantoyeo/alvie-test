@@ -39,9 +39,6 @@ export const AMPLITUDE_EVENTS = {
         render: "render_nextpulverisationdetailsscreen",
         click_culturePicker: "click_nextpulverisationdetailsscreen_culturepicker",
         click_productPicker: "click_nextpulverisationdetailsscreen_productpicker",
-        click_timeSlot: "click_nextpulverisationdetailsscreen_timeslot",
-        click_update: "click_nextpulverisationdetailsscreen_updatemodulation",
-        click_map: "click_nextpulverisationdetailsscreen_map",
         click_toRealTimeScreen: "click_nextpulverisationdetailsscreen_torealtimescreen"
     },
     realTimeScreen : {
