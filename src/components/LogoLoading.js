@@ -38,7 +38,8 @@ const LogoLoading = ({ color, duration }) => {
         {
           toValue: 1,
           duration: duration,
-          easing: Easing.linear
+          easing: Easing.linear,
+          useNativeDriver: true
         },
       ),
       Animated.timing(
@@ -46,7 +47,8 @@ const LogoLoading = ({ color, duration }) => {
         {
           toValue: 1,
           duration: duration / 4,
-          easing: Easing.linear
+          easing: Easing.linear,
+          useNativeDriver: true
         },
       ),
       Animated.timing(
@@ -54,7 +56,8 @@ const LogoLoading = ({ color, duration }) => {
         {
           toValue: 0,
           duration: 0.25 * duration,
-          easing: Easing.linear
+          easing: Easing.linear,
+          useNativeDriver: true
         },
       ),
       Animated.timing(
@@ -62,7 +65,8 @@ const LogoLoading = ({ color, duration }) => {
         {
           toValue: 0,
           duration: duration,
-          easing: Easing.linear
+          easing: Easing.linear,
+          useNativeDriver: true
         },
       ),
     ]).start(() => startAnimation());
