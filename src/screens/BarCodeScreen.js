@@ -11,7 +11,7 @@ import { updatePhytoProductList, updatePulvInfo } from '../store/actions/pulveAc
 import { updateParcellesList, updateCulturesList } from '../store/actions/metaActions'
 import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
 import { Notifications } from 'expo';
-import { getLocationPermissionAsync } from '../geolocation'
+//import { getLocationPermissionAsync } from '../geolocation'
 import * as Device from 'expo-device';
 import COLORS from '../colors'
 import i18n from 'i18n-js';
@@ -55,7 +55,7 @@ class BarCodeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    await getLocationPermissionAsync(i18n.t('geolocation.text'))
+    //await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
     this.props.updatePhytoProductList(await getPhytoProducts())
 
