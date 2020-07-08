@@ -8,7 +8,7 @@
       "android",
       "web"
     ],
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,7 +23,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "120",
+      "buildNumber": "122",
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "infoPlist": {
@@ -52,7 +52,7 @@
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 120,
+      "versionCode": 122,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
