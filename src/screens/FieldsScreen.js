@@ -17,7 +17,7 @@ const FieldsScreen = ({ navigation, parcelles }) => {
   const [legend, setLegend] = useState(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })

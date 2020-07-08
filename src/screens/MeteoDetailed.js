@@ -93,7 +93,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
 
   const goToDetails = ({ day, product }) => {
 
-    console.log("Amplitude : ", meteoDetailedScreen.click_goToPulvDetails)
+    // console.log("Amplitude : ", meteoDetailedScreen.click_goToPulvDetails)
     Amplitude.logEventWithProperties(meteoDetailedScreen.click_goToPulvDetails, {
       timestamp: Date.now()
     })

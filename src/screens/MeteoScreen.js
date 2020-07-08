@@ -27,7 +27,7 @@ const MeteoScreen = ({ navigation }) => {
   }, [])
 
   useEffect( () => {
-    console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[currentTab]].render)
+    // console.log("Amplitude : ", AMPLITUDE_EVENTS[tabs[currentTab]].render)
     Amplitude.logEventWithProperties(AMPLITUDE_EVENTS[tabs[currentTab]].render, {
       timestamp: Date.now()
     })

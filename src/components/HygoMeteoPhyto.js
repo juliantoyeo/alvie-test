@@ -16,7 +16,7 @@ const HygoMeteoPhyto = ({ product, navigation, updatePhytoProductSelected, day, 
 
   const handleProductClick = async () => {
 
-    console.log("Amplitude : ", meteoBriefScreen.click_hygoMeteoPhyto)
+    // console.log("Amplitude : ", meteoBriefScreen.click_hygoMeteoPhyto)
     Amplitude.logEventWithProperties(meteoBriefScreen.click_hygoMeteoPhyto, {
       timestamp: Date.now()
     })

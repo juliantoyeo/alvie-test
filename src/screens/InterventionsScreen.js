@@ -29,12 +29,12 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
   }, [])
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })
     const unsubscribe = navigation.addListener('didFocus', () => {
-      console.log("Amplitude : ", ampEvent.render)
+      // console.log("Amplitude : ", ampEvent.render)
       Amplitude.logEventWithProperties(ampEvent.render, {
         timestamp: Date.now()
       })

@@ -64,7 +64,7 @@ const EquipmentScreen = ({ navigation }) => {
   })
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })
@@ -141,7 +141,7 @@ const EquipmentScreen = ({ navigation }) => {
   }
 
   const notifyAmplitude = () => {
-    console.log("Amplitude : ", ampEvent.click_validate)
+    // console.log("Amplitude : ", ampEvent.click_validate)
     Amplitude.logEventWithProperties(ampEvent.click_validate, {
       timestamp: Date.now()
     })

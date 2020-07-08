@@ -63,7 +63,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
   const [modulationChanged, setModulationChanged] = useState(true)
 
   const notifyAmplitude = () => {
-    console.log("Amplitude : ", ampEvent.click_toRealTimeScreen)
+    // console.log("Amplitude : ", ampEvent.click_toRealTimeScreen)
     Amplitude.logEventWithProperties(ampEvent.click_toRealTimeScreen, {
       timestamp: Date.now()
     })
@@ -71,7 +71,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
 
   const openPicker = (screen) => {
     const event = (screen == "HygoCulturePicker") ? ampEvent.click_culturePicker : ampEvent.click_productPicker
-    console.log("Amplitude : ", event)
+    // console.log("Amplitude : ", event)
     Amplitude.logEventWithProperties(event, {
       timestamp: Date.now()
     })

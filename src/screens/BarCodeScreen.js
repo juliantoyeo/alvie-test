@@ -74,7 +74,7 @@ class BarCodeScreen extends React.Component {
     await AsyncStorage.setItem('token', token);
 
     Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
-    console.log("Amplitude : ", ampEvent.loggedin)
+    // console.log("Amplitude : ", ampEvent.loggedin)
     Amplitude.logEventWithProperties(ampEvent.loggedin, {
       timestamp: Date.now(),
       token,

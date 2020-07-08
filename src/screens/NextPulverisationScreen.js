@@ -54,12 +54,12 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   }
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })
     const unsubscribe = navigation.addListener('didFocus', () => {
-      console.log("Amplitude : ", ampEvent.render)
+      // console.log("Amplitude : ", ampEvent.render)
       Amplitude.logEventWithProperties(ampEvent.render, {
         timestamp: Date.now()
       })
@@ -113,7 +113,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   }, [setCurrentParams, currentParams, phytoProductSelected, culturesSelected])
 
   const goToDetails = ({ day, hour, data }) => {
-    console.log("Amplitude : ", ampEvent.click_goToPulvDetails)
+    // console.log("Amplitude : ", ampEvent.click_goToPulvDetails)
     Amplitude.logEventWithProperties(ampEvent.click_goToPulvDetails, {
       timestamp: Date.now()
     })

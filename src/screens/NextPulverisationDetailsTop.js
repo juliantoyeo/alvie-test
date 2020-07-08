@@ -14,7 +14,7 @@ const NextPulverisationDetailsTop = ({ navigation }) => {
   let ra = navigation.getParam('r')
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })

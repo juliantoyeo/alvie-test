@@ -22,7 +22,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
   const [field, setField] = useState(null)
 
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })

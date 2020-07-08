@@ -39,12 +39,12 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   }, [])
   
   useEffect( () => {
-    console.log("Amplitude : ", ampEvent.render)
+    // console.log("Amplitude : ", ampEvent.render)
     Amplitude.logEventWithProperties(ampEvent.render, {
       timestamp: Date.now()
     })
     const unsubscribe = navigation.addListener('didFocus', () => {
-      console.log("Amplitude : ", ampEvent.render)
+      // console.log("Amplitude : ", ampEvent.render)
       Amplitude.logEventWithProperties(ampEvent.render, {
         timestamp: Date.now()
       })
@@ -99,7 +99,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   }
 
   const onProductPicker = () => {
-    console.log("Amplitude : ", ampEvent.click_productPicker)
+    // console.log("Amplitude : ", ampEvent.click_productPicker)
     Amplitude.logEventWithProperties(ampEvent.click_productPicker, {
       timestamp: Date.now()
     })
@@ -107,7 +107,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   }
 
   const onGoToNextPulv = () => {
-    console.log("Amplitude : ", ampEvent.click_toNextPulvScreen)
+    // console.log("Amplitude : ", ampEvent.click_toNextPulvScreen)
     Amplitude.logEventWithProperties(ampEvent.click_toNextPulvScreen, {
       timestamp: Date.now()
     })
