@@ -11,6 +11,8 @@ import i18n from 'i18n-js'
 
 import { connect } from 'react-redux'
 
+const phytoIdHide = [12]     // Hide "solution azotée"
+
 const Modulation = ({ day, hour, selected, setModulationChanged, modulationChanged, phytoProductSelected, culturesSelected, phytoProductList }) => {
   const [modulationValue, setModulationValue] = useState()
   const [modulationLoading, setModulationLoading] = useState(false)
@@ -52,13 +54,17 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
     return i18n.t(`products.${phytoProductList.filter(p => p.id === pid)[0].name}`)
   }
 
-  return (
+  return ( 
+    // Hide the whole component if all the products have to be hidden
+    // phytoProductSelected.reduce((acc, p) => phytoIdHide.find((id) => id == p)  ? acc+1 : acc , 0) < phytoProductSelected.length && (
     <View style={styles.modulation}>
       <View style={styles.headerView}>
         <Text style={styles.headerText}>{i18n.t('modulation.dose_computation')}</Text>
       </View>
       { phytoProductSelected.map(p => {
         return (
+          // Hide the product if necessary
+          !phytoIdHide.find((id) => id == p) && (
           <View style={styles.modulationContainer} key={p}>
             <View style={styles.modulationTextContaier}>
               <View style={styles.modulationBlock}>
@@ -75,7 +81,7 @@ const Modulation = ({ day, hour, selected, setModulationChanged, modulationChang
               <Text style={styles.modulationTextInfo}>{getPhytoName(p)}</Text>
             </View>
           </View>
-        )
+        ))
       })}
     </View>
   )
