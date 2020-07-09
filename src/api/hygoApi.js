@@ -2,9 +2,10 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
 import getUserAgent from './getUserAgent'
+import { VERSION } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'https://hygo-api.alvie.fr',
+    baseURL: 'http://192.168.1.35:3000', //'https://hygo-api.alvie.fr',
     //port: 3000,
     timeout: 30000,
     headers: { 
@@ -273,7 +274,7 @@ export const deleteIntervention = async (interventionid) => {
 // Check if the database is ready (parcels and meteo datas loaded => 24h)
 export const checkSetup = async () => {
     try {
-        const response = await hygoApi.get('/app/checkSetup')
+        const response = await hygoApi.post('/app/checkSetup', { version: VERSION })
         return (response.data);
     } catch(error) {
         console.log(error)

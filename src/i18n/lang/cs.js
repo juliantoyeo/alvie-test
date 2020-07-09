@@ -77,6 +77,10 @@ export default {
       'msg1': 'Zatím jsme neobdrželi data o Vašich polích.',
       'msg2' : 'Prosím, kontaktujte nás'
     },
+    'need_update': {
+      'msg1': 'C\'est la moisson pour votre application !',
+      'msg2': 'Pour continuer, merci d\'installer la nouvelle mise à jour.'
+    }
   },
   'equipment': {
     'header': 'Moje vybavení',
