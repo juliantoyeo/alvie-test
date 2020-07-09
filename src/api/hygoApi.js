@@ -271,7 +271,7 @@ export const deleteIntervention = async (interventionid) => {
     }
 } 
 
-// Check if the database is ready (parcels and meteo datas loaded => 24h)
+// Check if the database is ready (parcels and meteo datas loaded => 24h),and if a new version is needed
 export const checkSetup = async () => {
     try {
         const response = await hygoApi.post('/app/checkSetup', { version: VERSION })
