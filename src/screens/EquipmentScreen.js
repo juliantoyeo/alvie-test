@@ -103,7 +103,8 @@ const EquipmentScreen = ({ navigation }) => {
       "SABLE_TERREAU",
       "TERREAU",
       "TERREAU_ARGILE",
-      "ARGILE"
+      "ARGILE",
+      "CRAIE"
     ]
 
     let l = soils.map(p => {

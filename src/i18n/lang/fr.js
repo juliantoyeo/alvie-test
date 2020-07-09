@@ -36,6 +36,7 @@ export default {
     'TERREAU': 'Limon',
     'TERREAU_ARGILE': 'Limon / Argile',
     'ARGILE': 'Argile',
+    'CRAIE' : 'Craie',
     'none': 'Aucun type séléctionné'
   },
   'modulation': {
