@@ -564,5 +564,6 @@ export default {
     'Herbicide foliaire de contact': 'Herbicide foliaire de contact',
     'Herbicide foliaire systémique': 'Herbicide foliaire systémique',
     'Insecticide': 'Insecticide',
+    'Solution azotée': 'Solution azotée'
   }
 }

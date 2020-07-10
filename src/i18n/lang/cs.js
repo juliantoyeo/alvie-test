@@ -278,5 +278,6 @@ export default {
     'Herbicide foliaire de contact': 'Kontaktní herbicid',
     'Herbicide foliaire systémique': 'Systemický herbicid',
     'Insecticide': 'Insekticid',
+    'Solution azotée': 'Solution azotée'
   }
 }
