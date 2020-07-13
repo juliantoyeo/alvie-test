@@ -36,7 +36,7 @@ export default {
     'TERREAU': 'Hlína',
     'TERREAU_ARGILE': 'Bahnitá hlína',
     'ARGILE': 'Jílovitá',
-    'CRAIE' : 'Vápenec',
+    'CRAIE' : 'Vápenitá půda',
     'none': 'Žádný typ zeminy nevybrán'
   },
   'drawer': {
