@@ -50,6 +50,7 @@ export default {
     'hygo_serial': 'Numéro de série : %{serial}',
     'hygo_model': 'Modèle du capteur : %{model}',
     'app_version': 'Version applicative : %{version}',
+    'build_number': 'Build %{build}',
     'email_subject': 'Demande d\'aide capteur Hygo',
     'equipment': 'Mes équipements',
   },

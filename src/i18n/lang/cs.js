@@ -47,6 +47,7 @@ export default {
     'hygo_serial': 'Sériové číslo : %{serial}',
     'hygo_model': 'Model senzoru : %{model}',
     'app_version': 'Verze aplikace : %{version}',
+    'build_number': 'Build %{build}',
     'email_subject': 'HYGO: Potřebuji asistenci',
     'equipment': 'Moje vybavení',
   },

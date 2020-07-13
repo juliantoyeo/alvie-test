@@ -1,4 +1,7 @@
 {
+  "extra": {
+    "build": "123"
+  },
   "expo": {
     "name": "Hygo",
     "slug": "hygo",

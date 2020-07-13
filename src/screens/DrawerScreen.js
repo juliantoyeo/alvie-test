@@ -43,8 +43,9 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     const subject = i18n.t('drawer.email_subject')
     const body = `
     
-    ----
+    <br> ---- <br>
     ${i18n.t('drawer.app_version', { version: pkg.expo.version })}<br>
+    ${i18n.t('drawer.build_number', { build: pkg.extra.build })}<br>
     ${i18n.t('drawer.hygo_model', { model: deviceType })}<br>
     ${i18n.t('drawer.hygo_serial', { serial: deviceid })}
     `
@@ -79,6 +80,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/hygo.png')} style={styles.logo} />
         <Text style={styles.btmText}>{`${i18n.t('drawer.app_version', { version: pkg.expo.version })}`}</Text>
+        <Text style={styles.btmText}>{`${i18n.t('drawer.build_number', { build: pkg.extra.build })}`}</Text>
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_model', { model: deviceType })}`}</Text>
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_serial', { serial: deviceid })}`}</Text>
       </View>
