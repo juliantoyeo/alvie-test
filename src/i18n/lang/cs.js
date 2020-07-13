@@ -36,7 +36,7 @@ export default {
     'TERREAU': 'Hlína',
     'TERREAU_ARGILE': 'Bahnitá hlína',
     'ARGILE': 'Jílovitá',
-    'CRAIE' : 'Craie',
+    'CRAIE' : 'Vápenec',
     'none': 'Žádný typ zeminy nevybrán'
   },
   'drawer': {
@@ -79,8 +79,8 @@ export default {
       'msg2' : 'Prosím, kontaktujte nás'
     },
     'need_update': {
-      'msg1': 'C\'est la moisson pour votre application !',
-      'msg2': 'Pour continuer, merci d\'installer la nouvelle mise à jour.'
+      'msg1': 'Máme úrodu pro Vaši aplikaci !',
+      'msg2': 'Pro pokračování je třeba naistalovat novou verzi aplikace.'
     }
   },
   'equipment': {
@@ -278,6 +278,6 @@ export default {
     'Herbicide foliaire de contact': 'Kontaktní herbicid',
     'Herbicide foliaire systémique': 'Systemický herbicid',
     'Insecticide': 'Insekticid',
-    'Solution azotée': 'Solution azotée'
+    'Solution azotée': 'Tekuté dusíkaté hnojivo'
   }
 }
