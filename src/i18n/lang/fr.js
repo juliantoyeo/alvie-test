@@ -231,7 +231,7 @@ export default {
     'select_hours_text': 'Choisissez votre créneau de pulvérisation des prochaines 48h',
     'product_type': 'TYPE DE PRODUIT',
     'culture_type': 'TYPE DE CULTURE',
-    'start': 'Commencer',
+    'start': 'Temps réel',
     'computation_hint': '* Calculé sur la base de vos choix de cultures/produits',
     'reduce_dosage': 'Diminution de la dose* ',
     'all_cultures': 'Toutes les cultures',

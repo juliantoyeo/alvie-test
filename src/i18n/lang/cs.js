@@ -225,7 +225,7 @@ export default {
     'select_hours_text': 'Vyberte preferovaný čas postřiku v příštích 48 hodinách',
     'product_type': 'TYP PRODUKTU',
     'culture_type': 'TYPE PLODINY',
-    'start': 'Začít',
+    'start': 'reálný čas',
     'computation_hint': '* Výpočet na základě Vašeho výběru produktu, plodiny a času',
     'reduce_dosage': 'Doporučené snížení dávky* ',
     'all_cultures': 'Všechny druhy plodin',
