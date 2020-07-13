@@ -79,7 +79,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
     setModulationChanged(true)
     navigation.navigate(screen, {
       notifyUpdate: ()=>setModulationChanged(true),
-      backScreen: 'NextPulverisationDetails'
+      backScreen: 'Pulverisation'
     })
   }
 
