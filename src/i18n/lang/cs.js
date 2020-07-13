@@ -219,7 +219,7 @@ export default {
     'white_FORBIDDEN_everywhere': 'Pozor! V této době není dovoleno postřikovat na Vašich polích',
   },
   'pulverisation': {
-    'header': 'Příští postřikování',
+    'header': 'Plánování',
     'culture_type': 'Typ plodiny',
     'select_text': 'Vyberte typ produktu a plodiny, které plánujete ošetřit při Vašem příštím postřiku.',
     'select_hours_text': 'Vyberte preferovaný čas postřiku v příštích 48 hodinách',

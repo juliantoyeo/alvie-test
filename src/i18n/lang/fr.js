@@ -225,7 +225,7 @@ export default {
     'white_FORBIDDEN_everywhere': 'Attention ! Il est interdit de pulvériser dans ces conditions',
   },
   'pulverisation': {
-    'header': 'Prochaine pulvérisation',
+    'header': 'Planification',
     'culture_type': 'Type de culture',
     'select_text': 'Commencez par le choix de la culture et du type de produit pour votre pulvérisation.',
     'select_hours_text': 'Choisissez votre créneau de pulvérisation des prochaines 48h',
