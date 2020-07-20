@@ -170,7 +170,8 @@ export default {
     'status_conditions_CORRECT': 'Dobré počasí pro postřik',
     'status_conditions_BAD': 'Špatné počasí pro postřik',
     'status_conditions_FORBIDDEN': 'Velmi špatné počasí pro postřik',
-    'dewpoint': 'Rosný bod'
+    'dewpoint': 'Rosný bod',
+    'intervention': 'Postřik'
   },
   'fields': {
     'parcelles': 'Celková plocha polí : %{value}',
