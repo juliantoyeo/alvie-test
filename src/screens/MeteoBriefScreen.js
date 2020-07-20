@@ -48,7 +48,6 @@ const MeteoBriefScreen = ({ navigation }) => {
 
     setLastLoad(new Date().getTime())
     setLoading(false)
-    showSnackbar('Hello !')
   }
 
   const getDay = () => {
