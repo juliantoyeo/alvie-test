@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
 
@@ -12,7 +12,7 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './src/i18n/i18n.js'
 
-import { Snackbar } from 'react-native-paper';
+import { SnackbarProvider } from './src/context/snackbar.context'
 
 i18n.translations = translations
 i18n.locale = Localization.locale
@@ -48,8 +48,6 @@ const store = configureStore();
 
 export default App = () => {
   const [resourcesLoaded, setResourcesLoaded] = useState(false)
-  const [snackIsVisible ,setSnackIsVisible] = useState(true)
-
   if (!resourcesLoaded) {
     return (
       <AppLoading startAsync={fetchResources} onFinish={() => setResourcesLoaded(true)} />
@@ -58,19 +56,9 @@ export default App = () => {
 
   return (
     <Provider store={store}>
-      <AppContainer />
-      <Snackbar
-          visible={snackIsVisible}
-          onDismiss={() => setSnackIsVisible(false)}
-          action={{
-            label: 'Undo',
-            onPress: () => {
-              // Do something
-            },
-          }}
-        >
-          Hey there! I'm a Snackbar.
-        </Snackbar>
+      <SnackbarProvider>
+        <AppContainer />
+      </SnackbarProvider>
     </Provider>  
   );
 }
