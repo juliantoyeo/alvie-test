@@ -12,6 +12,8 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './src/i18n/i18n.js'
 
+import { Snackbar } from 'react-native-paper';
+
 i18n.translations = translations
 i18n.locale = Localization.locale
 i18n.defaultLocale = 'fr'
@@ -46,6 +48,7 @@ const store = configureStore();
 
 export default App = () => {
   const [resourcesLoaded, setResourcesLoaded] = useState(false)
+  const [snackIsVisible ,setSnackIsVisible] = useState(true)
 
   if (!resourcesLoaded) {
     return (
@@ -56,6 +59,18 @@ export default App = () => {
   return (
     <Provider store={store}>
       <AppContainer />
+      <Snackbar
+          visible={snackIsVisible}
+          onDismiss={() => setSnackIsVisible(false)}
+          action={{
+            label: 'Undo',
+            onPress: () => {
+              // Do something
+            },
+          }}
+        >
+          Hey there! I'm a Snackbar.
+        </Snackbar>
     </Provider>  
   );
 }

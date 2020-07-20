@@ -8,6 +8,9 @@ import COLORS from '../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../api/hygoApi'
 
+
+
+
 const MeteoBriefScreen = ({ navigation }) => {
 
   const MONTHS = [
@@ -33,7 +36,7 @@ const MeteoBriefScreen = ({ navigation }) => {
     start: '',
     end: ''
   })
-
+  
   const loadMeteo = async () => {
     let meteo = await getMeteo()
     setMeteoData(meteo)
@@ -44,7 +47,6 @@ const MeteoBriefScreen = ({ navigation }) => {
     })
 
     setLastLoad(new Date().getTime())
-
     setLoading(false)
   }
 
