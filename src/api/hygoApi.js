@@ -270,6 +270,17 @@ export const deleteIntervention = async (interventionid) => {
     }
 } 
 
+export const createIntervention = async () => {
+    try {
+        const response = await hygoApi.post('/app/interventions/create');
+        return (response.data);
+    } catch(error) {
+        return ({
+
+        });
+    }
+}
+
 // Check if the database is ready (parcels and meteo datas loaded => 24h),and if a new version is needed
 export const checkSetup = async () => {
     try {
@@ -280,3 +291,4 @@ export const checkSetup = async () => {
         return ({})
     }
 }
+

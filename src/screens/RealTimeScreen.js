@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
-import { getRealtimeData } from '../api/hygoApi';
+import { getRealtimeData, createIntervention } from '../api/hygoApi';
 
 import LogoLoading from '../components/LogoLoading'
 
@@ -49,7 +49,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
         timestamp: Date.now()
       })
     })
-    return () => unsubscribe()
+    return unsubscribe.remove()
   }, [])
 
   useEffect(() => {
@@ -71,7 +71,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     setUi(ui)
     setCurrentMeteo(parcelleMeteo)
     setCurrentCondition(parcelleMeteoProduct)
-
     if (phytoProductSelected.length === 0 || !parcelleMeteoProduct.condition) {
       updateColors('CYAN')
     } else {
@@ -112,6 +111,15 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
       timestamp: Date.now()
     })
     navigation.navigate('Pulverisation')
+  }
+
+  const onNewIntervention =  async () => {
+    try {
+      await createIntervention()
+    } catch(err) {
+      
+    }
+    loadRealtimeData()
   }
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
@@ -156,6 +164,12 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                   <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
                 </View>
               </TouchableWithoutFeedback>
+              <View style={styles.interv}>
+                <Text style={styles.pickerText}>{i18n.t('realtime.intervention')} {ui.interv ? ui.interv : '0'}</Text>  
+                <TouchableOpacity onPress={ onNewIntervention }>
+                  <Icon style={styles.intervIcon} type="Feather" name="plus-circle" />
+                </TouchableOpacity>  
+              </View>
               <View style={styles.gaugeContainer}>
                 <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
                 <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={0} max={100} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
@@ -224,6 +238,36 @@ const styles = StyleSheet.create({
     fontFamily: 'nunito-bold',
   },
   pickerIcon: {
+    marginLeft: 5,
+    fontSize: 20,
+    color: COLORS.DARK_BLUE
+  },
+  interv: {
+    shadowColor: '#000',
+    shadowOpacity: .2,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    elevation: 3,
+    backgroundColor: '#fff',
+    paddingLeft: 20,
+    borderTopRightRadius: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingRight: 20,
+    paddingVertical: 10,
+    marginTop:10
+  },
+  intervText: {
+    flex: 1,
+    color: COLORS.DARK_BLUE,
+    fontSize: 16,
+    fontFamily: 'nunito-bold',
+  },
+  intervIcon: {
     marginLeft: 5,
     fontSize: 20,
     color: COLORS.DARK_BLUE
