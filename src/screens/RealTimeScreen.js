@@ -71,7 +71,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     setUi(ui)
     setCurrentMeteo(parcelleMeteo)
     setCurrentCondition(parcelleMeteoProduct)
-
     if (phytoProductSelected.length === 0 || !parcelleMeteoProduct.condition) {
       updateColors('CYAN')
     } else {
@@ -114,8 +113,13 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     navigation.navigate('Pulverisation')
   }
 
-  const onNewIntervention =  () => {
-    console.log("hey")
+  const onNewIntervention =  async () => {
+    try {
+      await createIntervention()
+    } catch(err) {
+      
+    }
+    loadRealtimeData()
   }
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
@@ -161,7 +165,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                 </View>
               </TouchableWithoutFeedback>
               <View style={styles.interv}>
-                <Text style={styles.pickerText}>{i18n.t('realtime.intervention')}</Text>  
+                <Text style={styles.pickerText}>{i18n.t('realtime.intervention')} {ui.interv ? ui.interv : '0'}</Text>  
                 <TouchableOpacity onPress={ onNewIntervention }>
                   <Icon style={styles.intervIcon} type="Feather" name="plus-circle" />
                 </TouchableOpacity>  
