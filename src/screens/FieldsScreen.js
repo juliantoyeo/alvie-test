@@ -41,8 +41,8 @@ const FieldsScreen = ({ navigation, parcelles }) => {
   useEffect(() => {
     if (selected !== null) {
       const str_culture = i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selected].culture_name}`)||i18n.t('fields.unknown') })
-      const str_area = i18n.t('fields.area', {value: (parcelles.fields[selected].area / 10000).toFixed(2)})
-      setLegend(`${str_culture}\n${str_area}`)
+      const str_area = parcelles.fields[selected].area ? `\n${i18n.t('fields.area', {value: (parcelles.fields[selected].area / 10000).toFixed(2)})}`: ''
+      setLegend(`${str_culture}${str_area}`)
     } else {
       setLegend(i18n.t('fields.parcelles', { value: parcelles.fields.length }))
     }
