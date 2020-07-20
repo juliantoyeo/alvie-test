@@ -8,9 +8,6 @@ import COLORS from '../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../api/hygoApi'
 
-import { SnackbarContext } from '../context/snackbar.context'
-
-
 const MeteoBriefScreen = ({ navigation }) => {
 
   const MONTHS = [
@@ -36,7 +33,6 @@ const MeteoBriefScreen = ({ navigation }) => {
     start: '',
     end: ''
   })
-  const { showSnackbar } = useContext(SnackbarContext)
   const loadMeteo = async () => {
     let meteo = await getMeteo()
     setMeteoData(meteo)
