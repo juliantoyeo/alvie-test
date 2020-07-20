@@ -181,6 +181,7 @@ export default {
   'fields': {
     'parcelles': 'Parcelles totales : %{value}',
     'culture': 'Culture : %{value}',
+    'area': 'Superficie : %{value} ha',
     'unknown': 'inconnue',
     'header': 'Mon exploitation',
   },
