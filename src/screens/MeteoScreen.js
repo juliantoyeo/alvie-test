@@ -23,7 +23,7 @@ const MeteoScreen = ({ navigation }) => {
     const unsubscribe = navigation.addListener('didFocus', () => {
       setCurrentTab(0)
     })
-    return () => unsubscribe()
+    return () => unsubscribe.remove()
   }, [])
 
   useEffect( () => {

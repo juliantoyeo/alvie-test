@@ -64,7 +64,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
         timestamp: Date.now()
       })
     })
-    return () => unsubscribe()
+    return () => unsubscribe.remove()
   }, [])
 
   useEffect(() => {
