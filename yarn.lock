@@ -3094,6 +3094,14 @@ expo-task-manager@~8.3.0:
   dependencies:
     unimodules-app-loader "~1.2.0"
 
+expo-updates@~0.2.8:
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.2.11.tgz#8131b191049c1384d83b9b992bb33c1d1d86e3c7"
+  integrity sha512-j3Zenpm7qdnECOQsCk3YMnR0hfBqchHEQ31/QhpgSbrX5zSWhO6kY+IyGQKeCNnpZc8GXyJIlEu5AfUvFe1UdQ==
+  dependencies:
+    fbemitter "^2.1.1"
+    uuid "^3.4.0"
+
 expo@^38.0.0:
   version "38.0.8"
   resolved "https://registry.yarnpkg.com/expo/-/expo-38.0.8.tgz#c85727eb382d51d8a8289bc669257b1c90472406"
