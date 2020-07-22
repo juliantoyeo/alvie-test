@@ -5,7 +5,7 @@ import getUserAgent from './getUserAgent'
 import { VERSION } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://192.168.1.35:3000', //'https://hygo-api.alvie.fr',
+    baseURL: 'http://ec2-34-241-81-172.eu-west-1.compute.amazonaws.com:3000', //'https://hygo-api.alvie.fr',
     timeout: 30000,
     headers: { 
         'User-Agent': getUserAgent()

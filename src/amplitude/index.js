@@ -32,7 +32,7 @@ export const AMPLITUDE_EVENTS = {
         render: "render_meteoradarscreen",
     },
     nextPulvScreen : {
-        render: "render_nextpulverisationscreen",
+        render: "render_nextpulverisationscreen", 
         click_goToPulvDetails: "click_nextpulverisationscreen_gotopulvdetails"
     },
     PulvDetailsScreen :  {
@@ -44,7 +44,8 @@ export const AMPLITUDE_EVENTS = {
     realTimeScreen : {
         render: "render_realtimescreen",
         click_productPicker: "click_realtimescreen_productpicker",
-        click_toNextPulvScreen: "click_realtimescreen_tonextpulvscreen"
+        click_toNextPulvScreen: "click_realtimescreen_tonextpulvscreen",
+        click_newIntervention: "click_realtimescreen_newintervention"
     },
     interventionScreen : {
         render: "render_interventionscreen",

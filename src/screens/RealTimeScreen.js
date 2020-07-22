@@ -114,6 +114,9 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
   }
 
   const onNewIntervention =  async () => {
+    Amplitude.logEventWithProperties(ampEvent.click_newIntervention, {
+      timestamp: Date.now()
+    })
     try {
       await createIntervention()
     } catch(err) {
