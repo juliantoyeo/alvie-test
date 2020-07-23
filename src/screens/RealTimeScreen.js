@@ -167,12 +167,12 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                   <Icon style={styles.pickerIcon} type="Feather" name="chevron-down" />
                 </View>
               </TouchableWithoutFeedback>
-              <View style={styles.interv}>
+              {/*<View style={styles.interv}>
                 <Text style={styles.pickerText}>{i18n.t('realtime.intervention')} {ui.interv ? ui.interv : '0'}</Text>  
                 <TouchableOpacity onPress={ onNewIntervention }>
                   <Icon style={styles.intervIcon} type="Feather" name="plus-circle" />
                 </TouchableOpacity>  
-              </View>
+              </View> */}
               <View style={styles.gaugeContainer}>
                 <HygoGauge value={last && typeof last.temp !== 'undefined' ? Math.round(last.temp, 1) : null} min={-10} max={50} color={color} img={require('../../assets/thermo.png')} unit="°C" />
                 <HygoGauge value={last && typeof last.humi !== 'undefined' ? Math.round(last.humi) : null} min={0} max={100} color={color} img={require('../../assets/ICN-Hygro.png')} unit="%" />
