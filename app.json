@@ -1,6 +1,6 @@
 {
   "extra": {
-    "build": "125"
+    "build": "126"
   },
   "expo": {
     "name": "Hygo",
@@ -26,7 +26,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "125",
+      "buildNumber": "126",
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "infoPlist": {
@@ -55,7 +55,7 @@
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 125,
+      "versionCode": 126,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
