@@ -33,7 +33,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
   return (
     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <VictoryChart
-        theme={VictoryTheme.material}
+        //theme={VictoryTheme.material}
         domainPadding={{x: 15 }}
         scale={{ x: "time" }}
         padding={{ top: 30, bottom: 30, left: 50, right: 30 }}
@@ -66,7 +66,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
             fill: '#fff',
             fontSize: 16,
             fontWeight: 500,
-            fontFamily: 'nunito-heavy',
+            //fontFamily: 'nunito-heavy',
           }}
           />
         <VictoryScatter
@@ -74,7 +74,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
           size={4}
           data={data}
         />
-      </VictoryChart>
+        </VictoryChart>
     </View>
   )
 }
