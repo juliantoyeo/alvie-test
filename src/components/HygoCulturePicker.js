@@ -17,7 +17,7 @@ import { updateUICultures } from '../api/hygoApi'
 const HygoCulturePicker = ({ navigation, cultures, culturesSelected, updateCulturesSelected }) => {
 
   return (
-    <SafeAreaView style={[styles.statusbar]} forceInset={{top:'always'}}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <Container style={styles.content}>
         <Header hasTabs style={[styles.header]} androidStatusBarColor={COLORS.BEIGE} iosBarStyle="light-content">

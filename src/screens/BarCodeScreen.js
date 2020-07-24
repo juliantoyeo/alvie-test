@@ -140,7 +140,7 @@ class BarCodeScreen extends React.Component {
     const { hasCameraPermission, scanned, tokenLoading } = this.state;
 
     return (
-      <SafeAreaView style={{ flex: 1, display: 'flex' }}>
+      <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black', flex: 1, display: 'flex' }]} forceInset={{top:'always'}}>
         { this.state.loading && (
           <React.Fragment>
           <StatusBar translucent backgroundColor="transparent" />

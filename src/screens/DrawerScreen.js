@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image, AsyncStorage, Linking, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, Image, AsyncStorage, Linking, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native'
 import { NavigationActions } from 'react-navigation';
 import { DrawerActions } from 'react-navigation-drawer';
 import { connect } from 'react-redux'
@@ -54,7 +54,8 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} forceInset={{top:'always'}}>
+    <StatusBar translucent backgroundColor="transparent" />
       <View style={styles.top}>
         <Thumbnail source={require('../../assets/farmer-icon-png-10-transparent.png')} circular />
         <Text style={[styles.topText, { marginTop: 10}]}>{`${userName} ${familyName}`}</Text>
@@ -84,14 +85,14 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_model', { model: deviceType })}`}</Text>
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_serial', { serial: deviceid })}`}</Text>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 25,
-    backgroundColor: COLORS.CYAN,
+    backgroundColor: 'black',
     flex: 1
   },
   top: {

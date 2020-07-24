@@ -125,7 +125,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     loadRealtimeData()
   }
   return (
-    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <Container style={styles.content}>
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">

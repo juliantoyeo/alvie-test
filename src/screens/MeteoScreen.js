@@ -34,7 +34,7 @@ const MeteoScreen = ({ navigation }) => {
   }, [currentTab])
 
   return (
-    <SafeAreaView style={styles.statusbar}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <ImageBackground source={require('../../assets/meteo_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
         <Container style={styles.content}>

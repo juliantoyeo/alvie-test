@@ -54,10 +54,10 @@ const FieldsScreen = ({ navigation, parcelles }) => {
   }
 
   return (
-    <SafeAreaView style={styles.statusbar} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
-          <Left style={{ flex: 1 }}>
+          <Left style={{ flex: 1}}>
             { parcelles && (
               <Button transparent onPress={() => navigation.goBack()}>
                 <Icon name='close' style={{ color: '#fff' }} />
@@ -129,14 +129,14 @@ const styles = StyleSheet.create({
     fontFamily: 'nunito-regular',
     fontSize: 20
   },  
-  statusbar: { backgroundColor: COLORS.BEIGE, flex: 1 },
+  statusbar: { backgroundColor: 'black', flex: 1 },
   map: {
     justifyContent :"center",
     flexDirection: 'column',
     width: Dimensions.get('window').width,
     height : Dimensions.get('window').width,
   },
-  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 15, paddingRight: 15, alignItems: 'center' },
+  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 15, paddingRight: 15, alignItems: 'center', backgroundColor : COLORS.BEIGE },
   overlay: {
     paddingHorizontal: 20,
     paddingVertical: 15,

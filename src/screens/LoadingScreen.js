@@ -22,7 +22,7 @@ const LoadingScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.statusbar}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <ImageBackground source={require('../../assets/blue_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
         <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>

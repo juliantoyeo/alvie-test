@@ -149,7 +149,7 @@ const EquipmentScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.statusbar} forceInset={{top: 'always'}}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>

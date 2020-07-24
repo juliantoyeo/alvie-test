@@ -10,7 +10,8 @@ import HygoButton from '../components/HygoButton'
 
 const BarCodeValidationScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.statusbar} forceInset={{top: 'always'}}>
+    
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
         <Content contentContainerStyle={styles.container}>
           <View style={{ flex: 2 }} />

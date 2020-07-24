@@ -158,7 +158,7 @@ const NextPulverisationDetails = ({ result, day, hour, ra, next12HoursData, navi
 
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: background }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <ScrollView style={[styles.container, { backgroundColor: background }]}>
         <Header hasTabs style={[styles.header, { backgroundColor: background }]} androidStatusBarColor={background} iosBarStyle="light-content">

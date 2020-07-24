@@ -88,9 +88,9 @@ const MeteoDetailedDetails = ({ navigation }) => {
   }, [])
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: getBackground() }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={[styles.statusbar, { backgroundColor:'black' }]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
-      <ScrollView style={[styles.container, { backgroundColor: 'transparent' }]}>
+      <ScrollView style={[styles.container, { backgroundColor: getBackground() }]}>
         <Header hasTabs style={[styles.header, { backgroundColor: getBackground() }]} androidStatusBarColor={getBackground()} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             <Button transparent onPress={() => navigation.goBack()}>

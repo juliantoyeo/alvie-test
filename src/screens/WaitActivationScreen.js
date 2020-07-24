@@ -18,7 +18,7 @@ const WaitActivationScreen = ({navigation}) => {
       }
     
     return (
-      <SafeAreaView style={{ flex: 1, display: 'flex' }}>
+        <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black', flex: 1, display: 'flex' }]} forceInset={{top:'always'}}>
         
           <React.Fragment>
           <StatusBar translucent backgroundColor="transparent" />
