@@ -58,10 +58,10 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
   }
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <Container style={styles.content}>
-        <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
+        <Header style={styles.header} hasTabs androidStatusBarColor="transparent" iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             <Button transparent onPress={() => navigation.toggleDrawer() }>
               <Icon name='menu' style={{ color: '#fff' }} />
@@ -114,9 +114,14 @@ const InterventionScreen = ({ navigation, interventionValues, updateInterv }) =>
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    backgroundColor: COLORS.BEIGE
+  },
   statusbar: { 
     flex: 1, 
     display: 'flex',
+    backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
   },
   container: { 
     flex: 1, 

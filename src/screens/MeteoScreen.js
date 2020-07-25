@@ -12,6 +12,7 @@ import * as Localization from 'expo-localization';
 
 import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
 import { now } from 'lodash';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const MeteoScreen = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState(0)
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },  
   content: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: Colors.BEIGE
   },
   tabBar: { 
     backgroundColor: 'transparent', 

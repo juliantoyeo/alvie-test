@@ -125,10 +125,10 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
     loadRealtimeData()
   }
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <Container style={styles.content}>
-        <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
+        <Header style={styles.header} hasTabs androidStatusBarColor="transparent" iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             <Button transparent onPress={() => navigation.toggleDrawer() }>
               <Icon name='menu' style={{ color: '#fff' }} />
@@ -154,7 +154,7 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
               <ConditionHeader isRefreshing={isRefreshing} history={history} currentMeteo={currentMeteo} currentCondition={currentCondition} />
               <View style={styles.lastHour}>
                 <Text style={styles.lastHourText}>{history.length === 0 ? i18n.t('realtime.no_data_3_hours') : i18n.t('realtime.last_hour', { value: getLastHour() })}</Text>
-              </View>
+            </View>
 
               <TouchableWithoutFeedback onPress={onProductPicker}>
                 <View style={styles.picker}>
@@ -210,6 +210,10 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    backgroundColor: COLORS.BEIGE
+  },
   pulveContainer: {
     backgroundColor: COLORS.CYAN,
     paddingRight: 15,
@@ -278,6 +282,7 @@ const styles = StyleSheet.create({
   statusbar: { 
     flex: 1, 
     display: 'flex',
+    backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
   },
   container: { 
     flex: 1, 

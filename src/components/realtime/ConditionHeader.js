@@ -40,7 +40,7 @@ const ConditionHeader = ({ isRefreshing, history, phytoProductList, phytoProduct
   }, [phytoProductSelected])
 
   return (
-    <View>
+    <View >
       { isRefreshing && (
         <View style={[styles.headerCondition, { backgroundColor:  COLORS.CYAN }]}>
           <Text style={styles.textCondition}>{}</Text>
@@ -118,9 +118,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: COLORS.EXCELLENT,
     display: 'flex',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#888',
+    borderWidth: 0,
+    borderRadius: 0,
+    borderColor: COLORS.BEIGE, //'#888',
     borderBottomWidth: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

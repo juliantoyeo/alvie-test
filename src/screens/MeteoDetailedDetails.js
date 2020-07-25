@@ -88,10 +88,10 @@ const MeteoDetailedDetails = ({ navigation }) => {
   }, [])
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor:'black' }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={[styles.statusbar, {backgroundColor: Platform.OS === 'ios' ? 'black' : getBackground()}]} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
       <ScrollView style={[styles.container, { backgroundColor: getBackground() }]}>
-        <Header hasTabs style={[styles.header, { backgroundColor: getBackground() }]} androidStatusBarColor={getBackground()} iosBarStyle="light-content">
+        <Header hasTabs style={[styles.header, { backgroundColor: getBackground() }]} androidStatusBarColor="transparent" iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             <Button transparent onPress={() => navigation.goBack()}>
               <Icon name='close' style={{ color: '#fff' }} />
@@ -136,6 +136,10 @@ const MeteoDetailedDetails = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+  statusbar: { 
+    flex: 1, 
+    display: 'flex',
+  },
   header: {
     backgroundColor: 'transparent'
   },

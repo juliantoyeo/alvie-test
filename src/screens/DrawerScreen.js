@@ -5,7 +5,7 @@ import { DrawerActions } from 'react-navigation-drawer';
 import { connect } from 'react-redux'
 import { deleteToken } from '../store/actions/authActions'
 
-import { Thumbnail } from 'native-base'
+import { Thumbnail, Header } from 'native-base'
 import pkg from '../../app.json'
 
 import COLORS from '../colors'
@@ -92,7 +92,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 25,
-    backgroundColor: COLORS.CYAN,
+    backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
     flex: 1
   },
   top: {

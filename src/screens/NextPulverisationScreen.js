@@ -135,9 +135,8 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
   }
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
-      <ImageBackground source={require('../../assets/meteo_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
         <Content style={styles.content}>
           <Header style={styles.header} androidStatusBarColor="transparent" hasTabs transparent iosBarStyle="light-content">
             <Left style={{ flex: 1 }}>
@@ -196,7 +195,7 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
                   <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
                 )}
                 { !loading && (
-                  <>
+                  <React.Fragment>
                     { data.days && data.days.slice(0, 3).map((d, didx) => {
                       return (
                         <View key={d}>
@@ -268,13 +267,12 @@ const NextPulverisationScreen = ({ navigation, phytoProductList, cultures, cultu
                       )
                     })}
                     
-                  </>
+                  </React.Fragment>
                 )}
               </View>
             </View>
           )}
         </Content>
-      </ImageBackground>
     </SafeAreaView>
   )
 }
@@ -294,6 +292,7 @@ const styles = StyleSheet.create({
   statusbar: { 
     flex: 1, 
     display: 'flex',
+    backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
   },
   container: { 
     flex: 1, 
@@ -315,7 +314,7 @@ const styles = StyleSheet.create({
   },  
   content: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: '#fff'
   },
   tabBar: { 
     backgroundColor: 'transparent', 
