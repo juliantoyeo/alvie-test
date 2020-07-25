@@ -92,7 +92,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 25,
-    backgroundColor: 'black',
+    backgroundColor: COLORS.CYAN,
     flex: 1
   },
   top: {
