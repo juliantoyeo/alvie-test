@@ -149,8 +149,9 @@ const EquipmentScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{top:'always'}}>
+    <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
+      <Content style={{backgroundColor: COLORS.BEIGE}}>
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             { result && (
@@ -305,11 +306,16 @@ const EquipmentScreen = ({ navigation }) => {
           )}
         </ScrollView>
       )}
+      </Content>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  statusbar: { 
+    backgroundColor: Platform.OS === 'ios' ? 'black' : "transparent",
+    flex: 1 
+  },
   header: {
     backgroundColor: COLORS.CYAN
   },
@@ -324,8 +330,8 @@ const styles = StyleSheet.create({
     fontFamily: 'nunito-regular',
     fontSize: 20
   },  
-  statusbar: { backgroundColor: COLORS.BEIGE, flex: 1 },
-  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center' },
+  statusbar: { backgroundColor: 'black', flex: 1 },
+  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center', backgroundColor: COLORS.BEIGE },
   containerSelect: { justifyContent: 'flex-start', flex: 1, display: 'flex', paddingLeft: 0, paddingRight: 15, backgroundColor: COLORS.BEIGE },
   title: {
     color: COLORS.DARK_BLUE,
