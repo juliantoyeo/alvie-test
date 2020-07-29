@@ -116,12 +116,11 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
         </View>
       )}
 
-      { !loading && (
+      { !loading && !!detailed.data && !!detailed.data[currentDay] && !!detailed.days && (
         <View style={styles.container}>
           <View style={styles.tabBar}>
             { detailed.days.slice(0, 5).map(d => {
               let data = detailed.data[d].data
-
               return (
                 <TouchableOpacity key={d} style={[styles.tabHeading, { backgroundColor: currentDay === d ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
                   <Text style={[ styles.tabText, { color: currentDay === d ? COLORS.DARK_BLUE : '#fff' } ]}>{i18n.t(`meteo_detailed.days_${detailed.data[d].meta.dow}`)}</Text>
@@ -167,7 +166,7 @@ const MeteoDetailed = ({ navigation, lastMeteoLoad, meteoSynced }) => {
             </View>
           </View>
           <View style={styles.pulve}>
-            <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length })}</Text>
+            <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
 
             <View style={styles.pulveContainer}>
               { detailed.products.map(p => {
