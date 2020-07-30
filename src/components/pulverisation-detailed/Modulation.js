@@ -14,6 +14,9 @@ import { connect } from 'react-redux'
 const phytoIdHide = [12]     // Hide "solution azotée"
 
 const Modulation = ({ day, hour, selected, setModulationChanged, modulationChanged, phytoProductSelected, culturesSelected, phytoProductList }) => {
+  /**
+   * cSelected    : number of slot selected. {min: <number>, max: <number>}
+   */
   const [modulationValue, setModulationValue] = useState()
   const [modulationLoading, setModulationLoading] = useState(false)
   const [cSelected, setCSelected] = useState({...selected})
