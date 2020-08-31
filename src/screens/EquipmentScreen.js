@@ -151,7 +151,7 @@ const EquipmentScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
       <StatusBar translucent backgroundColor="transparent" />
-      <Content style={{backgroundColor: COLORS.BEIGE}}>
+      <Content contentContainerStyle={[{backgroundColor: COLORS.DARK_BLUE, display:"flex",flexDirection:"column" ,justifyContent:'flex-end'}, StyleSheet.absoluteFill]}>
         <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
           <Left style={{ flex: 1 }}>
             { result && (
@@ -164,11 +164,11 @@ const EquipmentScreen = ({ navigation }) => {
             <Title style={styles.headerTitle}>{i18n.t('equipment.header')}</Title>
           </Body>
           <Right style={{ flex: 1 }}></Right>
-        </Header>
-        
-        { step === 'INIT' && (
+          </Header>
+           
+        {step === 'INIT' && (
           <Content contentContainerStyle={styles.container}>
-            <View style={{ flex: 2 }} />
+             <View style={{ flex: 2 }} />
             <Text textAlign="center" style={styles.title}>{i18n.t('equipment.title_notice')}</Text>
             <Text textAlign="center" style={styles.text}>{i18n.t('equipment.text_notice')}</Text>
             <View style={{ flex: 2 }} />

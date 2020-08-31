@@ -36,7 +36,7 @@ const BarCodeValidationScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   statusbar: { backgroundColor: COLORS.BEIGE, flex: 1 },
-  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center' },
+  container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center', backgroundColor: COLORS.BEIGE },
   containerSelect: { justifyContent: 'flex-start', flex: 1, display: 'flex', paddingLeft: 0, paddingRight: 15, backgroundColor: COLORS.BEIGE },
   title: {
     color: COLORS.DARK_BLUE,
