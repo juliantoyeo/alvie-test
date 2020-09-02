@@ -30,6 +30,7 @@ import WaitActivationScreen from './screens/WaitActivationScreen'
 import HeaderText from './components/HeaderText'
 
 import COLORS from './colors'
+import SelectParcelsScreen from './screens/testScreens/SelectParcelsScreen';
 
 const Navigator = createSwitchNavigator({
   mainFlow: createStackNavigator({
@@ -128,7 +129,8 @@ const Navigator = createSwitchNavigator({
       navigationOptions: {
         header: null
       }
-    }
+    },
+    TestPage : SelectParcelsScreen
   }, {
     headerMode: 'none'
   })

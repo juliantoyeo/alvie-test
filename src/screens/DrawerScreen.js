@@ -40,6 +40,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     navigation.navigate('BarCode');
   }
 
+  const goToTest = () => {
+    navigation.navigate('TestPage');
+  }
+
   const sendEmail = () => {
     const email = 'editab@alvie.fr'
     const subject = i18n.t('drawer.email_subject')
@@ -78,6 +82,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         <TouchableOpacity style={styles.item} onPress={logout}>
           <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.item} onPress={goToTest}>
+          <Image source={require('../../assets/ICN-Nav2.png')} style={styles.itemImage} />
+          <Text style={styles.itemText}>Test</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>
