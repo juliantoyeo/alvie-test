@@ -26,11 +26,14 @@ import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
 import WaitActivationScreen from './screens/WaitActivationScreen'
-
+import SelectParcelsScreen from './screens/testScreens/SelectParcelsScreen';
+import SelectProductsScreen from './screens/testScreens/SelectProductsScreen';
+import SelectSlotScreen from './screens/testScreens/SelectSlotScreen';
+import ReportScreen from './screens/testScreens/ReportScreen';
 import HeaderText from './components/HeaderText'
 
 import COLORS from './colors'
-import SelectParcelsScreen from './screens/testScreens/SelectParcelsScreen';
+
 
 const Navigator = createSwitchNavigator({
   mainFlow: createStackNavigator({
@@ -130,7 +133,10 @@ const Navigator = createSwitchNavigator({
         header: null
       }
     },
-    TestPage : SelectParcelsScreen
+    TestPage : SelectParcelsScreen,
+    TestPageProducts : SelectProductsScreen,
+    TestPageSlot : SelectSlotScreen,
+    TestPageReport: ReportScreen
   }, {
     headerMode: 'none'
   })

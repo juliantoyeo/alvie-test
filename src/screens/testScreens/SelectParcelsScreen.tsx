@@ -62,7 +62,7 @@ const SelectParcelsScreen = ({ navigation }) => {
     if (newSelected == true) {
       context.addField(touchedField)
     } else {
-      context.removeField(touchedField)
+      context.removeField(touchedField.id)
     }
   }
   return (
@@ -83,7 +83,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                     {types.map((t, k) => {
                       const items = fields.filter( (p) => p.type == t)
                       return (
-                        !!items && 
+                        items.length > 0 && 
                         <HygoList key={k} title={t} items={items.sort((it1, it2)=>it2.id <= it1.id)} onPress={updateList}/>
                       )
                     })}
@@ -92,6 +92,9 @@ const SelectParcelsScreen = ({ navigation }) => {
               <Footer style={styles.footer}>
               <HygoButton  
                     label="CHOIX DES PRODUITS" 
+                    onPress={() => {
+                      navigation.navigate('TestPageProducts') 
+                    }}
                     icon={{
                       type: 'AntDesign',
                       name: 'arrowright',

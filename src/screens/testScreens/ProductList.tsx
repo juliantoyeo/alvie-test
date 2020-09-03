@@ -7,24 +7,21 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const HygoItem = ({ item, onPress }) => {
     return (
         <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-            <TouchableOpacity onPress={() => {onPress(item.id, !item.selected)}}>
-                <Icon type='AntDesign' name={item.selected ? 'arrowdown' : 'arrowright'} style={{fontSize: 14}} />
+            <TouchableOpacity onPress={() => {onPress(item.id)}}>
+                <Icon type='AntDesign' name='delete' style={{fontSize: 14}} />
             </TouchableOpacity>
-            <Text>{item.arg1}</Text>
-            <Text>{item.arg2}</Text>
+            <Text>{item.name}</Text>
+            <Text>{item.dose}</Text>
         </View>
     )
 }
 
-export const HygoList = ({title, items, onPress}) => {
+export const ProductList = ({title, items, onPress}) => {
     const [opened, setOpened] = useState(false)
     return ( 
         <View style={styles.container}>
             <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-                    
-                     <Icon type='AntDesign' name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
-             
                     <Text style={styles.cardTitle}>{title}</Text>
                     <TouchableOpacity onPress={()=>setOpened(!opened)}>
                         <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />

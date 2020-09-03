@@ -3,9 +3,16 @@ import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native'
 import COLORS from '../colors'
 
 export interface ModulationContextProps {
+    selectedFields: any,
     addField: any,
     removeField: any,
-    cleanFields: any
+    cleanFields: any,
+    setSelectedFields: any,
+    selectedProducts: any,
+    addProduct: any,
+    removeProduct: any,
+    cleanProducts: any,
+    setSelectedProducts: any
 }
 export type selectedFieldsType = {
 
@@ -20,15 +27,24 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedSlot, setSelectedSlot] = useState<any>([])
     const addField = (field) => {
         setSelectedFields([...selectedFields, field])
-        console.log(selectedFields)
     }
-    const removeField = (field) => {
-        setSelectedFields([...selectedFields.filter((f) => f.id != field.id)])
-        console.log(selectedFields)
+    const removeField = (id) => {
+        setSelectedFields([...selectedFields.filter((f) => f.id != id)])
     }
     const cleanFields = () => { setSelectedFields([]) }
+
+    const addProduct = (prod) => {
+        setSelectedProducts([...selectedProducts, prod])
+    }
+    const removeProduct = (id) => {
+        setSelectedProducts([...selectedProducts.filter((p) => p.id != id)])
+    }
+    const cleanProducts = () => { setSelectedProducts([]) }
+
     return (
-        <ModulationContext.Provider value={{ addField, removeField, cleanFields }}>
+        <ModulationContext.Provider value={{ 
+            selectedFields, addField, removeField, cleanFields, setSelectedFields,
+            selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts }}>
             {children}
         </ModulationContext.Provider>
     );
