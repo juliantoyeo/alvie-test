@@ -13,6 +13,12 @@ import COLORS from '../../colors'
 import {Amplitude, AMPLITUDE_EVENTS} from '../../amplitude'
 const {selectParcelsScreen: ampEvent} = AMPLITUDE_EVENTS
 
+import {
+    Alert,
+    Modal,
+    TouchableHighlight,
+  } from "react-native";
+
 const types=["fongicide", "herbicide"]
 
 const productsData = [
@@ -42,7 +48,7 @@ const productsData = [
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-
+    const [debitModalVisible, setDebitModalVisible] = useState<any>(true)
     useEffect(() => {
         context.setSelectedProducts([
             {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
@@ -63,6 +69,31 @@ const SelectProductsScreen = ({ navigation }) => {
                   <Right style={{ flex: 1 }}></Right>
               </Header>
               <Content style={styles.content}>
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={debitModalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+            <Text>Hello World!</Text>
+
+            <TouchableHighlight
+              onPress={() => {
+                setDebitModalVisible(!debitModalVisible);
+              }}
+            >
+              <Text>Hide Modal</Text>
+            </TouchableHighlight>
+          </View>
+          </View>
+      </Modal>
+
+
+
                   <View>
                     <Text style={styles.title}>Mes Produits</Text>
                     {types.map((t, k) => {
@@ -132,7 +163,30 @@ const styles = StyleSheet.create({
     },
     footer:{
       backgroundColor: COLORS.BEIGE
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        backgroundColor: "black",
+        opacity: 0.7
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
   });
   
   const mapStateToProps = (state) => ({
