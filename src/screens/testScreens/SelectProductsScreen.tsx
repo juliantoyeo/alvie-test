@@ -4,14 +4,11 @@ import { StyleSheet, RefreshControl, StatusBar, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
+import HygoModal from './HygoModal';
 import HygoButton from'../../components/HygoButton';
-import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js'
 import COLORS from '../../colors'
-import {Amplitude, AMPLITUDE_EVENTS} from '../../amplitude'
-const {selectParcelsScreen: ampEvent} = AMPLITUDE_EVENTS
 
 import {
     Alert,
@@ -69,57 +66,37 @@ const SelectProductsScreen = ({ navigation }) => {
                   <Right style={{ flex: 1 }}></Right>
               </Header>
               <Content style={styles.content}>
-              <Modal
-        animationType="slide"
-        transparent={true}
-        visible={debitModalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-            <Text>Hello World!</Text>
-
-            <TouchableHighlight
-              onPress={() => {
-                setDebitModalVisible(!debitModalVisible);
-              }}
-            >
-              <Text>Hide Modal</Text>
-            </TouchableHighlight>
-          </View>
-          </View>
-      </Modal>
-
-
-
-                  <View>
-                    <Text style={styles.title}>Mes Produits</Text>
-                    {types.map((t, k) => {
-                      const items = context.selectedProducts.filter( (p) => p.type == t)
-                      return (
-                        items.length > 0 && 
-                        <ProductList 
-                            key={k} 
-                            title={t} 
-                            items={items.sort((it1, it2)=>it2.id <= it1.id)} 
-                            onPress={(id) => context.removeProduct(id)}/>
-                      )
-                    })}
-                  </View>
-              </Content>
-              <Footer style={styles.footer}>
-              <HygoButton  
-                    label="CHOIX DU CRÉNEAU" 
-                    onPress={() => navigation.navigate('TestPageSlot') }
-                    icon={{
-                      type: 'AntDesign',
-                      name: 'arrowright',
-                      fontSize: 26
-                  }} />
-              </Footer>
-          </Container>
+                    <HygoModal 
+                        onClose={()=>{}} 
+                        modalVisible={debitModalVisible} 
+                        setModalVisible={setDebitModalVisible}
+                    />
+                    <View>
+                        <Text style={styles.title}>Mes Produits</Text>
+                        {types.map((t, k) => {
+                        const items = context.selectedProducts.filter( (p) => p.type == t)
+                        return (
+                            items.length > 0 && 
+                            <ProductList 
+                                key={k} 
+                                title={t} 
+                                items={items.sort((it1, it2)=>it2.id <= it1.id)} 
+                                onPress={(id) => context.removeProduct(id)}/>
+                        )
+                        })}
+                    </View>
+                </Content>
+                <Footer style={styles.footer}>
+                <HygoButton  
+                        label="CHOIX DU CRÉNEAU" 
+                        onPress={() => navigation.navigate('TestPageSlot') }
+                        icon={{
+                        type: 'AntDesign',
+                        name: 'arrowright',
+                        fontSize: 26
+                    }} />
+                </Footer>
+            </Container>
           
       </SafeAreaView>
   )
