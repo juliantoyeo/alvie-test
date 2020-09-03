@@ -8,11 +8,15 @@ export interface ModulationContextProps {
     removeField: any,
     cleanFields: any,
     setSelectedFields: any,
+
     selectedProducts: any,
     addProduct: any,
     removeProduct: any,
     cleanProducts: any,
     setSelectedProducts: any
+
+    debit: number,
+    setDebit: any
 }
 export type selectedFieldsType = {
 
@@ -25,6 +29,8 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedFields, setSelectedFields] = useState<any>([])
     const [selectedProducts, setSelectedProducts] = useState<any>([])
     const [selectedSlot, setSelectedSlot] = useState<any>([])
+    const [debit, setDebit] = useState<number>(100)
+
     const addField = (field) => {
         setSelectedFields([...selectedFields, field])
     }
@@ -44,7 +50,9 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     return (
         <ModulationContext.Provider value={{ 
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
-            selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts }}>
+            selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
+            debit, setDebit
+        }}>
             {children}
         </ModulationContext.Provider>
     );

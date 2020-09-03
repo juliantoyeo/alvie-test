@@ -5,10 +5,12 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  View,
+  TextInput
 } from "react-native";
 
-const HygoModal = ({onClose, modalVisible, setModalVisible}) => {
+const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, setInput}) => {
+    const [value, setValue] = useState<any>(defaultValue)
     return (
         <Modal
             animationType="slide"
@@ -19,14 +21,18 @@ const HygoModal = ({onClose, modalVisible, setModalVisible}) => {
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text>Hello World!</Text>
-
-                        <TouchableHighlight
-                        onPress={() => {
-                            setModalVisible(!modalVisible);
-                        }}
-                        >
-                        <Text>Hide Modal</Text>
-                        </TouchableHighlight>
+                    <TextInput 
+                      onChangeText={text => setValue(text)}
+                      value={value}
+                    />
+                    <TouchableHighlight
+                    onPress={() => {
+                        setInput(value)
+                        setModalVisible(!modalVisible);
+                    }}
+                    >
+                    <Text>Hide Modal</Text>
+                    </TouchableHighlight>
                 </View>
             </View>
       </Modal>
@@ -59,4 +65,4 @@ const styles = StyleSheet.create({
       },
   });
 
-export default HygoModal
+export default HygoInputModal

@@ -4,7 +4,7 @@ import { StyleSheet, RefreshControl, StatusBar, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
-import HygoModal from './HygoModal';
+import HygoInputModal from './HygoInputModal';
 import HygoButton from'../../components/HygoButton';
 import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js'
@@ -66,10 +66,13 @@ const SelectProductsScreen = ({ navigation }) => {
                   <Right style={{ flex: 1 }}></Right>
               </Header>
               <Content style={styles.content}>
-                    <HygoModal 
+                    <Text>Débit : {context.debit}</Text>
+                    <HygoInputModal 
                         onClose={()=>{}} 
                         modalVisible={debitModalVisible} 
                         setModalVisible={setDebitModalVisible}
+                        defaultValue={context.debit.toString()}
+                        setInput={(str) => context.setDebit(parseInt(str))}
                     />
                     <View>
                         <Text style={styles.title}>Mes Produits</Text>
