@@ -13,6 +13,7 @@ import i18n from 'i18n-js';
 import translations from './src/i18n/i18n.js'
 
 import { SnackbarProvider } from './src/context/snackbar.context'
+import { ModulationProvider } from './src/context/modulation.context'
 
 i18n.translations = translations
 i18n.locale = Localization.locale
@@ -57,7 +58,9 @@ export default App = () => {
   return (
     <Provider store={store}>
       <SnackbarProvider>
-        <AppContainer />
+        <ModulationProvider>
+          <AppContainer />
+        </ModulationProvider>
       </SnackbarProvider>
     </Provider>  
   );
