@@ -177,7 +177,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         icon={{
                         type: 'AntDesign',
                         name: 'arrowright',
-                        fontSize: 26
+                        fontSize: 26,
                     }} />
                 </Footer>
             </Container>
