@@ -60,8 +60,7 @@ const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [products, setProducts] = useState<Array<productType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
-    const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
-    let callbackModal
+ 
     
     const [viewMode, setViewMode] = useState<boolean>(true)
     useEffect(() => {
@@ -76,17 +75,6 @@ const SelectProductsScreen = ({ navigation }) => {
         context.removeProduct(id)
         const item:any = products.find((p) => p.id == id)
         setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
-    }
-    const addProduct = (item:productType) => {
-        const dose: number = 0
-        callbackModal = (str) => {
-            const dose = parseFloat(str)
-            const newItem: productType = {...item, selected: true}
-            context.addProduct({...newItem, dose})
-            setProducts([...products.filter((p) => p.id != item.id), newItem])
-        }
-        console.log(callbackModal)
-        setDoseModalVisible(true)
     }
 
     const Pulve = () => (
@@ -107,22 +95,43 @@ const SelectProductsScreen = ({ navigation }) => {
         </View>
     )
 
-    const Finder = () => (
-        <View>
-            {types.map((t, k) => {
-                const items:Array<any> = products.filter( (p) => p.type == t)
-                return (
-                    items.length > 0 && 
-                    <FinderList 
-                        key={k} 
-                        title={t} 
-                        items={items.sort((it1, it2) => it1.id - it2.id)} 
-                        onPress={addProduct}
-                    />
-                )
-            })}
-        </View>
-    )
+    const Finder = () => {
+        const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
+        const [select, setSelect] = useState<any>()
+
+        const addProduct = (item:productType) => {
+            setSelect(item)
+            const dose: string = '0.7'
+            setDoseModalVisible(true)
+        }
+        return (
+            <View>
+                <HygoInputModal 
+                    onClose={()=>{}} 
+                    modalVisible={doseModalVisible} 
+                    setModalVisible={setDoseModalVisible}
+                    defaultValue={'0.6'}
+                    setInput={(str)=>{
+                        const newItem: productType = {...select, selected: true}
+                        context.addProduct({...newItem, dose: parseFloat(str)})
+                        setProducts([...products.filter((p) => p.id != select.id), newItem])
+                    }}
+                />
+                {types.map((t, k) => {
+                    const items:Array<any> = products.filter( (p) => p.type == t)
+                    return (
+                        items.length > 0 && 
+                        <FinderList 
+                            key={k} 
+                            title={t} 
+                            items={items.sort((it1, it2) => it1.id - it2.id)} 
+                            onPress={addProduct}
+                        />
+                    )
+                })}
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
@@ -148,13 +157,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
                     />
-                    <HygoInputModal 
-                        onClose={()=>{}} 
-                        modalVisible={doseModalVisible} 
-                        setModalVisible={setDoseModalVisible}
-                        defaultValue={'0.6'}
-                        setInput={callbackModal}
-                    />
+                    
                     <Pulve/>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                         <Text style={styles.title}>Mes Produits</Text>
@@ -168,7 +171,9 @@ const SelectProductsScreen = ({ navigation }) => {
                 <Footer style={styles.footer}>
                 <HygoButton  
                         label="CHOIX DU CRÉNEAU" 
-                        onPress={() => navigation.navigate('TestPageSlot') }
+                        onPress={() => { 
+                            navigation.navigate('TestPageSlot') }
+                        }
                         icon={{
                         type: 'AntDesign',
                         name: 'arrowright',
