@@ -101,11 +101,39 @@ const currentHourMetrics = {
 }
 const hasRacinaire = () => false
 
-const hour = [ '11', '13', '15', '17', '19', '21']
+const hour = '11'
+
+const next12HoursData = {
+    '00': {condition : 'EXCELLENT'},
+    '01': {condition : 'GOOD'},
+    '02': {condition : 'CORRECT'},
+    '03': {condition : 'BAD'},
+    '04': {condition : 'FORBIDDEN'},
+    '05': {condition : 'EXCELLENT'},
+    '06': {condition : 'GOOD'},
+    '07': {condition : 'CORRECT'},
+    '08': {condition : 'BAD'},
+    '09': {condition : 'FORBIDDEN'},
+    '10': {condition : 'EXCELLENT'},
+    '11': {condition : 'GOOD'},
+    '12': {condition : 'CORRECT'},
+    '13': {condition : 'BAD'},
+    '14': {condition : 'FORBIDDEN'},
+    '15': {condition : 'CORRECT'},
+    '16': {condition : 'EXCELLENT'},
+    '17': {condition : 'GOOD'},
+    '18': {condition : 'BAD'},
+    '19': {condition : 'FORBIDDEN'},
+    '20': {condition : 'CORRECT'},
+    '21': {condition : 'FORBIDDEN'},
+    '22': {condition : 'EXCELLENT'},
+    '23': {condition : 'CORRECT'},
+}
 
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
+    const [backgroundColor, setBackgroundColor] = useState<any>(COLORS.EXCELLENT)
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -150,21 +178,27 @@ const SelectSlotScreen = ({ navigation }) => {
                         </View>
                     </View>
                     {/*=============== Slot Picker ===============*/}
-                    <View>
+                    <View style={{ backgroundColor: backgroundColor}}>
                         <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
 
-                        {/* <View style={styles.sliderContainer}>
-                            <HygoParcelleIntervention from={parseInt(hour)} initialMax={selected.max} onHourChangeEnd={(h) => {
-                            setSelected(h);
-                            setModulationChanged(true)
+                        <View style={styles.sliderContainer}>
+                            <HygoParcelleIntervention 
+                                from={parseInt(hour)} 
+                                //initialMax={selected.max} 
+                                data={next12HoursData} 
+                                width={Dimensions.get('window').width - 30} 
+                                onHourChangeEnd={(h) => {
+                                    // setSelected(h);
+                                    // setModulationChanged(true)
 
-                            if (h.max < h.min) {
-                                return
-                            }
-                            reloadCurrentMetrics(h)
-                            setBackgroundColor(h)
-                            }} data={next12HoursData} width={Dimensions.get('window').width - 30} />
-                        </View> */}
+                                    // if (h.max < h.min) {
+                                    //     return
+                                    // }
+                                    // reloadCurrentMetrics(h)
+                                    // setBackgroundColor(h)
+                                }} 
+                            />
+                        </View>
 
                         <HourScale hour={hour} />
 
@@ -215,7 +249,7 @@ const styles = StyleSheet.create({
       color: COLORS.CYAN
     },
     content: {
-      backgroundColor: "#000", //COLORS.BEIGE
+      backgroundColor: COLORS.BEIGE
     },
     footer:{
       backgroundColor: COLORS.BEIGE
