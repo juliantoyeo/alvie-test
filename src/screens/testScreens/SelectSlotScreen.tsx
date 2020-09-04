@@ -237,7 +237,19 @@ const SelectSlotScreen = ({ navigation }) => {
                     {/*================= Result ==================*/}
                     {/* <Modulation day={day} hour={hour} selected={selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
                     <Text style={{backgroundColor:COLORS.BEIGE}}>Modulation : {mod}%</Text>
-                </Content>            
+                </Content>     
+                <Footer style={styles.footer}>
+                <HygoButton  
+                        label="CHOIX DU CRÉNEAU" 
+                        onPress={() => { 
+                            navigation.navigate('TestPageReport') }
+                        }
+                        icon={{
+                        type: 'AntDesign',
+                        name: 'arrowright',
+                        fontSize: 26,
+                    }} />
+                </Footer>       
             </Container>
         </SafeAreaView>
     )
