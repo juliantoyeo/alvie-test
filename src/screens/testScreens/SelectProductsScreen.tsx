@@ -46,7 +46,7 @@ const productsData = [
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
-    const [mode, setMode] = useState<string>('view')
+    const [viewMode, setViewMode] = useState<boolean>(true)
     useEffect(() => {
         context.setSelectedProducts([
             {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
@@ -62,7 +62,6 @@ const SelectProductsScreen = ({ navigation }) => {
     const Recap = () => (
         <View>
             <View>
-                <Text style={styles.title}>Mes Produits</Text>
                 {/* <TouchableOpacity onPress={()=>setOpened(!opened)}>
                     <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
                 </TouchableOpacity> */}
@@ -93,7 +92,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
                 <Left style={{ flex: 1 }}>
                     <Button transparent onPress={() => navigation.goBack()}>
-                        <Icon name='close' style={{ color: '#fff' }} />
+                        <Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
                     </Button>
                 </Left>
                     <Body style={styles.headerBody}>
@@ -111,7 +110,13 @@ const SelectProductsScreen = ({ navigation }) => {
                         setInput={(str) => context.setDebit(parseInt(str))}
                     />
                     <Pulve/>
-                    { mode == 'view' ? <Recap/> : <Finder/>}
+                    <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+                        <Text style={styles.title}>Mes Produits</Text>
+                        <Button transparent onPress={()=>{setViewMode(!viewMode)}}>
+                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={{ color: COLORS.CYAN }} />
+                        </Button>
+                    </View>
+                    { viewMode  ? <Recap/> : <Finder/>}
 
                 </Content>
                 <Footer style={styles.footer}>

@@ -72,7 +72,7 @@ const SelectParcelsScreen = ({ navigation }) => {
               <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
                 <Left style={{ flex: 1 }}>
                   <Button transparent onPress={() => navigation.goBack()}>
-                    <Icon name='close' style={{ color: '#fff' }} />
+                    <Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
                   </Button>
                 </Left>
                   <Body style={styles.headerBody}>
