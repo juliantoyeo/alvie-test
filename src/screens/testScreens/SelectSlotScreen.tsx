@@ -21,28 +21,68 @@ const PICTO_MAP = {
 const slotsData: any = [
     {
         title: 'LUN',
-        pictocode: 'SUN'
+        pictocode: 'SUN',
+        hours4:{
+            '0': 'SUN',
+            '4': 'SUN',
+            '8': 'RAIN',
+            '12': 'RAIN',
+            '16': 'SUN',
+            '20': 'SNOW',
+        }
     },
     {
         title: 'MAR',
-        pictocode: 'CLOUD'
+        pictocode: 'CLOUD',
+        hours4:{
+            '0': 'SNOW',
+            '4': 'SNOW',
+            '8': 'SNOW',
+            '12': 'SNOW',
+            '16': 'SNOW',
+            '20': 'SNOW',
+        }
     },
     {
         title: 'MER',
-        pictocode: 'STORM'
+        pictocode: 'STORM',
+        hours4:{
+            '0': 'RAIN',
+            '4': 'RAIN',
+            '8': 'RAIN',
+            '12': 'RAIN',
+            '16': 'RAIN',
+            '20': 'SNOW',
+        }
     },
     {
         title: 'JEU',
-        pictocode: 'RAIN'
+        pictocode: 'RAIN',
+        hours4:{
+            '0': 'SUN',
+            '4': 'SUN',
+            '8': 'SUN',
+            '12': 'SUN',
+            '16': 'SUN',
+            '20': 'SUN',
+        }
     },
     {
         title: 'VEN',
-        pictocode: 'SNOW'
+        pictocode: 'SNOW',
+        hours4:{
+            '0': 'SUN',
+            '4': 'SUN',
+            '8': 'RAIN',
+            '12': 'RAIN',
+            '16': 'SUN',
+            '20': 'SUN',
+        }
     },
 ]
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    const [currentDay, setCurrentDay] = useState<dayType>('Lundi')
+    const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -59,19 +99,31 @@ const SelectSlotScreen = ({ navigation }) => {
                         </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
-                <Content>
+                <Content style={styles.content}>
                 <View style={styles.tabBar}>
-            { slotsData.slice(0, 5).map((d, i)=> {
-              return (
-                <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
-                  <Text style={[ styles.tabText, { color: currentDay === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
-                  <View style={styles.weatherContainer}>
-                    <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
+                { slotsData.slice(0, 5).map((d, i)=> {
+                    return (
+                        <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
+                        <Text style={[ styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
+                        <View style={styles.weatherContainer}>
+                            <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
+                        </View>
+                        </TouchableOpacity>
+                    )
+                })}
+                </View>
+                <View style={styles.dayContent}>
+                    <View style={styles.hour4Weather}>
+                    { ['00', '04', '08', '12', '16', '20' ].map((h, i) => {
+                        return (
+                            <View key={i} style={styles.hour4WeatherContainer}>
+                                <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
+                                <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
+                            </View>
+                        )
+                    })}
+                    </View>
+                </View>
                 </Content>            
             </Container>
         </SafeAreaView>
@@ -161,6 +213,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#fff',
       },
+      dayContent: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 15,
+        paddingTop: 20,
+        shadowColor: '#000',
+        elevation: 3,
+        shadowOpacity: .2,
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowRadius: 3,
+      },
       weatherContainer: {
         padding: 8,
         width: 40,
@@ -176,6 +241,33 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         tintColor: COLORS.DARK_BLUE
+      },
+      hour4Weather: {
+        paddingHorizontal: 8,
+        paddingVertical: 10,
+        paddingBottom: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+      },
+      hour4WeatherContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      hour4WeatherText: {
+        fontSize: 14,
+        fontFamily: 'nunito-regular',
+        color: '#aaa',
+      },
+      hour4WeatherImage: {
+        marginTop: 5,
+        width: 24,
+        height: 24,
+        resizeMode: 'cover',
+        tintColor: COLORS.DARK_BLUE,
       },
   });
   
