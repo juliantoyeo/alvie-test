@@ -11,7 +11,7 @@ const HygoItem = ({ item, onPress }) => {
                 <Icon type='AntDesign' name='delete' style={{fontSize: 14}} />
             </TouchableOpacity>
             <Text>{item.name}</Text>
-            <Text>{item.dose}</Text>
+            <Text>{item.dose.toString() + 'L/ha'}</Text>
         </View>
     )
 }

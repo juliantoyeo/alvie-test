@@ -3,6 +3,7 @@ import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Tex
 import { View, StyleSheet } from 'react-native'
 import COLORS from '../../colors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import HygoInputModal from './HygoInputModal';
 
 type productType={
     type:string,
@@ -17,13 +18,13 @@ type finderListProps = {
 }
 
 const Item = ({ item, onPress}) => {
-    const dose: number =0
+    
     return (
         <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
             {item.selected ? (
             <Icon type='AntDesign' name={'check'} style={{fontSize: 14}} />
             ): (
-            <TouchableOpacity onPress={() => { onPress(item, dose)}}>
+            <TouchableOpacity onPress={()=>onPress(item)}>
                 <Icon type='AntDesign' name={'pluscircleo'} style={{fontSize: 14}} />
             </TouchableOpacity>
             )}
@@ -37,8 +38,13 @@ const Item = ({ item, onPress}) => {
 
 export const FinderList = ({title, items, onPress}: finderListProps) => {
     const [opened, setOpened] = useState(true)
+    const onAdd = (item) => {
+        onPress(item)
+    }
     return ( 
         <View style={styles.container}>
+            
+
             <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                     <Text style={styles.cardTitle}>{title}</Text>
@@ -47,8 +53,8 @@ export const FinderList = ({title, items, onPress}: finderListProps) => {
                     </TouchableOpacity>
                 </View>
                 {opened && items.map((item,k) => {
-                    //const added = 
-                    return (<Item key={k} item={item} onPress={onPress}/>
+
+                    return (<Item key={k} item={item} onPress={onAdd}/>
                     )
                 })}
             </View>

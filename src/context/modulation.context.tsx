@@ -22,7 +22,7 @@ export type selectedFieldType = any
 export type selectedProductType = {
     type: string,
     name: string,
-    dose: string,
+    dose: number,
     selected?: boolean,
     id: number
 }

@@ -58,15 +58,18 @@ const productsData: Array<productType> = [
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    const [products, setProducts] = useState<Array<productType>>()
+    const [products, setProducts] = useState<Array<productType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
+    const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
+    let callbackModal
+    
     const [viewMode, setViewMode] = useState<boolean>(true)
     useEffect(() => {
         setProducts(productsData)
-        context.setSelectedProducts([
-            {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
-            {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
-        ])
+        // context.setSelectedProducts([
+        //     {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
+        //     {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
+        // ])
     }, [])
 
     const removeProduct = (id) => {
@@ -74,10 +77,16 @@ const SelectProductsScreen = ({ navigation }) => {
         const item:any = products.find((p) => p.id == id)
         setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
     }
-    const addProduct = (item:productType, dose: string) => {
-        const newItem: productType = {...item, selected: true}
-        context.addProduct({...newItem, dose})
-        setProducts([...products.filter((p) => p.id != item.id), newItem])
+    const addProduct = (item:productType) => {
+        const dose: number = 0
+        callbackModal = (str) => {
+            const dose = parseFloat(str)
+            const newItem: productType = {...item, selected: true}
+            context.addProduct({...newItem, dose})
+            setProducts([...products.filter((p) => p.id != item.id), newItem])
+        }
+        console.log(callbackModal)
+        setDoseModalVisible(true)
     }
 
     const Pulve = () => (
@@ -87,10 +96,14 @@ const SelectProductsScreen = ({ navigation }) => {
     )
     const Recap = () => (
         <View>
+            { context.selectedProducts.length > 0 ? (
             <ProductList 
                 items={context.selectedProducts.sort((it1, it2) => it1.id - it2.id)} 
                 onPress={(id) => removeProduct(id)}
             />
+            ) : (
+            <Text>Sélectionner un produit dans la liste</Text>
+            )}
         </View>
     )
 
@@ -107,7 +120,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         onPress={addProduct}
                     />
                 )
-                })}
+            })}
         </View>
     )
 
@@ -134,6 +147,13 @@ const SelectProductsScreen = ({ navigation }) => {
                         setModalVisible={setDebitModalVisible}
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
+                    />
+                    <HygoInputModal 
+                        onClose={()=>{}} 
+                        modalVisible={doseModalVisible} 
+                        setModalVisible={setDoseModalVisible}
+                        defaultValue={'0.6'}
+                        setInput={callbackModal}
                     />
                     <Pulve/>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
