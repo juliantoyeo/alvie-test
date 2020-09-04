@@ -19,7 +19,13 @@ export interface ModulationContextProps {
     setDebit?: any
 }
 export type selectedFieldType = any
-export type selectedProductType = any
+export type selectedProductType = {
+    type: string,
+    name: string,
+    dose: string,
+    selected?: boolean,
+    id: number
+}
 export type selectedSlotType = any
 export const ModulationContext = React.createContext<ModulationContextProps>({});
 
@@ -30,18 +36,18 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedSlot, setSelectedSlot] = useState<Array<selectedSlotType>>([])
     const [debit, setDebit] = useState<number>(100)
 
-    const addField = (field) => {
+    const addField = (field: selectedFieldType) => {
         setSelectedFields([...selectedFields, field])
     }
-    const removeField = (id) => {
+    const removeField = (id: number) => {
         setSelectedFields([...selectedFields.filter((f) => f.id != id)])
     }
     const cleanFields = () => { setSelectedFields([]) }
 
-    const addProduct = (prod) => {
+    const addProduct = (prod: selectedProductType) => {
         setSelectedProducts([...selectedProducts, prod])
     }
-    const removeProduct = (id) => {
+    const removeProduct = (id: number) => {
         setSelectedProducts([...selectedProducts.filter((p) => p.id != id)])
     }
     const cleanProducts = () => { setSelectedProducts([]) }

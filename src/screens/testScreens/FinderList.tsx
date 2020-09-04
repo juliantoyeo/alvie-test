@@ -4,19 +4,38 @@ import { View, StyleSheet } from 'react-native'
 import COLORS from '../../colors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+type productType={
+    type:string,
+    name:string,
+    selected: boolean,
+    id: number
+}
+type finderListProps = {
+    title: string,
+    items: Array<productType>,
+    onPress: any
+}
+
 const Item = ({ item, onPress}) => {
+    const dose: number =0
     return (
         <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-            <TouchableOpacity onPress={() => {onPress(item.id)}}>
-                <Icon type='AntDesign' name={item.selected ? 'check' : 'pluscircleo'} style={{fontSize: 14}} />
+            {item.selected ? (
+            <Icon type='AntDesign' name={'check'} style={{fontSize: 14}} />
+            ): (
+            <TouchableOpacity onPress={() => { onPress(item, dose)}}>
+                <Icon type='AntDesign' name={'pluscircleo'} style={{fontSize: 14}} />
             </TouchableOpacity>
+            )}
             <Text>{item.name}</Text>
             <Text>{item.dose}</Text>
         </View>
     )
 }
 
-export const FinderList = ({title, items, onPress}) => {
+
+
+export const FinderList = ({title, items, onPress}: finderListProps) => {
     const [opened, setOpened] = useState(true)
     return ( 
         <View style={styles.container}>
@@ -28,7 +47,7 @@ export const FinderList = ({title, items, onPress}) => {
                     </TouchableOpacity>
                 </View>
                 {opened && items.map((item,k) => {
-                    const added = 
+                    //const added = 
                     return (<Item key={k} item={item} onPress={onPress}/>
                     )
                 })}

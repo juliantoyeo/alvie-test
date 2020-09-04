@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, View } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
@@ -19,7 +19,12 @@ import {
 
 const types=["fongicide", "herbicide"]
 
-type productType=any
+type productType={
+    type:string,
+    name:string,
+    selected: boolean,
+    id: number
+}
 
 const productsData: Array<productType> = [
   
@@ -69,6 +74,11 @@ const SelectProductsScreen = ({ navigation }) => {
         const item:any = products.find((p) => p.id == id)
         setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
     }
+    const addProduct = (item:productType, dose: string) => {
+        const newItem: productType = {...item, selected: true}
+        context.addProduct({...newItem, dose})
+        setProducts([...products.filter((p) => p.id != item.id), newItem])
+    }
 
     const Pulve = () => (
         <View>
@@ -94,7 +104,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         key={k} 
                         title={t} 
                         items={items.sort((it1, it2) => it1.id - it2.id)} 
-                        onPress={(id) => context.removeProduct(id)}
+                        onPress={addProduct}
                     />
                 )
                 })}
