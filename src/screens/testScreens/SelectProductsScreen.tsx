@@ -4,6 +4,7 @@ import { StyleSheet, RefreshControl, StatusBar, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
+import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
 import HygoButton from'../../components/HygoButton';
 import { ModulationContext } from '../../context/modulation.context';
@@ -18,41 +19,56 @@ import {
 
 const types=["fongicide", "herbicide"]
 
-const productsData = [
+type productType=any
+
+const productsData: Array<productType> = [
   
   {
     type : "fongicide",
     name:"Prozator",
+    selected: false,
     id: 1
   },
   {
     type : "fongicide",
-    arg1: "Eliminator",
+    name: "Eliminator",
+    selected: false,
     id: 2
   },
   {
     type: "herbicide",
-    arg1:"Fusilator",
+    name:"Fusilator",
+    selected: false,
     id: 3
   },
   {
     type: "herbicide",
-    arg1:"destoyator",
+    name:"destoyator",
+    selected: false,
     id: 4
   }
 ]
-    
+
+
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
+    const [products, setProducts] = useState<Array<productType>>()
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
     const [viewMode, setViewMode] = useState<boolean>(true)
     useEffect(() => {
+        setProducts(productsData)
         context.setSelectedProducts([
             {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
             {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
         ])
     }, [])
+
+    const removeProduct = (id) => {
+        context.removeProduct(id)
+        const item:any = products.find((p) => p.id == id)
+        setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
+    }
 
     const Pulve = () => (
         <View>
@@ -61,28 +77,28 @@ const SelectProductsScreen = ({ navigation }) => {
     )
     const Recap = () => (
         <View>
-            <View>
-                {/* <TouchableOpacity onPress={()=>setOpened(!opened)}>
-                    <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
-                </TouchableOpacity> */}
-             
-                {types.map((t, k) => {
-                const items = context.selectedProducts.filter( (p) => p.type == t)
-                return (
-                    items.length > 0 && 
-                    <ProductList 
-                        key={k} 
-                        title={t} 
-                        items={items.sort((it1, it2)=>it2.id <= it1.id)} 
-                        onPress={(id) => context.removeProduct(id)}/>
-                )
-                })}
-            </View>
+            <ProductList 
+                items={context.selectedProducts.sort((it1, it2) => it1.id - it2.id)} 
+                onPress={(id) => removeProduct(id)}
+            />
         </View>
     )
 
     const Finder = () => (
-        <View></View>
+        <View>
+            {types.map((t, k) => {
+                const items:Array<any> = products.filter( (p) => p.type == t)
+                return (
+                    items.length > 0 && 
+                    <FinderList 
+                        key={k} 
+                        title={t} 
+                        items={items.sort((it1, it2) => it1.id - it2.id)} 
+                        onPress={(id) => context.removeProduct(id)}
+                    />
+                )
+                })}
+        </View>
     )
 
     return (

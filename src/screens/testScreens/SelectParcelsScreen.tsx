@@ -88,7 +88,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                       const items = fields.filter( (p) => p.type == t)
                       return (
                         items.length > 0 && 
-                        <HygoList key={k} title={t} items={items.sort((it1, it2)=>it2.id <= it1.id)} onPress={updateList}/>
+                        <HygoList key={k} title={t} items={items.sort((it1, it2)=>it1.id - it2.id)} onPress={updateList}/>
                       )
                     })}
                   </View>

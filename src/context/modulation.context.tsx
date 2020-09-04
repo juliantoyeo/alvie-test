@@ -3,32 +3,31 @@ import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native'
 import COLORS from '../colors'
 
 export interface ModulationContextProps {
-    selectedFields: any,
-    addField: any,
-    removeField: any,
-    cleanFields: any,
-    setSelectedFields: any,
+    selectedFields?: any,
+    addField?: any,
+    removeField?: any,
+    cleanFields?: any,
+    setSelectedFields?: any,
 
-    selectedProducts: any,
-    addProduct: any,
-    removeProduct: any,
-    cleanProducts: any,
-    setSelectedProducts: any
+    selectedProducts?: any,
+    addProduct?: any,
+    removeProduct?: any,
+    cleanProducts?: any,
+    setSelectedProducts?: any
 
-    debit: number,
-    setDebit: any
+    debit?: number,
+    setDebit?: any
 }
-export type selectedFieldsType = {
-
-}
-
+export type selectedFieldType = any
+export type selectedProductType = any
+export type selectedSlotType = any
 export const ModulationContext = React.createContext<ModulationContextProps>({});
 
 export const ModulationProvider: React.FunctionComponent = ({ children }) => {
 
-    const [selectedFields, setSelectedFields] = useState<any>([])
-    const [selectedProducts, setSelectedProducts] = useState<any>([])
-    const [selectedSlot, setSelectedSlot] = useState<any>([])
+    const [selectedFields, setSelectedFields] = useState<Array<selectedFieldType>>([])
+    const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
+    const [selectedSlot, setSelectedSlot] = useState<Array<selectedSlotType>>([])
     const [debit, setDebit] = useState<number>(100)
 
     const addField = (field) => {
