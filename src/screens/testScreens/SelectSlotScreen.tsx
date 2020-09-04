@@ -10,6 +10,11 @@ import { ModulationContext } from '../../context/modulation.context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js'
 import COLORS from '../../colors'
+import Metrics from '../../components/pulverisation-detailed/Metrics';
+import HourScale from '../../components/pulverisation-detailed/HourScale';
+import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
+import Modulation from '../../components/pulverisation-detailed/Modulation';
+import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -80,6 +85,24 @@ const slotsData: any = [
         }
     },
 ]
+
+const currentHourMetrics = {
+    winddirection: 'SO',
+    wind: 20,
+    gust: 21,
+    precipitation: 11,
+    probability: 67,
+    mintemp: -6,
+    maxtemp: 7,
+    minhumi: 30,
+    maxhumi: 35,
+    minsoilhumi: 4,
+    maxsoilhumi: 8,
+}
+const hasRacinaire = () => false
+
+const hour = [ '11', '13', '15', '17', '19', '21']
+
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
@@ -100,30 +123,57 @@ const SelectSlotScreen = ({ navigation }) => {
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
                 <Content style={styles.content}>
-                <View style={styles.tabBar}>
-                { slotsData.slice(0, 5).map((d, i)=> {
-                    return (
-                        <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
-                        <Text style={[ styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
-                        <View style={styles.weatherContainer}>
-                            <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
-                        </View>
-                        </TouchableOpacity>
-                    )
-                })}
-                </View>
-                <View style={styles.dayContent}>
-                    <View style={styles.hour4Weather}>
-                    { ['00', '04', '08', '12', '16', '20' ].map((h, i) => {
+                    {/*============= Week Tab =================*/}
+                    <View style={styles.tabBar}>
+                    { slotsData.slice(0, 5).map((d, i)=> {
                         return (
-                            <View key={i} style={styles.hour4WeatherContainer}>
-                                <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
-                                <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
+                            <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
+                            <Text style={[ styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
+                            <View style={styles.weatherContainer}>
+                                <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
                             </View>
+                            </TouchableOpacity>
                         )
                     })}
                     </View>
-                </View>
+                    {/*=============== Day Weather ==============*/}
+                    <View style={styles.dayContent}>
+                        <View style={styles.hour4Weather}>
+                        { ['00', '04', '08', '12', '16', '20' ].map((h, i) => {
+                            return (
+                                <View key={i} style={styles.hour4WeatherContainer}>
+                                    <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
+                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
+                                </View>
+                            )
+                        })}
+                        </View>
+                    </View>
+                    {/*=============== Slot Picker ===============*/}
+                    <View>
+                        <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
+
+                        {/* <View style={styles.sliderContainer}>
+                            <HygoParcelleIntervention from={parseInt(hour)} initialMax={selected.max} onHourChangeEnd={(h) => {
+                            setSelected(h);
+                            setModulationChanged(true)
+
+                            if (h.max < h.min) {
+                                return
+                            }
+                            reloadCurrentMetrics(h)
+                            setBackgroundColor(h)
+                            }} data={next12HoursData} width={Dimensions.get('window').width - 30} />
+                        </View> */}
+
+                        <HourScale hour={hour} />
+
+                        <ExtraMetrics currentHourMetrics={currentHourMetrics} />
+                    </View>
+
+                    {/*================= Result ==================*/}
+                    {/* <Modulation day={day} hour={hour} selected={selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
+                    
                 </Content>            
             </Container>
         </SafeAreaView>
@@ -165,7 +215,7 @@ const styles = StyleSheet.create({
       color: COLORS.CYAN
     },
     content: {
-      backgroundColor: COLORS.BEIGE
+      backgroundColor: "#000", //COLORS.BEIGE
     },
     footer:{
       backgroundColor: COLORS.BEIGE
@@ -268,6 +318,12 @@ const styles = StyleSheet.create({
         height: 24,
         resizeMode: 'cover',
         tintColor: COLORS.DARK_BLUE,
+      },
+      sliderContainer: {
+        marginTop: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       },
   });
   
