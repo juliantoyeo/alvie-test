@@ -17,16 +17,16 @@ const HygoItem = ({ item, onPress }) => {
 }
 
 export const ProductList = ({title, items, onPress}) => {
-    const [opened, setOpened] = useState(false)
+    const [opened, setOpened] = useState(true)
     return ( 
         <View style={styles.container}>
             <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+                {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                     <Text style={styles.cardTitle}>{title}</Text>
                     <TouchableOpacity onPress={()=>setOpened(!opened)}>
                         <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 {opened && items.map((item,k) => (<HygoItem key={k} item={item} onPress={onPress}/>
                     )
                 )}

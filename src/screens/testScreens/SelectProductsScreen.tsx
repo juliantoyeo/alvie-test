@@ -45,7 +45,8 @@ const productsData = [
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    const [debitModalVisible, setDebitModalVisible] = useState<any>(true)
+    const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
+    const [mode, setMode] = useState<string>('view')
     useEffect(() => {
         context.setSelectedProducts([
             {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
@@ -53,20 +54,55 @@ const SelectProductsScreen = ({ navigation }) => {
         ])
     }, [])
 
-  return (
-      <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
-          <StatusBar translucent backgroundColor="transparent" />
-          <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
-              <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
-                  <Left style={{ flex: 1 }}></Left>
-                  <Body style={styles.headerBody}>
-                      <Title style={styles.headerTitle}>Pulvérisation</Title>
-                      <Title style={styles.headerTitle}>Choix des produits</Title>
-                  </Body>
-                  <Right style={{ flex: 1 }}></Right>
-              </Header>
-              <Content style={styles.content}>
-                    <Text>Débit : {context.debit}</Text>
+    const Pulve = () => (
+        <View>
+            <Text>Débit : {context.debit}</Text>
+        </View>
+    )
+    const Recap = () => (
+        <View>
+            <View>
+                <Text style={styles.title}>Mes Produits</Text>
+                {/* <TouchableOpacity onPress={()=>setOpened(!opened)}>
+                    <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
+                </TouchableOpacity> */}
+             
+                {types.map((t, k) => {
+                const items = context.selectedProducts.filter( (p) => p.type == t)
+                return (
+                    items.length > 0 && 
+                    <ProductList 
+                        key={k} 
+                        title={t} 
+                        items={items.sort((it1, it2)=>it2.id <= it1.id)} 
+                        onPress={(id) => context.removeProduct(id)}/>
+                )
+                })}
+            </View>
+        </View>
+    )
+
+    const Finder = () => (
+        <View></View>
+    )
+
+    return (
+        <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
+            <StatusBar translucent backgroundColor="transparent" />
+            <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
+                <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
+                <Left style={{ flex: 1 }}>
+                    <Button transparent onPress={() => navigation.goBack()}>
+                        <Icon name='close' style={{ color: '#fff' }} />
+                    </Button>
+                </Left>
+                    <Body style={styles.headerBody}>
+                        <Title style={styles.headerTitle}>Pulvérisation</Title>
+                        <Title style={styles.headerTitle}>Choix des produits</Title>
+                    </Body>
+                    <Right style={{ flex: 1 }}></Right>
+                </Header>
+                <Content style={styles.content}>
                     <HygoInputModal 
                         onClose={()=>{}} 
                         modalVisible={debitModalVisible} 
@@ -74,20 +110,9 @@ const SelectProductsScreen = ({ navigation }) => {
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
                     />
-                    <View>
-                        <Text style={styles.title}>Mes Produits</Text>
-                        {types.map((t, k) => {
-                        const items = context.selectedProducts.filter( (p) => p.type == t)
-                        return (
-                            items.length > 0 && 
-                            <ProductList 
-                                key={k} 
-                                title={t} 
-                                items={items.sort((it1, it2)=>it2.id <= it1.id)} 
-                                onPress={(id) => context.removeProduct(id)}/>
-                        )
-                        })}
-                    </View>
+                    <Pulve/>
+                    { mode == 'view' ? <Recap/> : <Finder/>}
+
                 </Content>
                 <Footer style={styles.footer}>
                 <HygoButton  

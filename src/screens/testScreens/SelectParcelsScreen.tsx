@@ -70,7 +70,11 @@ const SelectParcelsScreen = ({ navigation }) => {
           <StatusBar translucent backgroundColor="transparent" />
           <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
               <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
-                  <Left style={{ flex: 1 }}></Left>
+                <Left style={{ flex: 1 }}>
+                  <Button transparent onPress={() => navigation.goBack()}>
+                    <Icon name='close' style={{ color: '#fff' }} />
+                  </Button>
+                </Left>
                   <Body style={styles.headerBody}>
                       <Title style={styles.headerTitle}>Pulvérisation</Title>
                       <Title style={styles.headerTitle}>Choix des parcelles</Title>
