@@ -84,7 +84,6 @@ class HygoParcelleIntervention extends Component {
       return 'transparent'
 
     let padded = `${i+this.props.from}`.padStart(2, '0')
-    console.log(typeof padded)
     return COLORS[`${this.props.data[padded].condition}_CARDS`];
   }
   

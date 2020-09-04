@@ -86,19 +86,34 @@ const slotsData: any = [
     },
 ]
 
-const currentHourMetrics = {
-    winddirection: 'SO',
-    wind: 20,
-    gust: 21,
-    precipitation: 11,
-    probability: 67,
-    mintemp: -6,
-    maxtemp: 7,
-    minhumi: 30,
-    maxhumi: 35,
-    minsoilhumi: 4,
-    maxsoilhumi: 8,
-}
+const hourMetricsData = [
+    {
+        winddirection: 'S',
+        wind: 50,
+        gust: 51,
+        precipitation: 12,
+        probability: 10,
+        mintemp: 20,
+        maxtemp: 27,
+        minhumi: 80,
+        maxhumi: 85,
+        minsoilhumi: 10,
+        maxsoilhumi: 11,
+    },
+    {
+        winddirection: 'N',
+        wind: 20,
+        gust: 21,
+        precipitation: 11,
+        probability: 67,
+        mintemp: -6,
+        maxtemp: 7,
+        minhumi: 30,
+        maxhumi: 35,
+        minsoilhumi: 4,
+        maxsoilhumi: 8,
+    },
+]
 const hasRacinaire = () => false
 
 const hour = '11'
@@ -129,11 +144,25 @@ const next12HoursData = {
     '22': {condition : 'EXCELLENT'},
     '23': {condition : 'CORRECT'},
 }
-
+const modData = [ 15, 16, 17, 39,15, 0, 4]
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
-    const [backgroundColor, setBackgroundColor] = useState<any>(COLORS.EXCELLENT)
+    const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
+    const [selected, setSelected] = useState({
+        min: 0,
+        max: 0 //ra ? parseInt(ra) : 0,
+    })
+    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
+    const [mod, setMod] = useState<any>(modData[0])
+
+    const setBackgroundColor = (h) => {}
+    const reloadCurrentMetrics = (h) => {
+        console.log((h.max + h.min)%2)
+        setCurrentHourMetrics(hourMetricsData[(h.max + h.min)%2])
+        setMod(modData[(h.max + h.min)%7])
+    }
+    
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -178,7 +207,7 @@ const SelectSlotScreen = ({ navigation }) => {
                         </View>
                     </View>
                     {/*=============== Slot Picker ===============*/}
-                    <View style={{ backgroundColor: backgroundColor}}>
+                    <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
                         <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
 
                         <View style={styles.sliderContainer}>
@@ -188,14 +217,14 @@ const SelectSlotScreen = ({ navigation }) => {
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {
-                                    // setSelected(h);
+                                    setSelected(h);
                                     // setModulationChanged(true)
 
-                                    // if (h.max < h.min) {
-                                    //     return
-                                    // }
-                                    // reloadCurrentMetrics(h)
-                                    // setBackgroundColor(h)
+                                    if (h.max < h.min) {
+                                        return
+                                    }
+                                    reloadCurrentMetrics(h)
+                                    setBackgroundColor(h)
                                 }} 
                             />
                         </View>
@@ -207,7 +236,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
                     {/*================= Result ==================*/}
                     {/* <Modulation day={day} hour={hour} selected={selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
-                    
+                    <Text style={{backgroundColor:COLORS.BEIGE}}>Modulation : {mod}%</Text>
                 </Content>            
             </Container>
         </SafeAreaView>
