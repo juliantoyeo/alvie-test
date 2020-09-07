@@ -29,7 +29,7 @@ const ReportScreen = ({ navigation }) => {
                     </Left>
                         <Body style={styles.headerBody}>
                             <Title style={styles.headerTitle}>Pulvérisation</Title>
-                            <Title style={styles.headerTitle}>Rapport</Title>
+                            <Title style={styles.headerTitle}>Récapitulatif</Title>
                         </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>

@@ -116,7 +116,7 @@ const hourMetricsData = [
 ]
 const hasRacinaire = () => false
 
-const hour = '11'
+const hour = '00'
 
 const next12HoursData = {
     '00': {condition : 'EXCELLENT'},
@@ -212,7 +212,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
                         <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
-                                from={parseInt(hour)} 
+                                 from={0/*parseInt(hour)*/}  
                                 //initialMax={selected.max} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
@@ -229,7 +229,28 @@ const SelectSlotScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        <HourScale hour={hour} />
+                        <HourScale hour={'00'/*hour*/} />
+
+                        <View style={styles.sliderContainer}>
+                            <HygoParcelleIntervention 
+                                from={12/*parseInt(hour)*/} 
+                                //initialMax={selected.max} 
+                                data={next12HoursData} 
+                                width={Dimensions.get('window').width - 30} 
+                                onHourChangeEnd={(h) => {
+                                    setSelected(h);
+                                    // setModulationChanged(true)
+
+                                    if (h.max < h.min) {
+                                        return
+                                    }
+                                    reloadCurrentMetrics(h)
+                                    setBackgroundColor(h)
+                                }} 
+                            />
+                        </View>
+
+                        <HourScale hour={'12'/*hour*/} />
 
                         <ExtraMetrics currentHourMetrics={currentHourMetrics} />
                     </View>
@@ -240,7 +261,7 @@ const SelectSlotScreen = ({ navigation }) => {
                 </Content>     
                 <Footer style={styles.footer}>
                 <HygoButton  
-                        label="CHOIX DU CRÉNEAU" 
+                        label="AFFICHER LE RÉCAPITULATIF" 
                         onPress={() => { 
                             navigation.navigate('TestPageReport') }
                         }
