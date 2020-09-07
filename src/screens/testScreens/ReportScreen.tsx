@@ -17,6 +17,8 @@ import Modulation from '../../components/pulverisation-detailed/Modulation';
 import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
 
 const ReportScreen = ({ navigation }) => {
+    const context = React.useContext(ModulationContext) 
+    console.log(context)
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />

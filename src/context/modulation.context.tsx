@@ -20,8 +20,10 @@ export interface ModulationContextProps {
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: any,
-    mod?: number,
-    setMod?: any
+    mod?: modulationType,
+    setMod?: any,
+    metrics?: metricsType,
+    setMetrics? : any
 }
 export type selectedFieldType = any
 export type selectedProductType = {
@@ -35,6 +37,20 @@ export type selectedSlotType = {
     min: number,
     max: number
 }
+export type modulationType = number
+export type metricsType ={
+    winddirection: string,
+    wind: number,
+    gust: number,
+    precipitation: number,
+    probability: number,
+    mintemp: number,
+    maxtemp: number,
+    minhumi: number,
+    maxhumi: number,
+    minsoilhumi: number,
+    maxsoilhumi: number,
+}
 
 export const ModulationContext = React.createContext<ModulationContextProps>({});
 
@@ -44,7 +60,8 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
     const [debit, setDebit] = useState<number>(100)
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:0, max:0})
-    const [mod, setMod] = useState<number>()
+    const [mod, setMod] = useState<modulationType>()
+    const [metrics, setMetrics] = useState<metricsType>()
 
     const addField = (field: selectedFieldType) => {
         setSelectedFields([...selectedFields, field])
@@ -67,7 +84,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
             debit, setDebit,
-            selectedSlot, setSelectedSlot, mod, setMod,
+            selectedSlot, setSelectedSlot, mod, setMod, metrics, setMetrics,
         }}>
             {children}
         </ModulationContext.Provider>
