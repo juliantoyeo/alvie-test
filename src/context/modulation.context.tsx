@@ -20,6 +20,8 @@ export interface ModulationContextProps {
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: any,
+    mod?: number,
+    setMod?: any
 }
 export type selectedFieldType = any
 export type selectedProductType = {
@@ -30,9 +32,10 @@ export type selectedProductType = {
     id: number
 }
 export type selectedSlotType = {
-    slot: number,
-    mod: number
+    min: number,
+    max: number
 }
+
 export const ModulationContext = React.createContext<ModulationContextProps>({});
 
 export const ModulationProvider: React.FunctionComponent = ({ children }) => {
@@ -40,7 +43,8 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedFields, setSelectedFields] = useState<Array<selectedFieldType>>([])
     const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
     const [debit, setDebit] = useState<number>(100)
-    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>()
+    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:0, max:0})
+    const [mod, setMod] = useState<number>()
 
     const addField = (field: selectedFieldType) => {
         setSelectedFields([...selectedFields, field])
@@ -63,7 +67,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
             debit, setDebit,
-            selectedSlot, setSelectedSlot,
+            selectedSlot, setSelectedSlot, mod, setMod,
         }}>
             {children}
         </ModulationContext.Provider>

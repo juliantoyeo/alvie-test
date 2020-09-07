@@ -149,18 +149,12 @@ const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    const [selected, setSelected] = useState({
-        min: 0,
-        max: 0 //ra ? parseInt(ra) : 0,
-    })
-    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
-    const [mod, setMod] = useState<any>(modData[0])
+    // const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
 
     const setBackgroundColor = (h) => {}
     const reloadCurrentMetrics = (h) => {
-        console.log((h.max + h.min)%2)
         setCurrentHourMetrics(hourMetricsData[(h.max + h.min)%2])
-        setMod(modData[(h.max + h.min)%7])
+        context.setMod(modData[(h.max + h.min)%7])
     }
     
     return (
@@ -213,11 +207,11 @@ const SelectSlotScreen = ({ navigation }) => {
                         <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
                                  from={0/*parseInt(hour)*/}  
-                                //initialMax={selected.max} 
+                                //initialMax={context.selected.max} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {
-                                    setSelected(h);
+                                    context.setSelectedSlot(h);
                                     // setModulationChanged(true)
 
                                     if (h.max < h.min) {
@@ -234,11 +228,11 @@ const SelectSlotScreen = ({ navigation }) => {
                         <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
                                 from={12/*parseInt(hour)*/} 
-                                //initialMax={selected.max} 
+                                //initialMax={context.selected.max} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {
-                                    setSelected(h);
+                                    context.setSelectedSlot(h);
                                     // setModulationChanged(true)
 
                                     if (h.max < h.min) {
@@ -256,8 +250,8 @@ const SelectSlotScreen = ({ navigation }) => {
                     </View>
 
                     {/*================= Result ==================*/}
-                    {/* <Modulation day={day} hour={hour} selected={selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
-                    <Text style={{backgroundColor:COLORS.BEIGE}}>Modulation : {mod}%</Text>
+                    {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
+                    <Text style={{backgroundColor:COLORS.BEIGE}}>Modulation : {context.mod ? context.mod : 'x'}%</Text>
                 </Content>     
                 <Footer style={styles.footer}>
                 <HygoButton  
