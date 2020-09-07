@@ -7,6 +7,7 @@ import { ProductList } from './ProductList';
 import HygoButton from'../../components/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
+import { HygoCard, HygoCardSmall } from '../../components/v2/HygoCards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js'
 import COLORS from '../../colors'
@@ -47,7 +48,6 @@ const next12HoursData = {
 
 const ReportScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    console.log(context)
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -74,6 +74,13 @@ const ReportScreen = ({ navigation }) => {
                     {/*=============== Quantities ==============*/}
                     <View>
                         <Title>Rapport de pulvérisation</Title>
+                        <HygoCard title='Remplissage de cuve'>
+                            <HygoCardSmall title='Matières actives'>
+                            {context.selectedProducts.map((p)=>(
+                                <Text key={p.id} style={{paddingLeft:20, color:COLORS.CYAN}}>{p.name}</Text>
+                            ))}
+                            </HygoCardSmall>
+                        </HygoCard>
                     </View>
                 </Content>
             </Container>
