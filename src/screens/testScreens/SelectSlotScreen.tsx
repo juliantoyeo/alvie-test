@@ -202,6 +202,8 @@ const SelectSlotScreen = ({ navigation }) => {
                     </View>
                     {/*=============== Slot Picker ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
+                        <Text>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Text>
+
                         <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
 
                         <View style={styles.sliderContainer}>
@@ -257,6 +259,7 @@ const SelectSlotScreen = ({ navigation }) => {
                 <HygoButton  
                         label="AFFICHER LE RÉCAPITULATIF" 
                         onPress={() => { 
+                            context.setMetrics(currentHourMetrics)
                             navigation.navigate('TestPageReport') }
                         }
                         icon={{

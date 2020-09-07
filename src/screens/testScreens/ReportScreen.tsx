@@ -16,6 +16,35 @@ import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
 import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
 
+const hasRacinaire = () => false
+
+const next12HoursData = {
+    '00': {condition : 'EXCELLENT'},
+    '01': {condition : 'GOOD'},
+    '02': {condition : 'CORRECT'},
+    '03': {condition : 'BAD'},
+    '04': {condition : 'FORBIDDEN'},
+    '05': {condition : 'EXCELLENT'},
+    '06': {condition : 'GOOD'},
+    '07': {condition : 'CORRECT'},
+    '08': {condition : 'BAD'},
+    '09': {condition : 'FORBIDDEN'},
+    '10': {condition : 'EXCELLENT'},
+    '11': {condition : 'GOOD'},
+    '12': {condition : 'CORRECT'},
+    '13': {condition : 'BAD'},
+    '14': {condition : 'FORBIDDEN'},
+    '15': {condition : 'CORRECT'},
+    '16': {condition : 'EXCELLENT'},
+    '17': {condition : 'GOOD'},
+    '18': {condition : 'BAD'},
+    '19': {condition : 'FORBIDDEN'},
+    '20': {condition : 'CORRECT'},
+    '21': {condition : 'FORBIDDEN'},
+    '22': {condition : 'EXCELLENT'},
+    '23': {condition : 'CORRECT'},
+}
+
 const ReportScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     console.log(context)
@@ -35,6 +64,18 @@ const ReportScreen = ({ navigation }) => {
                         </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
+                <Content style={styles.content}>
+                    {/*=============== Metrics ===============*/}
+                    <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
+                        <Text>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Text>
+                        <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
+                        <ExtraMetrics currentHourMetrics={context.metrics} />
+                    </View>
+                    {/*=============== Quantities ==============*/}
+                    <View>
+                        <Title>Rapport de pulvérisation</Title>
+                    </View>
+                </Content>
             </Container>
         </SafeAreaView>
     )
@@ -78,7 +119,13 @@ const styles = StyleSheet.create({
     },
     footer:{
       backgroundColor: COLORS.BEIGE
-    }
+    },
+    sliderContainer: {
+        marginTop: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
 })
 
 const mapStateToProps = (state) => ({
