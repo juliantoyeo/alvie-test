@@ -149,7 +149,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    // const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
+    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
 
     const setBackgroundColor = (h) => {}
     const reloadCurrentMetrics = (h) => {
