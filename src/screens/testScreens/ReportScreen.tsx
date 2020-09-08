@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
 import { ProductList } from './ProductList';
 import HygoButton from'../../components/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import { HygoCard, HygoCardSmall } from '../../components/v2/HygoCards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import i18n from 'i18n-js'
-import COLORS from '../../colors'
+import i18n from 'i18n-js';
+import hygoStyles from '../../styles';
+import COLORS from '../../colors';
 import Metrics from '../../components/pulverisation-detailed/Metrics';
 import HourScale from '../../components/pulverisation-detailed/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
@@ -72,26 +73,47 @@ const ReportScreen = ({ navigation }) => {
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
-                        <Text>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Text>
+                        <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
                         <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
                         <ExtraMetrics currentHourMetrics={context.metrics} />
                     </View>
                     {/*=============== Quantities ==============*/}
                     <View>
-                        <Title>Rapport de pulvérisation</Title>
+                        <Text style={hygoStyles.h0}>Rapport de pulvérisation</Text>
                         <HygoCard title='Remplissage de cuve'>
-                          <HygoCardSmall title='Matières actives'>
-                          {context.selectedProducts.map((p)=>(
-                              <Text key={p.id} style={{paddingLeft:20, color:COLORS.CYAN}}>{p.name} - {p.dose * totalArea * (100 - context.mod) / 100}L</Text>
-                          ))}
+                          <HygoCardSmall title='Matières actives' cardStyle={{ borderWidth:1, borderColor: '#B4B1B1'}}>
+                            <Grid style={{paddingTop: 10}}>
+                            {context.selectedProducts.map((p)=>(
+                              <Row key={p.id} style={{paddingLeft:20}}>
+                                <Col><Text style={[hygoStyles.text, {color:COLORS.CYAN}]}>{p.name}</Text></Col>
+                                <Col><Text style={[hygoStyles.text, {color:COLORS.CYAN, textAlign:'right'}]}>
+                                  {p.dose * totalArea * (100 - context.mod) / 100}L
+                                </Text></Col>
+                              </Row>
+                            ))}
+                            </Grid>
                           </HygoCardSmall>
-                          <Text>Volume de bouillie : {volume}L</Text>
-                          <Text>Eau : {water}L</Text>
-                          <Text>Surface totale: {totalArea}ha</Text>
-                          <Text>Débit : {context.debit}L/ha</Text>
+                          <Grid style={{paddingTop: 10}}>
+                            <Row>
+                              <Col><Text style={hygoStyles.text}>Volume de bouillie</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{volume}L</Text></Col> 
+                            </Row>
+                            <Row>
+                              <Col><Text style={hygoStyles.text}>Eau</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{water}L</Text></Col>
+                            </Row>
+                            <Row>
+                              <Col><Text style={hygoStyles.text}>Surface totale</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{totalArea}ha</Text></Col>
+                            </Row>
+                            <Row>
+                              <Col><Text style={hygoStyles.text}>Débit</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{context.debit}L/ha</Text></Col>
+                            </Row>
+                          </Grid>
                         </HygoCard>
-                        <HygoCard>
-                            <Text>Total économisé {`${totalPhyto * context.mod / 100}L (${context.mod}%)`} </Text>
+                        <HygoCard title="Total économisé">
+                          <Text style={[hygoStyles.h0, {padding:0}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
                         </HygoCard>
                     </View>
                 </Content>
@@ -144,7 +166,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      },
+    },
+    hourTitle: {
+      color: '#FFF',
+      textTransform: 'uppercase',
+      fontFamily: 'nunito-bold',
+      fontSize: 26,
+      paddingTop: 20
+    }
 })
 
 const mapStateToProps = (state) => ({
