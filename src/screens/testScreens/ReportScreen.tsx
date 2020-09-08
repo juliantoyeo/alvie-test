@@ -87,8 +87,8 @@ const ReportScreen = ({ navigation }) => {
                             <Grid style={{paddingTop: 10}}>
                             {context.selectedProducts.map((p)=>(
                               <Row key={p.id} style={{paddingLeft:20}}>
-                                <Col><Text style={[hygoStyles.text, {color:COLORS.CYAN}]}>{p.name}</Text></Col>
-                                <Col><Text style={[hygoStyles.text, {color:COLORS.CYAN, textAlign:'right'}]}>
+                                <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE}]}>{p.name}</Text></Col>
+                                <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
                                   {p.dose * totalArea * (100 - context.mod) / 100}L
                                 </Text></Col>
                               </Row>
