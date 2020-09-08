@@ -8,8 +8,12 @@ import {
   View,
   TextInput
 } from "react-native";
+import hygoStyles from '../../styles';
+import COLORS from  '../../colors';
+import HygoButton from '../../components/v2/HygoButton';
 
-const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, setInput}) => {
+
+const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, setInput, title}) => {
     const [value, setValue] = useState<any>(defaultValue)
     return (
         <Modal
@@ -18,51 +22,93 @@ const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, s
             visible={modalVisible}
             onRequestClose={onClose}
         >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text>Hello World!</Text>
-                    <TextInput 
-                      onChangeText={text => setValue(text)}
-                      value={value}
-                    />
-                    <TouchableHighlight
-                    onPress={() => {
+            <View style={[styles.backdrop, StyleSheet.absoluteFill]}/>
+            <View style={{justifyContent: "center", flex:1}}>
+              <View style={styles.modalView}>
+                  <View style={styles.title}>
+                    <Text style={hygoStyles.h0}>{title}</Text>
+                  </View>
+                  <View style={styles.input}>
+                    <View style={{flex:1}}/>
+                    <View style={styles.inputBorder}>
+                      <TextInput 
+                        onChangeText={text => setValue(text)}
+                        value={value}
+                        style={{ textAlign:'left', flex:1}}
+                      />
+                      <Text style={{paddingLeft: 10, textAlign: 'right', flex:1}}>L/ha</Text>
+                    </View>
+                    <View style={{flex:1}}/>
+                  </View>
+                    <HygoButton 
+                      label='OK'
+                      onPress={() => {
                         setInput(value)
                         setModalVisible(!modalVisible);
-                    }}
-                    >
-                    <Text>Hide Modal</Text>
-                    </TouchableHighlight>
-                </View>
+                      }}
+                      enabled={!!value}
+                    />
+              </View>
             </View>
       </Modal>
     )
 }
 
 const styles = StyleSheet.create({
-    centeredView: {
+    backdrop: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22,
+        //alignItems: "center",
+        // marginTop: 22,
         backgroundColor: "black",
-        opacity: 0.7
+        opacity: 0.5
       },
       modalView: {
-        margin: 20,
+        //margin: 20,
         backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        borderTopRightRadius: 20,
+        // padding: 35,
+        //alignItems: "center",
+        shadowOffset: { width: 0, height: 2},
+        shadowColor: '#000000',
+        shadowRadius: 2,
+        shadowOpacity: .2,
         elevation: 5,
+        },
+      title: {
+        borderColor: '#D1CFCF', 
+        borderBottomWidth: 1, 
+        alignItems:'center'
       },
+      input: {
+        display : 'flex',
+        flexDirection: 'row',
+        justifyContent:'center',
+        margin: 40
+      },
+      inputBorder: {
+        display : 'flex',
+        flexDirection: 'row',
+        justifyContent:'center',
+        borderColor: '#AAA',
+        borderWidth: 1,
+        flex:2,
+        padding: 10,
+      },
+      button: {
+        height: 60,
+        // width: 100,
+        backgroundColor: COLORS.DARK_BLUE,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+      },
+      buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily: 'nunito-bold',
+      }
   });
 
 export default HygoInputModal

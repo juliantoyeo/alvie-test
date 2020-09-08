@@ -97,11 +97,10 @@ const SelectProductsScreen = ({ navigation }) => {
 
     const Finder = () => {
         const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
-        const [select, setSelect] = useState<any>()
+        const [select, setSelect] = useState<productType>()
 
         const addProduct = (item:productType) => {
             setSelect(item)
-            const dose: string = '0.7'
             setDoseModalVisible(true)
         }
         return (
@@ -116,6 +115,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         context.addProduct({...newItem, dose: parseFloat(str)})
                         setProducts([...products.filter((p) => p.id != select.id), newItem])
                     }}
+                    title={select && `Concentration pour ${select.name}`}
                 />
                 {types.map((t, k) => {
                     const items:Array<any> = products.filter( (p) => p.type == t)
@@ -156,6 +156,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         setModalVisible={setDebitModalVisible}
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
+                        title="Débit de pulvérisation"
                     />
                     
                     <Pulve/>

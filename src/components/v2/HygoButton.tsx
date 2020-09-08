@@ -6,9 +6,9 @@ import { Icon } from 'native-base';
 
 import COLORS from '../../colors'
 
-const HygoButton = ({ label, onPress, icon, color, enabled }) => {
+const HygoButton = ({ label, onPress, icon, enabled }) => {
   return (
-    <TouchableOpacity transparent 
+    <TouchableOpacity 
       style={styles.button}
       onPress={onPress}
       disabled={!enabled}
@@ -23,6 +23,10 @@ const HygoButton = ({ label, onPress, icon, color, enabled }) => {
       </View>
     </TouchableOpacity>
   )
+}
+HygoButton.defaultProps= {
+  enabled: true,
+  icon: undefined
 }
 
 const styles = StyleSheet.create({    
