@@ -243,36 +243,17 @@ const SelectSlotScreen = ({ navigation }) => {
 
                         <HourScale hour={'00'/*hour*/} />
 
-                        {/* <View style={styles.sliderContainer}>
-                            <HygoParcelleIntervention 
-                                from={12} 
-                                //initialMax={context.selected.max} 
-                                data={next12HoursData} 
-                                width={Dimensions.get('window').width - 30} 
-                                onHourChangeEnd={(h) => {
-                                  console.log(h)
-                                    context.setSelectedSlot(h);
-                                    // setModulationChanged(true)
-
-                                    if (h.max < h.min) {
-                                        return
-                                    }
-                                    reloadCurrentMetrics(h)
-                                    setBackgroundColor(h)
-                                }} 
-                            />
-                        </View>
-
-                        <HourScale hour={'12'} /> */}
-
                         <ExtraMetrics currentHourMetrics={currentHourMetrics} />
                     </View>
 
                     {/*================= Result ==================*/}
                     {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
                     <View style={{paddingTop: 20, paddingBottom: 40}}>
-                    <HygoCard title="Total économisé">
-                      <Text style={[hygoStyles.h0, {padding:0}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
+                    <HygoCard>
+                        <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center'}}>
+                        <Text style={[hygoStyles.h0, {padding:0}]}>Total économisé</Text>
+                        <Text style={[hygoStyles.h0, {padding:0, fontSize: 26}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
+                      </View>
                     </HygoCard>
                     </View>
                 </Content>     

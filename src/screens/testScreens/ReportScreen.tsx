@@ -74,7 +74,9 @@ const ReportScreen = ({ navigation }) => {
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
                         <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
+                        <View style={{paddingBottom:20}}>
                         <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
+                        </View>
                         <ExtraMetrics currentHourMetrics={context.metrics} />
                     </View>
                     {/*=============== Quantities ==============*/}
@@ -112,9 +114,15 @@ const ReportScreen = ({ navigation }) => {
                             </Row>
                           </Grid>
                         </HygoCard>
-                        <HygoCard title="Total économisé">
-                          <Text style={[hygoStyles.h0, {padding:0}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
-                        </HygoCard>
+                      {/*============= Final result ====================*/}
+                        <View style={{paddingTop: 20, paddingBottom: 40}}>
+                    <HygoCard>
+                        <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center'}}>
+                        <Text style={[hygoStyles.h0, {padding:0}]}>Total économisé</Text>
+                        <Text style={[hygoStyles.h0, {padding:0, fontSize: 26}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
+                      </View>
+                    </HygoCard>
+                    </View>
                     </View>
                 </Content>
             </Container>
