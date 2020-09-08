@@ -4,12 +4,14 @@ import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimension
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
-import HygoButton from'../../components/HygoButton';
+import HygoButton from '../../components/v2/HygoButton';
+import {HygoCard } from '../../components/v2/HygoCards';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import i18n from 'i18n-js'
-import COLORS from '../../colors'
+import i18n from 'i18n-js';
+import COLORS from '../../colors';
+import hygoStyles from '../../styles'
 import Metrics from '../../components/pulverisation-detailed/Metrics';
 import HourScale from '../../components/pulverisation-detailed/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
@@ -150,6 +152,9 @@ const SelectSlotScreen = ({ navigation }) => {
     const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
+    
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
+    const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
 
     const setBackgroundColor = (h) => {}
     const reloadCurrentMetrics = (h) => {
@@ -254,7 +259,11 @@ const SelectSlotScreen = ({ navigation }) => {
 
                     {/*================= Result ==================*/}
                     {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
-                    <Text style={{backgroundColor:COLORS.BEIGE}}>Modulation : {context.mod ? context.mod : 'x'}%</Text>
+                    <View style={{paddingTop: 20, paddingBottom: 40}}>
+                    <HygoCard title="Total économisé">
+                      <Text style={[hygoStyles.h0, {padding:0}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
+                    </HygoCard>
+                    </View>
                 </Content>     
                 <Footer style={styles.footer}>
                 <HygoButton  
