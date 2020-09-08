@@ -225,7 +225,8 @@ const SelectSlotScreen = ({ navigation }) => {
                         <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
                                 from={0/*parseInt(hour)*/}  
-                                //initialMax={context.selected.max} 
+                                initialMax={context.selectedSlot.max} 
+                                initialMin={context.selectedSlot.min} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {

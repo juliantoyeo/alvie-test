@@ -18,8 +18,8 @@ class HygoParcelleIntervention extends Component {
 
     this.state = {
       selected: {
-        min: parseInt(0),
-        max: parseInt(props.initialMax?props.initialMax:0)
+        min: parseInt(props.initialMin ?props.initialMin : 0),
+        max: parseInt(props.initialMax ?props.initialMax : 0)
       },
     }
   }
