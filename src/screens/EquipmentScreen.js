@@ -20,7 +20,6 @@ const {equipmentScreen: ampEvent} = AMPLITUDE_EVENTS
 
 const EquipmentScreen = ({ navigation }) => {
   let result = navigation.getParam('result')
-
   const [step, setStep] = useState(result ? 'SELECT' : 'INIT')
 
   const [buses, setBuses] = useState(result ? {

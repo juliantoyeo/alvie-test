@@ -21,6 +21,7 @@ import {
 import hygoStyles from '../../styles';
 import { toISOString } from 'core-js/fn/date';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getEquipment } from '../../api/hygoApi';
 
 const types=["fongicide", "herbicide"]
 
@@ -75,6 +76,11 @@ const SelectProductsScreen = ({ navigation }) => {
         //     {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
         //     {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
         // ])
+        const asyncFunction = async () => {
+          const equ = await getEquipment()
+          context.setBuses(equ.buses)
+        }
+        asyncFunction()
     }, [])
     useEffect(() => {
       setReady(context.selectedProducts.length > 0)
@@ -97,7 +103,7 @@ const SelectProductsScreen = ({ navigation }) => {
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Type de buse</Text>
-                <Text style={styles.colRight}>{context.debit} L/ha</Text>
+                <Text style={styles.colRight}>{context.buses}</Text>
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Volume de bouillie</Text>

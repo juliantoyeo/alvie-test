@@ -17,6 +17,8 @@ export interface ModulationContextProps {
 
     debit?: number,
     setDebit?: any,
+    buses? :string,
+    setBuses? : any,
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: any,
@@ -65,6 +67,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedFields, setSelectedFields] = useState<Array<selectedFieldType>>([])
     const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
     const [debit, setDebit] = useState<number>(100)
+    const [buses, setBuses] = useState<string>()
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:0, max:0})
     const [mod, setMod] = useState<modulationType>()
     const [metrics, setMetrics] = useState<metricsType>()
@@ -89,7 +92,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
         <ModulationContext.Provider value={{ 
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
-            debit, setDebit,
+            debit, setDebit, buses, setBuses,
             selectedSlot, setSelectedSlot, mod, setMod, metrics, setMetrics,
         }}>
             {children}
