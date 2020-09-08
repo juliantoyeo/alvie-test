@@ -10,8 +10,8 @@ const HygoItem = ({ item, onPress }) => {
             <TouchableOpacity onPress={() => {onPress(item.id, !item.selected)}}>
                 <Icon type='AntDesign' name={item.selected ? 'arrowdown' : 'arrowright'} style={{fontSize: 14}} />
             </TouchableOpacity>
-            <Text>{item.arg1}</Text>
-            <Text>{item.arg2}</Text>
+            <Text>{item.name}</Text>
+            <Text>{item.area}ha</Text>
         </View>
     )
 }

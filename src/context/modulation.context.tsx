@@ -25,7 +25,13 @@ export interface ModulationContextProps {
     metrics?: metricsType,
     setMetrics? : any
 }
-export type selectedFieldType = any
+export type selectedFieldType = {
+    type: string,
+    name: string,
+    area: number,
+    selected: boolean,
+    id: number
+}
 export type selectedProductType = {
     type: string,
     name: string,

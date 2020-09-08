@@ -18,29 +18,29 @@ const fieldsData = [
   
   {
     type : "ble",
-    arg1:"Parcelle1",
-    arg2: "30ha",
+    name:"Parcelle1",
+    area: 30,
     selected: false,
     id: 1
   },
   {
     type : "ble",
-    arg1: "Parcelle2",
-    arg2: "60ha",
+    name: "Parcelle2",
+    area: 60,
     selected: false,
     id: 2
   },
   {
     type: "mais",
-    arg1:"Parcelle3",
-    arg2:"36ha",
+    name:"Parcelle3",
+    area:36,
     selected: false,
     id: 3
   },
   {
     type: "mais",
-    arg1:"Parcelle4",
-    arg2:"64ha",
+    name:"Parcelle4",
+    area:64,
     selected: false,
     id: 4
   }
