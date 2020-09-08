@@ -4,7 +4,7 @@ import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-nat
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { HygoList } from './HygoList';
-import HygoButton from'../../components/HygoButton';
+import HygoButton from'../../components/v2/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js'
@@ -51,11 +51,16 @@ const fieldsData = [
 const SelectParcelsScreen = ({ navigation }) => {
   const context = React.useContext(ModulationContext)
   const [fields, setFields] = useState<any>([])
+  const [ready, setReady] = useState<boolean>(false)
 
   useEffect(() => {
     setFields(fieldsData)
     context.cleanFields()
   }, [])
+
+  useEffect(() => {
+    setReady(context.selectedFields.length > 0)
+  }, [context.selectedFields])
 
   const updateList = (id, newSelected) => {
     const touchedField = {...fields.find( (p) => p.id == id), selected: newSelected}
@@ -96,15 +101,16 @@ const SelectParcelsScreen = ({ navigation }) => {
               </Content>
               <Footer style={styles.footer}>
               <HygoButton  
-                    label="CHOIX DES PRODUITS" 
-                    onPress={() => {
-                      navigation.navigate('TestPageProducts') 
-                    }}
-                    icon={{
-                      type: 'AntDesign',
-                      name: 'arrowright',
-                      fontSize: 26
-                  }} />
+                label="CHOIX DES PRODUITS" 
+                onPress={() => {navigation.navigate('TestPageProducts')}}
+                enabled={ready}
+                icon={{
+                  type: 'AntDesign',
+                  name: 'arrowright',
+                  fontSize: 26
+                }}
+                color={!ready && '#AFAEAE'}
+              />
               </Footer>
           </Container>
           
@@ -150,6 +156,11 @@ const styles = StyleSheet.create({
     },
     footer:{
       backgroundColor: COLORS.BEIGE
+    },
+  });
+  const buttonStyle = StyleSheet.create({
+    inner:{
+      backgroundColor: '#AFAEAE'
     }
   });
   
