@@ -8,7 +8,8 @@ import HygoButton from'../../components/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js'
-import COLORS from '../../colors'
+import hygoStyles from '../../styles';
+import COLORS from '../../colors';
 import {Amplitude, AMPLITUDE_EVENTS} from '../../amplitude'
 const {selectParcelsScreen: ampEvent} = AMPLITUDE_EVENTS
 
@@ -83,7 +84,7 @@ const SelectParcelsScreen = ({ navigation }) => {
               </Header>
               <Content style={styles.content}>
                   <View>
-                    <Text style={styles.title}>Mes Parcelles</Text>
+                    <Text style={hygoStyles.h0}>Mes Parcelles</Text>
                     {types.map((t, k) => {
                       const items = fields.filter( (p) => p.type == t)
                       return (
