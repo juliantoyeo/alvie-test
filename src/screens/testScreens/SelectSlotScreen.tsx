@@ -202,13 +202,14 @@ const SelectSlotScreen = ({ navigation }) => {
                     </View>
                     {/*=============== Slot Picker ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
-                        <Text>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Text>
-
-                        <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
-
+                      <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
+                        <View style={{paddingBottom:40}}>
+                          <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
+                        </View>
+                        
                         <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
-                                 from={0/*parseInt(hour)*/}  
+                                from={0/*parseInt(hour)*/}  
                                 //initialMax={context.selected.max} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
@@ -413,11 +414,18 @@ const styles = StyleSheet.create({
         tintColor: COLORS.DARK_BLUE,
       },
       sliderContainer: {
-        marginTop: 40,
+        //marginTop: 40,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
       },
+      hourTitle: {
+        color: '#FFF',
+        textTransform: 'uppercase',
+        fontFamily: 'nunito-bold',
+        fontSize: 26,
+        paddingTop: 20
+      }
   });
   
   const mapStateToProps = (state) => ({
