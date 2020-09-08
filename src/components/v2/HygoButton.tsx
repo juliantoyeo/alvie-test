@@ -13,7 +13,7 @@ const HygoButton = ({ label, onPress, icon, color, enabled }) => {
       onPress={onPress}
       disabled={!enabled}
       >
-      <View style={[styles.inner, {backgroundColor: color ? color : COLORS.DARK_BLUE }]}>
+      <View style={[styles.inner, {backgroundColor: enabled ? COLORS.DARK_BLUE : '#AFAEAE' }]}>
         <View style={styles.content}>
           { icon && (
             <Icon type={icon.type} name={icon.name} style={[styles.icon, {...{fontSize: icon.fontSize || 32}}]} />
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.DARK_BLUE,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,
   },

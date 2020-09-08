@@ -60,7 +60,7 @@ const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [products, setProducts] = useState<Array<productType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
- 
+    const [ready, setReady] = useState<boolean>(false)
     
     const [viewMode, setViewMode] = useState<boolean>(true)
     useEffect(() => {

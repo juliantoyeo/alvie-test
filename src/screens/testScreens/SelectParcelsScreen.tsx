@@ -109,7 +109,6 @@ const SelectParcelsScreen = ({ navigation }) => {
                   name: 'arrowright',
                   fontSize: 26
                 }}
-                color={!ready && '#AFAEAE'}
               />
               </Footer>
           </Container>
