@@ -11,25 +11,26 @@ export const HygoList = ({title, items, onPress}) => {
     const [opened, setOpened] = useState(false)
     return ( 
         <View style={styles.container}>
-            <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+            <View style={{  display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}>
                     
                      {/* <Icon 
                         type='AntDesign' 
                         name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'} 
                         style={{fontSize: 16, color: COLORS.CYAN}} /> */}
              
-                    <Text style={[hygoStyles.h1, {flex:1}]}>{title}</Text>
+                    <Text style={styles.cardTitle}>{title}</Text>
                     <TouchableOpacity onPress={()=>setOpened(!opened)}>
                         <Icon 
                             type='AntDesign' 
                             name={opened ? 'down' : 'right'} 
-                            style={{fontSize: 16, color: COLORS.CYAN}}
+                            style={{fontSize: 16, color: COLORS.CYAN, padding: 10, paddingRight:20}}
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                    {opened && items.map((item,k) => (
+                {opened && 
+                <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginTop: 10, paddingLeft:20, paddingRight: 20 }}>
+                    {items.map((item,k) => (
                     <TouchableOpacity 
                         key={k}
                         onPress={() => {onPress(item.id, !item.selected)}}
@@ -40,12 +41,13 @@ export const HygoList = ({title, items, onPress}) => {
                             name={item.selected ? 'square' : 'square-o'}
                             style={{fontSize:14, color: COLORS.CYAN, paddingTop: 2 }}  
                         />
-                        <Text style={[hygoStyles.text, {flex:1}]}>{item.name}</Text>
+                        <Text style={[hygoStyles.text, {flex:1, paddingLeft: 10}]}>{item.name}</Text>
                         <Text style={[hygoStyles.text, {textAlign:'right'}]}>{item.area}ha</Text>
                     </TouchableOpacity>
             
                     ))}
                 </View>
+                }
             </View>
         </View>
        
@@ -60,16 +62,14 @@ const styles = StyleSheet.create({
       shadowColor: '#000000',
       shadowRadius: 2,
       shadowOpacity: .2,
-      padding: 20,
       display: 'flex',
       elevation: 2,
-      marginBottom: 10
+      marginBottom: 10,
     },
     cardTitle: {
-      textTransform: 'uppercase',
-      fontFamily: 'nunito-bold',
-      fontSize: 14,
+        ...hygoStyles.h1,
       flex: 1,
-      color: COLORS.CYAN
+      padding: 10,
+      paddingLeft: 20
     },
   })
