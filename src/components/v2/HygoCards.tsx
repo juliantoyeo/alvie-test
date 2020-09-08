@@ -14,6 +14,9 @@ export const HygoCard = ({ title, children }) => {
     </View>
   )
 }
+HygoCard.defaultProps = {
+  title:''
+}
 
 export const HygoCardSmall = ({ title, children }) => {
   return (

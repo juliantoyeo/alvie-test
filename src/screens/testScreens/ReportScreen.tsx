@@ -48,6 +48,11 @@ const next12HoursData = {
 
 const ReportScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
+    const volume = totalArea * context.debit
+    const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
+    const water = volume - totalPhyto
+   
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -75,11 +80,18 @@ const ReportScreen = ({ navigation }) => {
                     <View>
                         <Title>Rapport de pulvérisation</Title>
                         <HygoCard title='Remplissage de cuve'>
-                            <HygoCardSmall title='Matières actives'>
-                            {context.selectedProducts.map((p)=>(
-                                <Text key={p.id} style={{paddingLeft:20, color:COLORS.CYAN}}>{p.name}</Text>
-                            ))}
-                            </HygoCardSmall>
+                          <HygoCardSmall title='Matières actives'>
+                          {context.selectedProducts.map((p)=>(
+                              <Text key={p.id} style={{paddingLeft:20, color:COLORS.CYAN}}>{p.name} - {p.dose * totalArea * (100 - context.mod) / 100}L</Text>
+                          ))}
+                          </HygoCardSmall>
+                          <Text>Volume de bouillie : {volume}L</Text>
+                          <Text>Eau : {water}L</Text>
+                          <Text>Surface totale: {totalArea}ha</Text>
+                          <Text>Débit : {context.debit}L/ha</Text>
+                        </HygoCard>
+                        <HygoCard>
+                            <Text>Total économisé {`${totalPhyto * context.mod / 100}L (${context.mod}%)`} </Text>
                         </HygoCard>
                     </View>
                 </Content>
