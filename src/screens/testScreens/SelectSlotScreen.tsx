@@ -13,10 +13,10 @@ import i18n from 'i18n-js';
 import COLORS from '../../colors';
 import hygoStyles from '../../styles'
 import Metrics from '../../components/pulverisation-detailed/Metrics';
-import HourScale from '../../components/pulverisation-detailed/HourScale';
+import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
-import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
+import HygoParcelleIntervention from '../../components/v2/HygoParcelleIntervention';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -243,13 +243,14 @@ const SelectSlotScreen = ({ navigation }) => {
 
                         <HourScale hour={'00'/*hour*/} />
 
-                        <View style={styles.sliderContainer}>
+                        {/* <View style={styles.sliderContainer}>
                             <HygoParcelleIntervention 
-                                from={12/*parseInt(hour)*/} 
+                                from={12} 
                                 //initialMax={context.selected.max} 
                                 data={next12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {
+                                  console.log(h)
                                     context.setSelectedSlot(h);
                                     // setModulationChanged(true)
 
@@ -262,7 +263,7 @@ const SelectSlotScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        <HourScale hour={'12'/*hour*/} />
+                        <HourScale hour={'12'} /> */}
 
                         <ExtraMetrics currentHourMetrics={currentHourMetrics} />
                     </View>
