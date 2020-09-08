@@ -20,6 +20,7 @@ import {
   } from "react-native";
 import hygoStyles from '../../styles';
 import { toISOString } from 'core-js/fn/date';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const types=["fongicide", "herbicide"]
 
@@ -133,18 +134,6 @@ const SelectProductsScreen = ({ navigation }) => {
         }
         return (
             <View>
-                <HygoInputModal 
-                    onClose={()=>{}} 
-                    modalVisible={doseModalVisible} 
-                    setModalVisible={setDoseModalVisible}
-                    defaultValue={'0.6'}
-                    setInput={(str)=>{
-                        const newItem: productType = {...select, selected: true}
-                        context.addProduct({...newItem, dose: parseFloat(str)})
-                        setProducts([...products.filter((p) => p.id != select.id), newItem])
-                    }}
-                    title={select && `Concentration pour ${select.name}`}
-                />
                 {types.map((t, k) => {
                     const items:Array<any> = products.filter( (p) => p.type == t)
                     return (
@@ -157,6 +146,18 @@ const SelectProductsScreen = ({ navigation }) => {
                         />
                     )
                 })}
+                <HygoInputModal 
+                    onClose={()=>{}} 
+                    modalVisible={doseModalVisible} 
+                    setModalVisible={setDoseModalVisible}
+                    defaultValue={'0.6'}
+                    setInput={(str)=>{
+                        const newItem: productType = {...select, selected: true}
+                        context.addProduct({...newItem, dose: parseFloat(str)})
+                        setProducts([...products.filter((p) => p.id != select.id), newItem])
+                    }}
+                    title={select && `Concentration pour ${select.name}`}
+                />
             </View>
         )
     }
@@ -191,9 +192,9 @@ const SelectProductsScreen = ({ navigation }) => {
 
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                         <Text style={hygoStyles.h0}>Mes Produits</Text>
-                        <Button transparent  onPress={()=>{setViewMode(!viewMode)}}>
-                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={{ color: COLORS.DARK_BLUE}} />
-                        </Button>
+                        <TouchableOpacity   onPress={()=>{setViewMode(!viewMode)}} >
+                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={styles.iconTitle} />
+                        </TouchableOpacity>
                     </View>
                     { viewMode  ? <Recap/> : <Finder/>}
 
@@ -252,6 +253,10 @@ const styles = StyleSheet.create({
       fontFamily: 'nunito-bold',
       fontSize: 16,
       color: COLORS.DARK_BLUE
+    },
+    iconTitle: {
+      color: COLORS.DARK_BLUE,
+      padding: 10,
     },
     content: {
       backgroundColor: COLORS.BEIGE
