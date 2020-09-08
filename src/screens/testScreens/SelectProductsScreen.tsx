@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Grid, Row, Col } from 'native-base';
 import { ProductList } from './ProductList';
 import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
-import HygoButton from'../../components/HygoButton';
+import HygoButton from'../../components/v2/HygoButton';
+import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
-import i18n from 'i18n-js'
+import i18n from 'i18n-js';
+import HygoStyles from '../../styles';
 import COLORS from '../../colors'
 
 import {
@@ -16,6 +18,8 @@ import {
     Modal,
     TouchableHighlight,
   } from "react-native";
+import hygoStyles from '../../styles';
+import { toISOString } from 'core-js/fn/date';
 
 const types=["fongicide", "herbicide"]
 
@@ -61,8 +65,9 @@ const SelectProductsScreen = ({ navigation }) => {
     const [products, setProducts] = useState<Array<productType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
     const [ready, setReady] = useState<boolean>(false)
-    
     const [viewMode, setViewMode] = useState<boolean>(true)
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
+
     useEffect(() => {
         setProducts(productsData)
         // context.setSelectedProducts([
@@ -70,6 +75,9 @@ const SelectProductsScreen = ({ navigation }) => {
         //     {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
         // ])
     }, [])
+    useEffect(() => {
+      setReady(context.selectedProducts.length > 0)
+    }, [context.selectedProducts])
 
     const removeProduct = (id) => {
         context.removeProduct(id)
@@ -77,22 +85,42 @@ const SelectProductsScreen = ({ navigation }) => {
         setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
     }
 
-    const Pulve = () => (
+    const Cuve = () => (
         <View>
-            <Text>Débit : {context.debit}</Text>
+          <Text style={hygoStyles.h0}>Ma Cuve</Text>
+          <HygoCard>
+            <View style={styles.grid}>
+              <View style={styles.row}>
+                <Text style={styles.colLeft}>Débit</Text>
+                <Text style={styles.colRight}>{context.debit} L/ha</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.colLeft}>Type de buse</Text>
+                <Text style={styles.colRight}>{context.debit} L/ha</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.colLeft}>Volume de bouillie</Text>
+                <Text style={[styles.colRight, {borderWidth: 0}]}>{context.debit * totalArea} L</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.colLeft}>Total surface</Text>
+                <Text style={[styles.colRight, {borderWidth: 0}]}>{totalArea} ha</Text>
+              </View>
+            </View>
+          </HygoCard>
         </View>
     )
     const Recap = () => (
         <View>
-            { context.selectedProducts.length > 0 ? (
+            {context.selectedProducts.length > 0 ? (
             <ProductList 
                 items={context.selectedProducts.sort((it1, it2) => it1.id - it2.id)} 
                 onPress={(id) => removeProduct(id)}
             />
             ) : (
-            <Text>Sélectionner un produit dans la liste</Text>
+            <Text style={[hygoStyles.h0, {textAlign:'center'}]}>Ajouter les produits phytosanitaires que vous voulez utiliser</Text>
             )}
-        </View>
+      </View>
     )
 
     const Finder = () => {
@@ -159,28 +187,33 @@ const SelectProductsScreen = ({ navigation }) => {
                         title="Débit de pulvérisation"
                     />
                     
-                    <Pulve/>
+                    <Cuve/>
+
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-                        <Text style={styles.title}>Mes Produits</Text>
-                        <Button transparent onPress={()=>{setViewMode(!viewMode)}}>
-                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={{ color: COLORS.CYAN }} />
+                        <Text style={hygoStyles.h0}>Mes Produits</Text>
+                        <Button transparent  onPress={()=>{setViewMode(!viewMode)}}>
+                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={{ color: COLORS.DARK_BLUE}} />
                         </Button>
                     </View>
                     { viewMode  ? <Recap/> : <Finder/>}
 
                 </Content>
+                { viewMode && (
                 <Footer style={styles.footer}>
                 <HygoButton  
-                        label="CHOIX DU CRÉNEAU" 
-                        onPress={() => { 
-                            navigation.navigate('TestPageSlot') }
-                        }
-                        icon={{
-                        type: 'AntDesign',
-                        name: 'arrowright',
-                        fontSize: 26,
-                    }} />
+                    label="CHOIX DU CRÉNEAU" 
+                    onPress={() => { 
+                        navigation.navigate('TestPageSlot') }
+                    }
+                    icon={{
+                      type: 'AntDesign',
+                      name: 'arrowright',
+                      fontSize: 26,
+                    }}
+                    enabled={ready}
+                  />
                 </Footer>
+                )}
             </Container>
           
       </SafeAreaView>
@@ -218,7 +251,7 @@ const styles = StyleSheet.create({
       textTransform: 'uppercase',
       fontFamily: 'nunito-bold',
       fontSize: 16,
-      color: COLORS.CYAN
+      color: COLORS.DARK_BLUE
     },
     content: {
       backgroundColor: COLORS.BEIGE
@@ -226,29 +259,32 @@ const styles = StyleSheet.create({
     footer:{
       backgroundColor: COLORS.BEIGE
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22,
-        backgroundColor: "black",
-        opacity: 0.7
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      },
+    grid: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      flexDirection:'column'
+    },
+    row : {
+      display: 'flex',
+      justifyContent:'space-between',
+      flexDirection:'row',
+      paddingBottom:5
+    },
+    colRight: {
+      ...hygoStyles.text,
+      textAlign:'right',
+      borderWidth: 1,
+      borderColor: '#AAA',
+      flex: 1,
+      padding :2,
+      paddingBottom:2
+    },
+    colLeft: {
+      ...hygoStyles.text,
+      flex: 3,
+      padding: 2,
+      paddingBottom:2
+    }
   });
   
   const mapStateToProps = (state) => ({

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
 import { View, StyleSheet } from 'react-native'
 import COLORS from '../../colors'
+import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HygoInputModal from './HygoInputModal';
 
@@ -20,16 +21,23 @@ type finderListProps = {
 const Item = ({ item, onPress}) => {
     
     return (
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+        <View style={styles.item}>
             {item.selected ? (
-            <Icon type='AntDesign' name={'check'} style={{fontSize: 14}} />
+            
+                <Icon type='AntDesign' name={'check'} style={{fontSize: 14, color: COLORS.DARK_BLUE, paddingTop: 2}} />
+                
+            
             ): (
-            <TouchableOpacity onPress={()=>onPress(item)}>
-                <Icon type='AntDesign' name={'pluscircleo'} style={{fontSize: 14}} />
+            <TouchableOpacity 
+                onPress={()=>onPress(item)}
+            >
+                <Icon type='AntDesign' name={'pluscircleo'} style={{fontSize: 14, color: COLORS.DARK_BLUE, paddingTop: 2}} />
             </TouchableOpacity>
             )}
-            <Text>{item.name}</Text>
-            <Text>{item.dose}</Text>
+                <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
+                <Text style={hygoStyles.text}>{item.dose}</Text>
+            
+            
         </View>
     )
 }
@@ -44,19 +52,25 @@ export const FinderList = ({title, items, onPress}: finderListProps) => {
     return ( 
         <View style={styles.container}>
             
-
-            <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-                    <Text style={styles.cardTitle}>{title}</Text>
-                    <TouchableOpacity onPress={()=>setOpened(!opened)}>
-                        <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
+            <View style={{  display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}> */}
+                    <TouchableOpacity 
+                        onPress={()=>setOpened(!opened)}
+                        style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}
+                    >
+                        <Text style={styles.cardTitle}>{title}</Text>
+                        <Icon 
+                            type='AntDesign' 
+                            name={opened ? 'down' : 'right'} 
+                            style={{fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20}} />
                     </TouchableOpacity>
-                </View>
+
                 {opened && items.map((item,k) => {
 
                     return (<Item key={k} item={item} onPress={onAdd}/>
                     )
                 })}
+                {/* </View> */}
             </View>
         </View>
        
@@ -65,22 +79,34 @@ export const FinderList = ({title, items, onPress}: finderListProps) => {
 
 const styles = StyleSheet.create({
     container: {
-      borderTopRightRadius: 20,
-      backgroundColor: '#fff',
-      shadowOffset: { width: 0, height: 2},
-      shadowColor: '#000000',
-      shadowRadius: 2,
-      shadowOpacity: .2,
-      padding: 20,
-      display: 'flex',
-      elevation: 2,
-      marginBottom: 10
-    },
+        borderTopRightRadius: 20,
+        backgroundColor: '#fff',
+        shadowOffset: { width: 0, height: 2},
+        shadowColor: '#000000',
+        shadowRadius: 2,
+        shadowOpacity: .2,
+        display: 'flex',
+        elevation: 2,
+        marginBottom: 10,
+      },
+    // cardTitle: {
+    //   textTransform: 'uppercase',
+    //   fontFamily: 'nunito-bold',
+    //   fontSize: 14,
+    //   flex: 1,
+    //   color: COLORS.DARK_BLUE
+    // },
     cardTitle: {
-      textTransform: 'uppercase',
-      fontFamily: 'nunito-bold',
-      fontSize: 14,
+        ...hygoStyles.h1,
       flex: 1,
-      color: COLORS.CYAN
-    }
+      padding: 10,
+      paddingLeft: 20
+    },
+    item: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent:'space-between', 
+        marginTop: 10, 
+        paddingLeft:20, 
+        paddingRight: 20 }
   })

@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
 import { View, StyleSheet } from 'react-native'
 import COLORS from '../../colors'
+import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const HygoItem = ({ item, onPress }) => {
     return (
         <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
             <TouchableOpacity onPress={() => {onPress(item.id)}}>
-                <Icon type='AntDesign' name='delete' style={{fontSize: 14}} />
+                <Icon type='AntDesign' name='delete' style={{fontSize: 14, paddingTop: 2, color:COLORS.DARK_BLUE}} />
             </TouchableOpacity>
-            <Text>{item.name}</Text>
-            <Text>{item.dose.toString() + 'L/ha'}</Text>
+            <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
+            <Text style={hygoStyles.text}>{item.dose.toString() + 'L/ha'}</Text>
         </View>
     )
 }

@@ -7,15 +7,18 @@ import COLORS from '../../colors'
 export const HygoCard = ({ title, children }) => {
   return (
     <View style={[styles.container, {backgroundColor: '#fff'}]}>
+      
+      { !!title && ( 
       <View style={{ minHeight: 26, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
         <Text style={[hygoStyles.h1, {flex: 1}]}>{title}</Text>
-      </View>
+      </View> )}
+      
       {children}
     </View>
   )
 }
 HygoCard.defaultProps = {
-  title:'',
+  title:undefined,
   style:{}
 }
 

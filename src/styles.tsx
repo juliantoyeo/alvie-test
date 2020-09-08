@@ -9,14 +9,15 @@ const hygoStyles = StyleSheet.create({
         textTransform: 'uppercase',
         fontFamily: 'nunito-heavy',
         fontSize: 16,
-        color: COLORS.CYAN,
-        padding: paddingBig
+        color: COLORS.DARK_BLUE,
+        padding: paddingBig,
+        paddingBottom: paddingSmall
     },
     h1: {
         textTransform: 'uppercase',
         fontFamily: 'nunito-regular',
         fontSize: 14,
-        color: COLORS.CYAN,
+        color: COLORS.DARK_BLUE,
         //paddingTop: 10,
         paddingBottom: 10
     },

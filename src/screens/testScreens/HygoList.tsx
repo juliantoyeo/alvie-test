@@ -24,7 +24,7 @@ export const HygoList = ({title, items, onPress}) => {
                         <Icon 
                             type='AntDesign' 
                             name={opened ? 'down' : 'right'} 
-                            style={{fontSize: 16, color: COLORS.CYAN, padding: 10, paddingRight:20}}
+                            style={{fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight:20}}
                         />
                     </TouchableOpacity>
                 </View>
@@ -39,7 +39,7 @@ export const HygoList = ({title, items, onPress}) => {
                         <Icon 
                             type='FontAwesome' 
                             name={item.selected ? 'square' : 'square-o'}
-                            style={{fontSize:14, color: COLORS.CYAN, paddingTop: 2 }}  
+                            style={{fontSize:14, color: COLORS.DARK_BLUE, paddingTop: 3 }}  
                         />
                         <Text style={[hygoStyles.text, {flex:1, paddingLeft: 10}]}>{item.name}</Text>
                         <Text style={[hygoStyles.text, {textAlign:'right'}]}>{item.area}ha</Text>
