@@ -101,6 +101,11 @@ const hourMetricsData = [
         maxhumi: 85,
         minsoilhumi: 10,
         maxsoilhumi: 11,
+        prevprecipitation: 5,
+        'r2': 13,
+        'r3': 16,
+        'r6': 33,
+        deltatemp: 10
     },
     {
         winddirection: 'N',
@@ -114,6 +119,11 @@ const hourMetricsData = [
         maxhumi: 35,
         minsoilhumi: 4,
         maxsoilhumi: 8,
+        prevprecipitation: 0,
+        'r2': 13,
+        'r3': 16,
+        'r6': 33,
+        deltatemp: 5
     },
 ]
 const hasRacinaire = () => false
