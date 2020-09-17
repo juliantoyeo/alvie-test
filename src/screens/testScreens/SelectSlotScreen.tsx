@@ -218,7 +218,7 @@ const SelectSlotScreen = ({ navigation }) => {
                     {/*=============== Slot Picker ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
                       <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
-                        <View style={{paddingBottom:40}}>
+                        <View style={{paddingBottom:20}}>
                           <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
                         </View>
                         

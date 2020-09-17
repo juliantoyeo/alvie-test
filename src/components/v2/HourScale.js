@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   hoursDetailsContainer: {
     flexDirection: 'row',
     display: 'flex',
-    marginBottom: 50,
+    marginBottom: 40,
     marginHorizontal: 15
   },
   hoursDetails: {
