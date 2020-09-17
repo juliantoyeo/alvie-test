@@ -1,7 +1,7 @@
 {
   "extra": {
-    "build": "127",
-    "ota": "3108"
+    "build": "128",
+    "ota": "1709-test"
   },
   "expo": {
     "name": "Hygo",
@@ -27,7 +27,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "127",
+      "buildNumber": "128",
       "supportsTablet": true,
       "bundleIdentifier": "com.alvie.hygo",
       "infoPlist": {
@@ -56,7 +56,7 @@
     },
     "android": {
       "package": "com.alvie.hygo",
-      "versionCode": 127,
+      "versionCode": 128,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
