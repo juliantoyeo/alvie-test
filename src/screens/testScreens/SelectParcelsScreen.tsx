@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
-import { HygoList } from './HygoList';
+import { HygoList } from './ParcelList';
 import HygoButton from'../../components/v2/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
@@ -13,39 +13,9 @@ import COLORS from '../../colors';
 import {Amplitude, AMPLITUDE_EVENTS} from '../../amplitude'
 const {selectParcelsScreen: ampEvent} = AMPLITUDE_EVENTS
 
-const types=["ble", "mais"]
+import { fieldsData } from './staticData';
 
-const fieldsData = [
-  
-  {
-    type : "ble",
-    name:"Parcelle1",
-    area: 30,
-    selected: false,
-    id: 1
-  },
-  {
-    type : "ble",
-    name: "Parcelle2",
-    area: 60,
-    selected: false,
-    id: 2
-  },
-  {
-    type: "mais",
-    name:"Parcelle3",
-    area:36,
-    selected: false,
-    id: 3
-  },
-  {
-    type: "mais",
-    name:"Parcelle4",
-    area:64,
-    selected: false,
-    id: 4
-  }
-]
+const types=["ble", "mais", "orge"]
     
 
 const SelectParcelsScreen = ({ navigation }) => {

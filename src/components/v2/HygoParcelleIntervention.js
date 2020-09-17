@@ -76,6 +76,9 @@ class HygoParcelleIntervention extends Component {
         max
       }
     })
+    if (this.props.onSelectMove) {
+      this.props.onSelectMove({selected: {min, max}})
+    }
   }
 
   getColor = (i) => {

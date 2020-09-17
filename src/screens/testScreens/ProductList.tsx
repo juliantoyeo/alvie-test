@@ -7,12 +7,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const HygoItem = ({ item, onPress }) => {
     return (
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+        <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', paddingVertical:5}}>
             <TouchableOpacity onPress={() => {onPress(item.id)}}>
-                <Icon type='AntDesign' name='delete' style={{fontSize: 14, paddingTop: 2, color:COLORS.DARK_BLUE}} />
+                <Icon type='AntDesign' name='delete' style={{fontSize: 16, paddingTop: 2, color:COLORS.DARK_BLUE}} />
             </TouchableOpacity>
             <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
-            <Text style={hygoStyles.text}>{item.dose.toString() + 'L/ha'}</Text>
+            <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
         </View>
     )
 }

@@ -20,33 +20,6 @@ import HygoParcelleIntervention from '../../components/HygoParcelleIntervention'
 
 const hasRacinaire = () => false
 
-const next12HoursData = {
-    '00': {condition : 'EXCELLENT'},
-    '01': {condition : 'GOOD'},
-    '02': {condition : 'CORRECT'},
-    '03': {condition : 'BAD'},
-    '04': {condition : 'FORBIDDEN'},
-    '05': {condition : 'EXCELLENT'},
-    '06': {condition : 'GOOD'},
-    '07': {condition : 'CORRECT'},
-    '08': {condition : 'BAD'},
-    '09': {condition : 'FORBIDDEN'},
-    '10': {condition : 'EXCELLENT'},
-    '11': {condition : 'GOOD'},
-    '12': {condition : 'CORRECT'},
-    '13': {condition : 'BAD'},
-    '14': {condition : 'FORBIDDEN'},
-    '15': {condition : 'CORRECT'},
-    '16': {condition : 'EXCELLENT'},
-    '17': {condition : 'GOOD'},
-    '18': {condition : 'BAD'},
-    '19': {condition : 'FORBIDDEN'},
-    '20': {condition : 'CORRECT'},
-    '21': {condition : 'FORBIDDEN'},
-    '22': {condition : 'EXCELLENT'},
-    '23': {condition : 'CORRECT'},
-}
-
 const ReportScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -73,7 +46,7 @@ const ReportScreen = ({ navigation }) => {
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
-                        <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
+                        <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
                         <View style={{paddingBottom:20}}>
                         <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
                         </View>
@@ -89,7 +62,7 @@ const ReportScreen = ({ navigation }) => {
                               <Row key={p.id} style={{paddingLeft:20}}>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE}]}>{p.name}</Text></Col>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
-                                  {p.dose * totalArea * (100 - context.mod) / 100}L
+                                  {(p.dose * totalArea * (100 - context.mod) / 100).toFixed(1)} L
                                 </Text></Col>
                               </Row>
                             ))}
@@ -98,33 +71,40 @@ const ReportScreen = ({ navigation }) => {
                           <Grid style={{paddingTop: 10}}>
                             <Row>
                               <Col><Text style={hygoStyles.text}>Volume de bouillie</Text></Col>
-                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{volume}L</Text></Col> 
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{volume.toFixed(1)} L</Text></Col> 
                             </Row>
                             <Row>
                               <Col><Text style={hygoStyles.text}>Eau</Text></Col>
-                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{water}L</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{water.toFixed(1)} L</Text></Col>
                             </Row>
                             <Row>
                               <Col><Text style={hygoStyles.text}>Surface totale</Text></Col>
-                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{totalArea}ha</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{totalArea.toFixed(1)} ha</Text></Col>
                             </Row>
                             <Row>
                               <Col><Text style={hygoStyles.text}>Débit</Text></Col>
-                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{context.debit}L/ha</Text></Col>
+                              <Col><Text style={[hygoStyles.text, { textAlign:'right'}]}>{context.debit.toFixed(1)} L/ha</Text></Col>
                             </Row>
+                            
                           </Grid>
+                          <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center', paddingTop: 10}}>
+                            <Text style={[hygoStyles.h0, {padding:0,paddingBottom:0,fontSize: 16, paddingTop:5 }]}>Total économisé</Text>
+                            <Text style={[hygoStyles.h0, {padding:0, paddingBottom:0,fontSize: 24}]}>{`${(totalPhyto * context.mod / 100).toFixed(1)}L (${(context.mod).toFixed(0)}%)`}</Text>
+                          </View> 
                         </HygoCard>
-                      {/*============= Final result ====================*/}
-                        <View style={{paddingTop: 20, paddingBottom: 40}}>
-                    <HygoCard>
-                        <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center'}}>
-                        <Text style={[hygoStyles.h0, {padding:0}]}>Total économisé</Text>
-                        <Text style={[hygoStyles.h0, {padding:0, fontSize: 26}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
-                      </View>
-                    </HygoCard>
-                    </View>
                     </View>
                 </Content>
+                <Footer style={styles.footer}>
+                <HygoButton  
+                        label="EXPORTER" 
+                        onPress={() => { 
+                        }}
+                        icon={{
+                        type: 'AntDesign',
+                        name: 'arrowright',
+                        fontSize: 26,
+                    }} />
+                </Footer>     
             </Container>
         </SafeAreaView>
     )

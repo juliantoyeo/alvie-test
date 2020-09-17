@@ -68,8 +68,8 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
     const [debit, setDebit] = useState<number>(100)
     const [buses, setBuses] = useState<string>()
-    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:0, max:0})
-    const [mod, setMod] = useState<modulationType>()
+    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
+    const [mod, setMod] = useState<modulationType>(0)
     const [metrics, setMetrics] = useState<metricsType>()
 
     const addField = (field: selectedFieldType) => {

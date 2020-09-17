@@ -23,44 +23,9 @@ import { toISOString } from 'core-js/fn/date';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getEquipment } from '../../api/hygoApi';
 
+import { productType, productsData } from './staticData';
+
 const types=["fongicide", "herbicide"]
-
-type productType={
-    type:string,
-    name:string,
-    selected: boolean,
-    id: number
-}
-
-const productsData: Array<productType> = [
-  
-  {
-    type : "fongicide",
-    name:"Prozator",
-    selected: false,
-    id: 1
-  },
-  {
-    type : "fongicide",
-    name: "Eliminator",
-    selected: false,
-    id: 2
-  },
-  {
-    type: "herbicide",
-    name:"Fusilator",
-    selected: false,
-    id: 3
-  },
-  {
-    type: "herbicide",
-    name:"destoyator",
-    selected: false,
-    id: 4
-  }
-]
-
-
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
@@ -72,16 +37,13 @@ const SelectProductsScreen = ({ navigation }) => {
 
     useEffect(() => {
         setProducts(productsData)
-        // context.setSelectedProducts([
-        //     {type: 'fongicide', name: 'Fusilator', dose: '0.7 L/ha', id: 3},
-        //     {type: 'herbicide', name: 'Eliminator', dose: '1.3 L/ha', id: 2}
-        // ])
         const asyncFunction = async () => {
-          const equ = await getEquipment()
+          const equ = {buses: "Orange"} //await getEquipment()
           context.setBuses(equ.buses)
         }
         asyncFunction()
     }, [])
+
     useEffect(() => {
       setReady(context.selectedProducts.length > 0)
     }, [context.selectedProducts])
@@ -99,7 +61,9 @@ const SelectProductsScreen = ({ navigation }) => {
             <View style={styles.grid}>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Débit</Text>
-                <Text style={styles.colRight}>{context.debit} L/ha</Text>
+                <TouchableOpacity onPress={() => setDebitModalVisible(true)}>
+                  <Text style={styles.colRight}>{context.debit} L/ha</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Type de buse</Text>
@@ -107,11 +71,11 @@ const SelectProductsScreen = ({ navigation }) => {
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Volume de bouillie</Text>
-                <Text style={[styles.colRight, {borderWidth: 0}]}>{context.debit * totalArea} L</Text>
+                <Text style={[styles.colRight, {borderWidth: 0}]}>{(context.debit * totalArea).toFixed(1)} L</Text>
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Total surface</Text>
-                <Text style={[styles.colRight, {borderWidth: 0}]}>{totalArea} ha</Text>
+                <Text style={[styles.colRight, {borderWidth: 0}]}>{totalArea.toFixed(1)} ha</Text>
               </View>
             </View>
           </HygoCard>

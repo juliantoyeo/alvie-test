@@ -17,6 +17,7 @@ import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
 import HygoParcelleIntervention from '../../components/v2/HygoParcelleIntervention';
+import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -25,151 +26,28 @@ const PICTO_MAP = {
     'RAIN': require('../../../assets/rainy.png'),
     'SNOW': require('../../../assets/snowy.png'),
   }
-const slotsData: any = [
-    {
-        title: 'LUN',
-        pictocode: 'SUN',
-        hours4:{
-            '0': 'SUN',
-            '4': 'SUN',
-            '8': 'RAIN',
-            '12': 'RAIN',
-            '16': 'SUN',
-            '20': 'SNOW',
-        }
-    },
-    {
-        title: 'MAR',
-        pictocode: 'CLOUD',
-        hours4:{
-            '0': 'SNOW',
-            '4': 'SNOW',
-            '8': 'SNOW',
-            '12': 'SNOW',
-            '16': 'SNOW',
-            '20': 'SNOW',
-        }
-    },
-    {
-        title: 'MER',
-        pictocode: 'STORM',
-        hours4:{
-            '0': 'RAIN',
-            '4': 'RAIN',
-            '8': 'RAIN',
-            '12': 'RAIN',
-            '16': 'RAIN',
-            '20': 'SNOW',
-        }
-    },
-    {
-        title: 'JEU',
-        pictocode: 'RAIN',
-        hours4:{
-            '0': 'SUN',
-            '4': 'SUN',
-            '8': 'SUN',
-            '12': 'SUN',
-            '16': 'SUN',
-            '20': 'SUN',
-        }
-    },
-    {
-        title: 'VEN',
-        pictocode: 'SNOW',
-        hours4:{
-            '0': 'SUN',
-            '4': 'SUN',
-            '8': 'RAIN',
-            '12': 'RAIN',
-            '16': 'SUN',
-            '20': 'SUN',
-        }
-    },
-]
 
-const hourMetricsData = [
-    {
-        winddirection: 'S',
-        wind: 50,
-        gust: 51,
-        precipitation: 12,
-        probability: 10,
-        mintemp: 20,
-        maxtemp: 27,
-        minhumi: 80,
-        maxhumi: 85,
-        minsoilhumi: 10,
-        maxsoilhumi: 11,
-        prevprecipitation: 5,
-        'r2': 13,
-        'r3': 16,
-        'r6': 33,
-        deltatemp: 10
-    },
-    {
-        winddirection: 'N',
-        wind: 20,
-        gust: 21,
-        precipitation: 11,
-        probability: 67,
-        mintemp: -6,
-        maxtemp: 7,
-        minhumi: 30,
-        maxhumi: 35,
-        minsoilhumi: 4,
-        maxsoilhumi: 8,
-        prevprecipitation: 0,
-        'r2': 13,
-        'r3': 16,
-        'r6': 33,
-        deltatemp: 5
-    },
-]
 const hasRacinaire = () => false
 
 const hour = '00'
 
-const next12HoursData = {
-    '00': {condition : 'EXCELLENT'},
-    '01': {condition : 'GOOD'},
-    '02': {condition : 'CORRECT'},
-    '03': {condition : 'BAD'},
-    '04': {condition : 'FORBIDDEN'},
-    '05': {condition : 'EXCELLENT'},
-    '06': {condition : 'GOOD'},
-    '07': {condition : 'CORRECT'},
-    '08': {condition : 'BAD'},
-    '09': {condition : 'FORBIDDEN'},
-    '10': {condition : 'EXCELLENT'},
-    '11': {condition : 'GOOD'},
-    '12': {condition : 'CORRECT'},
-    '13': {condition : 'BAD'},
-    '14': {condition : 'FORBIDDEN'},
-    '15': {condition : 'CORRECT'},
-    '16': {condition : 'EXCELLENT'},
-    '17': {condition : 'GOOD'},
-    '18': {condition : 'BAD'},
-    '19': {condition : 'FORBIDDEN'},
-    '20': {condition : 'CORRECT'},
-    '21': {condition : 'FORBIDDEN'},
-    '22': {condition : 'EXCELLENT'},
-    '23': {condition : 'CORRECT'},
-}
-const modData = [ 15, 16, 17, 39,15, 0, 4]
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    const [currentDay, setCurrentDay] = useState<any>(slotsData[0])
+    const [currentDay, setCurrentDay] = useState<any>(daysData[0])
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
-    
+    const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
 
     const setBackgroundColor = (h) => {}
     const reloadCurrentMetrics = (h) => {
         setCurrentHourMetrics(hourMetricsData[(h.max + h.min)%2])
-        context.setMod(modData[(h.max + h.min)%7])
+        context.setMod((modData[currentDay.id % 2][h.max] + modData[currentDay.id % 2][h.min]) / 2)
+    }
+    const updateDay = (d) => {
+      setCurrentDay(d)
+      setCurrentNextHoursData(next12HoursData[d.id%2])
     }
     
     return (
@@ -191,9 +69,9 @@ const SelectSlotScreen = ({ navigation }) => {
                 <Content style={styles.content}>
                     {/*============= Week Tab =================*/}
                     <View style={styles.tabBar}>
-                    { slotsData.slice(0, 5).map((d, i)=> {
+                    { daysData.slice(0, 5).map((d, i)=> {
                         return (
-                            <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => setCurrentDay(d)}>
+                            <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => updateDay(d)}>
                             <Text style={[ styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
                             <View style={styles.weatherContainer}>
                                 <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
@@ -217,7 +95,7 @@ const SelectSlotScreen = ({ navigation }) => {
                     </View>
                     {/*=============== Slot Picker ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
-                      <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max}h</Title>
+                      <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max +  1}h</Title>
                         <View style={{paddingBottom:20}}>
                           <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
                         </View>
@@ -227,7 +105,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 from={0/*parseInt(hour)*/}  
                                 initialMax={context.selectedSlot.max} 
                                 initialMin={context.selectedSlot.min} 
-                                data={next12HoursData} 
+                                data={currentNext12HoursData} 
                                 width={Dimensions.get('window').width - 30} 
                                 onHourChangeEnd={(h) => {
                                     context.setSelectedSlot(h);
@@ -238,7 +116,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                     }
                                     reloadCurrentMetrics(h)
                                     setBackgroundColor(h)
-                                }} 
+                                }}
                             />
                         </View>
 
@@ -252,8 +130,8 @@ const SelectSlotScreen = ({ navigation }) => {
                     <View style={{paddingTop: 20, paddingBottom: 40}}>
                     <HygoCard>
                         <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center'}}>
-                        <Text style={[hygoStyles.h0, {padding:0}]}>Total économisé</Text>
-                        <Text style={[hygoStyles.h0, {padding:0, fontSize: 26}]}>{`${totalPhyto * context.mod / 100}L (${context.mod}%)`}</Text>
+                        <Text style={[hygoStyles.h0, {padding:0,paddingBottom:0,fontSize: 16, }]}>Total économisé</Text>
+                        <Text style={[hygoStyles.h0, {padding:0, paddingBottom:0,fontSize: 24}]}>{`${(totalPhyto * context.mod / 100).toFixed(1)}L (${(context.mod).toFixed(0)}%)`}</Text>
                       </View>
                     </HygoCard>
                     </View>

@@ -8,7 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export const HygoList = ({title, items, onPress}) => {
-    const [opened, setOpened] = useState(false)
+    const [opened, setOpened] = useState(true)
     return ( 
         <View style={styles.container}>
             <View style={{  display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
@@ -34,12 +34,12 @@ export const HygoList = ({title, items, onPress}) => {
                     <TouchableOpacity 
                         key={k}
                         onPress={() => {onPress(item.id, !item.selected)}}
-                        style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}
+                        style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', paddingVertical:5}}
                     >
                         <Icon 
                             type='FontAwesome' 
                             name={item.selected ? 'square' : 'square-o'}
-                            style={{fontSize:14, color: COLORS.DARK_BLUE, paddingTop: 3 }}  
+                            style={{fontSize:16, color: COLORS.DARK_BLUE, paddingTop: 3 }}  
                         />
                         <Text style={[hygoStyles.text, {flex:1, paddingLeft: 10}]}>{item.name}</Text>
                         <Text style={[hygoStyles.text, {textAlign:'right'}]}>{item.area}ha</Text>

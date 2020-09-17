@@ -19,25 +19,23 @@ type finderListProps = {
 }
 
 const Item = ({ item, onPress}) => {
-    
     return (
         <View style={styles.item}>
             {item.selected ? (
-            
+            <View style={{display: 'flex', flexDirection:'row'}}>
                 <Icon type='AntDesign' name={'check'} style={{fontSize: 14, color: COLORS.DARK_BLUE, paddingTop: 2}} />
-                
-            
+                <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
+                {/* <Text style={hygoStyles.text}>{item.dose && item.dose.toString() + 'L/ha'}</Text> */}
+            </View>
             ): (
-            <TouchableOpacity 
+            <TouchableOpacity
+            style={{display: 'flex', flexDirection:'row'}} 
                 onPress={()=>onPress(item)}
             >
                 <Icon type='AntDesign' name={'pluscircleo'} style={{fontSize: 14, color: COLORS.DARK_BLUE, paddingTop: 2}} />
+                <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
             </TouchableOpacity>
             )}
-                <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
-                <Text style={hygoStyles.text}>{item.dose}</Text>
-            
-            
         </View>
     )
 }
@@ -103,9 +101,9 @@ const styles = StyleSheet.create({
       paddingLeft: 20
     },
     item: {
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent:'space-between', 
+        // display: 'flex', 
+        // flexDirection: 'row', 
+        // justifyContent:'space-between', 
         marginTop: 10, 
         paddingLeft:20, 
         paddingRight: 20 }

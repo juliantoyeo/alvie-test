@@ -16,8 +16,10 @@ const HourScale = ({ hour }) => {
   return (
     <View style={styles.hoursDetailsContainer}>
       <Text style={[styles.hoursDetails, { left: 0 * getWidth()}]}>{getHour(0)}</Text>
+      <Text style={[styles.hoursDetails, { left: 3 * getWidth()}]}>{getHour(6)}</Text>
       <Text style={[styles.hoursDetails, { left: 6 * getWidth()}]}>{getHour(12)}</Text>
-      <Text style={[styles.hoursDetails, { left: 11 * getWidth()}]}>{getHour(23)}</Text>
+      <Text style={[styles.hoursDetails, { left: 9 * getWidth()}]}>{getHour(18)}</Text>
+      {/* <Text style={[styles.hoursDetails, { left: 11 * getWidth()}]}>{getHour(23)}</Text> */}
     </View>
   )
 }

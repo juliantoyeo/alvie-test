@@ -36,7 +36,7 @@ const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, s
                         value={value}
                         style={{ textAlign:'left', flex:1}}
                       />
-                      <Text style={{paddingLeft: 10, textAlign: 'right', flex:1}}>L/ha</Text>
+                      <Text style={{paddingLeft: 10, textAlign: 'right', textAlignVertical:'center', flex:1}}>L/ha</Text>
                     </View>
                     <View style={{flex:1}}/>
                   </View>
