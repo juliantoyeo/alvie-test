@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Grid, Row, Col } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Picker, Grid, Row, Col } from 'native-base';
 import { ProductList } from './ProductList';
 import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
+import HygoPickerModal from './HygoPickerModal';
 import HygoButton from'../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
@@ -26,6 +27,7 @@ import { getEquipment } from '../../api/hygoApi';
 import { productType, productsData } from './staticData';
 
 const types=["fongicide", "herbicide"]
+const buses=["Orange", "Bleu", "Verte", "Jaune", "Blanche"]
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
@@ -38,7 +40,7 @@ const SelectProductsScreen = ({ navigation }) => {
     useEffect(() => {
         setProducts(productsData)
         const asyncFunction = async () => {
-          const equ = {buses: "Orange"} //await getEquipment()
+          const equ = {buses: buses[0]} //await getEquipment()
           context.setBuses(equ.buses)
         }
         asyncFunction()
@@ -54,7 +56,10 @@ const SelectProductsScreen = ({ navigation }) => {
         setProducts([...products.filter((p) => p.id != id), {...item, selected:false}])
     }
 
-    const Cuve = () => (
+    const Cuve = () => {
+      const [buseModalVisible, setBuseModalVisible] = useState<boolean>(false)
+      return(
+    
         <View>
           <Text style={hygoStyles.h0}>Ma Cuve</Text>
           <HygoCard>
@@ -67,7 +72,9 @@ const SelectProductsScreen = ({ navigation }) => {
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Type de buse</Text>
-                <Text style={styles.colRight}>{context.buses}</Text>
+                <TouchableOpacity onPress={() => setBuseModalVisible(true)}>
+                  <Text style={styles.colRight}>{context.buses}</Text>
+                  </TouchableOpacity>
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Volume de bouillie</Text>
@@ -79,8 +86,19 @@ const SelectProductsScreen = ({ navigation }) => {
               </View>
             </View>
           </HygoCard>
+          <HygoPickerModal 
+                    onClose={()=>{}} 
+                    modalVisible={buseModalVisible} 
+                    setModalVisible={setBuseModalVisible}
+                    defaultValue={context.buses}
+                    items = {buses}
+                    setInput={(item)=>{
+                        context.setBuses(item)
+                    }}
+                    title={`Type de buses`}
+                />
         </View>
-    )
+    )}
     const Recap = () => (
         <View>
             {context.selectedProducts.length > 0 ? (

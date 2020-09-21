@@ -11,9 +11,10 @@ import {
 import hygoStyles from '../../styles';
 import COLORS from  '../../colors';
 import HygoButton from '../../components/v2/HygoButton';
+import { Picker } from 'native-base';
 
 
-const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, setInput, title}) => {
+const HygoPickerModal = ({onClose, modalVisible, setModalVisible, defaultValue, items, setInput, title}) => {
     const [value, setValue] = useState<any>(defaultValue)
     return (
         <Modal
@@ -31,12 +32,22 @@ const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, s
                   <View style={styles.input}>
                     <View style={{flex:1}}/>
                     <View style={styles.inputBorder}>
-                      <TextInput 
+                    <Picker
+                      mode='dropdown'
+                      selectedValue={value}
+                      onValueChange={(v, i)=>{
+                        setValue(v)
+                      }}
+                    >
+                          { items.map((v, i) => <Picker.Item label={v} value={v} key={i}/>)}     
+                    </Picker>
+                    
+                      {/* <TextInput 
                         onChangeText={text => setValue(text)}
                         value={value}
                         style={{ textAlign:'left', flex:1}}
                       />
-                      <Text style={{paddingLeft: 10, textAlign: 'right', textAlignVertical:'center', flex:1}}>L/ha</Text>
+                      <Text style={{paddingLeft: 10, textAlign: 'right', textAlignVertical:'center', flex:1}}>L/ha</Text> */}
                     </View>
                     <View style={{flex:1}}/>
                   </View>
@@ -111,4 +122,4 @@ const styles = StyleSheet.create({
       }
   });
 
-export default HygoInputModal
+export default HygoPickerModal

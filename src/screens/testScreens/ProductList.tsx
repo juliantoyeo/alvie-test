@@ -5,17 +5,7 @@ import COLORS from '../../colors'
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const HygoItem = ({ item, onPress }) => {
-    return (
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', paddingVertical:5}}>
-            <TouchableOpacity onPress={() => {onPress(item.id)}}>
-                <Icon type='AntDesign' name='delete' style={{fontSize: 16, paddingTop: 2, color:COLORS.DARK_BLUE}} />
-            </TouchableOpacity>
-            <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
-            <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
-        </View>
-    )
-}
+
 
 export const ProductList = ({items, onPress}) => {
     const [opened, setOpened] = useState(true)
@@ -28,12 +18,17 @@ export const ProductList = ({items, onPress}) => {
                         <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
                     </TouchableOpacity>
                 </View> */}
-                {opened && items.map((item,k) => (<HygoItem key={k} item={item} onPress={onPress}/>
-                    )
-                )}
+                {opened && items.map((item,k) => (
+                <View key= {k} style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => {onPress(item.id)}}>
+                        <Icon type='AntDesign' name='delete' style={{fontSize: 16, paddingTop: 2, color:COLORS.DARK_BLUE}} />
+                    </TouchableOpacity>
+                    <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
+                    <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
+                </View>
+                ))}
             </View>
         </View>
-       
     )
 }
 
