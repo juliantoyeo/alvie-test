@@ -122,7 +122,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
                         <HourScale hour={'00'/*hour*/} />
 
-                        <ExtraMetrics currentHourMetrics={currentHourMetrics} />
+                        {/* <ExtraMetrics currentHourMetrics={currentHourMetrics} /> */}
                     </View>
 
                     {/*================= Result ==================*/}
