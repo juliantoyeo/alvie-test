@@ -181,7 +181,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                         <Text style={hygoStyles.h0}>Mes Produits</Text>
                         <TouchableOpacity   onPress={()=>{setViewMode(!viewMode)}} >
-                            <Icon type='AntDesign' name ={viewMode ? 'search1' : 'check'} style={styles.iconTitle} />
+                            <Icon type='AntDesign' name ={viewMode ? 'pluscircleo' : 'check'} style={styles.iconTitle} />
                         </TouchableOpacity>
                     </View>
                     { viewMode  ? <Recap/> : <Finder/>}

@@ -68,7 +68,7 @@ const SelectSlotScreen = ({ navigation }) => {
                 </Header>
                 <Content style={styles.content}>
                     {/*============= Week Tab =================*/}
-                    {/* <View style={styles.tabBar}>
+                    <View style={styles.tabBar}>
                     { daysData.slice(0, 5).map((d, i)=> {
                         return (
                             <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => updateDay(d)}>
@@ -79,7 +79,7 @@ const SelectSlotScreen = ({ navigation }) => {
                             </TouchableOpacity>
                         )
                     })}
-                    </View> */}
+                    </View>
                     {/*=============== Day Weather ==============*/}
                     <View style={styles.dayContent}>
                         <View style={styles.hour4Weather}>

@@ -56,11 +56,14 @@ const ReportScreen = ({ navigation }) => {
                     <View>
                         <Text style={hygoStyles.h0}>Rapport de pulvérisation</Text>
                         <HygoCard title='Remplissage de cuve'>
-                          <HygoCardSmall title='Matières actives' cardStyle={{ borderWidth:1, borderColor: '#B4B1B1'}}>
+                          <HygoCardSmall title='Produits' cardStyle={{ borderWidth:1, borderColor: '#B4B1B1'}}>
                             <Grid style={{paddingTop: 10}}>
                             {context.selectedProducts.map((p)=>(
                               <Row key={p.id} style={{paddingLeft:20}}>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE}]}>{p.name}</Text></Col>
+                                <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
+                                  {p.dose * (100 - context.mod) / 100} L/ha
+                                </Text></Col>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
                                   {(p.dose * totalArea * (100 - context.mod) / 100).toFixed(1)} L
                                 </Text></Col>
