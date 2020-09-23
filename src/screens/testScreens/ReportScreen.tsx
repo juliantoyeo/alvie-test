@@ -62,7 +62,7 @@ const ReportScreen = ({ navigation }) => {
                               <Row key={p.id} style={{paddingLeft:20}}>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE}]}>{p.name}</Text></Col>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
-                                  {p.dose * (100 - context.mod) / 100} L/ha
+                                  {(p.dose * (100 - context.mod) / 100).toFixed(3)} L/ha
                                 </Text></Col>
                                 <Col><Text style={[hygoStyles.text, {color:COLORS.DARK_BLUE, textAlign:'right'}]}>
                                   {(p.dose * totalArea * (100 - context.mod) / 100).toFixed(1)} L
