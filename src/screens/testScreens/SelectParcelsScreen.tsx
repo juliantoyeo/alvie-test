@@ -84,10 +84,10 @@ const SelectParcelsScreen = ({ navigation }) => {
 
     useEffect(() => {
         // Init fields and retrieve culture_names
-        const loadFields = async () => {
+        const load = async () => {
            
             const {fields: fld}: getFieldsReturnType = await getFields()
-            if (!isError(fld)) {
+            if (!!fld) {
                 setFields(fld)
                 const nm = fld.map( (f) => f.culture_name)
                 setNames([... new Set(nm)])     //delete duplicate
@@ -95,7 +95,7 @@ const SelectParcelsScreen = ({ navigation }) => {
         }
         if (fields.length == 0) {
             context.cleanFields()
-            loadFields()
+            load()
         }
     }, [])
 

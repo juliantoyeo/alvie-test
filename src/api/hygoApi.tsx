@@ -5,6 +5,7 @@ import { VERSION } from '../constants';
 
 import { fieldType } from '../types/field.types';
 import { errorType } from '../types/error.types';
+import { activeProductType } from '../types/activeproduct.types';
 
 export const hygoApi = axios.create({
     baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
@@ -56,6 +57,19 @@ export const updateUICultures = async (cultures) => {
         return res.data
     } catch(e) {
         console.log(e)
+    }
+}
+
+// Retrieve active products list
+export interface getActiveProductsReturnType {
+    products?: Array<activeProductType>
+}
+export const getActiveProducts = async (): Promise<Array<activeProductType>> => {
+    try {
+        const response = await hygoApi.get('/app/activeproducts');
+        return response.data
+    } catch(error) {
+       return []
     }
 }
 

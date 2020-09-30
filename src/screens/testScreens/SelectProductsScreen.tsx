@@ -21,9 +21,9 @@ import {
   } from "react-native";
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getEquipment } from '../../api/hygoApi';
-
+import { getEquipment, getActiveProducts, getActiveProductsReturnType } from '../../api/hygoApi';
 import { productType, productsData } from './staticData';
+import { activeProductType } from '../../types/activeproduct.types';
 
 const types=["fongicide", "herbicide"]
 const buses=["Orange", "Bleu", "Verte", "Jaune", "Blanche"]
@@ -56,10 +56,11 @@ export const ProductList = ({items, onPress}) => {
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
-    const [products, setProducts] = useState<Array<productType>>([])
+    const [products, setProducts] = useState<Array<activeProductType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
     const [ready, setReady] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<boolean>(true)
+    const [families, setFamilies] = useState<Array<string>>([])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
 
     useEffect(() => {
@@ -69,6 +70,23 @@ const SelectProductsScreen = ({ navigation }) => {
           context.setBuses(equ.buses)
         }
         asyncFunction()
+    }, [])
+
+    useEffect(() => {
+        // Init product list and retrieve product families
+        const load = async () => {
+            const prd: Array<activeProductType> = await getActiveProducts()
+            console.log(prd)
+            if (prd.length > 0) {
+                setProducts(prd)
+                const nm = prd.map( (f) => f.phyto_family)
+                setFamilies([... new Set(nm)])     //delete duplicate
+            }
+        }
+        if (products.length == 0) {
+            context.cleanFields()
+            load()
+        }
     }, [])
 
     useEffect(() => {
@@ -148,7 +166,7 @@ const SelectProductsScreen = ({ navigation }) => {
         return (
             <View>
                 {types.map((t, k) => {
-                    const items:Array<any> = products.filter( (p) => p.type == t)
+                    const items:Array<any> = products.filter( (p) => p.phyto_family == t)
                     return (
                         items.length > 0 && 
                         <FinderList 
