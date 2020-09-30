@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Picker, Grid, Row, Col } from 'native-base';
-import { ProductList } from './ProductList';
+//import { ProductList } from './ProductList';
 import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
 import HygoPickerModal from './HygoPickerModal';
@@ -20,7 +20,6 @@ import {
     TouchableHighlight,
   } from "react-native";
 import hygoStyles from '../../styles';
-import { toISOString } from 'core-js/fn/date';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getEquipment } from '../../api/hygoApi';
 
@@ -29,13 +28,39 @@ import { productType, productsData } from './staticData';
 const types=["fongicide", "herbicide"]
 const buses=["Orange", "Bleu", "Verte", "Jaune", "Blanche"]
 
+
+export const ProductList = ({items, onPress}) => {
+    const [opened, setOpened] = useState(true)
+    return ( 
+        <View style={productStyles.container}>
+            <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+                    <Text style={styles.cardTitle}>{title}</Text>
+                    <TouchableOpacity onPress={()=>setOpened(!opened)}>
+                        <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
+                    </TouchableOpacity>
+                </View> */}
+                {opened && items.map((item,k) => (
+                <View key= {k} style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => {onPress(item.id)}}>
+                        <Icon type='AntDesign' name='delete' style={{fontSize: 16, paddingTop: 2, color:COLORS.DARK_BLUE}} />
+                    </TouchableOpacity>
+                    <Text style={[hygoStyles.text, {flex:1, paddingLeft:10}]}>{item.name}</Text>
+                    <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
+                </View>
+                ))}
+            </View>
+        </View>
+    )
+}
+
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext) 
     const [products, setProducts] = useState<Array<productType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
     const [ready, setReady] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<boolean>(true)
-    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
 
     useEffect(() => {
         setProducts(productsData)
@@ -82,7 +107,7 @@ const SelectProductsScreen = ({ navigation }) => {
               </View>
               <View style={styles.row}>
                 <Text style={styles.colLeft}>Total surface</Text>
-                <Text style={[styles.colRight, {borderWidth: 0}]}>{totalArea.toFixed(1)} ha</Text>
+                <Text style={[styles.colRight, {borderWidth: 0}]}>{(totalArea).toFixed(1)} ha</Text>
               </View>
             </View>
           </HygoCard>
@@ -279,6 +304,28 @@ const styles = StyleSheet.create({
       paddingBottom:2
     }
   });
+  
+  const productStyles = StyleSheet.create({
+    container: {
+      borderTopRightRadius: 20,
+      backgroundColor: '#fff',
+      shadowOffset: { width: 0, height: 2},
+      shadowColor: '#000000',
+      shadowRadius: 2,
+      shadowOpacity: .2,
+      padding: 20,
+      display: 'flex',
+      elevation: 2,
+      marginBottom: 10
+    },
+    cardTitle: {
+      textTransform: 'uppercase',
+      fontFamily: 'nunito-bold',
+      fontSize: 14,
+      flex: 1,
+      color: COLORS.CYAN
+    }
+  })
   
   const mapStateToProps = (state) => ({
     

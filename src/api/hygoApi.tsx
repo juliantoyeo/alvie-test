@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-
-import getUserAgent from './getUserAgent'
+import getUserAgent from './getUserAgent';
 import { VERSION } from '../constants';
+
+import { fieldType } from '../types/field.types';
+import { errorType } from '../types/error.types';
 
 export const hygoApi = axios.create({
     baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
@@ -218,12 +220,15 @@ export const getRealtimeData = async (phytoProductSelected) => {
 }
 
 // Get fields
-export const getFields = async () => {
+export interface getFieldsReturnType {
+    fields?: Array<fieldType>
+}
+export const getFields = async (): Promise<getFieldsReturnType> => {
     try {
         const response = await hygoApi.get('/app/fields');
         return response.data
     } catch(error) {
-        return { }
+       return {}
     }
 }
 
