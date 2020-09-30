@@ -63,7 +63,7 @@ export const HygoList = ({ title, items, onPress }: HygoListProps) => {
                                     name={item.selected ? 'square' : 'square-o'}
                                     style={{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }}
                                 />
-                                <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>name here - {item.id/*item.name*/}</Text>
+                                <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>{item.id} - {item.name}</Text>
                                 <Text style={[hygoStyles.text, { textAlign: 'right' }]}>{(item.area / 10000).toFixed(1)}ha</Text>
                             </TouchableOpacity>
 

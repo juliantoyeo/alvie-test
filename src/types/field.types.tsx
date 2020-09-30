@@ -8,5 +8,5 @@ export interface fieldType {
     },
     id: number,
     selected? : boolean
-    name?: string
+    name: string
 }
