@@ -86,7 +86,6 @@ const SelectParcelsScreen = ({ navigation }) => {
             }
         }
         if (fields.length == 0) {
-            console.log("0000")
             context.cleanFields()
             load()
         }
@@ -137,11 +136,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                 <Footer style={styles.footer}>
                     <HygoButton
                         label="CHOIX DES PRODUITS"
-                        onPress={() => { 
-                            console.log("?===========?")
-                            console.log(context.selectedFields)
-                            console.log("!============!")
-                             navigation.navigate('TestPageProducts') }}
+                        onPress={() => navigation.navigate('TestPageProducts')}
                         enabled={ready}
                         icon={{
                             type: 'AntDesign',
