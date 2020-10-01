@@ -131,7 +131,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                 <Content style={styles.content}>
                     <View>
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
-                        {fields.length != 0 && names.length != 0 &&
+                        {fields.length > 0 && names.length > 0 &&
                             names.map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((p) => p.culture_name == n)
                                 return (

@@ -1,6 +1,9 @@
 export interface activeProductType {
     id: number,      
     name: string,
-    phyto_family?: string,
+    phytoproduct: {
+        id: number,
+        name: string,
+    }
     selected?: boolean
 }

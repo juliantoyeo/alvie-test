@@ -5,6 +5,7 @@ import COLORS from '../../colors'
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HygoInputModal from './HygoInputModal';
+import { activeProductType } from '../../types/activeproduct.types';
 
 type productType={
     type:string,
@@ -14,11 +15,15 @@ type productType={
 }
 type finderListProps = {
     title: string,
-    items: Array<productType>,
+    items: Array<activeProductType>,
+    onPress: any
+}
+type itemProps = {
+    item: activeProductType,
     onPress: any
 }
 
-const Item = ({ item, onPress}) => {
+const Item = ({ item, onPress}: itemProps) => {
     return (
         <View style={styles.item}>
             {item.selected ? (

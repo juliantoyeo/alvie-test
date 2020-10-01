@@ -25,7 +25,6 @@ import { getEquipment, getActiveProducts, getActiveProductsReturnType } from '..
 import { productType, productsData } from './staticData';
 import { activeProductType } from '../../types/activeproduct.types';
 
-const types=["fongicide", "herbicide"]
 const buses=["Orange", "Bleu", "Verte", "Jaune", "Blanche"]
 
 
@@ -64,7 +63,7 @@ const SelectProductsScreen = ({ navigation }) => {
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
 
     useEffect(() => {
-        setProducts(productsData)
+        //setProducts(productsData)
         const asyncFunction = async () => {
           const equ = {buses: buses[0]} //await getEquipment()
           context.setBuses(equ.buses)
@@ -73,15 +72,16 @@ const SelectProductsScreen = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        // Init product list and retrieve product families
+        // Init product list and retrieve product families, init buses
         const load = async () => {
             const prd: Array<activeProductType> = await getActiveProducts()
-            console.log(prd)
             if (prd.length > 0) {
                 setProducts(prd)
-                const nm = prd.map( (f) => f.phyto_family)
+                const nm = prd.map( (f) => f.phytoproduct.name)
                 setFamilies([... new Set(nm)])     //delete duplicate
             }
+            const equ = {buses: buses[0]} //await getEquipment()
+            context.setBuses(equ.buses)
         }
         if (products.length == 0) {
             context.cleanFields()
@@ -157,21 +157,22 @@ const SelectProductsScreen = ({ navigation }) => {
 
     const Finder = () => {
         const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
-        const [select, setSelect] = useState<productType>()
+        const [select, setSelect] = useState<activeProductType>()
 
-        const addProduct = (item:productType) => {
+        const addProduct = (item:activeProductType) => {
             setSelect(item)
             setDoseModalVisible(true)
         }
         return (
             <View>
-                {types.map((t, k) => {
-                    const items:Array<any> = products.filter( (p) => p.phyto_family == t)
+                {families.length > 0 && families.map((f, k) => {
+                    console.log(f)
+                    const items:Array<activeProductType> = products.filter( (p) => p.phytoproduct.name == f)
                     return (
                         items.length > 0 && 
                         <FinderList 
                             key={k} 
-                            title={t} 
+                            title={f} 
                             items={items.sort((it1, it2) => it1.id - it2.id)} 
                             onPress={addProduct}
                         />
@@ -183,7 +184,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
                     setInput={(str)=>{
-                        const newItem: productType = {...select, selected: true}
+                        const newItem: activeProductType = {...select, selected: true}
                         context.addProduct({...newItem, dose: parseFloat(str)})
                         setProducts([...products.filter((p) => p.id != select.id), newItem])
                     }}
