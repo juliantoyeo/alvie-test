@@ -60,12 +60,7 @@ const SelectProductsScreen = ({ navigation }) => {
     const [ready, setReady] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<boolean>(true)
     const [families, setFamilies] = useState<Array<string>>([])
-    const totalArea = context.selectedFields.reduce((r, f) => {
-        console.log("!--")
-        return r + f.area / 10000}
-        , 0)    //converted to ha
-        console.log(context.selectedFields)
-        console.log("--!")
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
     useEffect(() => {
         //setProducts(productsData)
         const asyncFunction = async () => {
