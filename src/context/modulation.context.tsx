@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import COLORS from '../colors'
+import { activeProductType } from '../types/activeproduct.types';
+import { fieldType } from '../types/field.types';
 
 export interface ModulationContextProps {
-    selectedFields?: any,
+    selectedFields?: Array<fieldType>,
     addField?: any,
     removeField?: any,
     cleanFields?: any,
     setSelectedFields?: any,
 
-    selectedProducts?: any,
+    selectedProducts?: Array<activeProductType>,
     addProduct?: any,
     removeProduct?: any,
     cleanProducts?: any,
@@ -27,20 +29,20 @@ export interface ModulationContextProps {
     metrics?: metricsType,
     setMetrics? : any
 }
-export type selectedFieldType = {
-    type: string,
-    name: string,
-    area: number,
-    selected: boolean,
-    id: number
-}
-export type selectedProductType = {
-    type: string,
-    name: string,
-    dose: number,
-    selected?: boolean,
-    id: number
-}
+// export type selectedFieldType = {
+//     type: string,
+//     name: string,
+//     area: number,
+//     selected: boolean,
+//     id: number
+// }
+// export type selectedProductType = {
+//     type: string,
+//     name: string,
+//     dose: number,
+//     selected?: boolean,
+//     id: number
+// }
 export type selectedSlotType = {
     min: number,
     max: number
@@ -64,15 +66,15 @@ export const ModulationContext = React.createContext<ModulationContextProps>({})
 
 export const ModulationProvider: React.FunctionComponent = ({ children }) => {
 
-    const [selectedFields, setSelectedFields] = useState<Array<selectedFieldType>>([])
-    const [selectedProducts, setSelectedProducts] = useState<Array<selectedProductType>>([])
+    const [selectedFields, setSelectedFields] = useState<Array<fieldType>>([])
+    const [selectedProducts, setSelectedProducts] = useState<Array<activeProductType>>([])
     const [debit, setDebit] = useState<number>(100)
     const [buses, setBuses] = useState<string>()
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
     const [mod, setMod] = useState<modulationType>(0)
     const [metrics, setMetrics] = useState<metricsType>()
 
-    const addField = (field: selectedFieldType) => {
+    const addField = (field: fieldType) => {
         setSelectedFields([...selectedFields, field])
     }
     const removeField = (id: number) => {
@@ -80,7 +82,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     }
     const cleanFields = () => { setSelectedFields([]) }
 
-    const addProduct = (prod: selectedProductType) => {
+    const addProduct = (prod: activeProductType) => {
         setSelectedProducts([...selectedProducts, prod])
     }
     const removeProduct = (id: number) => {

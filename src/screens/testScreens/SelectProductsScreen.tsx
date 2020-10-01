@@ -60,8 +60,12 @@ const SelectProductsScreen = ({ navigation }) => {
     const [ready, setReady] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<boolean>(true)
     const [families, setFamilies] = useState<Array<string>>([])
-    const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
-
+    const totalArea = context.selectedFields.reduce((r, f) => {
+        console.log("!--")
+        return r + f.area / 10000}
+        , 0)    //converted to ha
+        console.log(context.selectedFields)
+        console.log("--!")
     useEffect(() => {
         //setProducts(productsData)
         const asyncFunction = async () => {
@@ -84,7 +88,7 @@ const SelectProductsScreen = ({ navigation }) => {
             context.setBuses(equ.buses)
         }
         if (products.length == 0) {
-            context.cleanFields()
+            context.cleanProducts()
             load()
         }
     }, [])
@@ -166,7 +170,6 @@ const SelectProductsScreen = ({ navigation }) => {
         return (
             <View>
                 {families.length > 0 && families.map((f, k) => {
-                    console.log(f)
                     const items:Array<activeProductType> = products.filter( (p) => p.phytoproduct.name == f)
                     return (
                         items.length > 0 && 

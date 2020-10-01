@@ -6,4 +6,5 @@ export interface activeProductType {
         name: string,
     }
     selected?: boolean
+    dose?: number
 }

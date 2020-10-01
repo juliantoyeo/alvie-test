@@ -67,7 +67,6 @@ export interface getActiveProductsReturnType {
 export const getActiveProducts = async (): Promise<Array<activeProductType>> => {
     try {
         const response = await hygoApi.get('/app/activeproducts');
-        console.log(response.data)
         return response.data
     } catch(error) {
        return []

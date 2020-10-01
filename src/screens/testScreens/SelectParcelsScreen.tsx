@@ -3,10 +3,8 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
-//import { HygoList } from './ParcelList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HygoButton from '../../components/v2/HygoButton';
-import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js'
 import hygoStyles from '../../styles';
@@ -14,22 +12,16 @@ import COLORS from '../../colors';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { selectParcelsScreen: ampEvent } = AMPLITUDE_EVENTS
 import { fieldType } from '../../types/field.types';
-import { fieldsData } from './staticData';
 import { getFields, getFieldsReturnType } from '../../api/hygoApi';
-import { errorType, isError } from '../../types/error.types';
-const types = ["ble", "mais", "orge"]
 
-interface HygoListProps {
+
+interface ParcelListProps {
     title: string,
     items: Array<fieldType>,
     onPress: ((id: number, selected: boolean) => any)
 }
 
-interface fieldsInterface { 
-    fields: Array<fieldType>
-}
-
-export const HygoList = ({ title, items, onPress }: HygoListProps) => {
+export const ParcelList = ({ title, items, onPress }: ParcelListProps) => {
     const [opened, setOpened] = useState(true)
     return (
         <View style={ListStyles.container}>
@@ -94,6 +86,7 @@ const SelectParcelsScreen = ({ navigation }) => {
             }
         }
         if (fields.length == 0) {
+            console.log("0000")
             context.cleanFields()
             load()
         }
@@ -136,7 +129,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                                 const items: Array<fieldType> = fields.filter((p) => p.culture_name == n)
                                 return (
                                     items.length > 0 &&
-                                    <HygoList key={k} title={n} items={items.sort((it1, it2) => it1.id - it2.id)} onPress={updateList} />
+                                    <ParcelList key={k} title={n} items={items.sort((it1, it2) => it1.id - it2.id)} onPress={updateList} />
                                 )
                             })}
                     </View>
@@ -144,7 +137,11 @@ const SelectParcelsScreen = ({ navigation }) => {
                 <Footer style={styles.footer}>
                     <HygoButton
                         label="CHOIX DES PRODUITS"
-                        onPress={() => { navigation.navigate('TestPageProducts') }}
+                        onPress={() => { 
+                            console.log("?===========?")
+                            console.log(context.selectedFields)
+                            console.log("!============!")
+                             navigation.navigate('TestPageProducts') }}
                         enabled={ready}
                         icon={{
                             type: 'AntDesign',
