@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Fab } from 'native-base';
 import { View, StyleSheet } from 'react-native'
 import COLORS from '../../colors'
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HygoInputModal from './HygoInputModal';
 import { activeProductType } from '../../types/activeproduct.types';
+import HygoButton from '../../components/v2/HygoButton';
 
 type productType={
     type:string,

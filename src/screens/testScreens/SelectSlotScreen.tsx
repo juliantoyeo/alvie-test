@@ -16,7 +16,7 @@ import Metrics from '../../components/pulverisation-detailed/Metrics';
 import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
-import HygoParcelleIntervention from '../../components/v2/HygoParcelleIntervention';
+import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 
 const PICTO_MAP = {
@@ -101,7 +101,8 @@ const SelectSlotScreen = ({ navigation }) => {
                         </View>
                         
                         <View style={styles.sliderContainer}>
-                            <HygoParcelleIntervention 
+                            {/*<HygoParcelleIntervention/>*/}
+                            <ModulationBar      
                                 from={0/*parseInt(hour)*/}  
                                 initialMax={context.selectedSlot.max} 
                                 initialMin={context.selectedSlot.min} 
