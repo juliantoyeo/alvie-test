@@ -193,13 +193,25 @@ export const getMeteoIntervention = async ({ products, cultures }) => {
     }
 }
 
+
 // Retrieve modulation
+type getModulationValueProps = any
+
 export const getModulationValue = async (data) => {
     try {
         const response = await hygoApi.post('/app/modulation', { ...data })
         return response.data
     } catch(error) {
         return {}
+    }
+}
+
+export const getModulationList = async (data:Array<getModulationValueProps>): Promise<Array<number>> => {
+    try {
+        const response = await hygoApi.post('/app/modulationList', {...data})
+        return response.data.modulationList
+    } catch(error) {
+        return []
     }
 }
 

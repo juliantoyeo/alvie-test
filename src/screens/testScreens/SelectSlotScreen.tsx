@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
 import { ProductList } from './ProductList';
 import HygoButton from '../../components/v2/HygoButton';
-import {HygoCard } from '../../components/v2/HygoCards';
+import { HygoCard } from '../../components/v2/HygoCards';
 import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -18,6 +18,9 @@ import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
 import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
+import moment from 'moment';
+
+import { getMeteoDetailed } from '../../api/hygoApi'
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -25,33 +28,66 @@ const PICTO_MAP = {
     'STORM': require('../../../assets/stormy.png'),
     'RAIN': require('../../../assets/rainy.png'),
     'SNOW': require('../../../assets/snowy.png'),
-  }
+}
 
 const hasRacinaire = () => false
 
 const hour = '00'
 
+interface meteoType {
+    dt: string,         //date
+    maxhumi: number,
+    minhumi: number,
+    maxtemp: number,
+    mintemp: number,
+    wind: number,
+    gust: number,
+    precipitation: number,
+    probability: string,
+    soiltemp: number,
+    soilhumi: number,
+    pictocode: string,      //PICTO_MAP
+    winddirection: string   
+}
+
 const SelectSlotScreen = ({ navigation }) => {
-    const context = React.useContext(ModulationContext) 
+    const context = React.useContext(ModulationContext)
     const [currentDay, setCurrentDay] = useState<any>(daysData[0])
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
+    const [meteo, setMeteo] = useState<any>([])
     const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
 
-    const setBackgroundColor = (h) => {}
-    const reloadCurrentMetrics = (h) => {
-        setCurrentHourMetrics(hourMetricsData[(h.max + h.min)%2])
-        context.setMod((modData[currentDay.id % 2][h.max] + modData[currentDay.id % 2][h.min]) / 2)
-    }
-    const updateDay = (d) => {
-      setCurrentDay(d)
-      setCurrentNextHoursData(next12HoursData[d.id%2])
-    }
-    
+    const [loading, setLoading] = useState(true)
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const [detailed, setDetailed] = useState({})
+
+    // Loading meteo : every hour and 4hours merged for the next 5 days 
+    useEffect(() => {
+        const loadMeteo = async () => {
+            let now = moment.utc()
+            if (now.minutes() >= 30) {
+                now.hours(now.hours() + 1)
+            }
+            now = now.startOf('day')
+            // array of the 5 next days to iterate on
+            const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+            const ret = await Promise.all(dt.map( (d) => getMeteoDetailed({ day: d, product: null })))
+            const meteoData = ret.map((r) => r.data)
+
+            console.log(now)
+            console.log(dt)
+            console.log("==============",meteoData)
+            setMeteo(meteoData)
+            setLoading(false)
+        }
+        loadMeteo()
+    }, [])
+
     return (
-        <SafeAreaView style={styles.statusbar} forceInset={{top:'always'}}>
+        <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
             <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
                 <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
@@ -60,54 +96,54 @@ const SelectSlotScreen = ({ navigation }) => {
                             <Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
                         </Button>
                     </Left>
-                        <Body style={styles.headerBody}>
-                            <Title style={styles.headerTitle}>Pulvérisation</Title>
-                            <Title style={styles.headerTitle}>Choix du créneau</Title>
-                        </Body>
+                    <Body style={styles.headerBody}>
+                        <Title style={styles.headerTitle}>Pulvérisation</Title>
+                        <Title style={styles.headerTitle}>Choix du créneau</Title>
+                    </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
                 <Content style={styles.content}>
                     {/*============= Week Tab =================*/}
                     <View style={styles.tabBar}>
-                    { daysData.slice(0, 5).map((d, i)=> {
-                        return (
-                            <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => updateDay(d)}>
-                            <Text style={[ styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' } ]}>{d.title}</Text>
-                            <View style={styles.weatherContainer}>
-                                <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
-                            </View>
-                            </TouchableOpacity>
-                        )
-                    })}
+                        {daysData.slice(0, 5).map((d, i) => {
+                            return (
+                                <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => updateDay(d)}>
+                                    <Text style={[styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' }]}>{d.title}</Text>
+                                    <View style={styles.weatherContainer}>
+                                        <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })}
                     </View>
                     {/*=============== Day Weather ==============*/}
                     <View style={styles.dayContent}>
                         <View style={styles.hour4Weather}>
-                        { ['00', '04', '08', '12', '16', '20' ].map((h, i) => {
-                            return (
-                                <View key={i} style={styles.hour4WeatherContainer}>
-                                    <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
-                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
-                                </View>
-                            )
-                        })}
+                            {['00', '04', '08', '12', '16', '20'].map((h, i) => {
+                                return (
+                                    <View key={i} style={styles.hour4WeatherContainer}>
+                                        <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
+                                        <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
+                                    </View>
+                                )
+                            })}
                         </View>
                     </View>
                     {/*=============== Slot Picker ===============*/}
-                    <View style={{ backgroundColor: COLORS.DARK_BLUE}}>
-                      <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max +  1}h</Title>
-                        <View style={{paddingBottom:20}}>
-                          <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
+                    <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
+                        <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
+                        <View style={{ paddingBottom: 20 }}>
+                            <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
                         </View>
-                        
+
                         <View style={styles.sliderContainer}>
                             {/*<HygoParcelleIntervention/>*/}
-                            <ModulationBar      
-                                from={0/*parseInt(hour)*/}  
-                                initialMax={context.selectedSlot.max} 
-                                initialMin={context.selectedSlot.min} 
-                                data={currentNext12HoursData} 
-                                width={Dimensions.get('window').width - 30} 
+                            <ModulationBar
+                                from={0/*parseInt(hour)*/}
+                                initialMax={context.selectedSlot.max}
+                                initialMin={context.selectedSlot.min}
+                                data={currentNext12HoursData}
+                                width={Dimensions.get('window').width - 30}
                                 onHourChangeEnd={(h) => {
                                     context.setSelectedSlot(h);
                                     // setModulationChanged(true)
@@ -128,28 +164,29 @@ const SelectSlotScreen = ({ navigation }) => {
 
                     {/*================= Result ==================*/}
                     {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
-                    <View style={{paddingTop: 20, paddingBottom: 40}}>
-                    <HygoCard>
-                        <View style={{display: 'flex', justifyContent:'space-between', flexDirection:'row', alignItems: 'center'}}>
-                        <Text style={[hygoStyles.h0, {padding:0,paddingBottom:0,fontSize: 16, }]}>Total économisé</Text>
-                        <Text style={[hygoStyles.h0, {padding:0, paddingBottom:0,fontSize: 24}]}>{`${(totalPhyto * context.mod / 100).toFixed(1)}L (${(context.mod).toFixed(0)}%)`}</Text>
-                      </View>
-                    </HygoCard>
+                    <View style={{ paddingTop: 20, paddingBottom: 40 }}>
+                        <HygoCard>
+                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
+                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${(totalPhyto * context.mod / 100).toFixed(1)}L (${(context.mod).toFixed(0)}%)`}</Text>
+                            </View>
+                        </HygoCard>
                     </View>
-                </Content>     
+                </Content>
                 <Footer style={styles.footer}>
-                <HygoButton  
-                        label="AFFICHER LE RÉCAPITULATIF" 
-                        onPress={() => { 
+                    <HygoButton
+                        label="AFFICHER LE RÉCAPITULATIF"
+                        onPress={() => {
                             context.setMetrics(currentHourMetrics)
-                            navigation.navigate('TestPageReport') }
+                            navigation.navigate('TestPageReport')
+                        }
                         }
                         icon={{
-                        type: 'AntDesign',
-                        name: 'arrowright',
-                        fontSize: 26,
-                    }} />
-                </Footer>       
+                            type: 'AntDesign',
+                            name: 'arrowright',
+                            fontSize: 26,
+                        }} />
+                </Footer>
             </Container>
         </SafeAreaView>
     )
@@ -157,43 +194,43 @@ const SelectSlotScreen = ({ navigation }) => {
 
 
 const styles = StyleSheet.create({
-    statusbar: { 
-      flex: 1, 
-      display: 'flex',
-      backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
+    statusbar: {
+        flex: 1,
+        display: 'flex',
+        backgroundColor: Platform.OS === 'ios' ? 'black' : COLORS.CYAN,
     },
-    container: { 
-      backgroundColor: COLORS.BEIGE,
-      flexDirection:"column",
-      display: 'flex', 
+    container: {
+        backgroundColor: COLORS.BEIGE,
+        flexDirection: "column",
+        display: 'flex',
     },
     header: {
-      backgroundColor: COLORS.CYAN
+        backgroundColor: COLORS.CYAN
     },
     headerBody: {
-      flex: 4,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+        flex: 4,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     headerTitle: {
-      color: '#fff',
-      fontFamily: 'nunito-regular',
-      fontSize: 24
-    },  
+        color: '#fff',
+        fontFamily: 'nunito-regular',
+        fontSize: 24
+    },
     title: {
-      paddingTop:20,
-      paddingLeft:10,
-      textTransform: 'uppercase',
-      fontFamily: 'nunito-bold',
-      fontSize: 16,
-      color: COLORS.CYAN
+        paddingTop: 20,
+        paddingLeft: 10,
+        textTransform: 'uppercase',
+        fontFamily: 'nunito-bold',
+        fontSize: 16,
+        color: COLORS.CYAN
     },
     content: {
-      backgroundColor: COLORS.BEIGE
+        backgroundColor: COLORS.BEIGE
     },
-    footer:{
-      backgroundColor: COLORS.BEIGE
+    footer: {
+        backgroundColor: COLORS.BEIGE
     },
     centeredView: {
         flex: 1,
@@ -202,8 +239,8 @@ const styles = StyleSheet.create({
         marginTop: 22,
         backgroundColor: "black",
         opacity: 0.7
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -211,18 +248,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-      },
-      tabBar: {
+    },
+    tabBar: {
         display: 'flex',
         flexDirection: 'row',
-      },  
-      tabHeading: {
+    },
+    tabHeading: {
         padding: 15,
         width: Dimensions.get('window').width / 5 - 4,
         backgroundColor: COLORS.DARK_BLUE,
@@ -232,13 +269,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderTopRightRadius: 20,
         marginHorizontal: 2,
-      },
-      tabText: {
+    },
+    tabText: {
         fontFamily: 'nunito-heavy',
         fontSize: 14,
         color: '#fff',
-      },
-      dayContent: {
+    },
+    dayContent: {
         backgroundColor: '#fff',
         paddingHorizontal: 15,
         paddingTop: 20,
@@ -246,12 +283,12 @@ const styles = StyleSheet.create({
         elevation: 3,
         shadowOpacity: .2,
         shadowOffset: {
-          width: 0,
-          height: 3,
+            width: 0,
+            height: 3,
         },
         shadowRadius: 3,
-      },
-      weatherContainer: {
+    },
+    weatherContainer: {
         padding: 8,
         width: 40,
         height: 40,
@@ -261,13 +298,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      weatherImage: {
+    },
+    weatherImage: {
         width: 24,
         height: 24,
         tintColor: COLORS.DARK_BLUE
-      },
-      hour4Weather: {
+    },
+    hour4Weather: {
         paddingHorizontal: 8,
         paddingVertical: 10,
         paddingBottom: 20,
@@ -275,46 +312,46 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-      },
-      hour4WeatherContainer: {
+    },
+    hour4WeatherContainer: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      hour4WeatherText: {
+    },
+    hour4WeatherText: {
         fontSize: 14,
         fontFamily: 'nunito-regular',
         color: '#aaa',
-      },
-      hour4WeatherImage: {
+    },
+    hour4WeatherImage: {
         marginTop: 5,
         width: 24,
         height: 24,
         resizeMode: 'cover',
         tintColor: COLORS.DARK_BLUE,
-      },
-      sliderContainer: {
+    },
+    sliderContainer: {
         //marginTop: 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
-      },
-      hourTitle: {
+    },
+    hourTitle: {
         color: '#FFF',
         textTransform: 'uppercase',
         fontFamily: 'nunito-bold',
         fontSize: 26,
         paddingTop: 20
-      }
-  });
-  
-  const mapStateToProps = (state) => ({
-    
-  });
-  
-  const mapDispatchToProps = (dispatch, props) => ({
-    
-  })
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(SelectSlotScreen);
+    }
+});
+
+const mapStateToProps = (state) => ({
+
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectSlotScreen);
