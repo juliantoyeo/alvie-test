@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Spinner } from 'native-base';
 import { ProductList } from './ProductList';
 import HygoButton from '../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
@@ -20,7 +20,8 @@ import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 import moment from 'moment';
 
-import { getMeteoDetailed } from '../../api/hygoApi'
+import { getMeteoDetailed_v2 } from '../../api/hygoApi';
+import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -32,29 +33,11 @@ const PICTO_MAP = {
 
 const hasRacinaire = () => false
 
-const hour = '00'
-
-interface meteoType {
-    dt: string,         //date
-    maxhumi: number,
-    minhumi: number,
-    maxtemp: number,
-    mintemp: number,
-    wind: number,
-    gust: number,
-    precipitation: number,
-    probability: string,
-    soiltemp: number,
-    soilhumi: number,
-    pictocode: string,      //PICTO_MAP
-    winddirection: string   
-}
-
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext)
-    const [currentDay, setCurrentDay] = useState<any>(daysData[0])
+    const [currentDay, setCurrentDay] = useState<number>(0)
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    const [meteo, setMeteo] = useState<any>([])
+    const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
     const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -67,25 +50,28 @@ const SelectSlotScreen = ({ navigation }) => {
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
         const loadMeteo = async () => {
-            let now = moment.utc()
+            let now = moment.utc('2020-08-08')
             if (now.minutes() >= 30) {
                 now.hours(now.hours() + 1)
             }
             now = now.startOf('day')
             // array of the 5 next days to iterate on
             const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-            const ret = await Promise.all(dt.map( (d) => getMeteoDetailed({ day: d, product: null })))
-            const meteoData = ret.map((r) => r.data)
-
+            const data: Array<meteoDataType> = await Promise.all(dt.map( (d) => getMeteoDetailed_v2(d)))
+           
             console.log(now)
             console.log(dt)
             console.log("==============",meteoData)
-            setMeteo(meteoData)
+            setMeteoData(data)
             setLoading(false)
         }
+        setLoading(true)
         loadMeteo()
     }, [])
 
+    const updateDay = (i) => {
+
+    }
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -103,14 +89,23 @@ const SelectSlotScreen = ({ navigation }) => {
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
                 <Content style={styles.content}>
+                {loading ? (
+                <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
+                )
+                : (
+                <View>
                     {/*============= Week Tab =================*/}
                     <View style={styles.tabBar}>
-                        {daysData.slice(0, 5).map((d, i) => {
+                        {meteoData.map((d, i) => {
                             return (
-                                <TouchableOpacity key={i} style={[styles.tabHeading, { backgroundColor: currentDay.title === d.title ? '#fff' : COLORS.DARK_BLUE }]} onPress={() => updateDay(d)}>
-                                    <Text style={[styles.tabText, { color: currentDay.title === d.title ? COLORS.DARK_BLUE : '#fff' }]}>{d.title}</Text>
+                                <TouchableOpacity 
+                                    key={i} 
+                                    style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]} 
+                                    onPress={() =>{setCurrentDay(i)} }
+                                >
+                                    <Text style={[styles.tabText, { color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{d.day}</Text>
                                     <View style={styles.weatherContainer}>
-                                        <Image source={PICTO_MAP[d.pictocode]} style={styles.weatherImage} />
+                                        <Image source={PICTO_MAP[d.pictoDay]} style={styles.weatherImage} />
                                     </View>
                                 </TouchableOpacity>
                             )
@@ -119,11 +114,11 @@ const SelectSlotScreen = ({ navigation }) => {
                     {/*=============== Day Weather ==============*/}
                     <View style={styles.dayContent}>
                         <View style={styles.hour4Weather}>
-                            {['00', '04', '08', '12', '16', '20'].map((h, i) => {
+                            {meteoData[currentDay].meteoBy4Hour.map((m, i) => {
                                 return (
                                     <View key={i} style={styles.hour4WeatherContainer}>
-                                        <Text style={styles.hour4WeatherText}>{`${h}h`}</Text>
-                                        <Image style={styles.hour4WeatherImage} source={PICTO_MAP[currentDay.hours4[`${parseInt(h)}`]]} />
+                                        <Text style={styles.hour4WeatherText}>{`${m.hour}h`}</Text>
+                                        <Image style={styles.hour4WeatherImage} source={PICTO_MAP[m.pictocode]} />
                                     </View>
                                 )
                             })}
@@ -172,21 +167,25 @@ const SelectSlotScreen = ({ navigation }) => {
                             </View>
                         </HygoCard>
                     </View>
+                </View>
+                )}
                 </Content>
-                <Footer style={styles.footer}>
-                    <HygoButton
-                        label="AFFICHER LE RÉCAPITULATIF"
-                        onPress={() => {
-                            context.setMetrics(currentHourMetrics)
-                            navigation.navigate('TestPageReport')
-                        }
-                        }
-                        icon={{
-                            type: 'AntDesign',
-                            name: 'arrowright',
-                            fontSize: 26,
-                        }} />
-                </Footer>
+                {!loading && (
+                    <Footer style={styles.footer}>
+                        <HygoButton
+                            label="AFFICHER LE RÉCAPITULATIF"
+                            onPress={() => {
+                                context.setMetrics(currentHourMetrics)
+                                navigation.navigate('TestPageReport')
+                            }
+                            }
+                            icon={{
+                                type: 'AntDesign',
+                                name: 'arrowright',
+                                fontSize: 26,
+                            }} />
+                    </Footer>
+                )}
             </Container>
         </SafeAreaView>
     )

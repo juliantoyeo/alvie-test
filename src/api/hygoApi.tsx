@@ -6,11 +6,12 @@ import { VERSION } from '../constants';
 import { fieldType } from '../types/field.types';
 import { errorType } from '../types/error.types';
 import { activeProductType } from '../types/activeproduct.types';
+import {meteoByHourType, meteoDataType} from '../types/meteo.types';
 
 export const hygoApi = axios.create({
     baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
     timeout: 30000,
-    headers: { 
+    headers: {
         'User-Agent': getUserAgent()
     },
 });
@@ -26,7 +27,7 @@ hygoApi.interceptors.request.use(async (config) => {
 export const storeAppLocation = async (data) => {
     try {
         await hygoApi.post('/app/location', { ...data });
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -36,7 +37,7 @@ export const updateUI = async (phytoProduct) => {
     try {
         const res = await hygoApi.post('/app/ui', { phytoProduct });
         return res.data
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -46,7 +47,7 @@ export const updateUIPhytoProduct = async (phytoProducts) => {
     try {
         const res = await hygoApi.post('/app/ui', { phytoProducts, timestamp: (new Date()).getTime() });
         return res.data
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -55,7 +56,7 @@ export const updateUICultures = async (cultures) => {
     try {
         const res = await hygoApi.post('/app/ui', { cultures, timestamp: (new Date()).getTime() });
         return res.data
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -68,8 +69,8 @@ export const getActiveProducts = async (): Promise<Array<activeProductType>> => 
     try {
         const response = await hygoApi.get('/app/activeproducts');
         return response.data
-    } catch(error) {
-       return []
+    } catch (error) {
+        return []
     }
 }
 
@@ -78,7 +79,7 @@ export const getPhytoProducts = async () => {
     try {
         const { data } = await hygoApi.get('/app/phytoproducts')
         return data
-    } catch(e) { console.log(e) }
+    } catch (e) { console.log(e) }
 
     return []
 }
@@ -89,7 +90,7 @@ export const checkToken = async (token) => {
         return {
             errorMessage: 'NO_TOKEN',
         };
-    } 
+    }
 
     try {
         const response = await hygoApi.post('/app/auth/token', { token });
@@ -99,7 +100,7 @@ export const checkToken = async (token) => {
             errorMessage: '',
             userName, familyName, deviceid, deviceType, hasEquipment
         }
-    } catch(err) {
+    } catch (err) {
         return {
             errorMessage: 'INVALID_TOKEN',
         };
@@ -109,14 +110,14 @@ export const checkToken = async (token) => {
 // SignIn using a barcode
 export const signInWithBarCode = async (barcode) => {
     try {
-        const response =  await hygoApi.post('/app/auth/barcode', {barcode});
-        
+        const response = await hygoApi.post('/app/auth/barcode', { barcode });
+
         const { token, userName, familyName, deviceid, deviceType, hasEquipment } = response.data
         return {
             token, userName, familyName, deviceid, deviceType, hasEquipment,
             errorMessage: ''
         };
-    } catch(err) {
+    } catch (err) {
         console.log(err);
         if (err.message.trim().match(/^Network Error/)) {
             return {
@@ -127,14 +128,14 @@ export const signInWithBarCode = async (barcode) => {
                 errorMessage: 'SIGNIN_ERROR'
             };
         }
-        
+
     }
 }
 
 // Store a new pushToken for this device
-export const storePushToken = async (token, deviceid)=> {
+export const storePushToken = async (token, deviceid) => {
     try {
-        const response = await hygoApi.post('/app/pushtoken', {pushToken: token, deviceid});
+        const response = await hygoApi.post('/app/pushtoken', { pushToken: token, deviceid });
         return response.data;
     } catch (error) {
         return {}
@@ -144,7 +145,7 @@ export const storePushToken = async (token, deviceid)=> {
 // Save equipments
 export const storeEquipmentInformation = async ({ buses, speed, pressure, soil, family }) => {
     try {
-        const response = await hygoApi.post('/app/equipment', {buses, speed, pressure, soil, family });
+        const response = await hygoApi.post('/app/equipment', { buses, speed, pressure, soil, family });
         return response.data;
     } catch (error) {
         return {}
@@ -154,7 +155,7 @@ export const getEquipment = async () => {
     try {
         const response = await hygoApi.get('/app/equipment')
         return response.data
-    } catch(error) {
+    } catch (error) {
         return {}
     }
 }
@@ -164,7 +165,7 @@ export const getMeteo = async () => {
     try {
         const response = await hygoApi.post('/app/meteo', {})
         return response.data
-    } catch(error) {
+    } catch (error) {
         return {}
     }
 }
@@ -174,8 +175,25 @@ export const getMeteoDetailed = async ({ day, product }) => {
     try {
         const response = await hygoApi.post('/app/meteo/detailed', { day, product })
         return response.data
-    } catch(error) {
+    } catch (error) {
         return {}
+    }
+}
+
+export const getMeteoDetailed_v2 = async (day: string): Promise<meteoDataType> => {
+    /**
+     * Retrieve meteo by hour and meteo by 4 hour of the day
+     * faster than getMeteoDetailed
+     * @param day = "2020-09-09"
+     */
+    try {
+        const response = await hygoApi.post('/app/meteo/detailed/v2', { day })
+        return response.data
+    } catch (error) {
+        return {
+            meteoByHour: [],
+            meteoBy4Hour: []
+        }
     }
 }
 
@@ -184,11 +202,11 @@ export const getMeteoIntervention = async ({ products, cultures }) => {
     if (products.length === 0 || cultures.length === 0) {
         return {}
     }
-    
+
     try {
         const response = await hygoApi.post('/app/meteo/intervention', { products, cultures })
         return response.data
-    } catch(error) {
+    } catch (error) {
         return {}
     }
 }
@@ -201,16 +219,16 @@ export const getModulationValue = async (data) => {
     try {
         const response = await hygoApi.post('/app/modulation', { ...data })
         return response.data
-    } catch(error) {
+    } catch (error) {
         return {}
     }
 }
 
-export const getModulationList = async (data:Array<getModulationValueProps>): Promise<Array<number>> => {
+export const getModulationList = async (data: Array<getModulationValueProps>): Promise<Array<number>> => {
     try {
-        const response = await hygoApi.post('/app/modulationList', {...data})
+        const response = await hygoApi.post('/app/modulationList', { ...data })
         return response.data.modulationList
-    } catch(error) {
+    } catch (error) {
         return []
     }
 }
@@ -220,7 +238,7 @@ export const getInterventions = async () => {
     try {
         const response = await hygoApi.post('/app/interventions', {});
         return { interventionValues: response.data }
-    } catch(error) {
+    } catch (error) {
         return { interventionValues: [] }
     }
 }
@@ -230,7 +248,7 @@ export const getInterventionByID = async ({ id }) => {
     try {
         const response = await hygoApi.post('/app/interventions/details', { id });
         return response.data
-    } catch(error) {
+    } catch (error) {
         return { intervention: {} }
     }
 }
@@ -240,8 +258,8 @@ export const getRealtimeData = async (phytoProductSelected) => {
     try {
         const response = await hygoApi.post('/app/realtime', { products: phytoProductSelected });
         return response.data
-    } catch(error) {
-        return { }
+    } catch (error) {
+        return {}
     }
 }
 
@@ -253,8 +271,8 @@ export const getFields = async (): Promise<getFieldsReturnType> => {
     try {
         const response = await hygoApi.get('/app/fields');
         return response.data
-    } catch(error) {
-       return {}
+    } catch (error) {
+        return {}
     }
 }
 
@@ -274,8 +292,8 @@ export const getCultures = async () => {
     try {
         const response = await hygoApi.get('/app/cultures');
         return response.data
-    } catch(error) {
-        return { }
+    } catch (error) {
+        return {}
     }
 }
 
@@ -293,17 +311,17 @@ export const getMeteoRadar = async () => {
     try {
         const response = await hygoApi.get('/app/radar');
         return response.data
-    } catch(error) {
-        return { }
+    } catch (error) {
+        return {}
     }
 }
 
 // Update intervention products
 export const updateIntervention = async (products, interventionid) => {
     try {
-        const response = await hygoApi.post('/app/interventions/update', {products, interventionid });
+        const response = await hygoApi.post('/app/interventions/update', { products, interventionid });
         return (response.data);
-    } catch(error) {
+    } catch (error) {
         return ({
 
         });
@@ -312,20 +330,20 @@ export const updateIntervention = async (products, interventionid) => {
 
 export const deleteIntervention = async (interventionid) => {
     try {
-        const response = await hygoApi.post('/app/interventions/delete', {id: interventionid});
+        const response = await hygoApi.post('/app/interventions/delete', { id: interventionid });
         return (response.data);
-    } catch(error) {
+    } catch (error) {
         return ({
 
         });
     }
-} 
+}
 
 export const createIntervention = async () => {
     try {
         const response = await hygoApi.post('/app/interventions/create');
         return (response.data);
-    } catch(error) {
+    } catch (error) {
         return ({
 
         });
@@ -337,7 +355,7 @@ export const checkSetup = async () => {
     try {
         const response = await hygoApi.post('/app/checkSetup', { version: VERSION })
         return (response.data);
-    } catch(error) {
+    } catch (error) {
         console.log(error)
         return ({})
     }
