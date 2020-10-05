@@ -20,5 +20,5 @@ export interface meteoDataType {
     day?: string
     meteoByHour?: Array<meteoByHourType>,
     meteoBy4Hour?: Array<meteoByHourType>,
-    pictoDay? :string
+    //pictoDay? :string
 }

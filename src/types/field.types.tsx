@@ -1,6 +1,9 @@
 export interface fieldType {
     area: number,       // in meter
-    culture_name: string,
+    culture: {
+        name: string,
+        id: number
+    }
     features: {
         bbox: any,
         coordinates:Array<Array<Array<number>>>, 

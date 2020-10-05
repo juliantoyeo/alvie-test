@@ -12,7 +12,7 @@ import COLORS from '../../colors';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { selectParcelsScreen: ampEvent } = AMPLITUDE_EVENTS
 import { fieldType } from '../../types/field.types';
-import { getFields, getFieldsReturnType } from '../../api/hygoApi';
+import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
 
 
 interface ParcelListProps {
@@ -78,10 +78,10 @@ const SelectParcelsScreen = ({ navigation }) => {
         // Init fields and retrieve culture_names
         const load = async () => {
            
-            const {fields: fld}: getFieldsReturnType = await getFields()
+            const {fields: fld}: getFieldsReturnType = await getFields_v2()
             if (!!fld) {
                 setFields(fld)
-                const nm = fld.map( (f) => f.culture_name)
+                const nm = fld.map( (f) => f.culture.name)
                 setNames([... new Set(nm)])     //delete duplicate
             }
         }
@@ -125,7 +125,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
                         {fields.length > 0 && names.length > 0 &&
                             names.map((n, k) => {
-                                const items: Array<fieldType> = fields.filter((p) => p.culture_name == n)
+                                const items: Array<fieldType> = fields.filter((p) => p.culture.name == n)
                                 return (
                                     items.length > 0 &&
                                     <ParcelList key={k} title={n} items={items.sort((it1, it2) => it1.id - it2.id)} onPress={updateList} />

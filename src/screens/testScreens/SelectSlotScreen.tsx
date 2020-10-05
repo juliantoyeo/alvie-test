@@ -20,8 +20,10 @@ import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 import moment from 'moment';
 
-import { getMeteoDetailed_v2 } from '../../api/hygoApi';
+import { getMeteoDetailed_v2, getModulationValue } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
+import { activeProductType } from '../../types/activeproduct.types';
+import { fieldType } from '../../types/field.types';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -58,10 +60,6 @@ const SelectSlotScreen = ({ navigation }) => {
             // array of the 5 next days to iterate on
             const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
             const data: Array<meteoDataType> = await Promise.all(dt.map( (d) => getMeteoDetailed_v2(d)))
-           
-            console.log(now)
-            console.log(dt)
-            console.log("==============",meteoData)
             setMeteoData(data)
             setLoading(false)
         }
@@ -69,6 +67,25 @@ const SelectSlotScreen = ({ navigation }) => {
         loadMeteo()
     }, [])
 
+    useEffect(() => {
+        onSelectedSlotchange()
+    }, [context.selectedSlot])
+
+    const onSelectedSlotchange = async () => {
+        const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
+        const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
+        const data={
+            hour: "00",
+            day: "",
+            cultures,
+            products,
+            selected: { 
+                min: context.selectedSlot.min, 
+                max: context.selectedSlot.max
+            }
+        }
+        const newMod = getModulationValue(data)
+    }
     const updateDay = (i) => {
 
     }
@@ -97,16 +114,17 @@ const SelectSlotScreen = ({ navigation }) => {
                     {/*============= Week Tab =================*/}
                     <View style={styles.tabBar}>
                         {meteoData.map((d, i) => {
+                            const dayName = i18n.t(`days.${d.day.toLowerCase()}`).toUpperCase().slice(0,3) 
                             return (
                                 <TouchableOpacity 
                                     key={i} 
                                     style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]} 
                                     onPress={() =>{setCurrentDay(i)} }
                                 >
-                                    <Text style={[styles.tabText, { color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{d.day}</Text>
-                                    <View style={styles.weatherContainer}>
+                                    <Text style={[styles.tabText, { color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                    {/* <View style={styles.weatherContainer}>
                                         <Image source={PICTO_MAP[d.pictoDay]} style={styles.weatherImage} />
-                                    </View>
+                                    </View> */}
                                 </TouchableOpacity>
                             )
                         })}
@@ -139,16 +157,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 initialMin={context.selectedSlot.min}
                                 data={currentNext12HoursData}
                                 width={Dimensions.get('window').width - 30}
-                                onHourChangeEnd={(h) => {
-                                    context.setSelectedSlot(h);
-                                    // setModulationChanged(true)
-
-                                    if (h.max < h.min) {
-                                        return
-                                    }
-                                    reloadCurrentMetrics(h)
-                                    setBackgroundColor(h)
-                                }}
+                                onHourChangeEnd={(h) => {context.setSelectedSlot(h);}}
                             />
                         </View>
 

@@ -264,12 +264,21 @@ export const getRealtimeData = async (phytoProductSelected) => {
 }
 
 // Get fields
+export const getFields = async () => {
+    try {
+        const response = await hygoApi.get('/app/fields');
+        return response.data
+    } catch (error) {
+        return {}
+    }
+}
+
 export interface getFieldsReturnType {
     fields?: Array<fieldType>
 }
-export const getFields = async (): Promise<getFieldsReturnType> => {
+export const getFields_v2 = async (): Promise<getFieldsReturnType> => {
     try {
-        const response = await hygoApi.get('/app/fields');
+        const response = await hygoApi.get('/app/fields/v2');
         return response.data
     } catch (error) {
         return {}
