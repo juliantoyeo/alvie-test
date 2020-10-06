@@ -73,6 +73,7 @@ const SelectSlotScreen = ({ navigation }) => {
     }, [context.selectedSlot])
     
     const onSelectedSlotchange = async () => {
+        setIsRefreshing(true)
         const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
         const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
         const now = moment.utc('2020-05-05')
@@ -88,6 +89,7 @@ const SelectSlotScreen = ({ navigation }) => {
         }
         const newMod:Array<modulationType> = await getModulationValue_v2(data)
         context.setMod(newMod)
+        setIsRefreshing(false)
     }
     const updateDay = (i) => {
 
@@ -175,12 +177,14 @@ const SelectSlotScreen = ({ navigation }) => {
                     {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
                     <View style={{ paddingTop: 20, paddingBottom: 40 }}>
                         <HygoCard>
+                            { isRefreshing ? <Spinner/> : (
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
                                     {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
                                 </Text>
                             </View>
+                            )}
                         </HygoCard>
                     </View>
                 </View>
