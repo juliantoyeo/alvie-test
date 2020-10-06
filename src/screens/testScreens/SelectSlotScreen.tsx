@@ -79,14 +79,16 @@ const SelectSlotScreen = ({ navigation }) => {
         const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
         const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
         const now = moment.utc('2020-05-05')
+        const hour = context.selectedSlot.min.toString().padStart(2,'0')
+        console.log('hour', hour)
         const data={
-            hour: "00",
+            hour,
             day: now.format('YYYY-MM-DD'),
             cultures,
             products,
             selected: { 
-                min: context.selectedSlot.min, 
-                max: context.selectedSlot.max
+                min: 0, 
+                max: context.selectedSlot.max - context.selectedSlot.min
             }
         }
         const newMod:Array<modulationType> = await getModulationValue_v2(data)

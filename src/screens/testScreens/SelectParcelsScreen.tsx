@@ -18,10 +18,11 @@ import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
 interface ParcelListProps {
     title: string,
     items: Array<fieldType>,
-    onPress: ((id: number, selected: boolean) => any)
+    onPress: ((id: number, selected: boolean) => any),
+    active: boolean
 }
 
-export const ParcelList = ({ title, items, onPress }: ParcelListProps) => {
+export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) => {
     const [opened, setOpened] = useState(true)
     return (
         <View style={ListStyles.container}>
@@ -33,12 +34,12 @@ export const ParcelList = ({ title, items, onPress }: ParcelListProps) => {
                       name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'} 
                       style={{fontSize: 16, color: COLORS.CYAN}} /> */}
 
-                    <Text style={ListStyles.cardTitle}>{title}</Text>
+                    <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
                     <TouchableOpacity onPress={() => setOpened(!opened)}>
                         <Icon
                             type='AntDesign'
                             name={opened ? 'down' : 'right'}
-                            style={{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }}
+                            style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
                         />
                     </TouchableOpacity>
                 </View>
@@ -47,16 +48,21 @@ export const ParcelList = ({ title, items, onPress }: ParcelListProps) => {
                         {items.map((item, k) => (
                             <TouchableOpacity
                                 key={k}
-                                onPress={() => { onPress(item.id, !item.selected) }}
+                                onPress={() => { active && onPress(item.id, !item.selected) }}
                                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}
+                                disabled={!active}
                             >
                                 <Icon
                                     type='FontAwesome'
                                     name={item.selected ? 'square' : 'square-o'}
-                                    style={{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }}
+                                    style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
                                 />
-                                <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>{item.id} - {item.name}</Text>
-                                <Text style={[hygoStyles.text, { textAlign: 'right' }]}>{(item.area / 10000).toFixed(1)}ha</Text>
+                                <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }, !active && ListStyles.hidden]}>
+                                    {item.id} - {item.name}
+                                </Text>
+                                <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
+                                    {(item.area / 10000).toFixed(1)}ha
+                                </Text>
                             </TouchableOpacity>
 
                         ))}
@@ -73,6 +79,7 @@ const SelectParcelsScreen = ({ navigation }) => {
     const [fields, setFields] = useState<Array<fieldType>>([])
     const [ready, setReady] = useState<boolean>(false)
     const [names, setNames] = useState<Array<string>>([])
+    const [selectedName, setSelectedName] = useState<string>(null)
 
     useEffect(() => {
         // Init fields and retrieve culture_names
@@ -93,6 +100,9 @@ const SelectParcelsScreen = ({ navigation }) => {
 
     useEffect(() => {
         setReady(context.selectedFields.length > 0)
+        if (context.selectedFields.length == 0) {
+            setSelectedName(null)
+        }
     }, [context.selectedFields])
 
     const updateList = (id, newSelected) => {
@@ -100,6 +110,7 @@ const SelectParcelsScreen = ({ navigation }) => {
         setFields([...fields.filter((p) => p.id != id), touchedField])
         if (newSelected == true) {
             context.addField(touchedField)
+            setSelectedName(touchedField.culture.name)
         } else {
             context.removeField(touchedField.id)
         }
@@ -125,10 +136,16 @@ const SelectParcelsScreen = ({ navigation }) => {
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
                         {fields.length > 0 && names.length > 0 &&
                             names.map((n, k) => {
-                                const items: Array<fieldType> = fields.filter((p) => p.culture.name == n)
+                                const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
                                 return (
-                                    items.length > 0 &&
-                                    <ParcelList key={k} title={n} items={items.sort((it1, it2) => it1.id - it2.id)} onPress={updateList} />
+                                    items.length > 0 && 
+                                    <ParcelList 
+                                        key={k} 
+                                        title={n} 
+                                        items={items.sort((it1, it2) => it1.id - it2.id)} 
+                                        onPress={updateList} 
+                                        active={(!selectedName || n == selectedName)}
+                                    />
                                 )
                             })}
                     </View>
@@ -216,6 +233,9 @@ const ListStyles = StyleSheet.create({
         padding: 10,
         paddingLeft: 20
     },
+    hidden: {
+        color: '#DDD'
+    }
 })
 
 const mapStateToProps = (state) => ({
