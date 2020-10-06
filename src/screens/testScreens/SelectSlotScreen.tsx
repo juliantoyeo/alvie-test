@@ -78,7 +78,7 @@ const SelectSlotScreen = ({ navigation }) => {
         setLoading(false)
     }
     const loadConditions = async () => {
-        let now = moment.utc('2020-08-08')
+        let now = moment.utc('2020-05-05')
         if (now.minutes() >= 30) {
             now.hours(now.hours() + 1)
         }
@@ -100,7 +100,7 @@ const SelectSlotScreen = ({ navigation }) => {
         setIsRefreshing(true)
         const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
         const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
-        const now = moment.utc('2020-08-08')
+        const now = moment.utc('2020-05-05')
         const hour = context.selectedSlot.min.toString().padStart(2,'0')
         const data={
             hour,

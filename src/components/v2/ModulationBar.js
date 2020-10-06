@@ -134,9 +134,8 @@ class ModulationBar extends Component {
         const isSelected = i <= this.state.selected.max && this.state.selected.min <= i
         if (isSelected)
             return 'transparent'
-
-        const padded = `${i + this.props.from}`.padStart(2, '0')
-        return COLORS[`${CONDITIONS[this.props.data[i + this.props.from]]}_CARDS`];
+        const color_name = `${CONDITIONS[this.props.data[i + this.props.from]]}_CARDS`
+        return COLORS[color_name];
     }
 
     getItemWidth = (i, isSub) => {
@@ -167,7 +166,7 @@ class ModulationBar extends Component {
 
         let curCond = null
         for (let i = this.state.selected.min; i <= this.state.selected.max; i++) {
-            // let padded = `${i + this.props.from}`.padStart(2, '0')
+            // find worst condition over the selected slot
              if (!curCond || CONDITIONS.indexOf(curCond) >= this.props.data[i + this.props.from]) {
                 curCond = CONDITIONS[this.props.data[i + this.props.from]]
              }
