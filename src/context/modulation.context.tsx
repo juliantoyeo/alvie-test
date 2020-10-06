@@ -3,6 +3,7 @@ import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native'
 import COLORS from '../colors'
 import { activeProductType } from '../types/activeproduct.types';
 import { fieldType } from '../types/field.types';
+import { modulationType } from '../types/modulation.types';
 
 export interface ModulationContextProps {
     selectedFields?: Array<fieldType>,
@@ -24,7 +25,7 @@ export interface ModulationContextProps {
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: any,
-    mod?: modulationType,
+    mod?: Array<modulationType>,
     setMod?: any,
     metrics?: metricsType,
     setMetrics? : any
@@ -47,7 +48,6 @@ export type selectedSlotType = {
     min: number,
     max: number
 }
-export type modulationType = number
 export type metricsType ={
     winddirection: string,
     wind: number,
@@ -71,7 +71,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [debit, setDebit] = useState<number>(100)
     const [buses, setBuses] = useState<string>()
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
-    const [mod, setMod] = useState<modulationType>(0)
+    const [mod, setMod] = useState<Array<modulationType>>([])
     const [metrics, setMetrics] = useState<metricsType>()
 
     const addField = (field: fieldType) => {

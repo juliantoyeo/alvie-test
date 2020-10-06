@@ -20,10 +20,11 @@ import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 import moment from 'moment';
 
-import { getMeteoDetailed_v2, getModulationValue } from '../../api/hygoApi';
+import { getMeteoDetailed_v2, getModulationValue_v2 } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
+import { modulationType } from '../../types/modulation.types';
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -42,8 +43,8 @@ const SelectSlotScreen = ({ navigation }) => {
     const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
     const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
-    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
-    const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
+    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
+    const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
 
     const [loading, setLoading] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -70,13 +71,14 @@ const SelectSlotScreen = ({ navigation }) => {
     useEffect(() => {
         onSelectedSlotchange()
     }, [context.selectedSlot])
-
+    
     const onSelectedSlotchange = async () => {
         const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
         const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
+        const now = moment.utc('2020-05-05')
         const data={
             hour: "00",
-            day: "",
+            day: now.format('YYYY-MM-DD'),
             cultures,
             products,
             selected: { 
@@ -84,11 +86,14 @@ const SelectSlotScreen = ({ navigation }) => {
                 max: context.selectedSlot.max
             }
         }
-        const newMod = getModulationValue(data)
+        const newMod:Array<modulationType> = await getModulationValue_v2(data)
+        context.setMod(newMod)
     }
     const updateDay = (i) => {
 
     }
+    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -172,7 +177,9 @@ const SelectSlotScreen = ({ navigation }) => {
                         <HygoCard>
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
-                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${(totalPhyto * context.mod / 100).toFixed(1)}L (${(context.mod).toFixed(0)}%)`}</Text>
+                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
+                                    {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
+                                </Text>
                             </View>
                         </HygoCard>
                     </View>

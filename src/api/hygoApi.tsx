@@ -7,6 +7,7 @@ import { fieldType } from '../types/field.types';
 import { errorType } from '../types/error.types';
 import { activeProductType } from '../types/activeproduct.types';
 import {meteoByHourType, meteoDataType} from '../types/meteo.types';
+import { modulationType} from '../types/modulation.types';
 
 export const hygoApi = axios.create({
     baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
@@ -221,6 +222,15 @@ export const getModulationValue = async (data) => {
         return response.data
     } catch (error) {
         return {}
+    }
+}
+
+export const getModulationValue_v2 = async (data): Promise<Array<modulationType>> => {
+    try {
+        const response = await hygoApi.post('/app/modulation/v2', { ...data })
+        return response.data
+    } catch (error) {
+        return []
     }
 }
 
