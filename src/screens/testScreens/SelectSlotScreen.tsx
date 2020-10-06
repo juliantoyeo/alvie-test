@@ -50,6 +50,8 @@ const SelectSlotScreen = ({ navigation }) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
 
+    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
         const loadMeteo = async () => {
@@ -94,8 +96,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const updateDay = (i) => {
 
     }
-    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
-
+    
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
