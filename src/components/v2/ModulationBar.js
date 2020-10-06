@@ -116,13 +116,15 @@ class ModulationBar extends Component {
             }
         }
 
-        //Update the selected slots
-        this.setState({
-            selected: {
-                min,
-                max
-            }
-        })
+        //Update the selected slots if size < 12 slots
+        if((max - min) < 12) {
+            this.setState({
+                selected: {
+                    min,
+                    max
+                }
+            })
+        }
     }
 
     getColor = (i) => {
