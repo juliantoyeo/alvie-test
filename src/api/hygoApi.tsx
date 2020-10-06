@@ -8,6 +8,10 @@ import { errorType } from '../types/error.types';
 import { activeProductType } from '../types/activeproduct.types';
 import {meteoByHourType, meteoDataType} from '../types/meteo.types';
 import { modulationType} from '../types/modulation.types';
+import { conditionType } from '../types/condition.types'
+import _ from 'lodash';
+
+import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
     baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
@@ -195,6 +199,36 @@ export const getMeteoDetailed_v2 = async (day: string): Promise<meteoDataType> =
             meteoByHour: [],
             meteoBy4Hour: []
         }
+    }
+}
+
+type getConditionV2Props = {
+    day: string,
+    parcelles: Array<number>,
+    products: Array<number>
+}
+
+export const getConditions_v2 = async (data:getConditionV2Props): Promise<Array<conditionType>> => {
+    /**
+     * Retrieve compacted conditions for every hour of the day
+     * Rules : the worst condition win
+     */
+    try {
+        const { products, parcelles, day } = data
+        const response = await hygoApi.post('/app/meteo/condition/v2', { products, parcelles, day })
+        const conditions = response.data.map(
+            ({condition, parcelleId, productId, timestamp }) => ({
+                condition, parcelleId, productId, timestamp 
+            }))
+        const ret = _(conditions)
+            .groupBy(x => x.timestamp)
+            .sortBy((v)=> v.timestamp)
+            .map((value, key) => Math.min(...value.map((v) => CONDITIONS_ORDERING[v.condition])))
+            .value()
+
+        return ret
+    } catch (error) {
+        return []
     }
 }
 

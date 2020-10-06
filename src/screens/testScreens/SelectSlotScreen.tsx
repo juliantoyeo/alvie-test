@@ -20,11 +20,14 @@ import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 import moment from 'moment';
 
-import { getMeteoDetailed_v2, getModulationValue_v2 } from '../../api/hygoApi';
+import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2 } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
 import { modulationType } from '../../types/modulation.types';
+import { conditionType } from '../../types/condition.types';
+
+type dailyConditionType = Array<conditionType>
 
 const PICTO_MAP = {
     'SUN': require('../../../assets/sunny.png'),
@@ -35,7 +38,6 @@ const PICTO_MAP = {
 }
 
 const hasRacinaire = () => false
-
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
@@ -45,7 +47,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
-
+    const [conditions, setConditions] = useState<Array<dailyConditionType>>([])
     const [loading, setLoading] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
@@ -54,33 +56,52 @@ const SelectSlotScreen = ({ navigation }) => {
 
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
-        const loadMeteo = async () => {
-            let now = moment.utc('2020-08-08')
-            if (now.minutes() >= 30) {
-                now.hours(now.hours() + 1)
-            }
-            now = now.startOf('day')
-            // array of the 5 next days to iterate on
-            const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-            const data: Array<meteoDataType> = await Promise.all(dt.map( (d) => getMeteoDetailed_v2(d)))
-            setMeteoData(data)
-            setLoading(false)
-        }
         setLoading(true)
         loadMeteo()
+        loadConditions()
     }, [])
 
     useEffect(() => {
         onSelectedSlotchange()
     }, [context.selectedSlot])
     
+    const loadMeteo = async () => {
+        let now = moment.utc('2020-05-05')
+        if (now.minutes() >= 30) {
+            now.hours(now.hours() + 1)
+        }
+        now = now.startOf('day')
+        // array of the 5 next days to iterate on
+        const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+        const data: Array<meteoDataType> = await Promise.all(dt.map( (d) => getMeteoDetailed_v2(d)))
+        setMeteoData(data)
+        setLoading(false)
+    }
+    const loadConditions = async () => {
+        let now = moment.utc('2020-08-08')
+        if (now.minutes() >= 30) {
+            now.hours(now.hours() + 1)
+        }
+        now = now.startOf('day')
+        // array of the 5 next days to iterate on
+        const dt = [...Array(5).keys()].map((i) => now.add(i==0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+        const data: Array<dailyConditionType> = await Promise.all(
+            dt.map( (day) => (
+                getConditions_v2({
+                    day, 
+                    products: context.selectedProducts.map((p)=> p.id),
+                    parcelles: context.selectedFields.map((f) => f.id)
+                })))
+        )
+        setConditions(data)
+    }
+
     const onSelectedSlotchange = async () => {
         setIsRefreshing(true)
         const products:Array<number> = context.selectedProducts.map((p:activeProductType) => p.phytoproduct.id)
         const cultures:Array<number> = context.selectedFields.map((f:fieldType) => f.culture.id)
-        const now = moment.utc('2020-05-05')
+        const now = moment.utc('2020-08-08')
         const hour = context.selectedSlot.min.toString().padStart(2,'0')
-        console.log('hour', hour)
         const data={
             hour,
             day: now.format('YYYY-MM-DD'),
@@ -94,9 +115,6 @@ const SelectSlotScreen = ({ navigation }) => {
         const newMod:Array<modulationType> = await getModulationValue_v2(data)
         context.setMod(newMod)
         setIsRefreshing(false)
-    }
-    const updateDay = (i) => {
-
     }
     
     return (
@@ -165,7 +183,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 from={0/*parseInt(hour)*/}
                                 initialMax={context.selectedSlot.max}
                                 initialMin={context.selectedSlot.min}
-                                data={currentNext12HoursData}
+                                data={conditions[currentDay]}
                                 width={Dimensions.get('window').width - 30}
                                 onHourChangeEnd={(h) => {context.setSelectedSlot(h);}}
                             />

@@ -14,6 +14,14 @@ const CONDITIONS_ORDERING = {
   EXCELLENT: 4
 }
 
+const CONDITIONS = [
+    "FORBIDDEN", 
+    "BAD",
+    "CORRECT",
+    "GOOD",
+    "EXCELLENT"
+]
+
 const MONTHS = [
   i18n.t('months.january'),
   i18n.t('months.february'),
@@ -43,6 +51,7 @@ export {
   VERSION,
   PADDED,
   CONDITIONS_ORDERING,
+  CONDITIONS,
   MONTHS,
   DAYS,
 }

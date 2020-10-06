@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableWithoutFeedback, PanResponder, Dimensions } 
 
 import COLORS from '../../colors'
 import _ from 'lodash';
+import { CONDITIONS } from '../../constants';
 
 const NUM_ITEMS = 24
 const CURSOR_HEIGHT = 120
@@ -135,7 +136,7 @@ class ModulationBar extends Component {
             return 'transparent'
 
         const padded = `${i + this.props.from}`.padStart(2, '0')
-        return COLORS[`${this.props.data[padded].condition}_CARDS`];
+        return COLORS[`${CONDITIONS[this.props.data[i + this.props.from]]}_CARDS`];
     }
 
     getItemWidth = (i, isSub) => {
@@ -166,10 +167,10 @@ class ModulationBar extends Component {
 
         let curCond = null
         for (let i = this.state.selected.min; i <= this.state.selected.max; i++) {
-            let padded = `${i + this.props.from}`.padStart(2, '0')
-            if (!curCond || conditionsOrdering.indexOf(curCond) >= conditionsOrdering.indexOf(this.props.data[padded].condition)) {
-                curCond = this.props.data[padded].condition
-            }
+            // let padded = `${i + this.props.from}`.padStart(2, '0')
+             if (!curCond || CONDITIONS.indexOf(curCond) >= this.props.data[i + this.props.from]) {
+                curCond = CONDITIONS[this.props.data[i + this.props.from]]
+             }
         }
 
         const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14
