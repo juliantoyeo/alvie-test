@@ -149,7 +149,7 @@ const SelectSlotScreen = ({ navigation }) => {
             chd.r2 = Math.max((chd.r2 || minval), v.r2)
             chd.r3 = Math.max((chd.r3 || minval), v.r3)
             chd.r6 = Math.max((chd.r6 || minval), v.r6)
-            
+
             // _.forOwn(v.parcelle, (v0, k0) => {
             //     if (parseInt(k) === selected.max) {
             //         chd.r2 = Math.max((chd.r2 || minval), v0.r2)
@@ -283,7 +283,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
                                     <HourScale hour={'00'/*hour*/} />
 
-                                    {/* <ExtraMetrics currentHourMetrics={currentHourMetrics} /> */}
+                                    <ExtraMetrics currentHourMetrics={{...metrics, deltatemp:0}} />
                                 </View>
 
                                 {/*================= Result ==================*/}
