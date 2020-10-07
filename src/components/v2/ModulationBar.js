@@ -1,4 +1,4 @@
-import React, { useState, Component, useEffect } from 'react'
+import React, { useState, Component, useEffect, useRef, useCallback, useMemo } from 'react'
 import { StyleSheet, View, TouchableWithoutFeedback, PanResponder, Dimensions } from 'react-native'
 
 import COLORS from '../../colors'
@@ -12,7 +12,7 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-class ModulationBar extends Component {
+const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd }) => {
     /**
      * 
      * @param props
@@ -23,38 +23,35 @@ class ModulationBar extends Component {
      * that do the color of the selected slot
      */
 
-    constructor(props) {
-        super(props);
 
-        this.onHourChangeDelayed = _.debounce((h) => { props.onHourChange(h) }, 100);
+    const [selected, setSelected] = useState({
+        min: parseInt(initialMin ? initialMin : 0),
+        max: parseInt(initialMax ? initialMax : 0)
+    })
+    //useRef needed for onPanResponderRelease
+    const selectedRef = useRef(selected)
+    selectedRef.current = selected
 
-        this.state = {
-          selected: {
-            min: parseInt(props.initialMin ?props.initialMin : 0),
-            max: parseInt(props.initialMax ?props.initialMax : 0)
-          },
-        }
-    }
-
-    panResponder = PanResponder.create({
+    const panResponder = useMemo(() => PanResponder.create({
         onMoveShouldSetPanResponderCapture: () => true,
         onStartShouldSetPanResponder: () => true,
-        onPanResponderStart: (evt, gestureState) => this.onStart(evt, gestureState),
-        onPanResponderMove: (evt, gestureState) => this.onMove(evt, gestureState),
+        onPanResponderStart: (evt, gestureState) => onStart(evt, gestureState),
+        onPanResponderMove: (evt, gestureState) => onMove(evt, gestureState),
         onPanResponderRelease: () => {
-            if (this.props.onHourChangeEnd) {
-                this.props.onHourChangeEnd(this.state.selected)
+            //selected is not changing here because we use useMemo()
+            if (onHourChangeEnd) {
+                onHourChangeEnd(selectedRef.current)
             }
         }
-    })
+    }), [])
 
-    onStart = (evt, gestureState) => {
-    /**
-    * Handle the gesture when touching the finger
-    */
-        const  xpos = gestureState.x0 + gestureState.dx
-        const  offset = (Dimensions.get('window').width - this.props.width) / 2
-        let  fv = (xpos - offset) / this.props.width * NUM_ITEMS
+    const onStart = (evt, gestureState) => {
+        /**
+        * Handle the gesture when touching the finger
+        */
+        const xpos = gestureState.x0 + gestureState.dx
+        const offset = (Dimensions.get('window').width - width) / 2
+        let fv = (xpos - offset) / width * NUM_ITEMS
 
         // slot number where we are
         let posInsideBar = parseInt(fv)
@@ -62,29 +59,26 @@ class ModulationBar extends Component {
         if (posInsideBar > NUM_ITEMS - 1) { posInsideBar = NUM_ITEMS - 1 }
         if (posInsideBar < 0) { posInsideBar = 0 }
 
-        const { min, max } = this.state.selected
-
-        // if we touch outside of the selection : update selection
-        if ((posInsideBar > max + 1) || (posInsideBar < min - 1)) {
-            this.setState({
-                selected: {
-                    min: posInsideBar,
-                    max: posInsideBar
-                }
-            })
-        } 
-
+        // be careful with the problem of stale closure with react Hooks
+        
+        setSelected(({min, max}) => {
+            // if we touch outside of the selection : update selection
+            return (posInsideBar > max + 1) || (posInsideBar < min - 1) ? ({
+                min: posInsideBar,
+                max: posInsideBar
+            }) : ({min, max})  
+        })
     }
-    
-    onMove = (evt, gestureState) => {
-    /**
-     * Handle the gesture when moving the finger
-     */
-        const  xpos = gestureState.x0 + gestureState.dx
-        const  offset = (Dimensions.get('window').width - this.props.width) / 2
-        let  fv = (xpos - offset) / this.props.width * NUM_ITEMS
-        // where we are inside the slot : 0(top left) -> 1(top right)
-        const  dv = fv % 1
+
+    const onMove = (evt, gestureState) => {
+        /**
+         * Handle the gesture when moving the finger
+         */
+        const xpos = gestureState.x0 + gestureState.dx
+        const offset = (Dimensions.get('window').width - width) / 2
+        let fv = (xpos - offset) / width * NUM_ITEMS
+        // dv: where we are inside the slot : 0(top left) -> 1(top right)
+        const dv = fv % 1
 
         if (gestureState.vx > 0) {
             if (dv >= 0.65) { fv = parseInt(fv) + 1 }
@@ -100,49 +94,41 @@ class ModulationBar extends Component {
         if (posInsideBar > NUM_ITEMS - 1) { posInsideBar = NUM_ITEMS - 1 }
         if (posInsideBar < 0) { posInsideBar = 0 }
 
-        let { min, max } = this.state.selected
-
-        // compare with current min and max
-        if (gestureState.vx > 0) {
-            if (posInsideBar === max + 1) {
-                max = posInsideBar
-            } else if (posInsideBar === min && max !== posInsideBar) {
-                min = posInsideBar + 1
-            }
-        } else {
-            if (posInsideBar === min - 1) {
-                min = posInsideBar
-            } else if (posInsideBar === max && posInsideBar !== min) {
-                max = posInsideBar - 1
-            }
-        }
-
-        //Update the selected slots if size < 12 slots
-        if((max - min) < 12) {
-            this.setState({
-                selected: {
-                    min,
-                    max
+        // be careful with the problem of stale closure with react Hooks
+        setSelected((selected) => {
+            let {min, max} = selected
+            if (gestureState.vx > 0) {
+                if (posInsideBar === max + 1) {
+                    max = posInsideBar
+                } else if (posInsideBar === min && max !== posInsideBar) {
+                    min = posInsideBar + 1
                 }
-            })
-        }
+            } else {
+                if (posInsideBar === min - 1) {
+                    min = posInsideBar
+                } else if (posInsideBar === max && posInsideBar !== min) {
+                    max = posInsideBar - 1
+                }
+            }
+            return ((max - min) < 12) ? ({min, max}) : (selected)
+        })
     }
 
-    getColor = (i) => {
+    const getColor = (i) => {
         // if selected : color is transparent
         // else the color is taken from the data provided
-        const isSelected = i <= this.state.selected.max && this.state.selected.min <= i
+        const isSelected = i <= selected.max && selected.min <= i
         if (isSelected)
             return 'transparent'
-        const color_name = `${CONDITIONS[this.props.data[i + this.props.from]]}_CARDS`
+        const color_name = `${CONDITIONS[data[i + from]]}_CARDS`
         return COLORS[color_name];
     }
 
-    getItemWidth = (i, isSub) => {
+    const getItemWidth = (i, isSub) => {
 
-        const w = this.props.width
+        const w = width
         const margin = parseFloat(w) / NUM_ITEMS * 0.14
-        const isSelected = i <= this.state.selected.max && this.state.selected.min <= i
+        const isSelected = i <= selected.max && selected.min <= i
         return {
             width: parseFloat(w) / NUM_ITEMS,
             paddingHorizontal: isSelected ? 0 : margin,
@@ -151,13 +137,13 @@ class ModulationBar extends Component {
         }
     }
 
-    getSelectedWidth = () => {
+    const getSelectedWidth = () => {
         /**
          * Get the width of the rectagle in the background that will do the color
          *  for the selected slot
          *  The color is the worst color of all the selected slots
          */
-        if (this.state.selected.max < this.state.selected.min) {
+        if (selected.max < selected.min) {
             return {
                 width: 0,
                 boderWidth: 0,
@@ -165,60 +151,58 @@ class ModulationBar extends Component {
         }
 
         let curCond = null
-        for (let i = this.state.selected.min; i <= this.state.selected.max; i++) {
+        for (let i = selected.min; i <= selected.max; i++) {
             // find worst condition over the selected slot
-             if (!curCond || CONDITIONS.indexOf(curCond) >= this.props.data[i + this.props.from]) {
-                curCond = CONDITIONS[this.props.data[i + this.props.from]]
-             }
+            if (!curCond || CONDITIONS.indexOf(curCond) >= data[i + from]) {
+                curCond = CONDITIONS[data[i + from]]
+            }
         }
 
-        const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14
+        const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14
         return {
-            width: (this.state.selected.max - this.state.selected.min + 1) * (parseFloat(w) / NUM_ITEMS),
+            width: (selected.max - selected.min + 1) * (parseFloat(w) / NUM_ITEMS),
             marginHorizontal: 0,
             borderWidth: margin,
             borderColor: '#fff',
             height: 45 + margin,
             position: 'absolute',
-            left: this.state.selected.min * this.props.width / NUM_ITEMS,
+            left: selected.min * width / NUM_ITEMS,
             backgroundColor: COLORS[`${curCond}_CARDS`],
         }
     }
 
-    getContainerHeight = () => {
-        const w = this.props.width, margin = parseFloat(w) / NUM_ITEMS * 0.14
+    const getContainerHeight = () => {
+        const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14
         return 45 + margin
     }
 
-    render() {
-        return (
-            <View style={[styles.container, { width: this.props.width, height: this.getContainerHeight() }]}>
-                <View style={[styles.parcelleCursor, {
-                    left: -1 * parseFloat(Dimensions.get('window').width - this.props.width) / 2,
-                    width: Dimensions.get('window').width,
-                    height: this.props.cursorHeight || CURSOR_HEIGHT,
-                }]}
-                    {...this.panResponder.panHandlers}></View>
+    return (
+        <View style={[styles.container, { width: width, height: getContainerHeight() }]}>
+            <View style={[styles.parcelleCursor, {
+                left: -1 * parseFloat(Dimensions.get('window').width - width) / 2,
+                width: Dimensions.get('window').width,
+                height: CURSOR_HEIGHT,
+            }]}
+                {...panResponder.panHandlers}></View>
 
-                {/* The background rectangle*/}
-                <View style={[styles.selected, {...this.getSelectedWidth() }]}></View>
+            {/* The background rectangle*/}
+            <View style={[styles.selected, { ...getSelectedWidth() }]}></View>
 
-                {/* The slots */}
-                {[...Array(NUM_ITEMS).keys()].map(i => {
-                    return (
-                        <TouchableWithoutFeedback key={i} onPress={() => {}}>
-                            <View style={[styles.parcelle, {
-                                ...this.getItemWidth(i)
-                            },
-                            ]}>
-                                <View style={[styles.subTile, { backgroundColor: this.getColor(i), }]}></View>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    )
-                })}
-            </View>
-        )
-    }
+            {/* The slots */}
+            {[...Array(NUM_ITEMS).keys()].map(i => {
+                return (
+                    <TouchableWithoutFeedback key={i} onPress={() => { }}>
+                        <View style={[styles.parcelle, {
+                            ...getItemWidth(i)
+                        },
+                        ]}>
+                            <View style={[styles.subTile, { backgroundColor: getColor(i), }]}></View>
+                        </View>
+                    </TouchableWithoutFeedback>
+                )
+            })}
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
