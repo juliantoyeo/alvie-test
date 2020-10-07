@@ -21,7 +21,7 @@ import { hourMetricsData, daysData, next12HoursData, modData } from './staticDat
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2 } from '../../api/hygoApi';
+import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2, getMetrics_v2 } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -29,7 +29,7 @@ import { modulationType } from '../../types/modulation.types';
 import { conditionType } from '../../types/condition.types';
 
 type dailyConditionType = Array<conditionType>
-type currentMetricsType = {
+type metricsType = {
     wind?: any,
     gust?: any
     precipitation?: any,
@@ -67,7 +67,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
     const [conditions, setConditions] = useState<Array<dailyConditionType>>([])
-    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>()//hourMetricsData[0])
+    const [metrics, setMetrics] = useState<any>()//hourMetricsData[0])
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
 
     const [loading, setLoading] = useState(true)
@@ -81,7 +81,6 @@ const SelectSlotScreen = ({ navigation }) => {
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
         setLoading(true)
-        reloadCurrentMetrics(context.selectedSlot)
         loadMeteo()
         loadConditions()
     }, [])
@@ -89,8 +88,12 @@ const SelectSlotScreen = ({ navigation }) => {
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         loadModulation()
+        loadMetrics()
     }, [context.selectedSlot, currentDay])
 
+    useEffect(() => {
+        loadMetrics()
+    }, [meteoData])
 
     const loadMeteo = async () => {
         let now = moment.utc('2020-05-05')
@@ -105,43 +108,48 @@ const SelectSlotScreen = ({ navigation }) => {
         setLoading(false)
     }
 
-    const updateSelectedSlot = (selected) => {
-        context.setSelectedSlot(selected)
-        reloadCurrentMetrics(selected)
-    }
+    const loadMetrics = useCallback(async () => {
 
-    const reloadCurrentMetrics = useCallback((selected) => {
+        const mtr = await getMetrics_v2({
+            day: moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD'),
+            fields: context.selectedFields
+        })
+        if (mtr.length <= 0){
+            return
+        }
+
         const minval = -99999, maxval = 99999
-        let chd:currentMetricsType = {}, dir = []
-        _.forOwn(meteoData[currentDay].meteoByHour, (v2, k2) => {
-            const v = {}
-            const k = v2.hour
-            v['data'] = v2
-
-            if (k === 'ready') { return }
-            if (parseInt(k) > selected.max || parseInt(k) < selected.min) {
+        const selected = context.selectedSlot
+        let chd:metricsType = {}, dir = []
+        _.forEach(mtr, (v, k2) => {
+            const h = v.hour.toString().padStart(2,'0')
+            if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
                 return
             }
-            chd.wind = Math.max((chd.wind || minval), v.data.wind)
-            chd.gust = Math.max((chd.gust || minval), v.data.gust)
+            chd.wind = Math.max((chd.wind || minval), v.wind)
+            chd.gust = Math.max((chd.gust || minval), v.gust)
 
-            chd.precipitation = (chd.precipitation || 0) + v.data.precipitation
+            chd.precipitation = (chd.precipitation || 0) + v.precipitation
             chd.probabilityCnt = (chd.probabilityCnt || 0) + 1
-            chd.probabilitySum = (chd.probabilitySum || 0) + parseFloat(v.data.probability)
+            chd.probabilitySum = (chd.probabilitySum || 0) + parseFloat(v.probability)
 
-            chd.prevprecipitation = (chd.prevprecipitation || 0) + (parseInt(k) < selected.max ? v.data.precipitation : 0)
+            chd.prevprecipitation = (chd.prevprecipitation || 0) + (parseInt(h) < selected.max ? v.precipitation : 0)
 
-            chd.mintemp = Math.min((chd.mintemp || maxval), v.data.mintemp)
-            chd.maxtemp = Math.max((chd.maxtemp || minval), v.data.maxtemp)
+            chd.mintemp = Math.min((chd.mintemp || maxval), v.mintemp)
+            chd.maxtemp = Math.max((chd.maxtemp || minval), v.maxtemp)
 
-            chd.minhumi = Math.min((chd.minhumi || maxval), v.data.minhumi)
-            chd.maxhumi = Math.max((chd.maxhumi || minval), v.data.maxhumi)
+            chd.minhumi = Math.min((chd.minhumi || maxval), v.minhumi)
+            chd.maxhumi = Math.max((chd.maxhumi || minval), v.maxhumi)
 
-            chd.minsoilhumi = Math.min((chd.minsoilhumi || maxval), v.data.soilhumi)
-            chd.maxsoilhumi = Math.max((chd.maxsoilhumi || minval), v.data.soilhumi)
+            chd.minsoilhumi = Math.min((chd.minsoilhumi || maxval), v.soilhumi)
+            chd.maxsoilhumi = Math.max((chd.maxsoilhumi || minval), v.soilhumi)
 
-            dir.push(v.data.winddirection)
+            dir.push(v.winddirection)
 
+            chd.r2 = Math.max((chd.r2 || minval), v.r2)
+            chd.r3 = Math.max((chd.r3 || minval), v.r3)
+            chd.r6 = Math.max((chd.r6 || minval), v.r6)
+            
             // _.forOwn(v.parcelle, (v0, k0) => {
             //     if (parseInt(k) === selected.max) {
             //         chd.r2 = Math.max((chd.r2 || minval), v0.r2)
@@ -158,8 +166,8 @@ const SelectSlotScreen = ({ navigation }) => {
 
         chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
 
-        setCurrentHourMetrics(chd)
-    }, [meteoData])
+        setMetrics(chd)
+    }, [context.selectedSlot, meteoData, currentDay])
 
     const loadConditions = async () => {
         let now = moment.utc('2020-05-05')
@@ -258,7 +266,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
                                     <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
                                     <View style={{ paddingBottom: 20 }}>
-                                        <Metrics currentHourMetrics={currentHourMetrics} hasRacinaire={hasRacinaire()} />
+                                        <Metrics currentHourMetrics={metrics} hasRacinaire={hasRacinaire()} />
                                     </View>
 
                                     <View style={styles.sliderContainer}>
@@ -269,7 +277,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                             initialMin={context.selectedSlot.min}
                                             data={conditions[currentDay]}
                                             width={Dimensions.get('window').width - 30}
-                                            onHourChangeEnd={(h) => updateSelectedSlot(h) }
+                                            onHourChangeEnd={(selected) => context.setSelectedSlot(selected) }
                                         />
                                     </View>
 
@@ -300,7 +308,7 @@ const SelectSlotScreen = ({ navigation }) => {
                         <HygoButton
                             label="AFFICHER LE RÉCAPITULATIF"
                             onPress={() => {
-                                context.setMetrics(currentHourMetrics)
+                                context.setMetrics(metrics)
                                 navigation.navigate('TestPageReport')
                             }
                             }

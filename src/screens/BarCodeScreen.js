@@ -37,8 +37,8 @@ class BarCodeScreen extends React.Component {
     this.setState({ hasCameraPermission: status === 'granted' });
 
     if (!Device.isDevice) {
-      let code = await BarCodeScanner.scanFromURLAsync('https://alvie-mvp.s3-eu-west-1.amazonaws.com/qr-code30.png') //'https://alvie-mvp.s3-eu-west-1.amazonaws.com/qr-code8+(1).png') // 'https://alvie-mvp.s3-eu-west-1.amazonaws.com/barcode+test.png')//
-      this.handleBarCodeScanned(code[0])
+      //let code = await BarCodeScanner.scanFromURLAsync('https://alvie-mvp.s3-eu-west-1.amazonaws.com/qr-code30.png') //'https://alvie-mvp.s3-eu-west-1.amazonaws.com/qr-code8+(1).png') // 'https://alvie-mvp.s3-eu-west-1.amazonaws.com/barcode+test.png')//
+      this.handleBarCodeScanned("ThisIsAHygoDevice30")//code[0])
     }
   };
 
