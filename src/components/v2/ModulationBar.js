@@ -12,7 +12,7 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd }) => {
+const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd, enabled }) => {
     /**
      * 
      * @param props
@@ -33,8 +33,8 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
     selectedRef.current = selected
 
     const panResponder = useMemo(() => PanResponder.create({
-        onMoveShouldSetPanResponderCapture: () => true,
-        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponderCapture: () => enabled,
+        onStartShouldSetPanResponder: () => enabled,
         onPanResponderStart: (evt, gestureState) => onStart(evt, gestureState),
         onPanResponderMove: (evt, gestureState) => onMove(evt, gestureState),
         onPanResponderRelease: () => {
@@ -43,7 +43,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
                 onHourChangeEnd(selectedRef.current)
             }
         }
-    }), [])
+    }), [enabled])
 
     const onStart = (evt, gestureState) => {
         /**

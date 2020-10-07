@@ -109,7 +109,6 @@ const SelectSlotScreen = ({ navigation }) => {
     }
 
     const loadMetrics = useCallback(async () => {
-
         const mtr = await getMetrics_v2({
             day: moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD'),
             fields: context.selectedFields
@@ -117,7 +116,6 @@ const SelectSlotScreen = ({ navigation }) => {
         if (mtr.length <= 0){
             return
         }
-
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
         let chd:metricsType = {}, dir = []
@@ -149,23 +147,13 @@ const SelectSlotScreen = ({ navigation }) => {
             chd.r2 = Math.max((chd.r2 || minval), v.r2)
             chd.r3 = Math.max((chd.r3 || minval), v.r3)
             chd.r6 = Math.max((chd.r6 || minval), v.r6)
+            chd.t3 = Math.min((chd.t3 || maxval), v.t3)
 
-            // _.forOwn(v.parcelle, (v0, k0) => {
-            //     if (parseInt(k) === selected.max) {
-            //         chd.r2 = Math.max((chd.r2 || minval), v0.r2)
-            //         chd.r3 = Math.max((chd.r3 || minval), v0.r3)
-            //         chd.r6 = Math.max((chd.r6 || minval), v0.r6)
-            //     }
-
-            //     chd.deltatemp = Math.max((chd.deltatemp || minval), v0.deltatemp)
-            //     chd.t3 = Math.min((chd.t3 || maxval), v0.t3)
-            // })
+            chd.deltatemp = Math.max((chd.deltatemp || minval), v.deltatemp)
         })
 
         chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
-
         chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
-
         setMetrics(chd)
     }, [context.selectedSlot, meteoData, currentDay])
 
@@ -277,13 +265,14 @@ const SelectSlotScreen = ({ navigation }) => {
                                             initialMin={context.selectedSlot.min}
                                             data={conditions[currentDay]}
                                             width={Dimensions.get('window').width - 30}
-                                            onHourChangeEnd={(selected) => context.setSelectedSlot(selected) }
+                                            onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
+                                            enabled={!isRefreshing}
                                         />
                                     </View>
 
                                     <HourScale hour={'00'/*hour*/} />
 
-                                    <ExtraMetrics currentHourMetrics={{...metrics, deltatemp:0}} />
+                                    <ExtraMetrics currentHourMetrics={metrics} />
                                 </View>
 
                                 {/*================= Result ==================*/}
