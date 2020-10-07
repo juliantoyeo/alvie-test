@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
