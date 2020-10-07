@@ -17,7 +17,8 @@ import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
 import ModulationBar from '../../components/v2/ModulationBar';
-import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
+import ModulationBarTiny from '../../components/v2/ModulationBarTiny';
+
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -67,8 +68,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
     const [conditions, setConditions] = useState<Array<dailyConditionType>>([])
-    const [metrics, setMetrics] = useState<any>()//hourMetricsData[0])
-    const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
+    const [metrics, setMetrics] = useState<any>()
 
     const [loading, setLoading] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -227,9 +227,17 @@ const SelectSlotScreen = ({ navigation }) => {
                                             <TouchableOpacity
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
-                                                onPress={() => { setCurrentDay(i) }}
+                                                onPress={() => {setCurrentDay(i) }}
+                                                disabled={isRefreshing}
                                             >
-                                                <Text style={[styles.tabText, { color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                <Text style={[styles.tabText, { flex:1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                <View style={{flex:1, paddingTop:5}}>
+                                                    <ModulationBarTiny
+                                                        data={conditions[i]}
+                                                        height={8}
+                                                        width={60}
+                                                    />
+                                                </View>
                                                 {/* <View style={styles.weatherContainer}>
                                         <Image source={PICTO_MAP[d.pictoDay]} style={styles.weatherImage} />
                                     </View> */}
@@ -381,13 +389,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     tabHeading: {
-        padding: 15,
+        padding: 10,
         width: Dimensions.get('window').width / 5 - 4,
         backgroundColor: COLORS.DARK_BLUE,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         borderTopRightRadius: 20,
         marginHorizontal: 2,
     },
