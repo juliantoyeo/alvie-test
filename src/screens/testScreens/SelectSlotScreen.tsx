@@ -19,6 +19,7 @@ import Modulation from '../../components/pulverisation-detailed/Modulation';
 import ModulationBar from '../../components/v2/ModulationBar';
 import { hourMetricsData, daysData, next12HoursData, modData } from './staticData';
 import moment from 'moment';
+import _ from 'lodash';
 
 import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2 } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
@@ -29,25 +30,25 @@ import { conditionType } from '../../types/condition.types';
 
 type dailyConditionType = Array<conditionType>
 type currentMetricsType = {
-    wind: any,
-    gust: any
-    precipitation: any,
-    probabilityCnt: any,
-    probabilitySum: any,
-    prevprecipitation: any,
-    mintemp: any,
-    maxtemp: any,
-    minhumi: any,
-    maxhumi: any,
-    minsoilhumi: any,
-    maxsoilhumi: any,
-    r2: any,
-    r3: any,
-    r6: any,
-    deltatemp: any,
-    t3: any,
-    winddirection: any,
-    probability: any
+    wind?: any,
+    gust?: any
+    precipitation?: any,
+    probabilityCnt?: any,
+    probabilitySum?: any,
+    prevprecipitation?: any,
+    mintemp?: any,
+    maxtemp?: any,
+    minhumi?: any,
+    maxhumi?: any,
+    minsoilhumi?: any,
+    maxsoilhumi?: any,
+    r2?: any,
+    r3?: any,
+    r6?: any,
+    deltatemp?: any,
+    t3?: any,
+    winddirection?: any,
+    probability?: any
 }
 
 const PICTO_MAP = {
@@ -66,7 +67,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
     const [conditions, setConditions] = useState<Array<dailyConditionType>>([])
-    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>(hourMetricsData[0])
+    const [currentHourMetrics, setCurrentHourMetrics] = useState<any>()//hourMetricsData[0])
     const [currentNext12HoursData, setCurrentNextHoursData] = useState<any>(next12HoursData[0])
 
     const [loading, setLoading] = useState(true)
@@ -80,6 +81,7 @@ const SelectSlotScreen = ({ navigation }) => {
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
         setLoading(true)
+        reloadCurrentMetrics(context.selectedSlot)
         loadMeteo()
         loadConditions()
     }, [])
@@ -105,12 +107,17 @@ const SelectSlotScreen = ({ navigation }) => {
 
     const updateSelectedSlot = (selected) => {
         context.setSelectedSlot(selected)
+        reloadCurrentMetrics(selected)
     }
 
     const reloadCurrentMetrics = useCallback((selected) => {
         const minval = -99999, maxval = 99999
         let chd:currentMetricsType = {}, dir = []
-        _.forOwn(meteoData, (v, k) => {
+        _.forOwn(meteoData[currentDay].meteoByHour, (v2, k2) => {
+            const v = {}
+            const k = v2.hour
+            v['data'] = v2
+
             if (k === 'ready') { return }
             if (parseInt(k) > selected.max || parseInt(k) < selected.min) {
                 return
@@ -135,16 +142,16 @@ const SelectSlotScreen = ({ navigation }) => {
 
             dir.push(v.data.winddirection)
 
-            _.forOwn(v.parcelle, (v0, k0) => {
-                if (parseInt(k) === selected.max) {
-                    chd.r2 = Math.max((chd.r2 || minval), v0.r2)
-                    chd.r3 = Math.max((chd.r3 || minval), v0.r3)
-                    chd.r6 = Math.max((chd.r6 || minval), v0.r6)
-                }
+            // _.forOwn(v.parcelle, (v0, k0) => {
+            //     if (parseInt(k) === selected.max) {
+            //         chd.r2 = Math.max((chd.r2 || minval), v0.r2)
+            //         chd.r3 = Math.max((chd.r3 || minval), v0.r3)
+            //         chd.r6 = Math.max((chd.r6 || minval), v0.r6)
+            //     }
 
-                chd.deltatemp = Math.max((chd.deltatemp || minval), v0.deltatemp)
-                chd.t3 = Math.min((chd.t3 || maxval), v0.t3)
-            })
+            //     chd.deltatemp = Math.max((chd.deltatemp || minval), v0.deltatemp)
+            //     chd.t3 = Math.min((chd.t3 || maxval), v0.t3)
+            // })
         })
 
         chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
