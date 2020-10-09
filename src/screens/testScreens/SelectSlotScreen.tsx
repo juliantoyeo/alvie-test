@@ -19,10 +19,12 @@ import Modulation from '../../components/pulverisation-detailed/Modulation';
 import ModulationBar from '../../components/v2/ModulationBar';
 import ModulationBarTiny from '../../components/v2/ModulationBarTiny';
 
+import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
+
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2, getMetrics_v2 } from '../../api/hygoApi';
+import { getMeteoDetailed_v2, getModulationValue_v2, getConditions_v2, getMetrics_v2, getMetrics4h_v2 } from '../../api/hygoApi';
 import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -53,13 +55,7 @@ type metricsType = {
     probability?: any
 }
 
-const PICTO_MAP = {
-    'SUN': require('../../../assets/sunny.png'),
-    'CLOUD': require('../../../assets/cloudy.png'),
-    'STORM': require('../../../assets/stormy.png'),
-    'RAIN': require('../../../assets/rainy.png'),
-    'SNOW': require('../../../assets/snowy.png'),
-}
+
 
 const hasRacinaire = () => false
 const SelectSlotScreen = ({ navigation }) => {
@@ -68,6 +64,7 @@ const SelectSlotScreen = ({ navigation }) => {
     const [currentDay, setCurrentDay] = useState<number>(0)
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [meteo, setMeteo] = useState<Array<meteoDataType>>()
+    const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>()
     const [metrics, setMetrics] = useState<any>()
 
@@ -76,6 +73,10 @@ const SelectSlotScreen = ({ navigation }) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
 
+    //The five days we analyse over
+    const dow = [...Array(5).keys()].map((i) => (
+        moment.utc('2020-05-05').add(i, 'day'))
+        ).map((d) =>  ({dt: d.format('YYYY-MM-DD'), name: d.format('dddd')}))
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
@@ -98,39 +99,54 @@ const SelectSlotScreen = ({ navigation }) => {
     }, [meteo])
 
     const loadMeteo = async () => {
-        let now = moment.utc('2020-05-05')
-        if (now.minutes() >= 30) {
-            now.hours(now.hours() + 1)
-        }
-        now = now.startOf('day')
-
-        // array of the 5 next days to iterate on
-        const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
         try {
-            const data: Array<meteoDataType> = await Promise.all(dt.map( async (d) => {
-                const data = await getMeteoDetailed_v2(d)
-                if (data.meteoByHour.length == 0 || data.meteoBy4Hour.length == 0) {
-                    throw new Error("getMeteoDetailed_v2 failed")
-                }
-                return data
-            }))
+            const data = await getMetrics_v2({days: dow.map((d)=>d.dt), fields: context.selectedFields})
+            const data4h = await getMetrics4h_v2(({days: dow.map((d)=>d.dt), fields: context.selectedFields}))
             setMeteo(data)
+            setMeteo4h(data4h)
             setLoading(false)
-        } catch(error) {
+        }catch(error) {
             setMeteo(null)
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
             setLoading(true)
         }
         
+        //console.log(data)
+        // let now = moment.utc('2020-05-05')
+        // if (now.minutes() >= 30) {
+        //     now.hours(now.hours() + 1)
+        // }
+        // now = now.startOf('day')
+
+        
+        // // array of the 5 next days to iterate on
+        // const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+        // try {
+        //     const data: Array<meteoDataType> = await Promise.all(dt.map( async (d) => {
+        //         const data = await getMeteoDetailed_v2(d)
+        //         if (data.meteoByHour.length == 0 || data.meteoBy4Hour.length == 0) {
+        //             throw new Error("getMeteoDetailed_v2 failed")
+        //         }
+        //         return data
+        //     }))
+        //     setMeteo(data)
+        //     setLoading(false)
+        // } catch(error) {
+        //     setMeteo(null)
+        //     snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
+        //     setLoading(true)
+        // }
+        
     }
 
     const loadMetrics = useCallback(async () => {
 
-        const mtr = await getMetrics_v2({
-            day: moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD'),
-            fields: context.selectedFields
-        })
-        if (mtr.length <= 0){
+        // const mtr = await getMetrics_v2({
+        //     days: [moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD')],
+        //     fields: context.selectedFields
+        // })
+
+        if (meteo == null){
             snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
             setMetrics(null)
             return
@@ -138,7 +154,7 @@ const SelectSlotScreen = ({ navigation }) => {
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
         let chd:metricsType = {}, dir = []
-        _.forEach(mtr, (v, k2) => {
+        _.forEach(meteo[currentDay], (v, k2) => {
             const h = v.hour.toString().padStart(2,'0')
             if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
                 return
@@ -194,7 +210,6 @@ const SelectSlotScreen = ({ navigation }) => {
                     }))}
             ))
             setConditions(data)
-            console.log('==============conditions', data)
         }catch(e){
             setConditions(null)
             snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
@@ -220,7 +235,6 @@ const SelectSlotScreen = ({ navigation }) => {
         try {
             const newMod: Array<modulationType> = await getModulationValue_v2(data)
             context.setMod(newMod)
-            console.log('==============modulation', newMod)
             setIsRefreshing(false)
         } catch(error){}
         
@@ -250,9 +264,8 @@ const SelectSlotScreen = ({ navigation }) => {
                             <View>
                                 {/*============= Week Tab =================*/}
                                 <View style={styles.tabBar}>
-                                    {meteo.map((d, i) => {
-                                        if (!d.day) return
-                                        const dayName = i18n.t(`days.${d.day.toLowerCase()}`).toUpperCase().slice(0, 3)
+                                    {dow.map((d, i) => {
+                                        const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
                                             <TouchableOpacity
                                                 key={i}
@@ -278,11 +291,12 @@ const SelectSlotScreen = ({ navigation }) => {
                                 {/*=============== Day Weather ==============*/}
                                 <View style={styles.dayContent}>
                                     <View style={styles.hour4Weather}>
-                                        {meteo[currentDay].meteoBy4Hour.map((m, i) => {
+                                        {meteo4h[currentDay].map((m, i) => {
+                                            console.log("=====",m,"=====")
                                             return (
                                                 <View key={i} style={styles.hour4WeatherContainer}>
-                                                    <Text style={styles.hour4WeatherText}>{`${m.hour}h`}</Text>
-                                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[m.pictocode]} />
+                                                    <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
+                                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[PICTO_TO_IMG[m.pictocode]]} />
                                                 </View>
                                             )
                                         })}

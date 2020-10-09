@@ -1,5 +1,5 @@
 export interface meteoByHourType {
-    dt: string,
+    timestamp: string,
     hour: string,
     dthour?: number,
     maxhumi: number,
@@ -19,6 +19,6 @@ export interface meteoByHourType {
 export interface meteoDataType {
     day?: string
     meteoByHour?: Array<meteoByHourType>,
-    meteoBy4Hour?: Array<meteoByHourType>,
+    //meteoBy4Hour?: Array<meteoByHourType>,
     //pictoDay? :string
 }

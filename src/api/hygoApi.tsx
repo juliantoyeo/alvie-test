@@ -202,17 +202,32 @@ export const getMeteoDetailed_v2 = async (day: string): Promise<meteoDataType> =
     }
 }
 
-type metricsType = any
-export const getMetrics_v2 = async ({day, fields}): Promise<Array<metricsType>> => {
+export const getMetrics_v2 = async ({days, fields}) => {
     /**
-     * Retrieve meteo by hour and meteo by 4 hour of the day over the givenFields
+     * Retrieve meteo by hour and meteo by 4 hour of the days over the givenFields
      * faster than getMeteoDetailed
      * @param 
-     * day = "2020-09-09"
+     * day = ["2020-09-09", "2020-09-08"]
      * fields : Array<fieldType>
      */
     try {
-        const response = await hygoApi.post('/app/meteo/detailed/v3', { day, fields })
+        const response = await hygoApi.post('/app/meteo/metrics/v2', { days, fields })
+        return response.data
+    } catch (error) {
+        return []
+    }
+}
+
+export const getMetrics4h_v2 = async ({days, fields}) => {
+    /**
+     * Retrieve meteo by hour and meteo by 4 hour of the days over the givenFields
+     * faster than getMeteoDetailed
+     * @param 
+     * day = ["2020-09-09", "2020-09-08"]
+     * fields : Array<fieldType>
+     */
+    try {
+        const response = await hygoApi.post('/app/meteo/metrics4h/v2', { days, fields })
         return response.data
     } catch (error) {
         return []
