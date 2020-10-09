@@ -14,8 +14,8 @@ import _ from 'lodash';
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.35:3000', //
-    timeout: 30000,
+    baseURL: 'http://127.0.0.1:3000',//'https://hygo-api.alvie.fr', //
+    timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
     },

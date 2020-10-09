@@ -67,11 +67,12 @@ const SelectSlotScreen = ({ navigation }) => {
     const snackbar = React.useContext(SnackbarContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
-    const [conditions, setConditions] = useState<Array<dailyConditionType>>([])
+    const [meteo, setMeteo] = useState<Array<meteoDataType>>()
+    const [conditions, setConditions] = useState<Array<dailyConditionType>>()
     const [metrics, setMetrics] = useState<any>()
 
     const [loading, setLoading] = useState(true)
+    const ready = !!meteo && !!metrics && !!conditions
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
 
@@ -94,7 +95,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
     useEffect(() => {
         loadMetrics()
-    }, [meteoData])
+    }, [meteo])
 
     const loadMeteo = async () => {
         let now = moment.utc('2020-05-05')
@@ -113,10 +114,10 @@ const SelectSlotScreen = ({ navigation }) => {
                 }
                 return data
             }))
-            setMeteoData(data)
+            setMeteo(data)
             setLoading(false)
         } catch(error) {
-            setMeteoData([])
+            setMeteo(null)
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
             setLoading(true)
         }
@@ -131,6 +132,7 @@ const SelectSlotScreen = ({ navigation }) => {
         })
         if (mtr.length <= 0){
             snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
+            setMetrics(null)
             return
         }
         const minval = -99999, maxval = 99999
@@ -172,7 +174,7 @@ const SelectSlotScreen = ({ navigation }) => {
         chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
         chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
         setMetrics(chd)
-    }, [context.selectedSlot, meteoData, currentDay])
+    }, [context.selectedSlot, meteo, currentDay])
 
     const loadConditions = async () => {
         let now = moment.utc('2020-05-05')
@@ -194,7 +196,7 @@ const SelectSlotScreen = ({ navigation }) => {
             setConditions(data)
             console.log('==============conditions', data)
         }catch(e){
-            setConditions([])
+            setConditions(null)
             snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
         }
     }
@@ -215,10 +217,13 @@ const SelectSlotScreen = ({ navigation }) => {
                 max: context.selectedSlot.max - context.selectedSlot.min
             }
         }
-        const newMod: Array<modulationType> = await getModulationValue_v2(data)
-        context.setMod(newMod)
-        console.log('==============modulation', newMod)
-        setIsRefreshing(false)
+        try {
+            const newMod: Array<modulationType> = await getModulationValue_v2(data)
+            context.setMod(newMod)
+            console.log('==============modulation', newMod)
+            setIsRefreshing(false)
+        } catch(error){}
+        
     }
 
     return (
@@ -238,14 +243,14 @@ const SelectSlotScreen = ({ navigation }) => {
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
                 <Content style={styles.content}>
-                    {loading ? (
+                    {!ready ? (
                         <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
                     )
                         : (
                             <View>
                                 {/*============= Week Tab =================*/}
                                 <View style={styles.tabBar}>
-                                    {meteoData.map((d, i) => {
+                                    {meteo.map((d, i) => {
                                         if (!d.day) return
                                         const dayName = i18n.t(`days.${d.day.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
@@ -273,7 +278,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 {/*=============== Day Weather ==============*/}
                                 <View style={styles.dayContent}>
                                     <View style={styles.hour4Weather}>
-                                        {meteoData[currentDay].meteoBy4Hour.map((m, i) => {
+                                        {meteo[currentDay].meteoBy4Hour.map((m, i) => {
                                             return (
                                                 <View key={i} style={styles.hour4WeatherContainer}>
                                                     <Text style={styles.hour4WeatherText}>{`${m.hour}h`}</Text>
@@ -325,7 +330,7 @@ const SelectSlotScreen = ({ navigation }) => {
                             </View>
                         )}
                 </Content>
-                {!loading && (
+                {ready && (
                     <Footer style={styles.footer}>
                         <HygoButton
                             label="AFFICHER LE RÉCAPITULATIF"
