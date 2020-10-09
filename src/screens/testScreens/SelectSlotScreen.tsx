@@ -28,6 +28,7 @@ import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
 import { modulationType } from '../../types/modulation.types';
 import { conditionType } from '../../types/condition.types';
+import { SnackbarContext } from '../../context/snackbar.context';
 
 type dailyConditionType = Array<conditionType>
 type metricsType = {
@@ -63,7 +64,7 @@ const PICTO_MAP = {
 const hasRacinaire = () => false
 const SelectSlotScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext)
-
+    const snackbar = React.useContext(SnackbarContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
     const [meteoData, setMeteoData] = useState<Array<meteoDataType>>([])
@@ -101,19 +102,35 @@ const SelectSlotScreen = ({ navigation }) => {
             now.hours(now.hours() + 1)
         }
         now = now.startOf('day')
+
         // array of the 5 next days to iterate on
         const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-        const data: Array<meteoDataType> = await Promise.all(dt.map((d) => getMeteoDetailed_v2(d)))
-        setMeteoData(data)
-        setLoading(false)
+        try {
+            const data: Array<meteoDataType> = await Promise.all(dt.map( async (d) => {
+                const data = await getMeteoDetailed_v2(d)
+                if (data.meteoByHour.length == 0 || data.meteoBy4Hour.length == 0) {
+                    throw new Error("getMeteoDetailed_v2 failed")
+                }
+                return data
+            }))
+            setMeteoData(data)
+            setLoading(false)
+        } catch(error) {
+            setMeteoData([])
+            snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
+            setLoading(true)
+        }
+        
     }
 
     const loadMetrics = useCallback(async () => {
+
         const mtr = await getMetrics_v2({
             day: moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD'),
             fields: context.selectedFields
         })
         if (mtr.length <= 0){
+            snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
             return
         }
         const minval = -99999, maxval = 99999
@@ -165,15 +182,21 @@ const SelectSlotScreen = ({ navigation }) => {
         now = now.startOf('day')
         // array of the 5 next days to iterate on
         const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-        const data: Array<dailyConditionType> = await Promise.all(
-            dt.map((day) => (
-                getConditions_v2({
-                    day,
-                    products: context.selectedProducts.map((p) => p.id),
-                    parcelles: context.selectedFields.map((f) => f.id)
-                })))
-        )
-        setConditions(data)
+        try {
+            const data: Array<dailyConditionType> = await Promise.all(
+                dt.map((day) => {
+                    return (getConditions_v2({
+                        day,
+                        products: context.selectedProducts.map((p) => p.id),
+                        parcelles: context.selectedFields.map((f) => f.id)
+                    }))}
+            ))
+            setConditions(data)
+            console.log('==============conditions', data)
+        }catch(e){
+            setConditions([])
+            snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
+        }
     }
 
     const loadModulation = async () => {
@@ -194,6 +217,7 @@ const SelectSlotScreen = ({ navigation }) => {
         }
         const newMod: Array<modulationType> = await getModulationValue_v2(data)
         context.setMod(newMod)
+        console.log('==============modulation', newMod)
         setIsRefreshing(false)
     }
 
@@ -222,6 +246,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 {/*============= Week Tab =================*/}
                                 <View style={styles.tabBar}>
                                     {meteoData.map((d, i) => {
+                                        if (!d.day) return
                                         const dayName = i18n.t(`days.${d.day.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
                                             <TouchableOpacity
