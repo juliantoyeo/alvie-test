@@ -67,7 +67,6 @@ const SelectSlotScreen = ({ navigation }) => {
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>()
     const [metrics, setMetrics] = useState<any>()
-
     const [loading, setLoading] = useState(true)
     const ready = !!meteo && !!metrics && !!conditions
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -110,44 +109,11 @@ const SelectSlotScreen = ({ navigation }) => {
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
             setLoading(true)
         }
-        
-        //console.log(data)
-        // let now = moment.utc('2020-05-05')
-        // if (now.minutes() >= 30) {
-        //     now.hours(now.hours() + 1)
-        // }
-        // now = now.startOf('day')
-
-        
-        // // array of the 5 next days to iterate on
-        // const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-        // try {
-        //     const data: Array<meteoDataType> = await Promise.all(dt.map( async (d) => {
-        //         const data = await getMeteoDetailed_v2(d)
-        //         if (data.meteoByHour.length == 0 || data.meteoBy4Hour.length == 0) {
-        //             throw new Error("getMeteoDetailed_v2 failed")
-        //         }
-        //         return data
-        //     }))
-        //     setMeteo(data)
-        //     setLoading(false)
-        // } catch(error) {
-        //     setMeteo(null)
-        //     snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
-        //     setLoading(true)
-        // }
-        
     }
 
     const loadMetrics = useCallback(async () => {
 
-        // const mtr = await getMetrics_v2({
-        //     days: [moment.utc('2020-05-05').add(currentDay, 'day').format('YYYY-MM-DD')],
-        //     fields: context.selectedFields
-        // })
-
         if (meteo == null){
-            snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
             setMetrics(null)
             return
         }
@@ -271,7 +237,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
                                                 onPress={() => {setCurrentDay(i) }}
-                                                disabled={isRefreshing}
+                                                //disabled={isRefreshing}
                                             >
                                                 <Text style={[styles.tabText, { flex:1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
                                                 <View style={{flex:1, paddingTop:5}}>
@@ -292,7 +258,6 @@ const SelectSlotScreen = ({ navigation }) => {
                                 <View style={styles.dayContent}>
                                     <View style={styles.hour4Weather}>
                                         {meteo4h[currentDay].map((m, i) => {
-                                            console.log("=====",m,"=====")
                                             return (
                                                 <View key={i} style={styles.hour4WeatherContainer}>
                                                     <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
