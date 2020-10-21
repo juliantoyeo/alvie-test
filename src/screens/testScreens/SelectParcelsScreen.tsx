@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Spinner } from 'native-base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HygoButton from '../../components/v2/HygoButton';
 import { ModulationContext } from '../../context/modulation.context';
@@ -134,7 +134,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                 <Content style={styles.content}>
                     <View>
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
-                        {fields.length > 0 && names.length > 0 &&
+                        {fields.length > 0 && names.length > 0 ? (
                             names.map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
                                 return (
@@ -147,7 +147,9 @@ const SelectParcelsScreen = ({ navigation }) => {
                                         active={(!selectedName || n == selectedName)}
                                     />
                                 )
-                            })}
+                            })
+                            ) : ( <Spinner/>)
+                        }
                     </View>
                 </Content>
                 <Footer style={styles.footer}>

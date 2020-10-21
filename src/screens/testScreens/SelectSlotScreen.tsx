@@ -63,15 +63,14 @@ const SelectSlotScreen = ({ navigation }) => {
     const snackbar = React.useContext(SnackbarContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
     const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    const [meteo, setMeteo] = useState<Array<meteoDataType>>()
-    const [meteo4h, setMeteo4h] = useState<Array<any>>()
-    const [conditions, setConditions] = useState<Array<dailyConditionType>>()
-    const [metrics, setMetrics] = useState<any>()
-    const [loading, setLoading] = useState(true)
-    const ready = !!meteo && !!metrics && !!conditions
+    const [meteo, setMeteo] = useState<Array<meteoDataType>>(null)
+    const [meteo4h, setMeteo4h] = useState<Array<any>>(null)
+    const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
+    const [metrics, setMetrics] = useState<any>(null)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
-
+    const ready = !!meteo && !!metrics && !!conditions
+    
     //The five days we analyse over
     const dow = [...Array(5).keys()].map((i) => (
         moment.utc('2020-05-05').add(i, 'day'))
@@ -82,8 +81,9 @@ const SelectSlotScreen = ({ navigation }) => {
 
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
-        setLoading(true)
-        loadMeteo()
+        if (meteo == null) {
+            loadMeteo()
+        }
         loadConditions()
     }, [])
 
@@ -103,11 +103,9 @@ const SelectSlotScreen = ({ navigation }) => {
             const data4h = await getMetrics4h_v2(({days: dow.map((d)=>d.dt), fields: context.selectedFields}))
             setMeteo(data)
             setMeteo4h(data4h)
-            setLoading(false)
         }catch(error) {
             setMeteo(null)
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
-            setLoading(true)
         }
     }
 
