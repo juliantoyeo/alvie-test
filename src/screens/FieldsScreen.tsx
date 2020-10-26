@@ -25,7 +25,7 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 
 
 const FieldsScreen = ({ navigation, parcelles }) => {
-    const [selected, setSelected] = useState(null)
+    const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
     
     useEffect(() => {
         // console.log("Amplitude : ", ampEvent.render)
@@ -82,19 +82,19 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                         return (
                             <Polygon
                                 key={field.id}
-                                strokeWidth={selected === idx ? 4 : 1}
-                                strokeColor={selected === idx ? '#fff' : COLORS.DARK_GREEN}
-                                fillColor={selected === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
+                                strokeWidth={selectedFieldIdx === idx ? 4 : 1}
+                                strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
+                                fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
                                 ref={ref => (polygons.current[idx] = ref)}
                                 onLayout={() => polygons.current[idx].setNativeProps({
-                                    fillColor: selected === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
+                                    fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
                                 })}
                                 tappable={true}
                                 onPress={() => {
                                     let i = idx
 
-                                    let newValue = selected === i ? null : i
-                                    setSelected(newValue)
+                                    let newValue = selectedFieldIdx === i ? null : i
+                                    setSelectedFieldIdx(newValue)
                                 }}
                                 coordinates={field.features.coordinates[0].map((coordinate) => {
                                     return {
@@ -108,10 +108,10 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                 </MapView>
 
                 <View style={styles.overlay}>
-                    {selected !== null ? (
+                    {selectedFieldIdx !== null ? (
                         <Text style={styles.overlayText}>
-                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selected].culture_name}`) || i18n.t('fields.unknown') })}
-                            {parcelles.fields[selected].area ? `\n${i18n.t('fields.area', { value: (parcelles.fields[selected].area / 10000).toFixed(2) })}` : ''}
+                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selectedFieldIdx].culture_name}`) || i18n.t('fields.unknown') })}
+                            {parcelles.fields[selectedFieldIdx].area ? `\n${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
                         </Text>
                     ) : (
                             <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
