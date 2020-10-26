@@ -46,17 +46,27 @@ const Card = ({ field, cultureList, onUpdate }) => {
                 <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
                     <View style={styles.editButtons}>
                         <Button transparent onPress={cancelEdit}>
-                            <Icon type='AntDesign' name='arrowleft' style={{ color: '#000' }} />
+                            <Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft:0 }} />
                         </Button>
 
                         <Button transparent onPress={confirmEdit}>
-                            <Icon type='AntDesign' name='check' style={{ color: '#000' }} />
+                            <Icon type='AntDesign' name='check' style={{ color: '#000', marginRight:0 }} />
                         </Button>
                     </View>
 
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        <TextInput
+                            onChangeText={text => setName(text)}
+                            value={name}
+                            style={[{ textAlign: 'left' }, styles.overlayText]}
+                        />
+                    </View>
                     <View style={{ display: 'flex' ,flexDirection: 'row' }}>
                         <Picker
                             mode='dropdown'
+                            itemTextStyle={styles.overlayText}
+                            textStyle={[styles.overlayText, {paddingLeft:0}]}
+                            // iosIcon={<Icon name="arrow-down" />} 
                             selectedValue={cultureId}
                             onValueChange={(v, i) => {
                                 setCultureId(v)
@@ -66,35 +76,23 @@ const Card = ({ field, cultureList, onUpdate }) => {
                         </Picker>
 
                     </View>
-                    <View style={{ display: 'flex' }}>
-                        <Text style={styles.overlayText}>
-                            {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
-                        </Text>
-                    </View>
-                    <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Text style={styles.overlayText}>Nom : </Text>
-                        <TextInput
-                            onChangeText={text => setName(text)}
-                            value={name}
-                            style={[{ textAlign: 'left' }, styles.overlayText]}
-                        />
-                    </View>
                 </View>
             ) : (
                     //============== Card in View Mode =======================//
                     <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-                        <View style={styles.editButtons}>
+                        <View style={[styles.editButtons, {flexDirection:'row-reverse'}]}>
                             <Button transparent onPress={() => { setEditMode(!editMode) }}>
-                                <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000' }} />
+                                <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000', marginRight:0 }} />
                             </Button>
                         </View>
+                        <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
                         <Text style={styles.overlayText}>
                             {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
                         </Text>
                         <Text style={styles.overlayText}>
                             {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
                         </Text>
-                        <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
+                        
                     </View>
                 )}
         </View>
@@ -249,7 +247,7 @@ const styles = StyleSheet.create({
         flex: 1, display: 'flex',
         paddingLeft: 15,
         paddingRight: 15,
-        paddingBottom: 10,
+        paddingBottom: 20,
         alignItems: 'center',
         backgroundColor: COLORS.BEIGE
     },
@@ -283,12 +281,12 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         shadowOpacity: .2,
         padding: 20,
+        paddingTop: 5,
         display: 'flex',
         elevation: 2,
         marginBottom: 10
     },
     editButtons: {
-        marginBottom: 10,
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'row'
