@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, createRef, Fragment } from 'react'
 import MapView, { Polygon } from 'react-native-maps';
-
+import { updateParcellesList } from '../store/actions/metaActions'
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, StatusBar, TextInput } from 'react-native';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import { Left, Right, Body, Title, Header, Button, Icon, Content, Item, Label, I
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
-import { updateField } from '../api/hygoApi';
+import { getFields, updateField } from '../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
@@ -28,9 +28,9 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 const Card = ({ field, onUpdate }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [name, setName] = useState<string>(field.name)
-    const confirmEdit = () => {
+    const confirmEdit = async () => {
         const newField = { ...field, name }
-        onUpdate(newField)
+        await onUpdate(newField)
         setEditMode(!editMode)
     }
     const cancelEdit= () => {
@@ -41,6 +41,7 @@ const Card = ({ field, onUpdate }) => {
     return (
         <View>
             {editMode ? (
+                //===========Card in Edit Mode==================//
                 <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
                     <View style={styles.editButtons}>
                         <Button transparent onPress={cancelEdit}>
@@ -72,6 +73,7 @@ const Card = ({ field, onUpdate }) => {
                     </View>
                 </View>
             ) : (
+                //============== Card in View Mode =======================//
                 <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
                     <View style={styles.editButtons}>
                         <Button transparent onPress={() => { setEditMode(!editMode) }}>
@@ -93,7 +95,7 @@ const Card = ({ field, onUpdate }) => {
 
 
 
-const FieldsScreen = ({ navigation, parcelles }) => {
+const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) => {
     const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
 
     useEffect(() => {
@@ -123,12 +125,18 @@ const FieldsScreen = ({ navigation, parcelles }) => {
         polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
     }
 
-    const setField = (newField) =>{
-        console.log(newField)
-        updateField(newField)
+    const setField = async (newField) => {
+        try {
+            await updateField(newField)
+            const fields = await getFields()
+            updateParcellesList(fields)
+        } catch(error) {
 
+        }
+        
     }
 
+    console.log(cultures)
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -181,8 +189,6 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                             );
                         })}
                     </MapView>
-
-
                 </View>
 
                 <View>
@@ -191,8 +197,8 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                             field={parcelles.fields[selectedFieldIdx]} 
                             onUpdate={setField}/>
                     ) : (
-                            <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
-                        )}
+                        <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
+                    )}
                 </View>
             </Content>
         </SafeAreaView >
@@ -275,8 +281,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     parcelles: state.metadata.parcelles,
+    cultures: state.metadata.cultures,
 });
 
-const mapDispatchToProps = (dispatch, props) => ({})
+const mapDispatchToProps = (dispatch, props) => ({
+    updateParcellesList: (l) => dispatch(updateParcellesList(l)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FieldsScreen);

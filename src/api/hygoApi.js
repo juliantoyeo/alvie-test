@@ -238,7 +238,7 @@ export const updateField = async (field) => {
     }
 }
 
-// Get cultures
+// Get cultures used by the farmer
 export const getCultures = async () => {
     try {
         const response = await hygoApi.get('/app/cultures');
@@ -248,6 +248,15 @@ export const getCultures = async () => {
     }
 }
 
+// Get all cultures available
+export const getAllCultures = async () => {
+    try {
+        const response = await hygoApi.get('/app/cultures/all');
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
 // Get Meteo Radar
 export const getMeteoRadar = async () => {
     try {
