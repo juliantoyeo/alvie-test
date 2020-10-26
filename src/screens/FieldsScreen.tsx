@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, createRef } from 'react'
+import React, { useState, useEffect, useRef, createRef, Fragment } from 'react'
 import MapView, { Polygon } from 'react-native-maps';
 
 import { SafeAreaView } from 'react-navigation';
-import { Dimensions, StyleSheet, View, Text, StatusBar } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, StatusBar, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { Left, Right, Body, Title, Header, Button, Icon, Content } from 'native-base';
+import { Left, Right, Body, Title, Header, Button, Icon, Content, Item, Label, Input } from 'native-base';
 
 import COLORS from '../colors';
 import i18n from 'i18n-js';
@@ -23,28 +23,77 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 //                           { items.map((v, i) => <Picker.Item label={v} value={v} key={i}/>)}     
 //                     </Picker>
 
+const Card = ({ field, onUpdate }) => {
+    const [editMode, setEditMode] = useState<boolean>(false)
+    const [name, setName] = useState<string>(field.name)
+    const confirmEdit = () => {
+        const newField = { ...field, name }
+        onUpdate(newField)
+        setEditMode(!editMode)
+    }
+    const cancelEdit= () => {
+        setName(field.name)
+        setEditMode(!editMode)
+    }
 
-const HygoCard = ({ title, children }) => {
     return (
-        <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+        <View>
+            {editMode ? (
+                <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+                    <View style={styles.editButtons}>
+                        <Button transparent onPress={cancelEdit}>
+                            <Icon type='AntDesign' name='arrowleft' style={{ color: '#000' }} />
+                        </Button>
 
-            { !!title && (
-                <View style={{ minHeight: 26, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                    {/* <Text style={[styles.h1, {flex: 1}]}>{title}</Text> */}
-                    <Text>{title}</Text>
-                </View>)}
+                        <Button transparent onPress={confirmEdit}>
+                            <Icon type='AntDesign' name='check' style={{ color: '#000' }} />
+                        </Button>
+                    </View>
 
-            {children}
+                    <View style={{ display: 'flex' }}>
+                        <Text style={styles.overlayText}>
+                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
+                        </Text>
+                    </View>
+                    <View style={{ display: 'flex' }}>
+                        <Text style={styles.overlayText}>
+                            {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
+                        </Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        <Text style={styles.overlayText}>Nom : </Text>
+                        <TextInput
+                            onChangeText={text => setName(text)}
+                            value={name}
+                            style={[{ textAlign: 'left' }, styles.overlayText]}
+                        />
+                    </View>
+                </View>
+            ) : (
+                <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+                    <View style={styles.editButtons}>
+                        <Button transparent onPress={() => { setEditMode(!editMode) }}>
+                            <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000' }} />
+                        </Button>
+                    </View>
+                    <Text style={styles.overlayText}>
+                        {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
+                    </Text>
+                    <Text style={styles.overlayText}>
+                        {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
+                    </Text>
+                    <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
+                </View>
+                )}
         </View>
     )
 }
-HygoCard.defaultProps = {
-    title: undefined,
-    style: {}
-}
+
+
 
 const FieldsScreen = ({ navigation, parcelles }) => {
     const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
+
     useEffect(() => {
         // console.log("Amplitude : ", ampEvent.render)
         Amplitude.logEventWithProperties(ampEvent.render, {
@@ -70,6 +119,10 @@ const FieldsScreen = ({ navigation, parcelles }) => {
     const polygons = useRef([]);
     if (polygons.current.length !== parcelles.length) {
         polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
+    }
+
+    const updateField = (newField) =>{
+        console.log(newField)
     }
 
     return (
@@ -125,26 +178,20 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                         })}
                     </MapView>
 
-                    
+
                 </View>
-                <HygoCard>
-                        {selectedFieldIdx != null ? (
-                            <React.Fragment>
-                            <Text style={styles.overlayText}>
-                                {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selectedFieldIdx].culture_name}`) || i18n.t('fields.unknown') })}
-                            </Text>
-                            <Text style={styles.overlayText}>
-                                {parcelles.fields[selectedFieldIdx].area ? `${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
-                            </Text>
-                            <Text style={styles.overlayText}>{i18n.t('fields.name')} : {parcelles.fields[selectedFieldIdx].name}</Text>
-                            </React.Fragment>
-                        ) : (
-                                <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
-                            )
-                        }
-                    </HygoCard>
+
+                <View>
+                    {selectedFieldIdx != null ? (
+                        <Card 
+                            field={parcelles.fields[selectedFieldIdx]} 
+                            onUpdate={updateField}/>
+                    ) : (
+                            <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
+                        )}
+                </View>
             </Content>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
@@ -170,14 +217,15 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').width,
     },
-    mapview: { 
-        justifyContent: 'center', 
-        flex: 1, display: 'flex', 
-        paddingLeft: 15, 
-        paddingRight: 15, 
+    mapview: {
+        justifyContent: 'center',
+        flex: 1, display: 'flex',
+        paddingLeft: 15,
+        paddingRight: 15,
         paddingBottom: 10,
-        alignItems: 'center', 
-        backgroundColor: COLORS.BEIGE },
+        alignItems: 'center',
+        backgroundColor: COLORS.BEIGE
+    },
     overlay: {
         paddingHorizontal: 20,
         paddingVertical: 15,
@@ -211,6 +259,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         elevation: 2,
         marginBottom: 10
+    },
+    editButtons: {
+        marginBottom: 10,
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
     }
 });
 
