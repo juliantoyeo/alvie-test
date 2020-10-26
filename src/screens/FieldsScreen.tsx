@@ -28,9 +28,16 @@ const Card = ({ field, cultureList, onUpdate }) => {
         setEditMode(!editMode)
     }
     const cancelEdit = () => {
-        setName(field.name)
+        reset()
         setEditMode(!editMode)
     }
+    const reset = () => {
+        setName(field.name)
+        setCultureId(field.culture_id)
+    }
+    useEffect(() => {
+        reset()
+    }, [field])
 
     return (
         <View>
