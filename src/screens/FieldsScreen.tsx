@@ -45,7 +45,6 @@ HygoCard.defaultProps = {
 
 const FieldsScreen = ({ navigation, parcelles }) => {
     const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
-
     useEffect(() => {
         // console.log("Amplitude : ", ampEvent.render)
         Amplitude.logEventWithProperties(ampEvent.render, {
@@ -129,11 +128,16 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                     
                 </View>
                 <HygoCard>
-                        {selectedFieldIdx !== null ? (
+                        {selectedFieldIdx != null ? (
+                            <React.Fragment>
                             <Text style={styles.overlayText}>
                                 {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selectedFieldIdx].culture_name}`) || i18n.t('fields.unknown') })}
-                                {parcelles.fields[selectedFieldIdx].area ? `\n${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
                             </Text>
+                            <Text style={styles.overlayText}>
+                                {parcelles.fields[selectedFieldIdx].area ? `${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
+                            </Text>
+                            <Text style={styles.overlayText}>{i18n.t('fields.name')} : {parcelles.fields[selectedFieldIdx].name}</Text>
+                            </React.Fragment>
                         ) : (
                                 <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
                             )

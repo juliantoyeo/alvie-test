@@ -176,7 +176,8 @@ export default {
   'fields': {
     'parcelles': 'Celková plocha polí : %{value}',
     'culture': 'Plodina : %{value}',
-    'area': 'Superficie : %{value} ha',
+    'area': 'Výměra : %{value} ha',
+    'name': 'Název',
     'unknown': 'Neznámé',
     'header': 'Moje zemědělství',
   },

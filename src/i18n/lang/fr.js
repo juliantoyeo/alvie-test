@@ -183,6 +183,7 @@ export default {
     'parcelles': 'Parcelles totales : %{value}',
     'culture': 'Culture : %{value}',
     'area': 'Superficie : %{value} ha',
+    'name': 'Nom',
     'unknown': 'inconnue',
     'header': 'Mon exploitation',
   },
