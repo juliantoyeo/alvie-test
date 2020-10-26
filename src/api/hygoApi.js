@@ -227,6 +227,17 @@ export const getFields = async () => {
     }
 }
 
+// Update fields
+
+export const updateField = async (field) => {
+    try {
+        const response = await hygoApi.post('/app/fields/update', {field});
+        return response.data
+    } catch(error) {
+        return {}
+    }
+}
+
 // Get cultures
 export const getCultures = async () => {
     try {

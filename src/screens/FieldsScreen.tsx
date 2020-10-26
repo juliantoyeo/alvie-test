@@ -9,6 +9,8 @@ import { Left, Right, Body, Title, Header, Button, Icon, Content, Item, Label, I
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
+import { updateField } from '../api/hygoApi';
+
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 
@@ -121,8 +123,10 @@ const FieldsScreen = ({ navigation, parcelles }) => {
         polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
     }
 
-    const updateField = (newField) =>{
+    const setField = (newField) =>{
         console.log(newField)
+        updateField(newField)
+
     }
 
     return (
@@ -185,7 +189,7 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                     {selectedFieldIdx != null ? (
                         <Card 
                             field={parcelles.fields[selectedFieldIdx]} 
-                            onUpdate={updateField}/>
+                            onUpdate={setField}/>
                     ) : (
                             <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
                         )}
