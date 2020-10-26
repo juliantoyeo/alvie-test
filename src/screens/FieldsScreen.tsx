@@ -4,36 +4,30 @@ import { updateParcellesList } from '../store/actions/metaActions'
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, StatusBar, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { Left, Right, Body, Title, Header, Button, Icon, Content, Item, Label, Input } from 'native-base';
+import { Left, Right, Body, Title, Header, Button, Icon, Content, Picker } from 'native-base';
 
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
-import { getFields, updateField } from '../api/hygoApi';
+import { getFields, updateField, getAllCultures } from '../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 
 
-// <Picker
-//                       mode='dropdown'
-//                       selectedValue={value}
-//                       onValueChange={(v, i)=>{
-//                         setValue(v)
-//                       }}
-//                     >
-//                           { items.map((v, i) => <Picker.Item label={v} value={v} key={i}/>)}     
-//                     </Picker>
 
-const Card = ({ field, onUpdate }) => {
+
+const Card = ({ field, cultureList, onUpdate }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [name, setName] = useState<string>(field.name)
+    const [cultureId, setCultureId] = useState<string>(field.culture_id)
+
     const confirmEdit = async () => {
-        const newField = { ...field, name }
+        const newField = { id: field.id, name, cultureId: cultureId }
         await onUpdate(newField)
         setEditMode(!editMode)
     }
-    const cancelEdit= () => {
+    const cancelEdit = () => {
         setName(field.name)
         setEditMode(!editMode)
     }
@@ -53,10 +47,17 @@ const Card = ({ field, onUpdate }) => {
                         </Button>
                     </View>
 
-                    <View style={{ display: 'flex' }}>
-                        <Text style={styles.overlayText}>
-                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
-                        </Text>
+                    <View style={{ display: 'flex' ,flexDirection: 'row' }}>
+                        <Picker
+                            mode='dropdown'
+                            selectedValue={cultureId}
+                            onValueChange={(v, i) => {
+                                setCultureId(v)
+                            }}
+                        >
+                            {cultureList.sort((a,b) => (b.name >= a.name) ? -1 :  1).map((v, i) => <Picker.Item label={v.name} value={v.id} key={i} />)}
+                        </Picker>
+
                     </View>
                     <View style={{ display: 'flex' }}>
                         <Text style={styles.overlayText}>
@@ -73,21 +74,21 @@ const Card = ({ field, onUpdate }) => {
                     </View>
                 </View>
             ) : (
-                //============== Card in View Mode =======================//
-                <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-                    <View style={styles.editButtons}>
-                        <Button transparent onPress={() => { setEditMode(!editMode) }}>
-                            <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000' }} />
-                        </Button>
+                    //============== Card in View Mode =======================//
+                    <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+                        <View style={styles.editButtons}>
+                            <Button transparent onPress={() => { setEditMode(!editMode) }}>
+                                <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000' }} />
+                            </Button>
+                        </View>
+                        <Text style={styles.overlayText}>
+                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
+                        </Text>
+                        <Text style={styles.overlayText}>
+                            {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
+                        </Text>
+                        <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
                     </View>
-                    <Text style={styles.overlayText}>
-                        {i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
-                    </Text>
-                    <Text style={styles.overlayText}>
-                        {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
-                    </Text>
-                    <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
-                </View>
                 )}
         </View>
     )
@@ -97,12 +98,20 @@ const Card = ({ field, onUpdate }) => {
 
 const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) => {
     const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
-
+    const [cultureList, setCultureList] = useState<Array<any>>([])
     useEffect(() => {
         // console.log("Amplitude : ", ampEvent.render)
         Amplitude.logEventWithProperties(ampEvent.render, {
             timestamp: Date.now()
         })
+    }, [])
+
+    useEffect(() => {
+        const getCultureList = async () => {
+            const l = await getAllCultures()
+            setCultureList(l)
+        }
+        getCultureList()
     }, [])
 
     const getRegion = () => {
@@ -130,13 +139,13 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
             await updateField(newField)
             const fields = await getFields()
             updateParcellesList(fields)
-        } catch(error) {
+        } catch (error) {
 
         }
-        
+
     }
 
-    console.log(cultures)
+    //console.log(cultureList.sort((a,b) => (b.name >= a.name) ? -1 :  1))
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -193,12 +202,13 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
                 <View>
                     {selectedFieldIdx != null ? (
-                        <Card 
-                            field={parcelles.fields[selectedFieldIdx]} 
-                            onUpdate={setField}/>
+                        <Card
+                            field={parcelles.fields[selectedFieldIdx]}
+                            cultureList={cultureList}
+                            onUpdate={setField} />
                     ) : (
-                        <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
-                    )}
+                            <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
+                        )}
                 </View>
             </Content>
         </SafeAreaView >
