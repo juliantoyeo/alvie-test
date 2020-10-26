@@ -4,7 +4,7 @@ import MapView, { Polygon } from 'react-native-maps';
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
-import { Left, Right, Body, Title, Header, Button, Icon } from 'native-base';
+import { Left, Right, Body, Title, Header, Button, Icon, Content } from 'native-base';
 
 import COLORS from '../colors';
 import i18n from 'i18n-js';
@@ -24,9 +24,28 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 //                     </Picker>
 
 
+const HygoCard = ({ title, children }) => {
+    return (
+        <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+
+            { !!title && (
+                <View style={{ minHeight: 26, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    {/* <Text style={[styles.h1, {flex: 1}]}>{title}</Text> */}
+                    <Text>{title}</Text>
+                </View>)}
+
+            {children}
+        </View>
+    )
+}
+HygoCard.defaultProps = {
+    title: undefined,
+    style: {}
+}
+
 const FieldsScreen = ({ navigation, parcelles }) => {
     const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
-    
+
     useEffect(() => {
         // console.log("Amplitude : ", ampEvent.render)
         Amplitude.logEventWithProperties(ampEvent.render, {
@@ -70,55 +89,57 @@ const FieldsScreen = ({ navigation, parcelles }) => {
                 </Body>
                 <Right style={{ flex: 1 }}></Right>
             </Header>
+            <Content style={styles.content}>
+                <View style={styles.mapview}>
+                    <MapView
+                        provider="google"
+                        mapType="hybrid"
+                        initialRegion={getRegion()}
+                        style={styles.map}>
 
-            <View style={styles.container}>
-                <MapView
-                    provider="google"
-                    mapType="hybrid"
-                    initialRegion={getRegion()}
-                    style={styles.map}>
+                        {parcelles.fields.map((field, idx) => {
+                            return (
+                                <Polygon
+                                    key={field.id}
+                                    strokeWidth={selectedFieldIdx === idx ? 4 : 1}
+                                    strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
+                                    fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
+                                    ref={ref => (polygons.current[idx] = ref)}
+                                    onLayout={() => polygons.current[idx].setNativeProps({
+                                        fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
+                                    })}
+                                    tappable={true}
+                                    onPress={() => {
+                                        let i = idx
 
-                    {parcelles.fields.map((field, idx) => {
-                        return (
-                            <Polygon
-                                key={field.id}
-                                strokeWidth={selectedFieldIdx === idx ? 4 : 1}
-                                strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
-                                fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
-                                ref={ref => (polygons.current[idx] = ref)}
-                                onLayout={() => polygons.current[idx].setNativeProps({
-                                    fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
-                                })}
-                                tappable={true}
-                                onPress={() => {
-                                    let i = idx
+                                        let newValue = selectedFieldIdx === i ? null : i
+                                        setSelectedFieldIdx(newValue)
+                                    }}
+                                    coordinates={field.features.coordinates[0].map((coordinate) => {
+                                        return {
+                                            latitude: coordinate[1],
+                                            longitude: coordinate[0],
+                                        }
+                                    })}
+                                />
+                            );
+                        })}
+                    </MapView>
 
-                                    let newValue = selectedFieldIdx === i ? null : i
-                                    setSelectedFieldIdx(newValue)
-                                }}
-                                coordinates={field.features.coordinates[0].map((coordinate) => {
-                                    return {
-                                        latitude: coordinate[1],
-                                        longitude: coordinate[0],
-                                    }
-                                })}
-                            />
-                        );
-                    })}
-                </MapView>
-
-                <View style={styles.overlay}>
-                    {selectedFieldIdx !== null ? (
-                        <Text style={styles.overlayText}>
-                            {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selectedFieldIdx].culture_name}`) || i18n.t('fields.unknown') })}
-                            {parcelles.fields[selectedFieldIdx].area ? `\n${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
-                        </Text>
-                    ) : (
-                            <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
-                        )
-                    }
+                    
                 </View>
-            </View>
+                <HygoCard>
+                        {selectedFieldIdx !== null ? (
+                            <Text style={styles.overlayText}>
+                                {i18n.t('fields.culture', { value: i18n.t(`cultures.${parcelles.fields[selectedFieldIdx].culture_name}`) || i18n.t('fields.unknown') })}
+                                {parcelles.fields[selectedFieldIdx].area ? `\n${i18n.t('fields.area', { value: (parcelles.fields[selectedFieldIdx].area / 10000).toFixed(2) })}` : ''}
+                            </Text>
+                        ) : (
+                                <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
+                            )
+                        }
+                    </HygoCard>
+            </Content>
         </SafeAreaView>
     );
 }
@@ -145,7 +166,14 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').width,
     },
-    container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 15, paddingRight: 15, alignItems: 'center', backgroundColor: COLORS.BEIGE },
+    mapview: { 
+        justifyContent: 'center', 
+        flex: 1, display: 'flex', 
+        paddingLeft: 15, 
+        paddingRight: 15, 
+        paddingBottom: 10,
+        alignItems: 'center', 
+        backgroundColor: COLORS.BEIGE },
     overlay: {
         paddingHorizontal: 20,
         paddingVertical: 15,
@@ -165,6 +193,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'nunito-bold',
         color: COLORS.DARK_GREEN,
+    },
+    content: {
+        backgroundColor: COLORS.BEIGE
+    },
+    hygocard: {
+        borderTopRightRadius: 20,
+        shadowOffset: { width: 0, height: 2 },
+        shadowColor: '#000000',
+        shadowRadius: 2,
+        shadowOpacity: .2,
+        padding: 20,
+        display: 'flex',
+        elevation: 2,
+        marginBottom: 10
     }
 });
 
