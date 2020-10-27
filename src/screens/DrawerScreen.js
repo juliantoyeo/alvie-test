@@ -15,6 +15,8 @@ import { getEquipment, getFields } from '../api/hygoApi'
 
 import { Amplitude } from '../amplitude'
 
+const dateversion = "21102020"
+
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
   const goToEquipment = () => {
     navigation.dispatch(DrawerActions.closeDrawer())
@@ -81,7 +83,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/hygo.png')} style={styles.logo} />
         <Text style={styles.btmText}>{`${i18n.t('drawer.app_version', { version: pkg.expo.version })}`}</Text>
-        <Text style={styles.btmText}>{`${i18n.t('drawer.build_number', { build: pkg.extra.build })}`}-3108</Text>
+        <Text style={styles.btmText}>{`${i18n.t('drawer.build_number', { build: pkg.extra.build })}`}-{dateversion}</Text>
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_model', { model: deviceType })}`}</Text>
         <Text style={styles.btmText}>{`${i18n.t('drawer.hygo_serial', { serial: deviceid })}`}</Text>
       </View>
