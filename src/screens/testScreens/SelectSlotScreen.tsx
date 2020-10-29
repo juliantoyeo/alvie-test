@@ -73,7 +73,7 @@ const SelectSlotScreen = ({ navigation }) => {
     
     //The five days we analyse over
     const dow = [...Array(5).keys()].map((i) => (
-        moment.utc('2020-05-05').add(i, 'day'))
+        moment.utc().add(i, 'day'))
         ).map((d) =>  ({dt: d.format('YYYY-MM-DD'), name: d.format('dddd')}))
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
@@ -157,7 +157,7 @@ const SelectSlotScreen = ({ navigation }) => {
     }, [context.selectedSlot, meteo, currentDay])
 
     const loadConditions = async () => {
-        let now = moment.utc('2020-05-05')
+        let now = moment.utc()
         if (now.minutes() >= 30) {
             now.hours(now.hours() + 1)
         }
@@ -184,7 +184,7 @@ const SelectSlotScreen = ({ navigation }) => {
         setIsRefreshing(true)
         const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
         const cultures: Array<number> = context.selectedFields.map((f: fieldType) => f.culture.id)
-        const now = moment.utc('2020-05-05')
+        const now = moment.utc()
         const hour = context.selectedSlot.min.toString().padStart(2, '0')
         const data = {
             hour,
@@ -196,11 +196,13 @@ const SelectSlotScreen = ({ navigation }) => {
                 max: context.selectedSlot.max - context.selectedSlot.min
             }
         }
-        try {
-            const newMod: Array<modulationType> = await getModulationValue_v2(data)
-            context.setMod(newMod)
-            setIsRefreshing(false)
-        } catch(error){}
+      
+        const newMod: Array<modulationType> = await getModulationValue_v2(data)
+        context.setMod(newMod)
+        setIsRefreshing(false)
+        if (newMod.length == 0) {
+        snackbar.showSnackbar("Erreur pendant le calcul de modulation", "ALERT")
+        }
         
     }
 
