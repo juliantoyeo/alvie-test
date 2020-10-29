@@ -12,7 +12,8 @@ import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js';
 import HygoStyles from '../../styles';
-import COLORS from '../../colors'
+import COLORS from '../../colors';
+import { BUSES } from '../../constants';
 
 import {
     Alert,
@@ -24,9 +25,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getEquipment, getActiveProducts, getActiveProductsReturnType } from '../../api/hygoApi';
 import { productType, productsData } from './staticData';
 import { activeProductType } from '../../types/activeproduct.types';
-
-const buses = ["Orange", "Bleu", "Verte", "Jaune", "Blanche"]
-
 
 export const ProductList = ({ items, onPress }) => {
     const [opened, setOpened] = useState(true)
@@ -132,7 +130,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     modalVisible={buseModalVisible}
                     setModalVisible={setBuseModalVisible}
                     defaultValue={context.buses}
-                    items={buses}
+                    items={BUSES}
                     setInput={(item) => {
                         context.setBuses(item)
                     }}
@@ -145,7 +143,7 @@ const SelectProductsScreen = ({ navigation }) => {
         <View>
             {context.selectedProducts.length > 0 ? (
                 <ProductList
-                    items={context.selectedProducts.sort((it1, it2) => it1.id - it2.id)}
+                    items={context.selectedProducts.sort((it1, it2) => it1.name.localeCompare(it2.name))}
                     onPress={(id) => removeProduct(id)}
                 />
             ) : (

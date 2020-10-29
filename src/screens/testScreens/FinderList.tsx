@@ -49,7 +49,7 @@ const Item = ({ item, onPress}: itemProps) => {
 
 
 export const FinderList = ({title, items, onPress}: finderListProps) => {
-    const [opened, setOpened] = useState(true)
+    const [opened, setOpened] = useState(false)
     const onAdd = (item) => {
         onPress(item)
     }
@@ -69,7 +69,7 @@ export const FinderList = ({title, items, onPress}: finderListProps) => {
                             style={{fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20}} />
                     </TouchableOpacity>
 
-                {opened && items.map((item,k) => {
+                {opened && items.sort((a, b) => a.name.localeCompare(b.name)).map((item,k) => {
 
                     return (<Item key={k} item={item} onPress={onAdd}/>
                     )

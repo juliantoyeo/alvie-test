@@ -325,6 +325,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 navigation.navigate('TestPageReport')
                             }
                             }
+                            enabled={currentDay<3}
                             icon={{
                                 type: 'AntDesign',
                                 name: 'arrowright',

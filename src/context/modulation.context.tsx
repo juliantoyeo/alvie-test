@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { getEquipment } from '../api/hygoApi';
 import COLORS from '../colors'
 import { activeProductType } from '../types/activeproduct.types';
 import { fieldType } from '../types/field.types';
@@ -89,7 +90,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setSelectedProducts([...selectedProducts.filter((p) => p.id != id)])
     }
     const cleanProducts = () => { setSelectedProducts([]) }
-
+    
     return (
         <ModulationContext.Provider value={{ 
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
