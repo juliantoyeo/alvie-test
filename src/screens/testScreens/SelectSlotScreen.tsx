@@ -70,11 +70,11 @@ const SelectSlotScreen = ({ navigation }) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
     const ready = !!meteo && !!metrics && !!conditions
-    
+
     //The five days we analyse over
     const dow = [...Array(5).keys()].map((i) => (
         moment.utc().add(i, 'day'))
-        ).map((d) =>  ({dt: d.format('YYYY-MM-DD'), name: d.format('dddd')}))
+    ).map((d) => ({ dt: d.format('YYYY-MM-DD'), name: d.format('dddd') }))
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
@@ -89,7 +89,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
     //Updating modulation when selected slot change or day change
     useEffect(() => {
-        loadModulation()
+        (currentDay < 3) ? loadModulation() : snackbar.showSnackbar("Modulation indisponible pour ce jour", "WARNING")
         loadMetrics()
     }, [context.selectedSlot, currentDay])
 
@@ -99,11 +99,11 @@ const SelectSlotScreen = ({ navigation }) => {
 
     const loadMeteo = async () => {
         try {
-            const data = await getMetrics_v2({days: dow.map((d)=>d.dt), fields: context.selectedFields})
-            const data4h = await getMetrics4h_v2(({days: dow.map((d)=>d.dt), fields: context.selectedFields}))
+            const data = await getMetrics_v2({ days: dow.map((d) => d.dt), fields: context.selectedFields })
+            const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields: context.selectedFields }))
             setMeteo(data)
             setMeteo4h(data4h)
-        }catch(error) {
+        } catch (error) {
             setMeteo(null)
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
         }
@@ -111,15 +111,15 @@ const SelectSlotScreen = ({ navigation }) => {
 
     const loadMetrics = useCallback(async () => {
 
-        if (meteo == null){
+        if (meteo == null) {
             setMetrics(null)
             return
         }
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
-        let chd:metricsType = {}, dir = []
+        let chd: metricsType = {}, dir = []
         _.forEach(meteo[currentDay], (v, k2) => {
-            const h = v.hour.toString().padStart(2,'0')
+            const h = v.hour.toString().padStart(2, '0')
             if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
                 return
             }
@@ -171,10 +171,11 @@ const SelectSlotScreen = ({ navigation }) => {
                         day,
                         products: context.selectedProducts.map((p) => p.phytoproduct.id),
                         parcelles: context.selectedFields.map((f) => f.id)
-                    }))}
-            ))
+                    }))
+                }
+                ))
             setConditions(data)
-        }catch(e){
+        } catch (e) {
             setConditions(null)
             snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
         }
@@ -196,14 +197,14 @@ const SelectSlotScreen = ({ navigation }) => {
                 max: context.selectedSlot.max - context.selectedSlot.min
             }
         }
-      
+
         const newMod: Array<modulationType> = await getModulationValue_v2(data)
         context.setMod(newMod)
         setIsRefreshing(false)
         if (newMod.length == 0) {
-        snackbar.showSnackbar("Erreur pendant le calcul de modulation", "ALERT")
+            snackbar.showSnackbar("Erreur pendant le calcul de modulation", "ALERT")
         }
-        
+
     }
 
     return (
@@ -236,11 +237,11 @@ const SelectSlotScreen = ({ navigation }) => {
                                             <TouchableOpacity
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
-                                                onPress={() => {setCurrentDay(i) }}
-                                                //disabled={isRefreshing}
+                                                onPress={() => { setCurrentDay(i) }}
+                                            //disabled={isRefreshing}
                                             >
-                                                <Text style={[styles.tabText, { flex:1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
-                                                <View style={{flex:1, paddingTop:5}}>
+                                                <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                <View style={{ flex: 1, paddingTop: 5 }}>
                                                     <ModulationBarTiny
                                                         data={conditions[i]}
                                                         height={8}
@@ -292,19 +293,25 @@ const SelectSlotScreen = ({ navigation }) => {
                                     <ExtraMetrics currentHourMetrics={metrics} />
                                 </View>
 
-                                {/*================= Result ==================*/}
+                                {/**
+                                 * ================= Result ==================
+                                 * display only for the first 3 days
+                                 *=========================================*/}
+
                                 {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
                                 <View style={{ paddingTop: 20, paddingBottom: 40 }}>
-                                    <HygoCard>
-                                        {isRefreshing ? <Spinner /> : (
-                                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
-                                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
-                                                    {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
-                                                </Text>
-                                            </View>
-                                        )}
-                                    </HygoCard>
+                                    {currentDay < 3 && (
+                                        <HygoCard>
+                                            {isRefreshing ? <Spinner /> : (
+                                                <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
+                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
+                                                        {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
+                                                    </Text>
+                                                </View>
+                                            )}
+                                        </HygoCard>
+                                    )}
                                 </View>
                             </View>
                         )}
