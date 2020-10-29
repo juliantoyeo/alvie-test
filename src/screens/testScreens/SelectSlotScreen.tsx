@@ -169,7 +169,7 @@ const SelectSlotScreen = ({ navigation }) => {
                 dt.map((day) => {
                     return (getConditions_v2({
                         day,
-                        products: context.selectedProducts.map((p) => p.id),
+                        products: context.selectedProducts.map((p) => p.phytoproduct.id),
                         parcelles: context.selectedFields.map((f) => f.id)
                     }))}
             ))
