@@ -10,6 +10,7 @@ import HygoPickerModal from './HygoPickerModal';
 import HygoButton from '../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
+import { SnackbarContext } from '../../context/snackbar.context';
 import i18n from 'i18n-js';
 import HygoStyles from '../../styles';
 import COLORS from '../../colors';
@@ -25,6 +26,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getEquipment, getActiveProducts, getActiveProductsReturnType } from '../../api/hygoApi';
 import { productType, productsData } from './staticData';
 import { activeProductType } from '../../types/activeproduct.types';
+import { Snackbar } from 'react-native-paper';
 
 export const ProductList = ({ items, onPress }) => {
     const [opened, setOpened] = useState(true)
@@ -53,6 +55,7 @@ export const ProductList = ({ items, onPress }) => {
 
 const SelectProductsScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext)
+    const snackbar = React.useContext(SnackbarContext)
     const [products, setProducts] = useState<Array<activeProductType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
     const [ready, setReady] = useState<boolean>(false)
@@ -155,7 +158,8 @@ const SelectProductsScreen = ({ navigation }) => {
     const Finder = () => {
         const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
         const [select, setSelect] = useState<activeProductType>()
-
+        const [search, setSearch] = useState<string>()
+        
         const addProduct = (item: activeProductType) => {
             setSelect(item)
             setDoseModalVisible(true)
@@ -176,6 +180,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 })}
                 <HygoInputModal
                     onClose={() => { }}
+                    onSuccess={() => snackbar.showSnackbar("Produit ajouté", 'OK')}
                     modalVisible={doseModalVisible}
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
@@ -209,12 +214,13 @@ const SelectProductsScreen = ({ navigation }) => {
                 </Header>
                 <Content style={styles.content}>
                     <HygoInputModal
-                        onClose={() => { }}
+                        onClose={() => {}}
                         modalVisible={debitModalVisible}
                         setModalVisible={setDebitModalVisible}
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
                         title="Débit de pulvérisation"
+                        onSuccess={() => {}}
                     />
 
                     <Cuve />

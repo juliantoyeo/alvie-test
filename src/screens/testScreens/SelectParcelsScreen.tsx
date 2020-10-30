@@ -23,7 +23,7 @@ interface ParcelListProps {
 }
 
 export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) => {
-    const [opened, setOpened] = useState(true)
+    const [opened, setOpened] = useState(false)
     return (
         <View style={ListStyles.container}>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
@@ -135,7 +135,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                     <View>
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
                         {fields.length > 0 && names.length > 0 ? (
-                            names.map((n, k) => {
+                            names.sort((a, b) => a.localeCompare(b)).map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
                                 return (
                                     items.length > 0 && 

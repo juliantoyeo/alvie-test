@@ -13,7 +13,7 @@ import COLORS from  '../../colors';
 import HygoButton from '../../components/v2/HygoButton';
 
 
-const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, setInput, title}) => {
+const HygoInputModal = ({onClose, onSuccess, modalVisible, setModalVisible, defaultValue, setInput, title}) => {
     const [value, setValue] = useState<any>(defaultValue)
     return (
         <Modal
@@ -45,6 +45,7 @@ const HygoInputModal = ({onClose, modalVisible, setModalVisible, defaultValue, s
                       onPress={() => {
                         setInput(value)
                         setModalVisible(!modalVisible);
+                        onSuccess && onSuccess()
                       }}
                       enabled={!!value}
                     />
