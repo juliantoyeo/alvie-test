@@ -15,7 +15,7 @@ import { getEquipment, getFields } from '../api/hygoApi'
 
 import { Amplitude } from '../amplitude'
 
-const dateversion = "021120"
+const dateversion = "031120"
 
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
   const goToEquipment = () => {
