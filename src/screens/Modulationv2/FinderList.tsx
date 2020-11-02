@@ -4,9 +4,7 @@ import { View, StyleSheet, FlatList } from 'react-native'
 import COLORS from '../../colors'
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import HygoInputModal from './HygoInputModal';
 import { activeProductType } from '../../types/activeproduct.types';
-import HygoButton from '../../components/v2/HygoButton';
 
 type productType={
     type:string,

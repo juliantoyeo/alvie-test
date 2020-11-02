@@ -406,7 +406,7 @@ export const getFavorites = async () => {
 // Updates favorites
 export const setFavorites = async (favIds: Array<number>) => {
     try {
-        const response = await hygoApi.post('/app/cultures/fav', favIds);
+        const response = await hygoApi.post('/app/cultures/fav', {favIds});
         return response.data
     } catch(error) {
         return { }

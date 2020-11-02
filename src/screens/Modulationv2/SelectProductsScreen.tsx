@@ -181,18 +181,14 @@ const SelectProductsScreen = ({ navigation }) => {
             
         }
         const updateFavs = (item: activeProductType) => {
-            // const stack: Array<number> = favs
-            //const stack = favs.push(item.id)
             const stack = favs.concat(item.id)
-            console.log("-----",favs,"-----", stack)
             const st = _.uniq(stack)   //delete duplicate
             if (st.length > 10) {
                 st.shift()
             }
             setFavs(st)
-            //setFavorites(st)
+            setFavorites(st)
         }
-        console.log("==============",favs)
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.searchbox}>
@@ -268,6 +264,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         setInput={(str) => context.setDebit(parseInt(str))}
                         title="Débit de pulvérisation"
                         onSuccess={() => { }}
+                        item={{}}
                     />
 
                     <Cuve />
