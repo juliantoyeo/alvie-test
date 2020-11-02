@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Fab } from 'native-base';
-import { View, StyleSheet } from 'react-native'
+import { Icon, Text } from 'native-base';
+import { View, StyleSheet, FlatList } from 'react-native'
 import COLORS from '../../colors'
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -17,7 +17,8 @@ type productType={
 type finderListProps = {
     title: string,
     items: Array<activeProductType>,
-    onPress: any
+    onPress: any,
+    collapseEnabled: boolean
 }
 type itemProps = {
     item: activeProductType,
@@ -46,35 +47,37 @@ const Item = ({ item, onPress}: itemProps) => {
     )
 }
 
-
-
-export const FinderList = ({title, items, onPress}: finderListProps) => {
+export const FinderList = ({title, items, onPress, collapseEnabled}: finderListProps) => {
     const [opened, setOpened] = useState(false)
     const onAdd = (item) => {
         onPress(item)
     }
+    // useEffect(() => {   
+    //     if (!collapseEnabled) {
+    //         setOpened(false)
+    //     }
+    // }, [collapseEnabled])
     return ( 
         <View style={styles.container}>
             
             <View style={{  display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}> */}
-                    <TouchableOpacity 
-                        onPress={()=>setOpened(!opened)}
-                        style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}
-                    >
-                        <Text style={styles.cardTitle}>{title}</Text>
-                        <Icon 
-                            type='AntDesign' 
-                            name={opened ? 'down' : 'right'} 
-                            style={{fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20}} />
-                    </TouchableOpacity>
+                <TouchableOpacity 
+                    // onPress={()=> collapseEnabled && setOpened(!opened)}
+                    onPress={()=> setOpened(!opened)}
+                    style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF'}}
+                >
+                    <Text style={styles.cardTitle}>{title}</Text>
+                    <Icon 
+                        type='AntDesign' 
+                        name={opened ? 'down' : 'right'} 
+                        style={{fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20}} />
+                </TouchableOpacity>
 
                 {opened && items.sort((a, b) => a.name.localeCompare(b.name)).map((item,k) => {
 
                     return (<Item key={k} item={item} onPress={onAdd}/>
                     )
                 })}
-                {/* </View> */}
             </View>
         </View>
        
