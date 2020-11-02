@@ -28,6 +28,8 @@ import { productType, productsData } from './staticData';
 import { activeProductType } from '../../types/activeproduct.types';
 import { Snackbar } from 'react-native-paper';
 
+import _ from 'lodash';
+
 export const ProductList = ({ items, onPress }) => {
     const [opened, setOpened] = useState(true)
     return (
@@ -62,7 +64,7 @@ const SelectProductsScreen = ({ navigation }) => {
     const [viewMode, setViewMode] = useState<boolean>(true)
     const [families, setFamilies] = useState<Array<string>>([])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
-    const [favs, setFavs] = useState<Array<activeProductType>>([])
+    const [favs, setFavs] = useState<Array<number>>([])
 
     useEffect(() => {
         // Init product list and retrieve product families and favorites
@@ -71,7 +73,7 @@ const SelectProductsScreen = ({ navigation }) => {
             if (prd.length > 0) {
                 setProducts(prd)
                 const nm = prd.map((f) => f.phytoproduct.name)
-                setFamilies([... new Set(nm)])     //delete duplicate
+                setFamilies(_.uniq(nm))     //delete duplicate
             }
         }
         if (products.length == 0) {
@@ -92,14 +94,13 @@ const SelectProductsScreen = ({ navigation }) => {
     // Init favorites
     useEffect(() => {
         const load = async () => {
-            const favIds: Array<number> = await getFavorites()
-            if (favIds.length > 0) {
-                const favs = favIds.map((f) => products.find((p) => p.id == f)).filter((f) => !!f)
+            const favs: Array<number> = await getFavorites()
+            if (favs.length > 0) {
                 setFavs(favs)
             }
         }
         load()
-    }, [products])
+    }, [])
 
     useEffect(() => {
         setReady(context.selectedProducts.length > 0)
@@ -180,15 +181,18 @@ const SelectProductsScreen = ({ navigation }) => {
             
         }
         const updateFavs = (item: activeProductType) => {
-            const stack: Array<activeProductType> = favs
-            stack.push(item)
-            if (stack.length > 10) {
-                stack.shift()
+            // const stack: Array<number> = favs
+            //const stack = favs.push(item.id)
+            const stack = favs.concat(item.id)
+            console.log("-----",favs,"-----", stack)
+            const st = _.uniq(stack)   //delete duplicate
+            if (st.length > 10) {
+                st.shift()
             }
-            setFavs(stack)
-            setFavorites(stack.map((st) => st.id))
+            setFavs(st)
+            //setFavorites(st)
         }
-
+        console.log("==============",favs)
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.searchbox}>
@@ -203,7 +207,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 {favs.length > 0 && 
                     <FinderList
                         title={"Favoris"}
-                        items={favs}
+                        items={favs.map((f) => products.find((p) => p.id == f)).filter((f) => !!f)}
                         onPress={addProduct}
                         collapseEnabled = {search != ''}
                     />
@@ -216,14 +220,14 @@ const SelectProductsScreen = ({ navigation }) => {
                             key={k}
                             title={f}
                             items={items.sort((it1, it2) => it1.id - it2.id)}
-                            onPress={(item) => { addProduct(item); updateFavs(item)}}
+                            onPress={addProduct}
                             collapseEnabled = {search != ''}
                         />
                     )
                 })}
                 <HygoInputModal
                     onClose={() => { }}
-                    onSuccess={() => snackbar.showSnackbar("Produit ajouté", 'OK')}
+                    onSuccess={(item) => {snackbar.showSnackbar("Produit ajouté", 'OK'); updateFavs(item)}}
                     modalVisible={doseModalVisible}
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
@@ -233,6 +237,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         setProducts([...products.filter((p) => p.id != select.id), newItem])
                     }}
                     title={select && `Concentration pour ${select.name}`}
+                    item={select}
                 />
             </View>
         )
