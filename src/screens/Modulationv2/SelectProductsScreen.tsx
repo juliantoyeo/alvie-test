@@ -23,7 +23,7 @@ import {
 } from "react-native";
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getEquipment, getActiveProducts, getActiveProductsReturnType } from '../../api/hygoApi';
+import { getEquipment, getActiveProducts, getActiveProductsReturnType, getFavorites, setFavorites} from '../../api/hygoApi';
 import { productType, productsData } from './staticData';
 import { activeProductType } from '../../types/activeproduct.types';
 import { Snackbar } from 'react-native-paper';
@@ -62,9 +62,10 @@ const SelectProductsScreen = ({ navigation }) => {
     const [viewMode, setViewMode] = useState<boolean>(true)
     const [families, setFamilies] = useState<Array<string>>([])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
+    const [favs, setFavs] = useState<Array<activeProductType>>([])
 
     useEffect(() => {
-        // Init product list and retrieve product families, init buses
+        // Init product list and retrieve product families and favorites
         const load = async () => {
             const prd: Array<activeProductType> = await getActiveProducts()
             if (prd.length > 0) {
@@ -88,9 +89,22 @@ const SelectProductsScreen = ({ navigation }) => {
         load()
     }, [])
 
+    // Init favorites
+    useEffect(() => {
+        const load = async () => {
+            const favIds: Array<number> = await getFavorites()
+            if (favIds.length > 0) {
+                const favs = favIds.map((f) => products.find((p) => p.id == f)).filter((f) => !!f)
+                setFavs(favs)
+            }
+        }
+        load()
+    }, [products])
+
     useEffect(() => {
         setReady(context.selectedProducts.length > 0)
     }, [context.selectedProducts])
+    
 
     const removeProduct = (id) => {
         context.removeProduct(id)
@@ -159,11 +173,22 @@ const SelectProductsScreen = ({ navigation }) => {
         const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
         const [select, setSelect] = useState<activeProductType>()
         const [search, setSearch] = useState<string>('')
-
         const addProduct = (item: activeProductType) => {
+            //Append to the list of product selected
             setSelect(item)
             setDoseModalVisible(true)
+            
         }
+        const updateFavs = (item: activeProductType) => {
+            const stack: Array<activeProductType> = favs
+            stack.push(item)
+            if (stack.length > 10) {
+                stack.shift()
+            }
+            setFavs(stack)
+            setFavorites(stack.map((st) => st.id))
+        }
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.searchbox}>
@@ -175,7 +200,14 @@ const SelectProductsScreen = ({ navigation }) => {
                         style={[hygoStyles.text, {textAlign: 'left', color:"#000", paddingLeft:10, flex:1, paddingBottom: 0}]}
                     />
                 </View>
-                
+                {favs.length > 0 && 
+                    <FinderList
+                        title={"Favoris"}
+                        items={favs}
+                        onPress={addProduct}
+                        collapseEnabled = {search != ''}
+                    />
+                }
                 {families.length > 0 && families.map((f, k) => {
                     const items: Array<activeProductType> = products.filter((p) => p.phytoproduct.name == f && p.name.toLowerCase().match(search.toLowerCase()))
                     return (
@@ -184,7 +216,8 @@ const SelectProductsScreen = ({ navigation }) => {
                             key={k}
                             title={f}
                             items={items.sort((it1, it2) => it1.id - it2.id)}
-                            onPress={addProduct}
+                            onPress={(item) => { addProduct(item); updateFavs(item)}}
+                            collapseEnabled = {search != ''}
                         />
                     )
                 })}
@@ -240,7 +273,7 @@ const SelectProductsScreen = ({ navigation }) => {
                             {viewMode && <Icon type='AntDesign' name='pluscircleo' style={styles.iconTitle} />}
                         </TouchableOpacity>
                     </View>
-                    {viewMode ? <Recap /> : <Finder />}
+                    {viewMode ? <Recap /> : <Finder/>}
                 </Content>
                 {viewMode ? (
                     <Footer style={styles.footer}>

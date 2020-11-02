@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //'http://192.168.1.35:3000',//'https://hygo-api.alvie.fr', // 
+    baseURL: 'http://192.168.1.35:3000',//'https://hygo-api.alvie.fr', // 'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -387,6 +387,26 @@ export const getCultures = async () => {
 export const getAllCultures = async () => {
     try {
         const response = await hygoApi.get('/app/cultures/all');
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
+
+// Get favorites
+export const getFavorites = async () => {
+    try {
+        const response = await hygoApi.get('/app/cultures/fav');
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
+
+// Updates favorites
+export const setFavorites = async (favIds: Array<number>) => {
+    try {
+        const response = await hygoApi.post('/app/cultures/fav', favIds);
         return response.data
     } catch(error) {
         return { }
