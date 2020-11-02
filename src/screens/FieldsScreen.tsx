@@ -15,8 +15,6 @@ import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 
 
-
-
 const Card = ({ field, cultureList, onUpdate }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [name, setName] = useState<string>(field.name)

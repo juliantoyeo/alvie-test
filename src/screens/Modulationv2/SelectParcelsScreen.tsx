@@ -12,8 +12,9 @@ import COLORS from '../../colors';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { selectParcelsScreen: ampEvent } = AMPLITUDE_EVENTS
 import { fieldType } from '../../types/field.types';
-import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
+import { cultureType } from '../../types/culture.types';
 
+import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
 
 interface ParcelListProps {
     title: string,
@@ -74,7 +75,12 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
     )
 }
 
-const SelectParcelsScreen = ({ navigation }) => {
+interface selectParcelsScreenProps {
+    navigation: any,
+    cultures: Array<cultureType>
+}
+
+const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) => {
     const context = React.useContext(ModulationContext)
     const [fields, setFields] = useState<Array<fieldType>>([])
     const [ready, setReady] = useState<boolean>(false)
@@ -88,7 +94,12 @@ const SelectParcelsScreen = ({ navigation }) => {
             const {fields: fld}: getFieldsReturnType = await getFields_v2()
             if (!!fld) {
                 setFields(fld)
-                const nm = fld.map( (f) => f.culture.name)
+                // filtering out useless cultures like "Jachère", "Bande Tampon",...
+                const fld_filter = fld.filter((f) => {
+                    const c = cultures.find((c) => c.id == f.culture.id)
+                    return !c.hidden
+                })
+                let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
                 setNames([... new Set(nm)])     //delete duplicate
             }
         }
@@ -135,7 +146,7 @@ const SelectParcelsScreen = ({ navigation }) => {
                     <View>
                         <Text style={hygoStyles.h0}>Mes Parcelles</Text>
                         {fields.length > 0 && names.length > 0 ? (
-                            names.sort((a, b) => a.localeCompare(b)).map((n, k) => {
+                            names.map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
                                 return (
                                     items.length > 0 && 
@@ -241,7 +252,7 @@ const ListStyles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-
+    cultures: state.metadata.cultures,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

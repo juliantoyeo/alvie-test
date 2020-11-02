@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, View, Platform } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View, Platform , TextInput} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Picker, Grid, Row, Col, Fab } from 'native-base';
 //import { ProductList } from './ProductList';
@@ -158,16 +158,26 @@ const SelectProductsScreen = ({ navigation }) => {
     const Finder = () => {
         const [doseModalVisible, setDoseModalVisible] = useState<boolean>(false)
         const [select, setSelect] = useState<activeProductType>()
-        const [search, setSearch] = useState<string>()
-        
+        const [search, setSearch] = useState<string>('')
+
         const addProduct = (item: activeProductType) => {
             setSelect(item)
             setDoseModalVisible(true)
         }
         return (
-            <View style={{flex:1}}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.searchbox}>
+                    <Icon type='AntDesign' name='search1' style={{ color: search == '' ? "#aaa" : COLORS.DARK_BLUE }} />
+                    <TextInput
+                        onChangeText={text => setSearch(text)}
+                        value={search}
+                        placeholder="Rechercher un produit"
+                        style={[hygoStyles.text, {textAlign: 'left', color:"#000", paddingLeft:10, flex:1, paddingBottom: 0}]}
+                    />
+                </View>
+                
                 {families.length > 0 && families.map((f, k) => {
-                    const items: Array<activeProductType> = products.filter((p) => p.phytoproduct.name == f)
+                    const items: Array<activeProductType> = products.filter((p) => p.phytoproduct.name == f && p.name.toLowerCase().match(search.toLowerCase()))
                     return (
                         items.length > 0 &&
                         <FinderList
@@ -191,7 +201,6 @@ const SelectProductsScreen = ({ navigation }) => {
                     }}
                     title={select && `Concentration pour ${select.name}`}
                 />
-                
             </View>
         )
     }
@@ -214,13 +223,13 @@ const SelectProductsScreen = ({ navigation }) => {
                 </Header>
                 <Content style={styles.content}>
                     <HygoInputModal
-                        onClose={() => {}}
+                        onClose={() => { }}
                         modalVisible={debitModalVisible}
                         setModalVisible={setDebitModalVisible}
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
                         title="Débit de pulvérisation"
-                        onSuccess={() => {}}
+                        onSuccess={() => { }}
                     />
 
                     <Cuve />
@@ -231,7 +240,7 @@ const SelectProductsScreen = ({ navigation }) => {
                             {viewMode && <Icon type='AntDesign' name='pluscircleo' style={styles.iconTitle} />}
                         </TouchableOpacity>
                     </View>
-                    {viewMode ? <Recap /> : <Finder />}                    
+                    {viewMode ? <Recap /> : <Finder />}
                 </Content>
                 {viewMode ? (
                     <Footer style={styles.footer}>
@@ -250,17 +259,17 @@ const SelectProductsScreen = ({ navigation }) => {
                         />
                     </Footer>
                 ) : (
-                    <Fab
-                        active={true}
-                        direction="left"
-                        //containerStyle={{ marginLeft: 10 }}
-                        style={styles.fab}
-                        position="bottomRight"
-                        onPress={() => { setViewMode(!viewMode) }}
-                    >
-                        <Icon type='AntDesign' name={'check'} />
-                    </Fab>
-            )}
+                        <Fab
+                            active={true}
+                            direction="left"
+                            //containerStyle={{ marginLeft: 10 }}
+                            style={styles.fab}
+                            position="bottomRight"
+                            onPress={() => { setViewMode(!viewMode) }}
+                        >
+                            <Icon type='AntDesign' name={'check'} />
+                        </Fab>
+                    )}
             </Container>
 
         </SafeAreaView>
@@ -313,7 +322,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.BEIGE
     },
     fab: {
-        backgroundColor: COLORS.DARK_BLUE 
+        backgroundColor: COLORS.DARK_BLUE
     },
     grid: {
         display: 'flex',
@@ -340,6 +349,14 @@ const styles = StyleSheet.create({
         flex: 3,
         padding: 2,
         paddingBottom: 2
+    },
+    searchbox: {
+        display: 'flex',
+        flexDirection:'row',
+        justifyContent:'center',
+        marginBottom:10, 
+        paddingLeft: 10,
+        backgroundColor: "#fff"
     }
 });
 

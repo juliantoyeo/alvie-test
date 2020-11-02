@@ -10,6 +10,6 @@ export interface fieldType {
         'type': string
     },
     id: number,
-    selected? : boolean
+    selected? : boolean,
     name: string
 }

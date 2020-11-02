@@ -26,10 +26,10 @@ import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
 import WaitActivationScreen from './screens/WaitActivationScreen'
-import SelectParcelsScreen from './screens/testScreens/SelectParcelsScreen';
-import SelectProductsScreen from './screens/testScreens/SelectProductsScreen';
-import SelectSlotScreen from './screens/testScreens/SelectSlotScreen';
-import ReportScreen from './screens/testScreens/ReportScreen';
+import SelectParcelsScreen from './screens/Modulationv2/SelectParcelsScreen';
+import SelectProductsScreen from './screens/Modulationv2/SelectProductsScreen';
+import SelectSlotScreen from './screens/Modulationv2/SelectSlotScreen';
+import ReportScreen from './screens/Modulationv2/ReportScreen';
 import HeaderText from './components/HeaderText'
 
 import COLORS from './colors'
