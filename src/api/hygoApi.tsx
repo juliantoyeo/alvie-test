@@ -79,6 +79,26 @@ export const getActiveProducts = async (): Promise<Array<activeProductType>> => 
     }
 }
 
+// Get favorite products
+export const getFavorites = async () => {
+    try {
+        const response = await hygoApi.get('/app/activeproducts/fav');
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
+
+// Updates favorite products
+export const setFavorites = async (favIds: Array<number>) => {
+    try {
+        const response = await hygoApi.post('/app/activeproducts/fav', {favIds});
+        return response.data
+    } catch(error) {
+        return { }
+    }
+}
+
 // Retrieve phytoproduct list
 export const getPhytoProducts = async () => {
     try {
@@ -393,25 +413,6 @@ export const getAllCultures = async () => {
     }
 }
 
-// Get favorites
-export const getFavorites = async () => {
-    try {
-        const response = await hygoApi.get('/app/cultures/fav');
-        return response.data
-    } catch(error) {
-        return { }
-    }
-}
-
-// Updates favorites
-export const setFavorites = async (favIds: Array<number>) => {
-    try {
-        const response = await hygoApi.post('/app/cultures/fav', {favIds});
-        return response.data
-    } catch(error) {
-        return { }
-    }
-}
 // Get Meteo Radar
 export const getMeteoRadar = async () => {
     try {
