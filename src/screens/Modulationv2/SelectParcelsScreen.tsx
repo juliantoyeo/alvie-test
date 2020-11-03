@@ -138,7 +138,7 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
                     </Left>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerTitle}>Choix des parcelles</Title>
+                        <Title style={styles.headerSubtitle}>Choix des parcelles</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     header: {
-        backgroundColor: COLORS.CYAN
+        backgroundColor: COLORS.CYAN,
+        paddingTop:0
     },
     headerBody: {
         flex: 4,
@@ -209,6 +210,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'nunito-regular',
         fontSize: 24
+    },
+    headerSubtitle: {
+        color: '#fff',
+        fontFamily: 'nunito-regular',
+        fontSize: 20,
     },
     title: {
         paddingTop: 20,

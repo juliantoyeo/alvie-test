@@ -41,7 +41,7 @@ const ReportScreen = ({ navigation }) => {
                     </Left>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={[styles.headerTitle, {fontSize: 20}]}>Récapitulatif</Title>
+                        <Title style={styles.headerSubtitle}>Récapitulatif</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -148,6 +148,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'nunito-regular',
         fontSize: 24,
+    },
+    headerSubtitle: {
+        color: '#fff',
+        fontFamily: 'nunito-regular',
+        fontSize: 20,
     },
     title: {
         paddingTop: 20,
