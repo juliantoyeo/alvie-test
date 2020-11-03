@@ -83,10 +83,6 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
           <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={goToTest}>
-          <Image source={require('../../assets/ICN-Nav2.png')} style={styles.itemImage} />
-          <Text style={styles.itemText}>Test</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/hygo.png')} style={styles.logo} />
