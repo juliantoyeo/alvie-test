@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, ScrollView, Text, Image } from 'react-native'
 import { Spinner } from 'native-base'
-import HygoMeteoPhyto  from '../components/HygoMeteoPhyto';
+import { HygoCardTransparent } from '../components/v2/HygoCards'
 import i18n from 'i18n-js'
 import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../api/hygoApi'
 
-const MeteoBriefScreen = ({ navigation }) => {
+const MeteoBriefScreen_v2 = ({ navigation }) => {
 
   const MONTHS = [
     i18n.t('months.january'),
@@ -154,16 +154,23 @@ const MeteoBriefScreen = ({ navigation }) => {
       </View>
       
       <View style={styles.actionCards}>
-        { loading && (
+        {/*{ loading && (
           <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
         )}
-       
+        */}
 
-        {!loading && meteoData.products.map(p => {
+        {/* !loading && meteoData.products.map(p => {
             return (
               <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={parseInt(moment().format('HH'))} />
             )
-        })}
+        })*/}
+        <HygoCardTransparent
+            title= "Pulvérisation"
+            subtitle= ""
+            text="Démarrer un travail de pulvérisation"
+            buttonText= "Démarrer"
+            onPress={() => navigation.navigate("Pulverisation_v2")}
+        />
         <View style={{ height: 80 }}></View>
       </View>
 
@@ -221,4 +228,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MeteoBriefScreen
+export default MeteoBriefScreen_v2

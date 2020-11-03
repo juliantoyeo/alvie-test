@@ -15,6 +15,7 @@ import HygoCulturePicker from './components/HygoCulturePicker';
 import RealTimeScreen from './screens/RealTimeScreen';
 import BarCodeScreen from './screens/BarCodeScreen';
 import MeteoScreen from './screens/MeteoScreen';
+import MeteoScreen_v2 from './screens/MeteoScreen_v2'
 import InterventionsScreen from './screens/InterventionsScreen';
 import InterventionMapScreen from './screens/InterventionMapScreen';
 import EquipmentScreen from './screens/EquipmentScreen';
@@ -35,8 +36,6 @@ import HeaderText from './components/HeaderText'
 import COLORS from './colors'
 
 
-const NewPulverisationScreen = SelectParcelsScreen // NextPulverisationScreen
-
 const Navigator = createSwitchNavigator({
     mainFlow: createStackNavigator({
         BarCode: BarCodeScreen,
@@ -53,14 +52,7 @@ const Navigator = createSwitchNavigator({
                         },
                     }),
 
-                    // Pulverisation: createStackNavigator({
-                    //     Pulv_Fields: NewPulverisationScreen,
-                    //     Pulverisation_Products: SelectProductsScreen,
-                    //     Pulverisation_Slot: SelectSlotScreen,
-                    //     Pulverisation_Report: ReportScreen,
-                    // }, {
-                    //     headerMode: 'none'
-                    // }),
+                    Pulverisation: NextPulverisationScreen,
 
                     RealTime: RealTimeScreen,
 
@@ -113,10 +105,77 @@ const Navigator = createSwitchNavigator({
             contentComponent: DrawerScreen,
             drawerWidth: 310
         }),
+
+        main_v2: createDrawerNavigator({
+            Drawer: {
+                screen: createBottomTabNavigator({
+                    MeteoScreen: createStackNavigator({
+                        MeteoScreen: {
+                            screen: MeteoScreen_v2,
+                            navigationOptions: {
+                                header: null,
+                            },
+                        },
+                    }),
+
+                    // Pulverisation: NextPulverisationScreen,
+
+                    RealTime: RealTimeScreen,
+
+                    Intervention: createStackNavigator({
+                        Interventions: InterventionsScreen,
+                    }, {
+                        headerMode: 'none',
+                        defaultNavigationOptions: {}
+                    }),
+                }, {
+                    defaultNavigationOptions: ({ navigation }) => ({
+                        tabBarIcon: ({ focused, horizontal, tintColor }) => {
+                            const { routeName } = navigation.state;
+
+                            const r = ['MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention']
+                            let idx = r.indexOf(routeName)
+
+                            let props = {
+                                style: {
+                                    height: 20,
+                                    tintColor,
+                                },
+                            }
+
+                            switch (idx) {
+                                case 0:
+                                    return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
+                                case 1:
+                                    return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
+                                case 2:
+                                    return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
+                                case 3:
+                                    return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+                            }
+
+                        }
+                    }),
+
+                    tabBarComponent: TabBar,
+                    tabBarOptions: {
+                        activeTintColor: COLORS.DARK_GREEN,
+                        inactiveTintColor: '#fff',
+                        labelStyle: {
+                            fontSize: 14,
+                        },
+                    },
+                })
+            }
+        }, {
+            contentComponent: DrawerScreen,
+            drawerWidth: 310
+        }),
+
         BarCodeValidationScreen: BarCodeValidationScreen,
 
-        Pulverisation: createStackNavigator({
-            Pulverisation_Fields:NewPulverisationScreen,
+        Pulverisation_v2: createStackNavigator({
+            Pulverisation_Fields:SelectParcelsScreen,
             Pulverisation_Products: SelectProductsScreen,
             Pulverisation_Slot: SelectSlotScreen,
             Pulverisation_Report: ReportScreen,
@@ -157,5 +216,7 @@ const Navigator = createSwitchNavigator({
         headerMode: 'none'
     })
 })
+
+
 
 export default createAppContainer(Navigator)

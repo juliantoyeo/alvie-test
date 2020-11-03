@@ -4,7 +4,7 @@ import { Container, Header, Left, Body, Right, Button, Icon, Title, Tabs, Tab } 
 
 import i18n from 'i18n-js'
 
-import MeteoBriefScreen from './MeteoBriefScreen'
+import MeteoBriefScreen_v2 from './MeteoBriefScreen_v2'
 import MeteoRadar from './MeteoRadar'
 import MeteoDetailed from './MeteoDetailed'
 
@@ -52,11 +52,13 @@ const MeteoScreen = ({ navigation }) => {
           </Header>
           <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({i}) => switchTab(i)  }>
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
-              <MeteoBriefScreen style={styles.tabBar} navigation={navigation} />
+              <MeteoBriefScreen_v2 style={styles.tabBar} navigation={navigation} />
             </Tab>
-            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
+            {/*
+                <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
               <MeteoDetailed navigation={navigation} style={styles.tabBar} />
             </Tab>
+            */}
             { Localization.locale.indexOf('cs') === -1 && (
               <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
                 <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
