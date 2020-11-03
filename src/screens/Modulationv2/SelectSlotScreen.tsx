@@ -90,7 +90,6 @@ const SelectSlotScreen = ({ navigation }) => {
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
-
         loadMetrics()
     }, [context.meteo])
 

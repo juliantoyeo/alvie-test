@@ -166,7 +166,10 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
                 <Footer style={styles.footer}>
                     <HygoButton
                         label="CHOIX DES PRODUITS"
-                        onPress={() => navigation.navigate('TestPageProducts')}
+                        onPress={() => {
+                            context.loadMeteo()
+                            navigation.navigate('TestPageProducts')
+                        }}
                         enabled={ready}
                         icon={{
                             type: 'AntDesign',

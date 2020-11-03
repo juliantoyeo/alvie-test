@@ -126,6 +126,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields: selectedFields }))
             setMeteo(data)
             setMeteo4h(data4h)
+            snackbar.showSnackbar("Météo chargé", "OK")
         } catch (error) {
             setMeteo(null)
             snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
