@@ -54,9 +54,11 @@ const MeteoScreen = ({ navigation }) => {
             <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
               <MeteoBriefScreen style={styles.tabBar} navigation={navigation} />
             </Tab>
-            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
+            {/*
+                <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
               <MeteoDetailed navigation={navigation} style={styles.tabBar} />
             </Tab>
+            */}
             { Localization.locale.indexOf('cs') === -1 && (
               <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
                 <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />

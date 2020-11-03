@@ -306,7 +306,7 @@ const SelectSlotScreen = ({ navigation }) => {
                             label="AFFICHER LE RÉCAPITULATIF"
                             onPress={() => {
                                 context.setMetrics(metrics)
-                                navigation.navigate('TestPageReport')
+                                navigation.navigate('Pulverisation_Report')
                             }
                             }
                             enabled={currentDay<3}

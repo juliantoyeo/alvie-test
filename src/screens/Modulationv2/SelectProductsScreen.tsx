@@ -282,7 +282,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         <HygoButton
                             label="CHOIX DU CRÉNEAU"
                             onPress={() => {
-                                navigation.navigate('TestPageSlot')
+                                navigation.navigate('Pulverisation_Slot')
                             }
                             }
                             icon={{

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { Icon } from 'native-base'
 import hygoStyles from '../../styles'
 import COLORS from '../../colors'
@@ -38,6 +38,26 @@ HygoCardSmall.defaultProps = {
 }
 
 
+export const HygoCardTransparent = ({title, subtitle, text, buttonText, onPress}) => {
+
+    return (
+      <View style={stylesTransparent.container}>
+        <View style={[stylesTransparent.left, { backgroundColor: COLORS.CYAN }]}></View>
+        <View style={stylesTransparent.right}>
+          <Text style={stylesTransparent.cardTitle}>{title}</Text>
+          <Text style={stylesTransparent.cardCondition}>{subtitle}</Text>
+          <Text style={stylesTransparent.cardParcelle}>{text}</Text>
+          <View style={stylesTransparent.buttonContainer}>
+            <TouchableOpacity style={[stylesTransparent.button, {backgroundColor: COLORS.CYAN}]} onPress={onPress}>
+              <Text style={stylesTransparent.buttonText}>{buttonText}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
+
 const styles = StyleSheet.create({
   container: {
     borderTopRightRadius: 20,
@@ -51,3 +71,63 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 })
+
+const stylesTransparent = StyleSheet.create({
+    container: {
+      borderTopRightRadius: 30,
+      backgroundColor: 'rgba(255, 255, 255, .4)',
+      shadowOffset: { width: 0, height: 2},
+      shadowColor: '#000000',
+      shadowRadius: 2,
+      shadowOpacity: .2,
+      padding: 0,
+      display: 'flex',
+      elevation: 2,
+      marginBottom: 10,
+      flexDirection: 'row'
+    },
+    left: {
+      width: 25
+    },
+    right: {
+      height: 130,
+      padding: 15,
+      flex: 1,
+    },
+    cardTitle: {
+      textTransform: 'uppercase',
+      fontFamily: 'nunito-bold',
+      fontSize: 14,
+      color: '#444444'
+    },
+    cardCondition: {
+      color: '#444444',
+      fontFamily: 'nunito-bold',
+      fontSize: 12,
+    },
+    cardParcelle: {
+      fontFamily: 'nunito-bold',
+      color: '#444444',
+      fontSize: 12,
+    },
+    buttonContainer: {
+      display: 'flex',
+      alignItems: 'flex-end'
+    },
+    button: {
+      height: 30,
+      borderRadius: 15,
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: 15,
+      paddingRight: 20,
+      paddingLeft: 20
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 14,
+      fontFamily: 'nunito-regular',
+      textTransform: 'uppercase'
+    }
+  })
+

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, ScrollView, Text, Image } from 'react-native'
 import { Spinner } from 'native-base'
-import HygoMeteoPhyto from '../components/HygoMeteoPhyto'
+import { HygoCardTransparent } from '../components/v2/HygoCards'
 import i18n from 'i18n-js'
 import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
@@ -152,18 +152,28 @@ const MeteoBriefScreen = ({ navigation }) => {
           )}
         </View>
       </View>
-      <View style={styles.productList}>
-        { loading && (
+      
+      <View style={styles.actionCards}>
+        {/*{ loading && (
           <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
         )}
+        */}
 
-        { !loading && meteoData.products.map(p => {
+        {/* !loading && meteoData.products.map(p => {
             return (
               <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={parseInt(moment().format('HH'))} />
             )
-        })}
+        })*/}
+        <HygoCardTransparent
+            title= "Pulvérisation"
+            subtitle= ""
+            text="Démarrer un travail de pulvérisation"
+            buttonText= "Démarrer"
+            onPress={() => navigation.navigate("Pulv_Fields")}
+        />
         <View style={{ height: 80 }}></View>
       </View>
+
     </ScrollView>
   )
 }
@@ -206,9 +216,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  productList: {
+  actionCards: {
     paddingRight: 15,
-    marginTop: 15,
+    marginTop: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   image: {
     marginBottom: 10,

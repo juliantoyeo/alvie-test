@@ -35,111 +35,123 @@ import HeaderText from './components/HeaderText'
 import COLORS from './colors'
 
 
+const NewPulverisationScreen = SelectParcelsScreen // NextPulverisationScreen
+
 const Navigator = createSwitchNavigator({
-  mainFlow: createStackNavigator({
-    BarCode: BarCodeScreen,
-    WaitActivation: WaitActivationScreen,
-    main: createDrawerNavigator({
-      Drawer: {
-        screen: createBottomTabNavigator({
-          MeteoScreen: createStackNavigator({
-            MeteoScreen: {
-              screen: MeteoScreen, 
-              navigationOptions: {
-                header: null,
-              },
-            },
-          }),
+    mainFlow: createStackNavigator({
+        BarCode: BarCodeScreen,
+        WaitActivation: WaitActivationScreen,
+        main: createDrawerNavigator({
+            Drawer: {
+                screen: createBottomTabNavigator({
+                    MeteoScreen: createStackNavigator({
+                        MeteoScreen: {
+                            screen: MeteoScreen,
+                            navigationOptions: {
+                                header: null,
+                            },
+                        },
+                    }),
 
-          Pulverisation: NextPulverisationScreen,
+                    // Pulverisation: createStackNavigator({
+                    //     Pulv_Fields: NewPulverisationScreen,
+                    //     Pulverisation_Products: SelectProductsScreen,
+                    //     Pulverisation_Slot: SelectSlotScreen,
+                    //     Pulverisation_Report: ReportScreen,
+                    // }, {
+                    //     headerMode: 'none'
+                    // }),
 
-          RealTime: RealTimeScreen,
+                    RealTime: RealTimeScreen,
 
-          Intervention: createStackNavigator({
-            Interventions : InterventionsScreen,
-          }, {
-            headerMode: 'none',
-            defaultNavigationOptions : {}
-          }),
-        }, {
-          defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
-              const { routeName } = navigation.state;
-      
-              const r = [ 'MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention' ]
-              let idx = r.indexOf(routeName)
-      
-              let props = {
-                style: {
-                  height: 20,
-                  tintColor,
-                },
-              }
-      
-              switch (idx) {
-                case 0:
-                  return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
-                case 1:
-                  return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
-                case 2:
-                  return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
-                case 3:
-                  return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
-              }
-      
+                    Intervention: createStackNavigator({
+                        Interventions: InterventionsScreen,
+                    }, {
+                        headerMode: 'none',
+                        defaultNavigationOptions: {}
+                    }),
+                }, {
+                    defaultNavigationOptions: ({ navigation }) => ({
+                        tabBarIcon: ({ focused, horizontal, tintColor }) => {
+                            const { routeName } = navigation.state;
+
+                            const r = ['MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention']
+                            let idx = r.indexOf(routeName)
+
+                            let props = {
+                                style: {
+                                    height: 20,
+                                    tintColor,
+                                },
+                            }
+
+                            switch (idx) {
+                                case 0:
+                                    return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
+                                case 1:
+                                    return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
+                                case 2:
+                                    return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
+                                case 3:
+                                    return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+                            }
+
+                        }
+                    }),
+
+                    tabBarComponent: TabBar,
+                    tabBarOptions: {
+                        activeTintColor: COLORS.DARK_GREEN,
+                        inactiveTintColor: '#fff',
+                        labelStyle: {
+                            fontSize: 14,
+                        },
+                    },
+                })
             }
-          }),
-      
-          tabBarComponent: TabBar,
-          tabBarOptions: {
-            activeTintColor: COLORS.DARK_GREEN,
-            inactiveTintColor: '#fff',
-            labelStyle: {
-              fontSize: 14,
+        }, {
+            contentComponent: DrawerScreen,
+            drawerWidth: 310
+        }),
+        BarCodeValidationScreen: BarCodeValidationScreen,
+
+        Pulv_Fields: NewPulverisationScreen,
+        Pulverisation_Products: SelectProductsScreen,
+        Pulverisation_Slot: SelectSlotScreen,
+        Pulverisation_Report: ReportScreen,
+
+        InterventionMapScreen: InterventionMapScreen,
+        MeteoDetailedDetails: {
+            screen: MeteoDetailedDetails,
+            navigationOptions: {
+                gesturesEnabled: false,
+            }
+        },
+        NextPulverisationDetails: {
+            screen: NextPulverisationDetails,
+            navigationOptions: {
+                gesturesEnabled: false,
+            }
+        },
+        FieldsScreen: FieldsScreen,
+        EquipmentSettingsScreen: {
+            screen: EquipmentScreen,
+            navigationOptions: {
+                header: () => <HeaderText text={i18n.t('equipment.header')} />,
             },
-          },
-        })
-      }
+        },
+        HygoProductPicker: HygoProductPicker,
+        HygoCulturePicker: HygoCulturePicker,
+        LoadingScreen: {
+            screen: LoadingScreen,
+            navigationOptions: {
+                header: null
+            }
+        },
+
     }, {
-      contentComponent: DrawerScreen,
-      drawerWidth: 310
-    }),
-    BarCodeValidationScreen: BarCodeValidationScreen,
-    InterventionMapScreen: InterventionMapScreen,
-    MeteoDetailedDetails: {
-      screen: MeteoDetailedDetails,
-      navigationOptions: {
-        gesturesEnabled: false,
-      }
-    },
-    NextPulverisationDetails: {
-      screen: NextPulverisationDetails,
-      navigationOptions: {
-        gesturesEnabled: false,
-      }
-    },
-    FieldsScreen: FieldsScreen,
-    EquipmentSettingsScreen: {
-      screen: EquipmentScreen, 
-      navigationOptions: {
-        header: () => <HeaderText text={i18n.t('equipment.header')} />,
-      },
-    },
-    HygoProductPicker: HygoProductPicker,
-    HygoCulturePicker: HygoCulturePicker,
-    LoadingScreen: {
-      screen: LoadingScreen,
-      navigationOptions: {
-        header: null
-      }
-    },
-    TestPage : SelectParcelsScreen,
-    TestPageProducts : SelectProductsScreen,
-    TestPageSlot : SelectSlotScreen,
-    TestPageReport: ReportScreen
-  }, {
-    headerMode: 'none'
-  })
+        headerMode: 'none'
+    })
 })
 
 export default createAppContainer(Navigator)

@@ -169,7 +169,7 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
                         onPress={() => {
                             context.loadMeteo()
                             context.loadConditions()
-                            navigation.navigate('TestPageProducts')
+                            navigation.navigate('Pulverisation_Products')
                         }}
                         enabled={ready}
                         icon={{
