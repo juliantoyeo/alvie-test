@@ -21,6 +21,8 @@ import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
 
 const {barCodeScreen: ampEvent} = AMPLITUDE_EVENTS
 
+const v2Devices = ["BE72FC"]
+
 class BarCodeScreen extends React.Component {
   constructor(props){
     super(props)
@@ -70,7 +72,7 @@ class BarCodeScreen extends React.Component {
     }
   }
 
-  gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment) => {
+  gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment,) => {
     await AsyncStorage.setItem('token', token);
 
     Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
@@ -114,7 +116,7 @@ class BarCodeScreen extends React.Component {
       // await this.registerForPushNotificationsAsync(deviceid)
   
       if (hasEquipment) {
-        this.props.navigation.replace('main_v2');
+          this.props.navigation.replace(!!v2Devices.find((d) => d == deviceid) ? 'main_v2' : 'main');
       } else {
         this.props.navigation.replace('BarCodeValidationScreen')
       }
@@ -265,6 +267,9 @@ BarCodeScreen.navigationOptions = () => {
   }
 }
 
+const mapStateToProps = (state) => ({
+    deviceid: state.authen.deviceid
+})
 const mapDispatchToProps = (dispatch, props) => ({
   updateAuthInfo: (params) => dispatch(updateAuthInfo(params)),
   updatePulvInfo: (params) => dispatch(updatePulvInfo(params)),
@@ -274,4 +279,4 @@ const mapDispatchToProps = (dispatch, props) => ({
   updateCulturesList: (l) => dispatch(updateCulturesList(l)),
 })
 
-export default connect(null, mapDispatchToProps)(BarCodeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BarCodeScreen);

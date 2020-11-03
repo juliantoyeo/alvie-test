@@ -132,7 +132,7 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
             <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
                 <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
                     <Left style={{ flex: 1 }}>
-                        <Button transparent onPress={() => navigation.goBack()}>
+                        <Button transparent onPress={() => navigation.navigate("main_v2")}>
                             <Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
                         </Button>
                     </Left>
