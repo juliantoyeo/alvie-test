@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL:'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //'https://hygo-api.alvie.fr', // 'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', // 'http://192.168.1.35:3000',// 
+    baseURL:'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //'https://hygo-api.alvie.fr', //  'http://192.168.1.35:3000',// 
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -179,6 +179,15 @@ export const storeEquipmentInformation = async ({ buses, speed, pressure, soil, 
 export const getEquipment = async () => {
     try {
         const response = await hygoApi.get('/app/equipment')
+        return response.data
+    } catch (error) {
+        return {}
+    }
+}
+
+export const isTester = async () => {
+    try {
+        const response = await hygoApi.get('/app/tester')
         return response.data
     } catch (error) {
         return {}

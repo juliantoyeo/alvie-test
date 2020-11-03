@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { updateAuthInfo } from '../store/actions/authActions';
 import { updatePhytoProductList, updatePulvInfo } from '../store/actions/pulveActions'
 import { updateParcellesList, updateCulturesList } from '../store/actions/metaActions'
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../api/hygoApi';
+import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup, isTester } from '../api/hygoApi';
 import { Notifications } from 'expo';
 //import { getLocationPermissionAsync } from '../geolocation'
 import * as Device from 'expo-device';
@@ -116,7 +116,8 @@ class BarCodeScreen extends React.Component {
       // await this.registerForPushNotificationsAsync(deviceid)
   
       if (hasEquipment) {
-          this.props.navigation.replace(!!v2Devices.find((d) => d == deviceid) ? 'main_v2' : 'main');
+          const tester = await isTester()
+          this.props.navigation.replace(tester ? 'main_v2' : 'main');
       } else {
         this.props.navigation.replace('BarCodeValidationScreen')
       }
