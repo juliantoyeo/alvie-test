@@ -195,11 +195,6 @@ const RealTimeScreen = ({ navigation, phytoProductList, phytoProductSelected }) 
                   <Text style={styles.dewpointText}>{i18n.t('realtime.dewpoint') + ' : ' + Math.round(last.dewpoint, 1).toString() + ' °C'}</Text>
                 </View>
               }
-              <View style={{ paddingHorizontal: 32, marginTop: 40 }}>
-                <TouchableOpacity style={styles.button} onPress={onGoToNextPulv}>
-                  <Text style={styles.buttonText}>{history.length > 0 ? i18n.t('realtime.next_cuve') : i18n.t('realtime.goto_cuve')}</Text>
-                </TouchableOpacity>
-              </View>
               <View style={{ height: 60 }} />
             </View>
           </Content>
