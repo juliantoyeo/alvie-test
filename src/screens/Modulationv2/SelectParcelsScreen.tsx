@@ -168,6 +168,7 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
                         label="CHOIX DES PRODUITS"
                         onPress={() => {
                             context.loadMeteo()
+                            context.loadConditions()
                             navigation.navigate('TestPageProducts')
                         }}
                         enabled={ready}

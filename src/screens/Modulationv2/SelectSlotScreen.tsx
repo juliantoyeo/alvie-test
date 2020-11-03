@@ -69,19 +69,19 @@ const SelectSlotScreen = ({ navigation }) => {
     const [metrics, setMetrics] = useState<any>(null)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
-    const ready = !!context.meteo && !!metrics && !!conditions
+    const ready = !!context.meteo && !!metrics && !!context.conditions
 
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
     // Loading meteo : every hour and 4hours merged for the next 5 days 
-    useEffect(() => {
-        if (context.meteo == null || context.meteo4h == null) {
-            context.loadMeteo()
-        }
-        loadConditions()
-    }, [])
+    // useEffect(() => {
+    //     if (context.meteo == null || context.meteo4h == null) {
+    //         context.loadMeteo()
+    //     }
+    //     loadConditions()
+    // }, [])
 
     //Updating modulation when selected slot change or day change
     useEffect(() => {
@@ -92,18 +92,6 @@ const SelectSlotScreen = ({ navigation }) => {
     useEffect(() => {
         loadMetrics()
     }, [context.meteo])
-
-    // const loadMeteo = async () => {
-    //     try {
-    //         const data = await getMetrics_v2({ days: dow.map((d) => d.dt), fields: context.selectedFields })
-    //         const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields: context.selectedFields }))
-    //         setMeteo(data)
-    //         setMeteo4h(data4h)
-    //     } catch (error) {
-    //         setMeteo(null)
-    //         snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
-    //     }
-    // }
 
     const loadMetrics = useCallback(async () => {
 
@@ -152,30 +140,30 @@ const SelectSlotScreen = ({ navigation }) => {
         setMetrics(chd)
     }, [context.selectedSlot, context.meteo, currentDay])
 
-    const loadConditions = async () => {
-        let now = moment.utc()
-        if (now.minutes() >= 30) {
-            now.hours(now.hours() + 1)
-        }
-        now = now.startOf('day')
-        // array of the 5 next days to iterate on
-        const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-        try {
-            const data: Array<dailyConditionType> = await Promise.all(
-                dt.map((day) => {
-                    return (getConditions_v2({
-                        day,
-                        products: context.selectedProducts.map((p) => p.phytoproduct.id),
-                        parcelles: context.selectedFields.map((f) => f.id)
-                    }))
-                }
-                ))
-            setConditions(data)
-        } catch (e) {
-            setConditions(null)
-            snackbar.showSnackbar("Erreur dans le chargement des metrics", "ALERT")
-        }
-    }
+    // const loadConditions = async () => {
+    //     let now = moment.utc()
+    //     if (now.minutes() >= 30) {
+    //         now.hours(now.hours() + 1)
+    //     }
+    //     now = now.startOf('day')
+    //     // array of the 5 next days to iterate on
+    //     const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+    //     try {
+    //         const data: Array<dailyConditionType> = await Promise.all(
+    //             dt.map((day) => {
+    //                 return (getConditions_v2({
+    //                     day,
+    //                     products: context.selectedProducts.map((p) => p.phytoproduct.id),
+    //                     parcelles: context.selectedFields.map((f) => f.id)
+    //                 }))
+    //             }
+    //             ))
+    //         setConditions(data)
+    //     } catch (e) {
+    //         setConditions(null)
+    //         snackbar.showSnackbar("Erreur dans le chargement des conditions", "ALERT")
+    //     }
+    // }
 
     const loadModulation = async () => {
         setIsRefreshing(true)
@@ -239,7 +227,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                                 <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
                                                 <View style={{ flex: 1, paddingTop: 5 }}>
                                                     <ModulationBarTiny
-                                                        data={conditions[i]}
+                                                        data={context.conditions[i]}
                                                         height={8}
                                                         width={60}
                                                     />
@@ -277,7 +265,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                             from={0/*parseInt(hour)*/}
                                             initialMax={context.selectedSlot.max}
                                             initialMin={context.selectedSlot.min}
-                                            data={conditions[currentDay]}
+                                            data={context.conditions[currentDay]}
                                             width={Dimensions.get('window').width - 30}
                                             onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
                                             enabled={!isRefreshing}
