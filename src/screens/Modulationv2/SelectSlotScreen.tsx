@@ -69,20 +69,16 @@ const SelectSlotScreen = ({ navigation }) => {
     const [metrics, setMetrics] = useState<any>(null)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
-    const ready = !!meteo && !!metrics && !!conditions
+    const ready = !!context.meteo && !!metrics && !!conditions
 
-    //The five days we analyse over
-    const dow = [...Array(5).keys()].map((i) => (
-        moment.utc().add(i, 'day'))
-    ).map((d) => ({ dt: d.format('YYYY-MM-DD'), name: d.format('dddd') }))
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
     // Loading meteo : every hour and 4hours merged for the next 5 days 
     useEffect(() => {
-        if (meteo == null) {
-            loadMeteo()
+        if (context.meteo == null || context.meteo4h == null) {
+            context.loadMeteo()
         }
         loadConditions()
     }, [])
@@ -94,31 +90,32 @@ const SelectSlotScreen = ({ navigation }) => {
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
-        loadMetrics()
-    }, [meteo])
 
-    const loadMeteo = async () => {
-        try {
-            const data = await getMetrics_v2({ days: dow.map((d) => d.dt), fields: context.selectedFields })
-            const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields: context.selectedFields }))
-            setMeteo(data)
-            setMeteo4h(data4h)
-        } catch (error) {
-            setMeteo(null)
-            snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
-        }
-    }
+        loadMetrics()
+    }, [context.meteo])
+
+    // const loadMeteo = async () => {
+    //     try {
+    //         const data = await getMetrics_v2({ days: dow.map((d) => d.dt), fields: context.selectedFields })
+    //         const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields: context.selectedFields }))
+    //         setMeteo(data)
+    //         setMeteo4h(data4h)
+    //     } catch (error) {
+    //         setMeteo(null)
+    //         snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
+    //     }
+    // }
 
     const loadMetrics = useCallback(async () => {
 
-        if (meteo == null) {
+        if (context.meteo == null) {
             setMetrics(null)
             return
         }
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
         let chd: metricsType = {}, dir = []
-        _.forEach(meteo[currentDay], (v, k2) => {
+        _.forEach(context.meteo[currentDay], (v, k2) => {
             const h = v.hour.toString().padStart(2, '0')
             if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
                 return
@@ -154,7 +151,7 @@ const SelectSlotScreen = ({ navigation }) => {
         chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
         chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
         setMetrics(chd)
-    }, [context.selectedSlot, meteo, currentDay])
+    }, [context.selectedSlot, context.meteo, currentDay])
 
     const loadConditions = async () => {
         let now = moment.utc()
@@ -231,7 +228,7 @@ const SelectSlotScreen = ({ navigation }) => {
                             <View>
                                 {/*============= Week Tab =================*/}
                                 <View style={styles.tabBar}>
-                                    {dow.map((d, i) => {
+                                    {context.dow.map((d, i) => {
                                         const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
                                             <TouchableOpacity
@@ -258,7 +255,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                 {/*=============== Day Weather ==============*/}
                                 <View style={styles.dayContent}>
                                     <View style={styles.hour4Weather}>
-                                        {meteo4h[currentDay].map((m, i) => {
+                                        {context.meteo4h[currentDay].map((m, i) => {
                                             return (
                                                 <View key={i} style={styles.hour4WeatherContainer}>
                                                     <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
