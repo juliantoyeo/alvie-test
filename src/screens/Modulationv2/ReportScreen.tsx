@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
+import { Container, Header, Left, Body, Title, Subtitle, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
 import { ProductList } from './ProductList';
 import HygoButton from '../../components/HygoButton';
 import { getInterventions } from '../../api/hygoApi';
@@ -17,7 +17,7 @@ import HourScale from '../../components/pulverisation-detailed/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import Modulation from '../../components/pulverisation-detailed/Modulation';
 import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
-
+import capitalize from '../../utils/capitalize';
 const hasRacinaire = () => false
 
 const ReportScreen = ({ navigation }) => {
@@ -41,7 +41,7 @@ const ReportScreen = ({ navigation }) => {
                     </Left>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerTitle}>Récapitulatif</Title>
+                        <Title style={[styles.headerTitle, {fontSize: 20}]}>Récapitulatif</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -62,15 +62,14 @@ const ReportScreen = ({ navigation }) => {
                                 <Grid style={{ paddingTop: 10 }}>
                                     {context.selectedProducts.map((p) => {
                                         const mod = context.mod.filter((m) => m.product.id == p.phytoproduct.id)
-                                        console.log(mod)
                                         return (
                                             (mod.length > 0) && (
                                             <Row key={p.id} style={{ paddingLeft: 20 }}>
-                                                <Col><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE }]}>{p.name}</Text></Col>
-                                                <Col><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                <Col style={{flex:2, paddingRight: 10}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign:'left' }]}>{capitalize(p.name)}</Text></Col>
+                                                <Col style={{flex:1, paddingRight: 5}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                     {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
                                                 </Text></Col>
-                                                <Col><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                <Col style={{flex:0.5}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                     {(p.dose * totalArea/10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
                                                 </Text></Col>
                                             </Row>
@@ -133,18 +132,22 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     header: {
-        backgroundColor: COLORS.CYAN
+        backgroundColor: COLORS.CYAN,
+        paddingTop:0
     },
     headerBody: {
+        paddingTop: 0,
         flex: 4,
         display: 'flex',
+        flexDirection:'column',
         justifyContent: 'center',
         alignItems: 'center',
+   
     },
     headerTitle: {
         color: '#fff',
         fontFamily: 'nunito-regular',
-        fontSize: 24
+        fontSize: 24,
     },
     title: {
         paddingTop: 20,
