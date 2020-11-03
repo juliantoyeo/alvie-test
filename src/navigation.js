@@ -115,10 +115,14 @@ const Navigator = createSwitchNavigator({
         }),
         BarCodeValidationScreen: BarCodeValidationScreen,
 
-        Pulv_Fields: NewPulverisationScreen,
-        Pulverisation_Products: SelectProductsScreen,
-        Pulverisation_Slot: SelectSlotScreen,
-        Pulverisation_Report: ReportScreen,
+        Pulverisation: createStackNavigator({
+            Pulverisation_Fields:NewPulverisationScreen,
+            Pulverisation_Products: SelectProductsScreen,
+            Pulverisation_Slot: SelectSlotScreen,
+            Pulverisation_Report: ReportScreen,
+        }, {
+            headerMode: 'none'
+        }),
 
         InterventionMapScreen: InterventionMapScreen,
         MeteoDetailedDetails: {

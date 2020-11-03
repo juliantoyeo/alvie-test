@@ -169,7 +169,7 @@ const MeteoBriefScreen = ({ navigation }) => {
             subtitle= ""
             text="Démarrer un travail de pulvérisation"
             buttonText= "Démarrer"
-            onPress={() => navigation.navigate("Pulv_Fields")}
+            onPress={() => navigation.navigate("Pulverisation")}
         />
         <View style={{ height: 80 }}></View>
       </View>
