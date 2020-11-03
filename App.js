@@ -47,6 +47,10 @@ const fetchResources = async () => {
 
 const store = configureStore();
 
+// disable warning about getNode()
+console.ignoredYellowBox = ['Calling getNode()']
+
+
 export default App = () => {
   const [resourcesLoaded, setResourcesLoaded] = useState(false)
   if (!resourcesLoaded) {
