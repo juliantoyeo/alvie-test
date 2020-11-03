@@ -26,7 +26,7 @@ const MeteoBriefScreen = ({ navigation }) => {
   ]
 
   const [loading, setLoading] = useState(true)
-  const [meteoData, setMeteoData] = useState({})
+  const [meteoData, setMeteoData] = useState<any>({})
   const [lastLoad, setLastLoad] = useState(-1)
   const [counter, setCounter] = useState(0);
   const [hourRange, setHourRange] = useState({
@@ -38,7 +38,7 @@ const MeteoBriefScreen = ({ navigation }) => {
     setMeteoData(meteo)
 
     setHourRange({
-      start: getHour(),
+      start: getHour(false),
       end: getHour(true),
     })
 
