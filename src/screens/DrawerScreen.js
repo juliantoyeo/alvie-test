@@ -17,7 +17,7 @@ import { Amplitude } from '../amplitude'
 
 const dateversion = "041120"
 
-const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
+const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken, tester }) => {
   const goToEquipment = () => {
     navigation.dispatch(DrawerActions.closeDrawer())
     navigation.navigate('LoadingScreen', {
@@ -40,9 +40,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     navigation.navigate('BarCode');
   }
 
-  const becomeTester = (tester) => {
-      await setTester(tester)
-      navigation.navigate('BarCodeScreen')
+  const becomeTester = async (t) => {
+      await setTester(t)
+      navigation.dispatch(DrawerActions.closeDrawer())
+      navigation.navigate('BarCode')
   }
 
   const sendEmail = () => {
@@ -83,6 +84,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         <TouchableOpacity style={styles.item} onPress={logout}>
           <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
           <Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.item} onPress={() => becomeTester(!tester)}>
+          <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
+          <Text style={styles.itemText}>{tester ? i18n.t('drawer.notester') : i18n.t('drawer.tester') }</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>

@@ -14,7 +14,7 @@ export default authReducer =  (state = initialState, action) => {
     let nextState
     switch (action.type) {
         case 'UPDATE_INFOS':
-            const { token, userName, familyName, deviceid, deviceType } = action
+            const { token, userName, familyName, deviceid, deviceType, tester } = action
             nextState = {
                 ...state,
                 token, 

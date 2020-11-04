@@ -47,6 +47,8 @@ export default {
     'parcelles': 'mes parcelles',
     'contact': 'nous contacter',
     'logout': 'me déconnecter',
+    'tester': 'mode beta test',
+    'notester': 'sortir du beta test',
     'hygo_serial': 'Numéro de série : %{serial}',
     'hygo_model': 'Modèle du capteur : %{model}',
     'app_version': 'Version applicative : %{version}',
