@@ -62,10 +62,10 @@ class BarCodeScreen extends React.Component {
     this.props.updatePhytoProductList(await getPhytoProducts())
 
     let storedToken = await AsyncStorage.getItem('token');
-    let {errorMessage, userName, familyName, deviceid, deviceType, hasEquipment} = await checkToken(storedToken);
+    let {errorMessage, userName, familyName, deviceid, deviceType, hasEquipment, tester} = await checkToken(storedToken);
 
     if(!errorMessage) {
-      await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment)
+      await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment,  tester)
     } else {
       this.setState({ loading: false, qrError: errorMessage})
       this.getPermissionsAsync();
@@ -91,7 +91,7 @@ class BarCodeScreen extends React.Component {
     let culturesSelected = await AsyncStorage.getItem('culturesSelected');
     await this.props.updateAuthInfo({
       token,
-      userName, familyName, deviceid, deviceType
+      userName, familyName, deviceid, deviceType, tester
     })
     phytoProductSelected = phytoProductSelected == null ? [] : JSON.parse(phytoProductSelected)
     culturesSelected = culturesSelected == null ? [] : JSON.parse(culturesSelected)

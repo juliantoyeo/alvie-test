@@ -120,10 +120,10 @@ export const checkToken = async (token) => {
     try {
         const response = await hygoApi.post('/app/auth/token', { token });
 
-        const { userName, familyName, deviceid, deviceType, hasEquipment } = response.data
+        const { userName, familyName, deviceid, deviceType, hasEquipment, tester } = response.data
         return {
             errorMessage: '',
-            userName, familyName, deviceid, deviceType, hasEquipment
+            userName, familyName, deviceid, deviceType, hasEquipment, tester
         }
     } catch (err) {
         return {
@@ -185,9 +185,18 @@ export const getEquipment = async () => {
     }
 }
 
-export const isTester = async () => {
+export const getTester = async () => {
     try {
         const response = await hygoApi.get('/app/tester')
+        return response.data
+    } catch (error) {
+        return {}
+    }
+}
+
+export const setTester = async (tester) => {
+    try {
+        const response = await hygoApi.post('/app/tester', {tester})
         return response.data
     } catch (error) {
         return {}

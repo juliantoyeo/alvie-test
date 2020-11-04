@@ -11,11 +11,11 @@ import pkg from '../../app.json'
 import COLORS from '../colors'
 import i18n from 'i18n-js'
 
-import { getEquipment, getFields } from '../api/hygoApi'
+import { getEquipment, getFields, setTester } from '../api/hygoApi'
 
 import { Amplitude } from '../amplitude'
 
-const dateversion = "031120"
+const dateversion = "041120"
 
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken }) => {
   const goToEquipment = () => {
@@ -40,8 +40,9 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     navigation.navigate('BarCode');
   }
 
-  const goToTest = () => {
-    navigation.navigate('TestPage');
+  const becomeTester = (tester) => {
+      await setTester(tester)
+      navigation.navigate('BarCodeScreen')
   }
 
   const sendEmail = () => {
@@ -151,7 +152,8 @@ const mapStateToProps = (state) => ({
   deviceid: state.authen.deviceid,
   deviceType: state.authen.deviceType,
   userName: state.authen.userName,
-  familyName: state.authen.familyName
+  familyName: state.authen.familyName,
+  tester: state.authen.tester
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

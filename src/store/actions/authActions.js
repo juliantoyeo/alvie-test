@@ -31,10 +31,10 @@ export const updateDeviceType = (deviceType) => {
     });
 }
 
-export const updateAuthInfo = ({ token, userName, familyName, deviceid, deviceType }) => {
+export const updateAuthInfo = ({ token, userName, familyName, deviceid, deviceType, tester }) => {
     return {
         type: 'UPDATE_INFOS',
-        token, userName, familyName, deviceid, deviceType,
+        token, userName, familyName, deviceid, deviceType, tester
     }
 }
 

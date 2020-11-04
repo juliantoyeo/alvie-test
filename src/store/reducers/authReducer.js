@@ -7,6 +7,7 @@ const initialState = {
     familyName:'',
     deviceid:'',
     deviceType:'',
+    tester:''
 }
 
 export default authReducer =  (state = initialState, action) => {  
@@ -21,6 +22,7 @@ export default authReducer =  (state = initialState, action) => {
                 familyName: capitalize(familyName), 
                 deviceid, 
                 deviceType,
+                tester
             }
             return nextState || state;
     
