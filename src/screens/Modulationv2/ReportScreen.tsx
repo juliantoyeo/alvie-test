@@ -29,6 +29,11 @@ const ReportScreen = ({ navigation }) => {
 
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
+    const saveContext = async () => {
+        // TODO : save the whole context 
+        return
+    }
+
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -106,8 +111,10 @@ const ReportScreen = ({ navigation }) => {
                 </Content>
                 <Footer style={styles.footer}>
                     <HygoButton
-                        label="EXPORTER"
-                        onPress={() => {
+                        label="RETOUR À L'ACCUEIL"
+                        onPress={async () => {
+                            await saveContext()
+                            navigation.navigate('main_v2')
                         }}
                         icon={{
                             type: 'AntDesign',
