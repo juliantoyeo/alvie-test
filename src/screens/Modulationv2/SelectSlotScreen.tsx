@@ -3,10 +3,8 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Spinner } from 'native-base';
-import { ProductList } from './ProductList';
 import HygoButton from '../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
-import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js';
@@ -15,7 +13,6 @@ import hygoStyles from '../../styles'
 import Metrics from '../../components/pulverisation-detailed/Metrics';
 import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
-import Modulation from '../../components/pulverisation-detailed/Modulation';
 import ModulationBar from '../../components/v2/ModulationBar';
 import ModulationBarTiny from '../../components/v2/ModulationBarTiny';
 
@@ -31,6 +28,13 @@ import { fieldType } from '../../types/field.types';
 import { modulationType } from '../../types/modulation.types';
 import { conditionType } from '../../types/condition.types';
 import { SnackbarContext } from '../../context/snackbar.context';
+
+import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+const { pulv2_slot } = AMPLITUDE_EVENTS
+// Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
+//     timestamp: Date.now(),
+//     context
+// })
 
 type dailyConditionType = Array<conditionType>
 type metricsType = {
@@ -304,12 +308,16 @@ const SelectSlotScreen = ({ navigation }) => {
                     <Footer style={styles.footer}>
                         <HygoButton
                             label="AFFICHER LE RÉCAPITULATIF"
-                            onPress={() => {
+                            onPress={async () => {
+                                Amplitude.logEventWithProperties(pulv2_slot.click_toPulv2Report, {
+                                    timestamp: Date.now(),
+                                    context
+                                })
                                 context.setMetrics(metrics)
                                 navigation.navigate('Pulverisation_Report')
                             }
                             }
-                            enabled={currentDay<3}
+                            enabled={currentDay < 3}
                             icon={{
                                 type: 'AntDesign',
                                 name: 'arrowright',
