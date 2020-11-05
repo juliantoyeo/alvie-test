@@ -43,6 +43,7 @@ export const AMPLITUDE_EVENTS = {
         click_toPulv2Report: "click_pulv2slot_topulv2report", 
     },
     pulv2_report: {
+        render: "render_pulv2report",
         click_toHome: "click_pulv2report_tohome", 
     },
     nextPulvScreen : {

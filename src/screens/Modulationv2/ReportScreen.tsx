@@ -3,28 +3,26 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Subtitle, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
-import { ProductList } from './ProductList';
 import HygoButton from '../../components/HygoButton';
-import { getInterventions } from '../../api/hygoApi';
 import { ModulationContext } from '../../context/modulation.context';
 import { HygoCard, HygoCardSmall } from '../../components/v2/HygoCards';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js';
 import hygoStyles from '../../styles';
 import COLORS from '../../colors';
 import Metrics from '../../components/pulverisation-detailed/Metrics';
-import HourScale from '../../components/pulverisation-detailed/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
-import Modulation from '../../components/pulverisation-detailed/Modulation';
-import HygoParcelleIntervention from '../../components/HygoParcelleIntervention';
 import capitalize from '../../utils/capitalize';
+
+import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+const { pulv2_report } = AMPLITUDE_EVENTS
+
 const hasRacinaire = () => false
 
 const ReportScreen = ({ navigation }) => {
     const context = React.useContext(ModulationContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
-    const volume = totalArea/10000 * context.debit
-    const totalPhyto = totalArea/10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
+    const volume = totalArea / 10000 * context.debit
+    const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
     const water = volume - totalPhyto
 
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
@@ -33,6 +31,11 @@ const ReportScreen = ({ navigation }) => {
         // TODO : save the whole context 
         return
     }
+
+    Amplitude.logEventWithProperties(pulv2_report.render, {
+        timestamp: Date.now(),
+        context
+    })
 
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
@@ -63,21 +66,21 @@ const ReportScreen = ({ navigation }) => {
                     <View>
                         <Text style={hygoStyles.h0}>Rapport de pulvérisation</Text>
                         <HygoCard title='Remplissage de cuve'>
-                            <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1'}}>
+                            <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
                                     {context.selectedProducts.map((p) => {
                                         const mod = context.mod.filter((m) => m.product.id == p.phytoproduct.id)
                                         return (
                                             (mod.length > 0) && (
-                                            <Row key={p.id} style={{ paddingLeft: 20 }}>
-                                                <Col style={{flex:2, paddingRight: 10}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign:'left' }]}>{capitalize(p.name)}</Text></Col>
-                                                <Col style={{flex:1, paddingRight: 5}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                    {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
+                                                <Row key={p.id} style={{ paddingLeft: 20 }}>
+                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
+                                                    <Col style={{ flex: 1, paddingRight: 5 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                        {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
                                                 </Text></Col>
-                                                <Col style={{flex:0.5}}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                    {(p.dose * totalArea/10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
+                                                    <Col style={{ flex: 0.5 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                        {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
                                                 </Text></Col>
-                                            </Row>
+                                                </Row>
                                             )
                                         )
                                     })}
@@ -94,7 +97,7 @@ const ReportScreen = ({ navigation }) => {
                                 </Row>
                                 <Row>
                                     <Col><Text style={hygoStyles.text}>Surface totale</Text></Col>
-                                    <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{(totalArea/10000).toFixed(1)} ha</Text></Col>
+                                    <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{(totalArea / 10000).toFixed(1)} ha</Text></Col>
                                 </Row>
                                 <Row>
                                     <Col><Text style={hygoStyles.text}>Débit</Text></Col>
@@ -114,6 +117,10 @@ const ReportScreen = ({ navigation }) => {
                         label="RETOUR À L'ACCUEIL"
                         onPress={async () => {
                             await saveContext()
+                            Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
+                                timestamp: Date.now(),
+                                context
+                            })
                             navigation.navigate('main_v2')
                         }}
                         icon={{
@@ -140,16 +147,16 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: COLORS.CYAN,
-        paddingTop:0
+        paddingTop: 0
     },
     headerBody: {
         paddingTop: 0,
         flex: 4,
         display: 'flex',
-        flexDirection:'column',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-   
+
     },
     headerTitle: {
         color: '#fff',
