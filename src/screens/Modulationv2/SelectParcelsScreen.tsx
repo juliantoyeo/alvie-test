@@ -15,7 +15,10 @@ import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_parcel } = AMPLITUDE_EVENTS
-
+// Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
+//     timestamp: Date.now(),
+//     context
+// })
 
 interface ParcelListProps {
     title: string,

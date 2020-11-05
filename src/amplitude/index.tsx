@@ -38,7 +38,6 @@ export const AMPLITUDE_EVENTS = {
     pulv2_product: {
         click_toPulv2Slot: "click_pulv2product_topulv2slot", 
         click_buses: "click_pulv2product_buses",
-        click_favorites: "click_pulv2product_favorites"
     },
     pulv2_slot: {
         click_toPulv2Report: "click_pulv2slot_topulv2report", 

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, View, Platform , TextInput} from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View, Platform, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Picker, Grid, Row, Col, Fab } from 'native-base';
-//import { ProductList } from './ProductList';
 import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
 import HygoPickerModal from './HygoPickerModal';
@@ -12,21 +11,21 @@ import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
 import { SnackbarContext } from '../../context/snackbar.context';
 import i18n from 'i18n-js';
-import HygoStyles from '../../styles';
 import COLORS from '../../colors';
 import { BUSES } from '../../constants';
 
-import {
-    Alert,
-    Modal,
-    TouchableHighlight,
-} from "react-native";
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getEquipment, getActiveProducts, getActiveProductsReturnType, getFavorites, setFavorites} from '../../api/hygoApi';
-import { productType, productsData } from './staticData';
+import { getEquipment, getActiveProducts, getActiveProductsReturnType, getFavorites, setFavorites } from '../../api/hygoApi';
 import { activeProductType } from '../../types/activeproduct.types';
 import { Snackbar } from 'react-native-paper';
+
+import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+const { pulv2_product } = AMPLITUDE_EVENTS
+// Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
+//     timestamp: Date.now(),
+//     context
+// })
 
 import _ from 'lodash';
 
@@ -105,7 +104,7 @@ const SelectProductsScreen = ({ navigation }) => {
     useEffect(() => {
         setReady(context.selectedProducts.length > 0)
     }, [context.selectedProducts])
-    
+
 
     const removeProduct = (id) => {
         context.removeProduct(id)
@@ -115,6 +114,13 @@ const SelectProductsScreen = ({ navigation }) => {
 
     const Cuve = () => {
         const [buseModalVisible, setBuseModalVisible] = useState<boolean>(false)
+        const changeBuses = () => {
+            Amplitude.logEventWithProperties(pulv2_product.click_buses, {
+                timestamp: Date.now(),
+                context
+            })
+            setBuseModalVisible(true)
+        }
         return (
 
             <View>
@@ -129,7 +135,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.colLeft}>Type de buse</Text>
-                            <TouchableOpacity onPress={() => setBuseModalVisible(true)}>
+                            <TouchableOpacity onPress={() => changeBuses()}>
                                 <Text style={styles.colRight}>{context.buses}</Text>
                             </TouchableOpacity>
                         </View>
@@ -154,7 +160,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     }}
                     title={`Type de buses`}
                 />
-            </View>
+            </View >
         )
     }
     const Recap = () => (
@@ -178,7 +184,7 @@ const SelectProductsScreen = ({ navigation }) => {
             //Append to the list of product selected
             setSelect(item)
             setDoseModalVisible(true)
-            
+
         }
         const updateFavs = (item: activeProductType) => {
             const stack = favs.concat(item.id)
@@ -197,15 +203,15 @@ const SelectProductsScreen = ({ navigation }) => {
                         onChangeText={text => setSearch(text)}
                         value={search}
                         placeholder="Rechercher un produit"
-                        style={[hygoStyles.text, {textAlign: 'left', color:"#000", paddingLeft:10, flex:1, paddingBottom: 0}]}
+                        style={[hygoStyles.text, { textAlign: 'left', color: "#000", paddingLeft: 10, flex: 1, paddingBottom: 0 }]}
                     />
                 </View>
-                {favs.length > 0 && 
+                {favs.length > 0 &&
                     <FinderList
                         title={"Favoris"}
                         items={favs.map((f) => products.find((p) => p.id == f)).filter((f) => !!f)}
                         onPress={addProduct}
-                        collapseEnabled = {search != ''}
+                        collapseEnabled={search != ''}
                     />
                 }
                 {families.length > 0 && families.map((f, k) => {
@@ -217,13 +223,13 @@ const SelectProductsScreen = ({ navigation }) => {
                             title={f}
                             items={items.sort((it1, it2) => it1.id - it2.id)}
                             onPress={addProduct}
-                            collapseEnabled = {search != ''}
+                            collapseEnabled={search != ''}
                         />
                     )
                 })}
                 <HygoInputModal
                     onClose={() => { }}
-                    onSuccess={(item) => {snackbar.showSnackbar("Produit ajouté", 'OK'); updateFavs(item)}}
+                    onSuccess={(item) => { snackbar.showSnackbar("Produit ajouté", 'OK'); updateFavs(item) }}
                     modalVisible={doseModalVisible}
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
@@ -275,13 +281,17 @@ const SelectProductsScreen = ({ navigation }) => {
                             {viewMode && <Icon type='AntDesign' name='pluscircleo' style={styles.iconTitle} />}
                         </TouchableOpacity>
                     </View>
-                    {viewMode ? <Recap /> : <Finder/>}
+                    {viewMode ? <Recap /> : <Finder />}
                 </Content>
                 {viewMode ? (
                     <Footer style={styles.footer}>
                         <HygoButton
                             label="CHOIX DU CRÉNEAU"
                             onPress={() => {
+                                Amplitude.logEventWithProperties(pulv2_product.click_toPulv2Slot, {
+                                    timestamp: Date.now(),
+                                    context
+                                })
                                 navigation.navigate('Pulverisation_Slot')
                             }
                             }
@@ -393,9 +403,9 @@ const styles = StyleSheet.create({
     },
     searchbox: {
         display: 'flex',
-        flexDirection:'row',
-        justifyContent:'center',
-        marginBottom:10, 
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 10,
         paddingLeft: 10,
         backgroundColor: "#fff"
     }
