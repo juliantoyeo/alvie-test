@@ -28,6 +28,7 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
     return (
         <View style={ListStyles.container}>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <TouchableOpacity onPress={() => setOpened(!opened)}>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
 
                     {/* <Icon 
@@ -36,14 +37,15 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                       style={{fontSize: 16, color: COLORS.CYAN}} /> */}
 
                     <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
-                    <TouchableOpacity onPress={() => setOpened(!opened)}>
+                    
                         <Icon
                             type='AntDesign'
                             name={opened ? 'down' : 'right'}
                             style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
                         />
-                    </TouchableOpacity>
+                    
                 </View>
+                </TouchableOpacity>
                 {opened &&
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
                         {items.map((item, k) => (
