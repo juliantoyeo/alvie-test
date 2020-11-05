@@ -97,11 +97,6 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
     const [names, setNames] = useState<Array<string>>([])
     const [selectedName, setSelectedName] = useState<string>(null)
 
-    Amplitude.logEventWithProperties(pulv2_parcel.render, {
-        timestamp: Date.now(),
-        context
-    })
-
     useEffect(() => {
         // Init fields and retrieve culture_names
         const load = async () => {

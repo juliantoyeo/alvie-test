@@ -32,7 +32,6 @@ export const AMPLITUDE_EVENTS = {
         render: "render_meteoradarscreen",
     },
     pulv2_parcel: {
-        render: "render_pulv2parcel",
         click_toPulv2Product: "click_pulv2parcel_topulv2product", 
     },
     pulv2_product: {
