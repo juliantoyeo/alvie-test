@@ -26,7 +26,7 @@ export const HygoCardSmall = ({ title, children, cardStyle }) => {
   return (
     <View style={[styles.container, {backgroundColor: COLORS.BEIGE}, cardStyle]}>
       <View style={{ minHeight: 26, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-        <Text style={[hygoStyles.h1, {flex: 1, textTransform:'none'}]}>{title}</Text>
+        <Text style={[hygoStyles.h1, {flex: 1}]}>{title}</Text>
       </View>
       {children}
     </View>

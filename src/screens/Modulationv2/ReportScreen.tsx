@@ -58,7 +58,7 @@ const ReportScreen = ({ navigation }) => {
                     <View>
                         <Text style={hygoStyles.h0}>Rapport de pulvérisation</Text>
                         <HygoCard title='Remplissage de cuve'>
-                            <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
+                            <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1'}}>
                                 <Grid style={{ paddingTop: 10 }}>
                                     {context.selectedProducts.map((p) => {
                                         const mod = context.mod.filter((m) => m.product.id == p.phytoproduct.id)
