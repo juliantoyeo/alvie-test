@@ -31,6 +31,21 @@ export const AMPLITUDE_EVENTS = {
     meteoRadarScreen: {
         render: "render_meteoradarscreen",
     },
+    pulv2_parcel: {
+        render: "render_pulv2parcel",
+        click_toPulv2Product: "click_pulv2parcel_topulv2product", 
+    },
+    pulv2_product: {
+        click_toPulv2Slot: "click_pulv2product_topulv2slot", 
+        click_buses: "click_pulv2product_buses",
+        click_favorites: "click_pulv2product_favorites"
+    },
+    pulv2_slot: {
+        click_toPulv2Report: "click_pulv2slot_topulv2report", 
+    },
+    pulv2_report: {
+        click_toHome: "click_pulv2report_tohome", 
+    },
     nextPulvScreen : {
         render: "render_nextpulverisationscreen", 
         click_goToPulvDetails: "click_nextpulverisationscreen_gotopulvdetails"

@@ -9,12 +9,13 @@ import { ModulationContext } from '../../context/modulation.context';
 import i18n from 'i18n-js'
 import hygoStyles from '../../styles';
 import COLORS from '../../colors';
-import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
-const { selectParcelsScreen: ampEvent } = AMPLITUDE_EVENTS
 import { fieldType } from '../../types/field.types';
 import { cultureType } from '../../types/culture.types';
-
 import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
+
+import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+const { pulv2_parcel } = AMPLITUDE_EVENTS
+
 
 interface ParcelListProps {
     title: string,
@@ -28,23 +29,23 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
     return (
         <View style={ListStyles.container}>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-            <TouchableOpacity onPress={() => setOpened(!opened)}>
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
+                <TouchableOpacity onPress={() => setOpened(!opened)}>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
 
-                    {/* <Icon 
+                        {/* <Icon 
                       type='AntDesign' 
                       name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'} 
                       style={{fontSize: 16, color: COLORS.CYAN}} /> */}
 
-                    <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
-                    
+                        <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
+
                         <Icon
                             type='AntDesign'
                             name={opened ? 'down' : 'right'}
                             style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
                         />
-                    
-                </View>
+
+                    </View>
                 </TouchableOpacity>
                 {opened &&
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
@@ -61,11 +62,11 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                     style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
                                 />
                                 <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }, !active && ListStyles.hidden]}>
-                                {item.name == 'unknown' ? (
-                                    `Parcelle ${item.id}`
-                                ) : (
-                                    `${item.id} - ${item.name}`
-                                )}
+                                    {item.name == 'unknown' ? (
+                                        `Parcelle ${item.id}`
+                                    ) : (
+                                            `${item.id} - ${item.name}`
+                                        )}
                                 </Text>
                                 <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
                                     {(item.area / 10000).toFixed(1)}ha
@@ -86,18 +87,23 @@ interface selectParcelsScreenProps {
     cultures: Array<cultureType>
 }
 
-const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) => {
+const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps) => {
     const context = React.useContext(ModulationContext)
     const [fields, setFields] = useState<Array<fieldType>>([])
     const [ready, setReady] = useState<boolean>(false)
     const [names, setNames] = useState<Array<string>>([])
     const [selectedName, setSelectedName] = useState<string>(null)
 
+    Amplitude.logEventWithProperties(pulv2_parcel.render, {
+        timestamp: Date.now(),
+        context
+    })
+
     useEffect(() => {
         // Init fields and retrieve culture_names
         const load = async () => {
-           
-            const {fields: fld}: getFieldsReturnType = await getFields_v2()
+
+            const { fields: fld }: getFieldsReturnType = await getFields_v2()
             if (!!fld) {
                 setFields(fld)
                 // filtering out useless cultures like "Jachère", "Bande Tampon",...
@@ -155,24 +161,28 @@ const SelectParcelsScreen = ({ navigation, cultures}: selectParcelsScreenProps) 
                             names.map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
                                 return (
-                                    items.length > 0 && 
-                                    <ParcelList 
-                                        key={k} 
-                                        title={n} 
-                                        items={items.sort((it1, it2) => it1.id - it2.id)} 
-                                        onPress={updateList} 
+                                    items.length > 0 &&
+                                    <ParcelList
+                                        key={k}
+                                        title={n}
+                                        items={items.sort((it1, it2) => it1.id - it2.id)}
+                                        onPress={updateList}
                                         active={(!selectedName || n == selectedName)}
                                     />
                                 )
                             })
-                            ) : ( <Spinner/>)
+                        ) : (<Spinner />)
                         }
                     </View>
                 </Content>
                 <Footer style={styles.footer}>
                     <HygoButton
                         label="CHOIX DES PRODUITS"
-                        onPress={() => {
+                        onPress={async () => {
+                            Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
+                                timestamp: Date.now(),
+                                context
+                            })
                             context.loadMeteo()
                             context.loadConditions()
                             navigation.navigate('Pulverisation_Products')
@@ -204,7 +214,7 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: COLORS.CYAN,
-        paddingTop:0
+        paddingTop: 0
     },
     headerBody: {
         flex: 4,
