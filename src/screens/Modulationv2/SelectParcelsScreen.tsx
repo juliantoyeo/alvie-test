@@ -61,7 +61,11 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                     style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
                                 />
                                 <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }, !active && ListStyles.hidden]}>
-                                    {item.id} - {item.name}
+                                {item.name == 'unknown' ? (
+                                    `Parcelle ${item.id}`
+                                ) : (
+                                    `${item.id} - ${item.name}`
+                                )}
                                 </Text>
                                 <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
                                     {(item.area / 10000).toFixed(1)}ha
