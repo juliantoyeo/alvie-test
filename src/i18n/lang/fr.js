@@ -561,8 +561,8 @@ export default {
         'Culture inconnue': 'Culture inconnue',
         'Pistache': 'Pistache',
         'Oliveraie': 'Oliveraie',
-        'Arachide ': 'Arachide',
-        'Artichaut ': 'Artichaut'
+        'Arachide': 'Arachide',
+        'Artichaut': 'Artichaut'
     },
     'products': {
         'Fongicide systemique': 'Fongicide systemique',
