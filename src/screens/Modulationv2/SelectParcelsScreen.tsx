@@ -147,14 +147,14 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                         </Button>
                     </Left>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerSubtitle}>Choix des parcelles</Title>
+                        <Title style={styles.headerTitle}>{i18n.t('pulve_parcelscreen.title')}</Title>
+                        <Title style={styles.headerSubtitle}>{i18n.t('pulve_parcelscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
                 <Content style={styles.content}>
                     <View>
-                        <Text style={hygoStyles.h0}>Mes Parcelles</Text>
+                        <Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text>
                         {fields.length > 0 && names.length > 0 ? (
                             names.map((n, k) => {
                                 const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
@@ -175,7 +175,7 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                 </Content>
                 <Footer style={styles.footer}>
                     <HygoButton
-                        label="CHOIX DES PRODUITS"
+                        label={i18n.t('pulve_parcelscreen.button_next').toUpperCase()}
                         onPress={async () => {
                             Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
                                 timestamp: Date.now(),

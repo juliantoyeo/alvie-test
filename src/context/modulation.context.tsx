@@ -9,6 +9,7 @@ import { modulationType } from '../types/modulation.types';
 import { conditionType } from '../types/condition.types';
 import { getMetrics_v2, getMetrics4h_v2, getConditions_v2 } from '../api/hygoApi';
 import { SnackbarContext } from './snackbar.context';
+import i18n from 'i18n-js';
 import moment from 'moment';
 
 export interface ModulationContextProps {
@@ -135,7 +136,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             setMeteo4h(data4h)
         } catch (error) {
             setMeteo(null)
-            snackbar.showSnackbar("Erreur dans le chargement météo", "ALERT")
+            snackbar.showSnackbar(i18n.t('snackbar.meteo_error'), "ALERT")
         }
     }
     
@@ -160,7 +161,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             setConditions(data)
         } catch (e) {
             setConditions(null)
-            snackbar.showSnackbar("Erreur dans le chargement des conditions", "ALERT")
+            snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
         }
     }
     return (

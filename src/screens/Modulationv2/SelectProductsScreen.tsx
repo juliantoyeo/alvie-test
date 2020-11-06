@@ -22,10 +22,6 @@ import { Snackbar } from 'react-native-paper';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_product } = AMPLITUDE_EVENTS
-// Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
-//     timestamp: Date.now(),
-//     context
-// })
 
 import _ from 'lodash';
 
@@ -124,27 +120,27 @@ const SelectProductsScreen = ({ navigation }) => {
         return (
 
             <View>
-                <Text style={hygoStyles.h0}>Ma Cuve</Text>
+                <Text style={hygoStyles.h0}>{i18n.t('pulve_productscreen.cuve')}</Text>
                 <HygoCard>
                     <View style={styles.grid}>
                         <View style={styles.row}>
-                            <Text style={styles.colLeft}>Débit</Text>
+                            <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.debit')}</Text>
                             <TouchableOpacity onPress={() => setDebitModalVisible(true)}>
                                 <Text style={styles.colRight}>{context.debit} L/ha</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.colLeft}>Type de buse</Text>
+                            <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.buse')}</Text>
                             <TouchableOpacity onPress={() => changeBuses()}>
-                                <Text style={styles.colRight}>{context.buses}</Text>
+                                <Text style={styles.colRight}>{i18n.t(`equipment.${context.buses}`)}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.colLeft}>Volume de bouillie</Text>
+                            <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.bouillie')}</Text>
                             <Text style={[styles.colRight, { borderWidth: 0 }]}>{(context.debit * totalArea).toFixed(1)} L</Text>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.colLeft}>Total surface</Text>
+                            <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.surface')}</Text>
                             <Text style={[styles.colRight, { borderWidth: 0 }]}>{(totalArea).toFixed(1)} ha</Text>
                         </View>
                     </View>
@@ -153,12 +149,14 @@ const SelectProductsScreen = ({ navigation }) => {
                     onClose={() => { }}
                     modalVisible={buseModalVisible}
                     setModalVisible={setBuseModalVisible}
-                    defaultValue={context.buses}
-                    items={BUSES}
+                    defaultValue={i18n.t(`equipment.${context.buses}`)}
+                    items={BUSES.map((b) => i18n.t(`equipment.${b}`))}
                     setInput={(item) => {
-                        context.setBuses(item)
+                        const i = BUSES.map((b) => i18n.t(`equipment.${b}`)).indexOf(item)
+                        context.setBuses(BUSES[i])
                     }}
-                    title={`Type de buses`}
+                    
+                    title={i18n.t('pulve_productscreen.modal_buses')}
                 />
             </View >
         )
@@ -171,7 +169,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     onPress={(id) => removeProduct(id)}
                 />
             ) : (
-                    <Text style={[hygoStyles.h0, { textAlign: 'center' }]}>Ajouter les produits phytosanitaires que vous voulez utiliser</Text>
+                    <Text style={[hygoStyles.h0, { textAlign: 'center' }]}>{i18n.t('pulve_productscreen.info')}</Text>
                 )}
         </View>
     )
@@ -202,13 +200,13 @@ const SelectProductsScreen = ({ navigation }) => {
                     <TextInput
                         onChangeText={text => setSearch(text)}
                         value={search}
-                        placeholder="Rechercher un produit"
+                        placeholder={i18n.t('pulve_productscreen.search')}
                         style={[hygoStyles.text, { textAlign: 'left', color: "#000", paddingLeft: 10, flex: 1, paddingBottom: 0 }]}
                     />
                 </View>
                 {favs.length > 0 &&
                     <FinderList
-                        title={"Favoris"}
+                        title={i18n.t('pulve_productscreen.favoris')}
                         items={favs.map((f) => products.find((p) => p.id == f)).filter((f) => !!f)}
                         onPress={addProduct}
                         collapseEnabled={search != ''}
@@ -220,7 +218,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         items.length > 0 &&
                         <FinderList
                             key={k}
-                            title={f}
+                            title={i18n.t(`products.${f}`)}
                             items={items.sort((it1, it2) => it1.id - it2.id)}
                             onPress={addProduct}
                             collapseEnabled={search != ''}
@@ -229,7 +227,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 })}
                 <HygoInputModal
                     onClose={() => { }}
-                    onSuccess={(item) => { snackbar.showSnackbar("Produit ajouté", 'OK'); updateFavs(item) }}
+                    onSuccess={(item) => { snackbar.showSnackbar(i18n.t('pulve_productscreen.snack_add'), 'OK'); updateFavs(item) }}
                     modalVisible={doseModalVisible}
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
@@ -238,7 +236,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         context.addProduct({ ...newItem, dose: parseFloat(str) })
                         setProducts([...products.filter((p) => p.id != select.id), newItem])
                     }}
-                    title={select && `Concentration pour ${select.name}`}
+                    title={select && i18n.t('pulve_productscreen.modal_product', {product: select.name})}
                     item={select}
                 />
             </View>
@@ -256,8 +254,8 @@ const SelectProductsScreen = ({ navigation }) => {
                         </Button>
                     </Left>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerSubtitle}>Choix des produits</Title>
+                        <Title style={styles.headerTitle}>{i18n.t('pulve_productscreen.title')}</Title>
+                        <Title style={styles.headerSubtitle}>{i18n.t('pulve_productscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -268,7 +266,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         setModalVisible={setDebitModalVisible}
                         defaultValue={context.debit.toString()}
                         setInput={(str) => context.setDebit(parseInt(str))}
-                        title="Débit de pulvérisation"
+                        title={i18n.t('pulve_productscreen.modal_debit')}
                         onSuccess={() => { }}
                         item={{}}
                     />
@@ -276,7 +274,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     <Cuve />
 
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={hygoStyles.h0}>Mes Produits</Text>
+                        <Text style={hygoStyles.h0}>{i18n.t('pulve_productscreen.products')}</Text>
                         <TouchableOpacity onPress={() => { setViewMode(!viewMode) }} >
                             {viewMode && <Icon type='AntDesign' name='pluscircleo' style={styles.iconTitle} />}
                         </TouchableOpacity>
@@ -286,7 +284,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 {viewMode ? (
                     <Footer style={styles.footer}>
                         <HygoButton
-                            label="CHOIX DU CRÉNEAU"
+                            label={i18n.t('pulve_productscreen.button_next').toUpperCase()}
                             onPress={() => {
                                 Amplitude.logEventWithProperties(pulv2_product.click_toPulv2Slot, {
                                     timestamp: Date.now(),

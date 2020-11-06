@@ -48,8 +48,8 @@ const ReportScreen = ({ navigation }) => {
                         </Button>
                     </Left>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerSubtitle}>Récapitulatif</Title>
+                        <Title style={styles.headerTitle}>{i18n.t('pulve_reportscreen.title')}</Title>
+                        <Title style={styles.headerSubtitle}>{i18n.t('pulve_reportscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -64,7 +64,7 @@ const ReportScreen = ({ navigation }) => {
                     </View>
                     {/*=============== Quantities ==============*/}
                     <View>
-                        <Text style={hygoStyles.h0}>Rapport de pulvérisation</Text>
+                        <Text style={hygoStyles.h0}>{i18n.t('pulve_reportscreen.report')}</Text>
                         <HygoCard title='Remplissage de cuve'>
                             <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
@@ -88,25 +88,25 @@ const ReportScreen = ({ navigation }) => {
                             </HygoCardSmall>
                             <Grid style={{ paddingTop: 10 }}>
                                 <Row>
-                                    <Col><Text style={hygoStyles.text}>Volume de bouillie</Text></Col>
+                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.bouillie')}</Text></Col>
                                     <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{volume.toFixed(1)} L</Text></Col>
                                 </Row>
                                 <Row>
-                                    <Col><Text style={hygoStyles.text}>Eau</Text></Col>
+                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.eau')}</Text></Col>
                                     <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{water.toFixed(1)} L</Text></Col>
                                 </Row>
                                 <Row>
-                                    <Col><Text style={hygoStyles.text}>Surface totale</Text></Col>
+                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.surface')}</Text></Col>
                                     <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{(totalArea / 10000).toFixed(1)} ha</Text></Col>
                                 </Row>
                                 <Row>
-                                    <Col><Text style={hygoStyles.text}>Débit</Text></Col>
+                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.debit')}</Text></Col>
                                     <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{context.debit.toFixed(1)} L/ha</Text></Col>
                                 </Row>
 
                             </Grid>
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
-                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, paddingTop: 5 }]}>Total économisé</Text>
+                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, paddingTop: 5 }]}>{i18n.t('pulve_reportscreen.total')}</Text>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}</Text>
                             </View>
                         </HygoCard>
@@ -114,7 +114,7 @@ const ReportScreen = ({ navigation }) => {
                 </Content>
                 <Footer style={styles.footer}>
                     <HygoButton
-                        label="RETOUR À L'ACCUEIL"
+                        label={i18n.t('pulve_reportscreen.button_next')}
                         onPress={async () => {
                             await saveContext()
                             Amplitude.logEventWithProperties(pulv2_report.click_toHome, {

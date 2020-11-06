@@ -46,10 +46,10 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     const becomeTester = async (t) => {
         await setTester(t)
         const welcome = t ? (
-            "Bienvenue dans le mode Beta Test. Nous sommes ravi de cette nouvelle expérience avec vous. Contactez-nous pour découvrir les nouveautés !"
+            i18n.t('snackbar.welcome_beta')
         )
         : (
-            "Mode Beta Test désactivé"
+            i18n.t('snackbar.bye_beta')
         )
         snackbar.showSnackbar(welcome,"OK")
         navigation.dispatch(DrawerActions.closeDrawer())

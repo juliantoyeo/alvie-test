@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import hygoStyles from '../../styles';
 import COLORS from '../../colors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import i18n from 'i18n-js';
 
 
 export const HygoList = ({title, items, onPress}) => {
@@ -41,7 +41,7 @@ export const HygoList = ({title, items, onPress}) => {
                             name={item.selected ? 'square' : 'square-o'}
                             style={{fontSize:16, color: COLORS.DARK_BLUE, paddingTop: 3 }}  
                         />
-                        <Text style={[hygoStyles.text, {flex:1, paddingLeft: 10}]}>{item.name}</Text>
+                        <Text style={[hygoStyles.text, {flex:1, paddingLeft: 10}]}>{i18n.t(`cultures.${item.name}`)}</Text>
                         <Text style={[hygoStyles.text, {textAlign:'right'}]}>{item.area}ha</Text>
                     </TouchableOpacity>
             

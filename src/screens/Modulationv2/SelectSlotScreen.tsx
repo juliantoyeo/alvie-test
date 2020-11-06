@@ -31,10 +31,6 @@ import { SnackbarContext } from '../../context/snackbar.context';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_slot } = AMPLITUDE_EVENTS
-// Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
-//     timestamp: Date.now(),
-//     context
-// })
 
 type dailyConditionType = Array<conditionType>
 type metricsType = {
@@ -89,7 +85,7 @@ const SelectSlotScreen = ({ navigation }) => {
 
     //Updating modulation when selected slot change or day change
     useEffect(() => {
-        (currentDay < 3) ? loadModulation() : snackbar.showSnackbar("Modulation indisponible pour ce jour", "WARNING")
+        (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
         loadMetrics()
     }, [context.selectedSlot, currentDay])
 
@@ -190,7 +186,7 @@ const SelectSlotScreen = ({ navigation }) => {
         context.setMod(newMod)
         setIsRefreshing(false)
         if (newMod.length == 0) {
-            snackbar.showSnackbar("Erreur pendant le calcul de modulation", "ALERT")
+            snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
         }
 
     }
@@ -206,8 +202,8 @@ const SelectSlotScreen = ({ navigation }) => {
                         </Button>
                     </Left>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Pulvérisation</Title>
-                        <Title style={styles.headerSubtitle}>Choix du créneau</Title>
+                        <Title style={styles.headerTitle}>{i18n.t('pulve_slotscreen.title')}</Title>
+                        <Title style={styles.headerSubtitle}>{i18n.t('pulve_slotscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
                 </Header>
@@ -292,7 +288,7 @@ const SelectSlotScreen = ({ navigation }) => {
                                         <HygoCard>
                                             {isRefreshing ? <Spinner /> : (
                                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>Total économisé</Text>
+                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>{i18n.t('pulve_slotscreen.total')}</Text>
                                                     <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
                                                         {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
                                                     </Text>
@@ -307,7 +303,7 @@ const SelectSlotScreen = ({ navigation }) => {
                 {ready && (
                     <Footer style={styles.footer}>
                         <HygoButton
-                            label="AFFICHER LE RÉCAPITULATIF"
+                            label={i18n.t('pulve_slotscreen.button_next').toUpperCase()}
                             onPress={async () => {
                                 Amplitude.logEventWithProperties(pulv2_slot.click_toPulv2Report, {
                                     timestamp: Date.now(),
