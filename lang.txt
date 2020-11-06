@@ -1,0 +1,61 @@
++        'tester': 'mode beta test',
++        'notester': 'sortir du beta test',
++        'join_betatest': 'Mode Beta test',
++        'leave_betatest': 'Sortir du Beta test'
+
++        'Pistache': 'Pistache',
++        'Oliveraie': 'Oliveraie',
++        'Arachide': 'Arachide',
++        'Artichaut': 'Artichaut'
+
++        'card_title': 'Pulvérisation',
++        'card_subtitle': 'Démarrer un travail de pulvérisation',
++        'card_button': 'Démarrer'
++  
++        'title': 'Pulvérisation',
++        'subtitle': 'Choix des parcelles',
++        'parcels': 'Mes Parcelles',
++        'button_next': 'Choix des produits'
+
++        'title': 'Pulvérisation',
++        'subtitle': 'Choix du créneau',
++        'modal_debit': 'Débit de pulvérisation',
++        'modal_buses': 'Type de buses',
++        'ok': 'Ok',
++        'cuve': 'Ma cuve',
++        'products': 'Mes produits',
++        'debit': 'Débit',
++        'buse': 'Type de buse',
++        'bouillie': 'Volume de bouillie',
++        'surface': 'Total surface',
++        'info': 'Ajoutez les produits phytosaitaires que vous voulez utiliser',
++        'search': 'Rechercher un produit',
++        'modal_product': 'Concentration pour %{product}',
++        'snack_add': 'Produit ajouté',
++        'button_next': 'Choix du créneau',
++        'favoris': 'Favoris',
+
++        'title': 'Pulvérisation',
++        'subtitle': 'Choix du créneau',
++        'total': 'Total économisé',
++        'button_next': 'Afficher le récapitulatif',
++        'snack_nomod': 'Modulation indisponible pour ce jour',
+
++        'title': 'Pulvérisation',
++        'subtitle': 'Récapitulatif',
++        'report': 'Rapport de pulvérisation',
++        'cuve': 'Remplissage de cuve',
++        'products': 'Produits',
++        'bouillie': 'Volume de bouillie',
++        'eau': 'Eau',
++        'surface': 'Surface totale',
++        'debit': 'Débit',
++        'total': 'Total économisé',
++        'button_next': "Retour à l'accueil"
+
++        'meteo_error': 'Erreur dans le chargement météo',
++        'mod_error': 'Erreur pendant le calcul de modulation',
++        'condition_error': "Erreur dans le chargement des conditions",
++        'welcome_beta': "Bienvenue dans le mode Beta Test. Nous sommes ravi de cette nouvelle expérience avec vous. Contactez-nous pour découvrir les nouveautés !",
++        'bye_beta': 'Mode Beta Test désactivé',
+

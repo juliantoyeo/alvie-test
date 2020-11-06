@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import getUserAgent from './getUserAgent';
-import { VERSION } from '../constants';
 
 import { fieldType } from '../types/field.types';
 import { errorType } from '../types/error.types';
@@ -10,6 +9,7 @@ import {meteoByHourType, meteoDataType} from '../types/meteo.types';
 import { modulationType} from '../types/modulation.types';
 import { conditionType } from '../types/condition.types'
 import _ from 'lodash';
+import pkg from '../../app.json'
 
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
@@ -478,7 +478,7 @@ export const createIntervention = async () => {
 // Check if the database is ready (parcels and meteo datas loaded => 24h),and if a new version is needed
 export const checkSetup = async () => {
     try {
-        const response = await hygoApi.post('/app/checkSetup', { version: VERSION })
+        const response = await hygoApi.post('/app/checkSetup', { version: pkg.expo.version })
         return (response.data);
     } catch (error) {
         console.log(error)

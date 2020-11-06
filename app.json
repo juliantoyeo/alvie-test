@@ -1,7 +1,6 @@
 {
   "extra": {
     "build": "128",
-    "ota": "2309-test"
   },
   "expo": {
     "name": "Hygo",

@@ -17,6 +17,9 @@ import COLORS from '../colors'
 import i18n from 'i18n-js';
 import HygoButton from '../components/HygoButton'
 import LogoLoading from '../components/LogoLoading'
+import pkg from '../../app.json'
+import {OTA} from './../constants'
+
 import {Amplitude, AMPLITUDE_EVENTS} from '../amplitude'
 
 const {barCodeScreen: ampEvent} = AMPLITUDE_EVENTS
@@ -244,6 +247,8 @@ class BarCodeScreen extends React.Component {
             }} />
           )}
         </View>
+        <Text textAlign="center" style={styles.text}>{`${i18n.t('drawer.app_version', { version: pkg.expo.version })} | ${i18n.t('drawer.build_number', { build: pkg.extra.build })} - ${OTA}`}</Text>
+  
       </SafeAreaView>     
     );
   }
@@ -259,6 +264,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     resizeMode: 'cover'
   },
+  text: {
+    color: COLORS.DARK_GREEN,
+    textAlign: 'center',
+    fontSize: 10,
+    flex: 1,
+    fontFamily: 'nunito-regular'
+  }
 })
 
 BarCodeScreen.navigationOptions = () => {
