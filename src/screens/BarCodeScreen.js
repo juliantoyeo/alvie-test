@@ -230,7 +230,10 @@ class BarCodeScreen extends React.Component {
                 </View>
                 <View style={{ backgroundColor: COLORS.BEIGE, flex: 1 }}></View>
               </View>
-              <View style={{ backgroundColor: COLORS.BEIGE, height: 90 }} />
+              <View style={{ backgroundColor: COLORS.BEIGE, height: 90, paddingTop:10 }}> 
+              <Text textAlign="center" style={styles.text}> {`${i18n.t('drawer.app_version', { version: pkg.expo.version })} | ${i18n.t('drawer.build_number', { build: pkg.extra.build })} - ${OTA}`} </Text>
+  
+              </View>
           </BarCodeScanner>
         )}
 
@@ -247,8 +250,7 @@ class BarCodeScreen extends React.Component {
             }} />
           )}
         </View>
-        <Text textAlign="center" style={styles.text}>{`${i18n.t('drawer.app_version', { version: pkg.expo.version })} | ${i18n.t('drawer.build_number', { build: pkg.extra.build })} - ${OTA}`}</Text>
-  
+        
       </SafeAreaView>     
     );
   }
