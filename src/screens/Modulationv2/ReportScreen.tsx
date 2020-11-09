@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
@@ -14,18 +14,25 @@ import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import capitalize from '../../utils/capitalize';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+import { processFontFamily } from 'expo-font';
 const { pulv2_report } = AMPLITUDE_EVENTS
 
-const hasRacinaire = () => false
+// const hasRacinaire = () => false
 
-const ReportScreen = ({ navigation }) => {
+const ReportScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const volume = totalArea / 10000 * context.debit
     const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
     const water = volume - totalPhyto
-
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+
+    const hasRacinaire = useCallback(() => {
+        return context.selectedProducts.filter(sp => {
+            const family = phytoProductList.find((p) => p.id == sp.phytoproduct.id)
+            return family && family.isRacinaire
+        }).length > 0
+    }, [])
 
     const saveContext = async () => {
         // TODO : save the whole context 
@@ -198,7 +205,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-
+    phytoProductList: state.pulve.phytoProductList
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

@@ -5,7 +5,7 @@ const initialState = {
   lastMeteoLoad: null,
 }
 
-export default authReducer = (state = initialState, action) => {
+export default metaReducer = (state = initialState, action) => {
   let nextState
   switch (action.type) {
     case 'UPDATE_PARCELLES':

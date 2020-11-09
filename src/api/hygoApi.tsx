@@ -14,7 +14,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL:'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //'https://hygo-api.alvie.fr', //  'http://192.168.1.35:3000',// 
+    baseURL:'https://hygo-api.alvie.fr', //  'http://192.168.1.35:3000',// 'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()

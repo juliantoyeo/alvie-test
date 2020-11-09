@@ -55,10 +55,7 @@ type metricsType = {
     probability?: any
 }
 
-
-
-const hasRacinaire = () => false
-const SelectSlotScreen = ({ navigation }) => {
+const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
@@ -75,14 +72,6 @@ const SelectSlotScreen = ({ navigation }) => {
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
-    // Loading meteo : every hour and 4hours merged for the next 5 days 
-    // useEffect(() => {
-    //     if (context.meteo == null || context.meteo4h == null) {
-    //         context.loadMeteo()
-    //     }
-    //     loadConditions()
-    // }, [])
-
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
@@ -92,6 +81,13 @@ const SelectSlotScreen = ({ navigation }) => {
     useEffect(() => {
         loadMetrics()
     }, [context.meteo])
+
+    const hasRacinaire = useCallback(() => {
+        return context.selectedProducts.filter(sp => {
+            const family = phytoProductList.find((p) => p.id == sp.phytoproduct.id)
+            return family && family.isRacinaire
+        }).length > 0
+    }, [])
 
     const loadMetrics = useCallback(async () => {
 
@@ -487,7 +483,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-
+    phytoProductList: state.pulve.phytoProductList
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
