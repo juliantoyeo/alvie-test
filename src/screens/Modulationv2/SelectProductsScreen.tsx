@@ -26,7 +26,6 @@ const { pulv2_product } = AMPLITUDE_EVENTS
 import _ from 'lodash';
 
 export const ProductList = ({ items, onPress }) => {
-    const [opened, setOpened] = useState(true)
     return (
         <View style={productStyles.container}>
             <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
@@ -36,7 +35,8 @@ export const ProductList = ({ items, onPress }) => {
                         <Icon type='AntDesign' name={opened ? 'arrowdown' : 'arrowright'} style={{fontSize: 16}} />
                     </TouchableOpacity>
                 </View> */}
-                {opened && items.map((item, k) => (
+                {items.map((item, k) => {
+                    return (
                     <View key={k} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
                         <TouchableOpacity onPress={() => { onPress(item.id) }}>
                             <Icon type='AntDesign' name='delete' style={{ fontSize: 16, paddingTop: 2, color: COLORS.DARK_BLUE }} />
@@ -44,7 +44,7 @@ export const ProductList = ({ items, onPress }) => {
                         <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>{item.name}</Text>
                         <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
                     </View>
-                ))}
+                )})}
             </View>
         </View>
     )
@@ -55,7 +55,6 @@ const SelectProductsScreen = ({ navigation }) => {
     const snackbar = React.useContext(SnackbarContext)
     const [products, setProducts] = useState<Array<activeProductType>>([])
     const [debitModalVisible, setDebitModalVisible] = useState<boolean>(true)
-    const [ready, setReady] = useState<boolean>(false)
     const [viewMode, setViewMode] = useState<boolean>(true)
     const [families, setFamilies] = useState<Array<string>>([])
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
@@ -96,11 +95,6 @@ const SelectProductsScreen = ({ navigation }) => {
         }
         load()
     }, [])
-
-    useEffect(() => {
-        setReady(context.selectedProducts.length > 0)
-    }, [context.selectedProducts])
-
 
     const removeProduct = (id) => {
         context.removeProduct(id)
@@ -165,7 +159,7 @@ const SelectProductsScreen = ({ navigation }) => {
         <View>
             {context.selectedProducts.length > 0 ? (
                 <ProductList
-                    items={context.selectedProducts.sort((it1, it2) => it1.name.localeCompare(it2.name))}
+                    items={context.selectedProducts.slice().sort((it1, it2) => it1.name.localeCompare(it2.name))}
                     onPress={(id) => removeProduct(id)}
                 />
             ) : (
@@ -298,7 +292,7 @@ const SelectProductsScreen = ({ navigation }) => {
                                 name: 'arrowright',
                                 fontSize: 26,
                             }}
-                            enabled={ready}
+                            enabled={context.selectedProducts.length > 0}
                         />
                     </Footer>
                 ) : (

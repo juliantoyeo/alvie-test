@@ -70,7 +70,7 @@ const Card = ({ field, cultureList, onUpdate }) => {
                                 setCultureId(v)
                             }}
                         >
-                            {cultureList.sort(
+                            {cultureList.slice().sort(
                                 (a,b) => (b.name >= a.name) ? -1 :  1
                             ).map(
                                 (v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
