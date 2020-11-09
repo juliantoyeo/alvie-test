@@ -59,13 +59,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
     const [currentDay, setCurrentDay] = useState<number>(0)
-    // const [background, setBackground] = useState<any>(COLORS.EXCELLENT)
-    // const [meteo, setMeteo] = useState<Array<meteoDataType>>(null)
-    // const [meteo4h, setMeteo4h] = useState<Array<any>>(null)
-    // const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
     const [metrics, setMetrics] = useState<any>(null)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    // const [detailed, setDetailed] = useState({})
     const ready = !!context.meteo && !!metrics && !!context.conditions
 
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
@@ -81,6 +76,10 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     useEffect(() => {
         loadMetrics()
     }, [context.meteo])
+
+    useEffect(() => {
+        context.loadConditions()
+    }, [context.selectedProducts])
 
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {

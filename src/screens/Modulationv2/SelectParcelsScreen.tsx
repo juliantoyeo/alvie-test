@@ -182,7 +182,6 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                                 context
                             })
                             context.loadMeteo()
-                            context.loadConditions()
                             navigation.navigate('Pulverisation_Products')
                         }}
                         enabled={ready}
