@@ -43,7 +43,7 @@ export interface ModulationContextProps {
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
-    loadMeteo: any
+    loadMeteo?: any
 
     conditions?: Array<dailyConditionType>
     loadConditions?: any
