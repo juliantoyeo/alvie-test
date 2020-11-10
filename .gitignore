@@ -2,3 +2,6 @@ node_modules/
 builds/
 src/.env*
 payload*
+.expo/
+hygo.jks
+google-services.json
