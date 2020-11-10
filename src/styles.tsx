@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import COLORS from './colors';
 
-const paddingBig = 20
+const paddingBig = 20 
 const paddingSmall = 10
 
 const hygoStyles = StyleSheet.create({
