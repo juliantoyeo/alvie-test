@@ -303,7 +303,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
-                                //context.setMetrics(metrics)
                                 navigation.navigate('Pulverisation_Report')
                             }
                             }
