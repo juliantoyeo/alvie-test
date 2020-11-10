@@ -486,3 +486,14 @@ export const checkSetup = async () => {
     }
 }
 
+// Save the data computed for the pulverisation, coming from the context "Modulation"
+export const saveModulationContext = async (context) => {
+    try {
+        const response = await hygoApi.post('/app/saveModulationContext', {context})
+        return (response.data)
+    } catch(error) {
+        console.log(error)
+        return ({error})
+    }
+
+}

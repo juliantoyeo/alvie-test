@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Subtitle, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
 import HygoButton from '../../components/HygoButton';
 import { ModulationContext } from '../../context/modulation.context';
+import { SnackbarContext } from '../../context/snackbar.context';
 import { HygoCard, HygoCardSmall } from '../../components/v2/HygoCards';
 import i18n from 'i18n-js';
 import hygoStyles from '../../styles';
@@ -14,6 +15,7 @@ import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import capitalize from '../../utils/capitalize';
 import moment from 'moment';
 import 'moment/locale/fr';
+import { saveModulationContext } from '../../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_report } = AMPLITUDE_EVENTS
@@ -21,7 +23,8 @@ const { pulv2_report } = AMPLITUDE_EVENTS
 
 
 const ReportScreen = ({ navigation, phytoProductList }) => {
-    const context = React.useContext(ModulationContext)
+    const context = useContext(ModulationContext)
+    const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const volume = totalArea / 10000 * context.debit
     const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
@@ -36,7 +39,10 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     }, [])
 
     const saveContext = async () => {
-        // TODO : save the whole context 
+        const {error} = await saveModulationContext(context)
+        if (error) {
+            snackbar.showSnackbar(i18n.t('snackbar.context_not_saved'), 'WARNING')
+        }
         return
     }
 
@@ -125,7 +131,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                     <HygoButton
                         label={i18n.t('pulve_reportscreen.button_next')}
                         onPress={async () => {
-                            await saveContext()
+                            saveContext()
                             Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
                                 timestamp: Date.now(),
                                 context

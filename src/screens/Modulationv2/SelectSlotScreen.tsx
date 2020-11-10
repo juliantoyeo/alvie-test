@@ -32,7 +32,7 @@ import { SnackbarContext } from '../../context/snackbar.context';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_slot } = AMPLITUDE_EVENTS
 
-type dailyConditionType = Array<conditionType>
+
 type metricsType = {
     wind?: any,
     gust?: any
@@ -60,8 +60,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const snackbar = React.useContext(SnackbarContext)
     const { currentDay, setCurrentDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const ready = !!context.meteo && !!metrics && !!context.conditions
 
+    const ready = !!context.meteo && !!metrics && !!context.conditions
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
