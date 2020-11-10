@@ -5,3 +5,4 @@ payload*
 .expo/
 hygo.jks
 google-services.json
+app.json
