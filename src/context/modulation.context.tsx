@@ -69,10 +69,14 @@ export type selectedSlotType = {
     max: number
 }
 export type metricsType ={
+    deltatemp: number,
     winddirection: string,
     wind: number,
     gust: number,
     precipitation: number,
+    prevprecipitation: number,
+    probabilityCnt: number,
+    probabilitySum: number,
     probability: number,
     mintemp: number,
     maxtemp: number,
@@ -80,6 +84,10 @@ export type metricsType ={
     maxhumi: number,
     minsoilhumi: number,
     maxsoilhumi: number,
+    r2: number,
+    r3: number,
+    r6: number,
+    t3: number,
 }
 
 export type dowType = {

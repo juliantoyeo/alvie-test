@@ -58,8 +58,7 @@ type metricsType = {
 const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
-    const { currentDay, setCurrentDay } = context
-    const [metrics, setMetrics] = useState<any>(null)
+    const { currentDay, setCurrentDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
     const ready = !!context.meteo && !!metrics && !!context.conditions
 
@@ -304,7 +303,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
-                                context.setMetrics(metrics)
+                                //context.setMetrics(metrics)
                                 navigation.navigate('Pulverisation_Report')
                             }
                             }
