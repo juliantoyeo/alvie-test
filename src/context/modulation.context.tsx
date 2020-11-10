@@ -37,7 +37,9 @@ export interface ModulationContextProps {
     metrics?: metricsType,
     setMetrics? : any
 
-    dow?: Array<dowType>
+    dow?: Array<dowType>,
+    currentDay?: number,
+    setCurrentDay?: any,
 
     meteo?: meteoDataType,
     setMeteo?: any
@@ -103,6 +105,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [meteo, setMeteo] = useState<meteoDataType>()
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
+    const [currentDay, setCurrentDay] = useState<number>(0)
 
     // The five days we analyse over
     const dow: Array<dowType> = [...Array(5).keys()].map((i) => (
@@ -170,7 +173,7 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
             debit, setDebit, buses, setBuses,
             selectedSlot, setSelectedSlot, mod, setMod, metrics, setMetrics,
-            dow,
+            dow, currentDay, setCurrentDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
             conditions, loadConditions
         }}>
