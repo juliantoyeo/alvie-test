@@ -210,6 +210,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                 {/*============= Week Tab =================*/}
                                 <View style={styles.tabBar}>
                                     {context.dow.map((d, i) => {
+                                        console.log("========dow", d)
                                         const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
                                             <TouchableOpacity

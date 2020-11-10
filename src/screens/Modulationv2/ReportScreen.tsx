@@ -13,8 +13,8 @@ import COLORS from '../../colors';
 import Metrics from '../../components/pulverisation-detailed/Metrics';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import capitalize from '../../utils/capitalize';
-import moment from 'moment';
-import 'moment/locale/fr';
+// import moment from 'moment';
+// import 'moment/min/moment-with-locales'
 import { saveModulationContext } from '../../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
@@ -30,7 +30,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
     const water = volume - totalPhyto
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
-    const dt = moment(context.dow[context.currentDay].dt).locale('fr').format('L')
+    // const dt = moment(context.dow[context.currentDay].dt).locale('fr').format('L')   => problem with locals
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {
             const family = phytoProductList.find((p) => p.id == sp.phytoproduct.id)
@@ -71,7 +71,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
                         <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
-                        <Title style={styles.hourSubtitle}>{dt}</Title>
+                        {/* <Title style={styles.hourSubtitle}>{dt}</Title> */}
                         <View style={{ paddingBottom: 20 }}>
                             <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
                         </View>
