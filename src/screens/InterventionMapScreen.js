@@ -273,7 +273,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
         )}
 
         { field !== null && (
-          <>
+          <React.Fragment>
             <View style={[styles.selected, { backgroundColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField === COLORS.DEFAULT_FIELD ? COLORS.CYAN : field.colorField) }]}>
               <View style={styles.selectedLine}>
                 <View style={styles.selectedElem}>
@@ -369,7 +369,7 @@ const InterventionMapScreen = ({ navigation, phytoProductList, updateProductsInt
             <View style={styles.carretContainer}>
               <View style={[styles.triangle, { borderBottomColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField === COLORS.DEFAULT_FIELD ? COLORS.CYAN : field.colorField) }]} />
             </View>
-          </>
+          </React.Fragment>
         )}
 
         <View style={[styles.mapContainer, { top: field != null ? -20 : 0 }]}>
