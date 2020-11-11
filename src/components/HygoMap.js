@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, createRef } from 'react'
 import { Dimensions, StyleSheet, View, Alert } from 'react-native'
 import  MapView, {Polygon} from 'react-native-maps';
+import { Polygon2 } from '../components/v2/Polygonv2';
 
 import COLORS from '../colors'
 
@@ -37,12 +38,12 @@ const HygoMap = ({ intervention, byParcelle, handleFieldSelection }) => {
 
           { intervention.fields.map((field, idx) => {
             return (
-              <Polygon
+              <Polygon2
                 key={idx}
                 strokeWidth={selected === idx ? 4 : 1}
                 strokeColor={selected === idx ? '#fff' : COLORS.DARK_GREEN}
                 fillColor={byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField||COLORS.DEFAULT_FIELD_MY)}
-                ref={ref => (polygons.current[idx] = ref)}
+                _ref={ref => (polygons.current[idx] = ref)}
                 onLayout={() => polygons.current[idx].setNativeProps({
                     fillColor: byParcelle[field.parcelleId] && byParcelle[field.parcelleId].condition ? COLORS[byParcelle[field.parcelleId].condition] : (field.colorField||COLORS.DEFAULT_FIELD_MY)
                 })}

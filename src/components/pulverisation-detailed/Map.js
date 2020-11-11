@@ -61,7 +61,7 @@ const Map = ({ region, parcelles, hour, min, max, data }) => {
             strokeWidth={1}
             strokeColor={COLORS.DARK_GREEN}
             fillColor={getFieldColor(field.id)}
-            ref={ref => (polygons.current[idx] = ref)}
+            _ref={ref => (polygons.current[idx] = ref)}
             onLayout={() => polygons.current[idx].setNativeProps({
                 fillColor: getFieldColor(field.id)
             })}

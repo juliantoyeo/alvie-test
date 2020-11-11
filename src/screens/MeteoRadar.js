@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, createRef } from 'react'
 import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native'
 import  MapView, { Overlay, Polygon } from 'react-native-maps';
 import { getMeteoRadar, getLastGeometryFields } from '../api/hygoApi';
-
+import { Polygon2 } from '../components/v2/Polygonv2';
 import { connect } from 'react-redux'
 import { Spinner, Icon, Button } from 'native-base'
 
@@ -152,12 +152,12 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
 
             { parcelles.fields.map((field, idx) => {
               return (
-                <Polygon
+                <Polygon2
                   key={field.id}
                   strokeWidth={1}
                   strokeColor={'#fff'}
                   fillColor={COLORS.CYAN}
-                  ref={ref => (polygons.current[idx] = ref)}
+                  _ref={ref => (polygons.current[idx] = ref)}
                   onLayout={() => polygons.current[idx].setNativeProps({
                       fillColor: COLORS.CYAN
                   })}

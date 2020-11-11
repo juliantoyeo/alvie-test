@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, createRef, Fragment } from 'react'
-import MapView, { Polygon } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import { Polygon2 } from '../components/v2/Polygonv2';
+
 import { updateParcellesList } from '../store/actions/metaActions'
 import { SafeAreaView } from 'react-navigation';
 import { Dimensions, StyleSheet, View, Text, StatusBar, TextInput } from 'react-native';
@@ -13,7 +15,6 @@ import { getFields, updateField, getAllCultures } from '../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
-
 
 const Card = ({ field, cultureList, onUpdate }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -44,11 +45,11 @@ const Card = ({ field, cultureList, onUpdate }) => {
                 <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
                     <View style={styles.editButtons}>
                         <Button transparent onPress={cancelEdit}>
-                            <Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft:0 }} />
+                            <Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft: 0 }} />
                         </Button>
 
                         <Button transparent onPress={confirmEdit}>
-                            <Icon type='AntDesign' name='check' style={{ color: '#000', marginRight:0 }} />
+                            <Icon type='AntDesign' name='check' style={{ color: '#000', marginRight: 0 }} />
                         </Button>
                     </View>
 
@@ -59,11 +60,11 @@ const Card = ({ field, cultureList, onUpdate }) => {
                             style={[{ textAlign: 'left' }, styles.overlayText]}
                         />
                     </View>
-                    <View style={{ display: 'flex' ,flexDirection: 'row' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <Picker
                             mode='dropdown'
                             itemTextStyle={styles.overlayText}
-                            textStyle={[styles.overlayText, {paddingLeft:0}]}
+                            textStyle={[styles.overlayText, { paddingLeft: 0 }]}
                             // iosIcon={<Icon name="arrow-down" />} 
                             selectedValue={cultureId}
                             onValueChange={(v, i) => {
@@ -71,7 +72,7 @@ const Card = ({ field, cultureList, onUpdate }) => {
                             }}
                         >
                             {cultureList.slice().sort(
-                                (a,b) => (b.name >= a.name) ? -1 :  1
+                                (a, b) => (b.name >= a.name) ? -1 : 1
                             ).map(
                                 (v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
                             )}
@@ -82,9 +83,9 @@ const Card = ({ field, cultureList, onUpdate }) => {
             ) : (
                     //============== Card in View Mode =======================//
                     <View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-                        <View style={[styles.editButtons, {flexDirection:'row-reverse'}]}>
+                        <View style={[styles.editButtons, { flexDirection: 'row-reverse' }]}>
                             <Button transparent onPress={() => { setEditMode(!editMode) }}>
-                                <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000', marginRight:0 }} />
+                                <Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000', marginRight: 0 }} />
                             </Button>
                         </View>
                         <Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
@@ -94,7 +95,7 @@ const Card = ({ field, cultureList, onUpdate }) => {
                         <Text style={styles.overlayText}>
                             {field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
                         </Text>
-                        
+
                     </View>
                 )}
         </View>
@@ -179,15 +180,16 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
                         {parcelles.fields.map((field, idx) => {
                             return (
-                                <Polygon
+                                <Polygon2
                                     key={field.id}
                                     strokeWidth={selectedFieldIdx === idx ? 4 : 1}
                                     strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
                                     fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
-                                    ref={ref => (polygons.current[idx] = ref)}
+                                    _ref={ref => (polygons.current[idx] = ref)}
                                     onLayout={() => polygons.current[idx].setNativeProps({
                                         fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
                                     })}
+
                                     tappable={true}
                                     onPress={() => {
                                         let i = idx

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, createRef } from "react";
 import { StyleSheet, Dimensions } from 'react-native'
 import  MapView, {Polygon} from 'react-native-maps';
-
+import { Polygon2 } from '../v2/Polygonv2';
 import COLORS from '../../colors'
 
 const Map = ({ region, parcelles, selected, setSelected, currentData }) => {
@@ -34,12 +34,12 @@ const Map = ({ region, parcelles, selected, setSelected, currentData }) => {
 
       { Object.values(parcelles).map((field, idx) => {
         return (
-          <Polygon
+          <Polygon2
             key={field.id}
             strokeWidth={selected === field.id ? 4 : 1}
             strokeColor={selected === field.id ? '#fff' : COLORS.DARK_GREEN}
             fillColor={COLORS[`${currentData[field.id].condition}_CARDS`]}
-            ref={ref => (polygons.current[idx] = ref)}
+            _ref={ref => (polygons.current[idx] = ref)}
             onLayout={() => polygons.current[idx].setNativeProps({
                 fillColor: COLORS[`${currentData[field.id].condition}_CARDS`]
             })}
