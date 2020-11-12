@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, ScrollView, Text, Image } from 'react-native'
 import { Spinner } from 'native-base'
-import { HygoCardTransparent } from '../components/v2/HygoCards'
+import { HygoCardTransparent } from '../../components/v2/HygoCards'
 import i18n from 'i18n-js'
-import capitalize from '../utils/capitalize'
-import COLORS from '../colors'
+import capitalize from '../../utils/capitalize'
+import COLORS from '../../colors'
 import moment from 'moment-timezone'
-import { getMeteo } from '../api/hygoApi'
+import { getMeteo } from '../../api/hygoApi'
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
 
@@ -104,7 +104,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
       </View>
       <View style={styles.iconContainer}>
         <View style={styles.meteoElement}>
-          <Image source={require('../../assets/ICN-Wind.png')} style={styles.image} />
+          <Image source={require('../../../assets/ICN-Wind.png')} style={styles.image} />
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
@@ -116,7 +116,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           )}
         </View>
         <View style={styles.meteoElement}>
-          <Image source={require('../../assets/ICN-Rain.png')} style={styles.image} />
+          <Image source={require('../../../assets/ICN-Rain.png')} style={styles.image} />
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
@@ -128,7 +128,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           )}
         </View>
         <View style={styles.meteoElement}>
-          <Image source={require('../../assets/ICN-Temperature.png')} style={styles.image} />
+          <Image source={require('../../../assets/ICN-Temperature.png')} style={styles.image} />
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
@@ -140,7 +140,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           )}
         </View>
         <View style={styles.meteoElement}>
-          <Image source={require('../../assets/ICN-Hygro.png')} style={styles.image} />
+          <Image source={require('../../../assets/ICN-Hygro.png')} style={styles.image} />
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}

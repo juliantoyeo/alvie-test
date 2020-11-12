@@ -15,7 +15,7 @@ import HygoCulturePicker from './components/HygoCulturePicker';
 import RealTimeScreen from './screens/RealTimeScreen';
 import BarCodeScreen from './screens/BarCodeScreen';
 import MeteoScreen from './screens/MeteoScreen';
-import MeteoScreen_v2 from './screens/MeteoScreen_v2'
+import MeteoScreen_v2 from './screens/meteo_v2/MeteoScreen_v2'
 import InterventionsScreen from './screens/InterventionsScreen';
 import InterventionMapScreen from './screens/InterventionMapScreen';
 import EquipmentScreen from './screens/EquipmentScreen';
