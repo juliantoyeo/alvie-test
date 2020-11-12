@@ -26,7 +26,7 @@ export interface MeteoContextProps {
     currentDay?: number,
     setCurrentDay?: any,
 
-    meteo?: Array<meteoByHourType>,
+    meteo?: Array<Array<meteoByHourType>>,
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
@@ -40,11 +40,11 @@ export type dailyConditionType = Array<conditionType>
 
 export const MeteoContext = React.createContext<MeteoContextProps>({});
 
-const MeteoProvider = ({ children, parcelles }) => {
+const MeteoProvider = ({ children }) => {
 
     const snackbar = React.useContext(SnackbarContext)
 
-    const [meteo, setMeteo] = useState<Array<meteoByHourType>>()
+    const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>()
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [metrics, setMetrics] = useState<metricsType>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
@@ -157,10 +157,4 @@ const MeteoProvider = ({ children, parcelles }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    parcelles: state.metadata.parcelles,
-});
-
-const mapDispatchToProps = (dispatch, props) => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(MeteoProvider);
+export default MeteoProvider;

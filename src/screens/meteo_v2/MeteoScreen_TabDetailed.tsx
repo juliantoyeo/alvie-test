@@ -20,13 +20,14 @@ import _ from 'lodash'
 import ModulationBar from '../../components/v2/ModulationBar'
 import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
 import HourScale from '../../components/v2/HourScale'
+import HygoChart from '../../components/realtime/HygoChart'
 
-const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
+const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles }) => {
     const context = React.useContext(MeteoContext)
     const [loading, setLoading] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
-    const { currentDay, setCurrentDay } = context
+    const { dow, currentDay, setCurrentDay } = context
     const [lastLoad, setLastLoad] = useState(-1)
     const [counter, setCounter] = useState(0);
 
@@ -47,73 +48,77 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
         return ret
     }, [context.meteo])
 
-    useEffect(() => {
-        let interval
+    // useEffect(() => {
+    //     let interval
 
-        const u1 = navigation.addListener('didFocus', () => {
-            interval = setInterval(() => {
-                setCounter(new Date().getTime());
-            }, 30000);
-            setCounter(new Date().getTime());
-        });
+    //     const u1 = navigation.addListener('didFocus', () => {
+    //         interval = setInterval(() => {
+    //             setCounter(new Date().getTime());
+    //         }, 30000);
+    //         setCounter(new Date().getTime());
+    //     });
 
-        const u2 = navigation.addListener('willBlur', () => {
-            clearInterval(interval);
-        });
+    //     const u2 = navigation.addListener('willBlur', () => {
+    //         clearInterval(interval);
+    //     });
 
-        interval = setInterval(() => {
-            setCounter(new Date().getTime());
-        }, 30000);
-        setCounter(new Date().getTime());
+    //     interval = setInterval(() => {
+    //         setCounter(new Date().getTime());
+    //     }, 30000);
+    //     setCounter(new Date().getTime());
 
-        return () => {
-            u1.remove()
-            u2.remove()
-        };
-    }, []);
+    //     return () => {
+    //         u1.remove()
+    //         u2.remove()
+    //     };
+    // }, []);
 
-    useEffect(() => {
-        if (counter - lastLoad >= 300000) {
-            loadMeteoDetailed()
-        }
-    }, [counter])
+    // useEffect(() => {
+    //     if (counter - lastLoad >= 300000) {
+    //         loadMeteoDetailed()
+    //     }
+    // }, [counter])
 
-    const loadMeteoDetailed = async () => {
-        if (!loading) {
-            setIsRefreshing(true)
-        }
+    // const loadMeteoDetailed = async () => {
+    //     if (!loading) {
+    //         setIsRefreshing(true)
+    //     }
 
-        let result = await getMeteoDetailed({
-            day: null,
-            product: null,
-        })
-        setDetailed(result)
+    //     let result = await getMeteoDetailed({
+    //         day: null,
+    //         product: null,
+    //     })
+    //     setDetailed(result)
 
-        setCurrentDay(prev => {
-            if (prev === null) {
-                return result.days[0]
-            }
-            return prev
-        })
+    //     setCurrentDay(prev => {
+    //         if (prev === null) {
+    //             return result.days[0]
+    //         }
+    //         return prev
+    //     })
 
-        meteoSynced((new Date()).getTime())
+    //     meteoSynced((new Date()).getTime())
 
-        setLoading(false)
-        setIsRefreshing(false)
-    }
+    //     setLoading(false)
+    //     setIsRefreshing(false)
+    // }
 
-    const onRefresh = async () => {
-        setIsRefreshing(true)
-        await loadMeteoDetailed(true)
-        setIsRefreshing(false)
-    }
+    // const onRefresh = async () => {
+    //     setIsRefreshing(true)
+    //     await Promise.all([
+    //         loadMeteoDetailed(true),
+    //         context.loadConditions(parcelles.fields),
+    //         context.loadMeteo(parcelles.fields)
+    //     ])
+    //     setIsRefreshing(false)
+    // }
 
     return (
         <Content
-            // refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
+           // refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
             contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-            { //!loading && !!detailed.data && !!detailed.data[currentDay] && !!detailed.days && (
+            {
                 (
                     <View style={styles.container}>
                         {!!context.meteo && !!context.meteo4h && !!context.conditions && context.conditions.length > 0 && (
@@ -170,64 +175,76 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                                         )}
                                         {/*=============== Conditions ==============*/}
                                         <View style={styles.sliderContainer}>
-                                            {/*<HygoParcelleIntervention/>*/}
+
                                             <ModulationBar
-                                                from={0/*parseInt(hour)*/}
+                                                from={0}
                                                 initialMax={4}
                                                 initialMin={5}
                                                 data={context.conditions[currentDay]}
-                                                width={Dimensions.get('window').width - 30}
+                                                width={Dimensions.get('window').width - 100}
                                                 onHourChangeEnd={() => { }}
                                                 enabled={false}
                                             />
                                         </View>
-                                        <HourScale hour={'00'/*hour*/} color="#fff" />
+                                        {/* <HourScale hour={'00'} color="#fff" /> */}
                                     </View>
+                                </View>
+                                {/*============= Charts ============*/}
+                                <View style={{backgroundColor: '#fff', borderTopRightRadius: 35,marginTop: 10, paddingTop:20}}>
+                                <Text style={[styles.pulveTitle, {marginLeft:20, paddingBottom:0}]}>{i18n.t('meteo_detailed.graph_title')}</Text>
+
+                                    <HygoChart label={i18n.t('realtime.temp')} data={context.meteo[currentDay].map(m => {
+                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                        return { x: dt, y: (m.maxtemp + m.mintemp)/2 }
+                                    })} mainColor={COLORS.DARK_BLUE} secondaryColor={COLORS.DARK_GREEN} />
+                                     <HygoChart label={i18n.t('realtime.hygro')} data={context.meteo[currentDay].map(m => {
+                                         const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                        return { x: dt, y: (m.maxhumi + m.minhumi) /2 }
+                                    })} mainColor={COLORS.DARK_BLUE} secondaryColor={COLORS.DARK_GREEN} />
                                 </View>
                             </React.Fragment>
                         )}
-                        {/* =============== Loading Spinner ============= */}
-                        { loading && (
-                            <View style={styles.container}>
-                                <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
-                            </View>
-                        )}
-                        {/* 
-                        <View style={styles.pulve}>
-                            <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
+                        {/* =============== Loading Spinner =============
+                        { !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt] && !!detailed.days ? (
+                            <View style={styles.pulve}>
+                                <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
 
-                            <View style={styles.pulveContainer}>
-                                {detailed.products.map(p => {
-                                    let dayProduct = detailed.data[currentDay].hours1[p.id].data
-                                    return (
-                                        <View style={styles.productContainer} key={p.id}>
-                                            <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
-                                            <View style={styles.productCondition}>
-                                                {[...Array(24).keys()].map(i => {
-                                                    let padded = `${i}`.padStart(2, '0')
-                                                    return (
-                                                        <View key={i} style={[styles.parcelle, {
-                                                            backgroundColor: COLORS[dayProduct[padded].condition]
-                                                        }]}>
-                                                            { dayProduct[padded].conflict && (
-                                                                <Text style={styles.parcelleExclamation}>!</Text>
-                                                            )}
-                                                        </View>
-                                                    )
-                                                })}
+                                <View style={styles.pulveContainer}>
+                                    {detailed.products.map(p => {
+                                        let dayProduct = detailed.data[dow[currentDay].dt].hours1[p.id].data
+                                        return (
+                                            <View style={styles.productContainer} key={p.id}>
+                                                <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
+                                                <View style={styles.productCondition}>
+                                                    {[...Array(24).keys()].map(i => {
+                                                        let padded = `${i}`.padStart(2, '0')
+                                                        return (
+                                                            <View key={i} style={[styles.parcelle, {
+                                                                backgroundColor: COLORS[dayProduct[padded].condition]
+                                                            }]}>
+                                                                { dayProduct[padded].conflict && (
+                                                                    <Text style={styles.parcelleExclamation}>!</Text>
+                                                                )}
+                                                            </View>
+                                                        )
+                                                    })}
+                                                </View>
+                                                <View style={styles.hoursContainer}>
+                                                    <Text style={styles.hours}>00H</Text>
+                                                    <Text style={styles.hours}>06H</Text>
+                                                    <Text style={styles.hours}>12H</Text>
+                                                    <Text style={styles.hours}>18H</Text>
+                                                    <Text style={styles.hours}>24H</Text>
+                                                </View>
                                             </View>
-                                            <View style={styles.hoursContainer}>
-                                                <Text style={styles.hours}>00H</Text>
-                                                <Text style={styles.hours}>06H</Text>
-                                                <Text style={styles.hours}>12H</Text>
-                                                <Text style={styles.hours}>18H</Text>
-                                                <Text style={styles.hours}>24H</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                        </View>)} */}
+                                        )
+                                    })}
+                                </View>
+                            </View>) : (
+                                <View style={styles.container}>
+                                    <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
+                                </View>
+                            )} */}
                     </View>
                 )
             }
@@ -306,6 +323,7 @@ const styles = StyleSheet.create({
     dayWeather: {
         backgroundColor: COLORS.DARK_BLUE,
         borderRadius: 35,
+        paddingBottom:35
 
     },
     dayWeatherItemContainer: {
@@ -352,8 +370,9 @@ const styles = StyleSheet.create({
         tintColor: COLORS.DARK_BLUE,
     },
     sliderContainer: {
-        paddingTop: 15,
+        paddingTop: 30,
         paddingHorizontal: 10,
+
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -362,6 +381,7 @@ const styles = StyleSheet.create({
     pulve: {
         paddingHorizontal: 20,
         paddingVertical: 18,
+        borderTopRightRadius: 35,
         display: 'flex',
         flexDirection: 'column',
         marginTop: 10,
@@ -406,6 +426,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     lastMeteoLoad: state.metadata.lastMeteoLoad,
+    parcelles: state.metadata.parcelles
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

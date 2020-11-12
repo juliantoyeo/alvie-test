@@ -200,6 +200,7 @@ export default {
         'days_5': 'VEN',
         'days_6': 'SAM',
         'pulve_title': 'Mes pulvérisations (%{value})',
+        'graph_title': 'Graphiques'
     },
     'meteo_overlay': {
         'header': '%{from}H - %{to}H',

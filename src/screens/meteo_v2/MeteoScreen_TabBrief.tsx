@@ -92,10 +92,12 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (counter - lastLoad >= 60000) {
+    if (counter - lastLoad >= 600000) {
       loadMeteo()
     }
   }, [counter])
+
+  const ready = !!meteoData
 
   return (
     <ScrollView>
@@ -106,7 +108,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
       <View style={styles.iconContainer}>
         <View style={styles.meteoElement}>
           <Image source={require('../../../assets/ICN-Wind.png')} style={styles.image} />
-          { loading ? (
+          { (loading || !ready) ? (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           ): (
             <React.Fragment>
@@ -117,10 +119,9 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         </View>
         <View style={styles.meteoElement}>
           <Image source={require('../../../assets/ICN-Rain.png')} style={styles.image} />
-          { loading && (
+          { (loading || !ready) ? (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
-          )}
-          { !loading && (
+          ) : (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.precipitation)} mm`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.probability)}%`}</Text>
@@ -129,10 +130,9 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         </View>
         <View style={styles.meteoElement}>
           <Image source={require('../../../assets/ICN-Temperature.png')} style={styles.image} />
-          { loading && (
+          { (loading || !ready) ? (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
-          )}
-          { !loading && (
+          ) : (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.mintemp)}°C`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxtemp)}°C`}</Text>
@@ -141,10 +141,9 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         </View>
         <View style={styles.meteoElement}>
           <Image source={require('../../../assets/ICN-Hygro.png')} style={styles.image} />
-          { loading && (
+          { (loading || !ready) ? (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
-          )}
-          { !loading && (
+          ) : (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.minhumi)}%`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxhumi)}%`}</Text>

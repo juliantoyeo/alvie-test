@@ -44,7 +44,7 @@ export interface ModulationContextProps {
     currentDay?: number,
     setCurrentDay?: any,
 
-    meteo?: Array<meteoByHourType>,
+    meteo?: Array<Array<meteoByHourType>>,
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
@@ -88,7 +88,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
     const [mod, setMod] = useState<Array<modulationType>>([])
     const [metrics, setMetrics] = useState<metricsType>()
-    const [meteo, setMeteo] = useState<Array<meteoByHourType>>()
+    const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>()
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
     const [currentDay, setCurrentDay] = useState<number>(0)
