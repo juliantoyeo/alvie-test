@@ -31,7 +31,7 @@ import SelectParcelsScreen from './screens/Modulationv2/SelectParcelsScreen';
 import SelectProductsScreen from './screens/Modulationv2/SelectProductsScreen';
 import SelectSlotScreen from './screens/Modulationv2/SelectSlotScreen';
 import ReportScreen from './screens/Modulationv2/ReportScreen';
-import HeaderText from './components/HeaderText'
+import HeaderText from './components/HeaderText';
 
 import COLORS from './colors'
 
@@ -175,7 +175,7 @@ const Navigator = createSwitchNavigator({
         BarCodeValidationScreen: BarCodeValidationScreen,
 
         Pulverisation_v2: createStackNavigator({
-            Pulverisation_Fields:SelectParcelsScreen,
+            Pulverisation_Fields: SelectParcelsScreen,
             Pulverisation_Products: SelectProductsScreen,
             Pulverisation_Slot: SelectSlotScreen,
             Pulverisation_Report: ReportScreen,

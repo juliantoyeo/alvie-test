@@ -14,6 +14,7 @@ import translations from './src/i18n/i18n.js'
 
 import { SnackbarProvider } from './src/context/snackbar.context'
 import { ModulationProvider } from './src/context/modulation.context'
+import { MeteoProvider } from './src/context/meteo.context';
 
 i18n.translations = translations
 i18n.locale = Localization.locale
@@ -21,28 +22,28 @@ i18n.defaultLocale = 'fr'
 i18n.fallbacks = true
 
 const fetchResources = async () => {
-  await Promise.all([
-    Font.loadAsync({
-      'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
-      'nunito-italic': require('./assets/fonts/Nunito-BoldItalic.ttf'),
-      'nunito-regular': require('./assets/fonts/Nunito-SemiBold.ttf'),
-      'nunito-heavy': require('./assets/fonts/Nunito-ExtraBold.ttf'), 
-      
-      'Roboto_medium': require('./assets/fonts/Nunito-SemiBold.ttf'),
-    }),
-    Asset.loadAsync([
-      require('./assets/blue_back.png'),      
-      require('./assets/meteo_back.png'),      
-      require('./assets/ICN-Nav1.png'),      
-      require('./assets/ICN-Nav2.png'),      
-      require('./assets/ICN-Nav3.png'),      
-      require('./assets/ICN-Nav4.png'),      
-      require('./assets/ICN-Temperature.png'),      
-      require('./assets/ICN-Rain.png'),      
-      require('./assets/ICN-Hygro.png'),      
-      require('./assets/ICN-Wind.png'),      
-    ]),
-  ]);
+    await Promise.all([
+        Font.loadAsync({
+            'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+            'nunito-italic': require('./assets/fonts/Nunito-BoldItalic.ttf'),
+            'nunito-regular': require('./assets/fonts/Nunito-SemiBold.ttf'),
+            'nunito-heavy': require('./assets/fonts/Nunito-ExtraBold.ttf'),
+
+            'Roboto_medium': require('./assets/fonts/Nunito-SemiBold.ttf'),
+        }),
+        Asset.loadAsync([
+            require('./assets/blue_back.png'),
+            require('./assets/meteo_back.png'),
+            require('./assets/ICN-Nav1.png'),
+            require('./assets/ICN-Nav2.png'),
+            require('./assets/ICN-Nav3.png'),
+            require('./assets/ICN-Nav4.png'),
+            require('./assets/ICN-Temperature.png'),
+            require('./assets/ICN-Rain.png'),
+            require('./assets/ICN-Hygro.png'),
+            require('./assets/ICN-Wind.png'),
+        ]),
+    ]);
 };
 
 const store = configureStore();
@@ -51,21 +52,28 @@ const store = configureStore();
 console.ignoredYellowBox = ['Calling getNode()']
 
 
-export default App = () => {
-  const [resourcesLoaded, setResourcesLoaded] = useState(false)
-  if (!resourcesLoaded) {
-    return (
-      <AppLoading startAsync={fetchResources} onFinish={() => setResourcesLoaded(true)} />
-    )
-  }
+const DataProviders = ({ children }) => (
+    <ModulationProvider>
+        <MeteoProvider>
+            {children}
+        </MeteoProvider>
+    </ModulationProvider>
+)
 
-  return (
-    <Provider store={store}>
-      <SnackbarProvider>
-        <ModulationProvider>
-          <AppContainer />
-        </ModulationProvider>
-      </SnackbarProvider>
-    </Provider>  
-  );
+export default App = () => {
+    const [resourcesLoaded, setResourcesLoaded] = useState(false)
+    if (!resourcesLoaded) {
+        return (
+            <AppLoading startAsync={fetchResources} onFinish={() => setResourcesLoaded(true)} />
+        )
+    }
+    return (
+        <Provider store={store}>
+            <SnackbarProvider>
+                <DataProviders>
+                    <AppContainer />
+                </DataProviders>
+            </SnackbarProvider>
+        </Provider>
+    );
 }
