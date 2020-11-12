@@ -79,6 +79,10 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     //     }
     // }, [counter])
 
+    useEffect(() => {
+        loadMeteoDetailed()
+    }, [])
+    
     const loadMeteoDetailed = async () => {
         if (!loading) {
             setIsRefreshing(true)
