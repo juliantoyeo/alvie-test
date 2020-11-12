@@ -17,6 +17,9 @@ import { MeteoContext } from '../../context/meteo.context'
 import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import Metrics_v2 from '../../components/v2/Metrics_v2';
 import _ from 'lodash'
+import ModulationBar from '../../components/v2/ModulationBar'
+import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
+import HourScale from '../../components/v2/HourScale'
 
 const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
     const context = React.useContext(MeteoContext)
@@ -113,10 +116,10 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
             { //!loading && !!detailed.data && !!detailed.data[currentDay] && !!detailed.days && (
                 (
                     <View style={styles.container}>
-                        { !!context.meteo && !!context.meteo4h && (
+                        {!!context.meteo && !!context.meteo4h && !!context.conditions && context.conditions.length > 0 && (
                             <React.Fragment>
                                 {/*============= Week Tab =================*/}
-                                <View style={styles.tabBar}>
+                                < View style={styles.tabBar}>
                                     {context.dow.map((d, i) => {
                                         const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
@@ -125,37 +128,25 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
                                                 onPress={() => { setCurrentDay(i) }}
-                                            //disabled={isRefreshing}
                                             >
                                                 <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
                                                 <View style={styles.weatherContainer}>
                                                     <Image source={PICTO_MAP[PICTO_TO_IMG[pictos[i]]]} style={styles.weatherImage} />
                                                 </View>
-                                                {/* <View style={{ flex: 1, paddingTop: 5 }}>
-                                        <ModulationBarTiny
-                                            data={context.conditions[i]}
-                                            height={8}
-                                            width={60}
-                                        />
-                                    </View> */}
-                                                {/* <View style={styles.weatherContainer}>
-                                        <Image source={PICTO_MAP[d.pictoDay]} style={styles.weatherImage} />
-                                    </View> */}
+                                                <View style={{ flex: 1, paddingTop: 5 }}>
+                                                    <ModulationBarTiny
+                                                        data={context.conditions[i]}
+                                                        height={8}
+                                                        width={60}
+                                                    />
+                                                </View>
                                             </TouchableOpacity>
                                         )
                                     })}
                                 </View>
-                                {/*=============== Day Weather ==============*/}
+
                                 <View style={styles.dayContent}>
-                                    <View style={styles.dayWeather}>
-                                        {!!context.metrics && (
-                                            <Metrics_v2
-                                                currentHourMetrics={context.metrics}
-                                                hasRacinaire={true}
-                                                color={COLORS.DARK_BLUE}
-                                            />
-                                        )}
-                                    </View>
+                                    {/*=============== Day weather ==============*/}
                                     <View style={styles.hour4Weather}>
                                         {context.meteo4h[currentDay].map((m, i) => {
                                             return (
@@ -166,55 +157,81 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                                             )
                                         })}
                                     </View>
+
+
+                                    <View style={styles.dayWeather}>
+                                        {/*=============== Metrics ==============*/}
+                                        {!!context.metrics && (
+                                            <Metrics_v2
+                                                currentHourMetrics={context.metrics}
+                                                hasRacinaire={true}
+                                                color="#fff"
+                                            />
+                                        )}
+                                        {/*=============== Conditions ==============*/}
+                                        <View style={styles.sliderContainer}>
+                                            {/*<HygoParcelleIntervention/>*/}
+                                            <ModulationBar
+                                                from={0/*parseInt(hour)*/}
+                                                initialMax={4}
+                                                initialMin={5}
+                                                data={context.conditions[currentDay]}
+                                                width={Dimensions.get('window').width - 30}
+                                                onHourChangeEnd={() => { }}
+                                                enabled={false}
+                                            />
+                                        </View>
+                                        <HourScale hour={'00'/*hour*/} color="#fff" />
+                                    </View>
                                 </View>
                             </React.Fragment>
                         )}
-
-                        {/* =============== Loading Spinner =============
+                        {/* =============== Loading Spinner ============= */}
                         { loading && (
                             <View style={styles.container}>
                                 <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
                             </View>
-                        )} */}
+                        )}
+                        {/* 
+                        <View style={styles.pulve}>
+                            <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
 
-                        {/* <View style={styles.pulve}>
-                        <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
-
-                        <View style={styles.pulveContainer}>
-                            {detailed.products.map(p => {
-                                let dayProduct = detailed.data[currentDay].hours1[p.id].data
-                                return (
-                                    <View style={styles.productContainer} key={p.id}>
-                                        <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
-                                        <View style={styles.productCondition}>
-                                            {[...Array(24).keys()].map(i => {
-                                                let padded = `${i}`.padStart(2, '0')
-                                                return (
-                                                    <View key={i} style={[styles.parcelle, {
-                                                        backgroundColor: COLORS[dayProduct[padded].condition]
-                                                    }]}>
-                                                        { dayProduct[padded].conflict && (
-                                                            <Text style={styles.parcelleExclamation}>!</Text>
-                                                        )}
-                                                    </View>
-                                                )
-                                            })}
+                            <View style={styles.pulveContainer}>
+                                {detailed.products.map(p => {
+                                    let dayProduct = detailed.data[currentDay].hours1[p.id].data
+                                    return (
+                                        <View style={styles.productContainer} key={p.id}>
+                                            <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
+                                            <View style={styles.productCondition}>
+                                                {[...Array(24).keys()].map(i => {
+                                                    let padded = `${i}`.padStart(2, '0')
+                                                    return (
+                                                        <View key={i} style={[styles.parcelle, {
+                                                            backgroundColor: COLORS[dayProduct[padded].condition]
+                                                        }]}>
+                                                            { dayProduct[padded].conflict && (
+                                                                <Text style={styles.parcelleExclamation}>!</Text>
+                                                            )}
+                                                        </View>
+                                                    )
+                                                })}
+                                            </View>
+                                            <View style={styles.hoursContainer}>
+                                                <Text style={styles.hours}>00H</Text>
+                                                <Text style={styles.hours}>06H</Text>
+                                                <Text style={styles.hours}>12H</Text>
+                                                <Text style={styles.hours}>18H</Text>
+                                                <Text style={styles.hours}>24H</Text>
+                                            </View>
                                         </View>
-                                        <View style={styles.hoursContainer}>
-                                            <Text style={styles.hours}>00H</Text>
-                                            <Text style={styles.hours}>06H</Text>
-                                            <Text style={styles.hours}>12H</Text>
-                                            <Text style={styles.hours}>18H</Text>
-                                            <Text style={styles.hours}>24H</Text>
-                                        </View>
-                                    </View>
-                                )
-                            })}
-                        </View>
-                    </View> */}
+                                    )
+                                })}
+                            </View>
+                        </View>)} */}
                     </View>
-                )}
-        </Content>
+                )
+            }
+        </Content >
     )
 }
 
@@ -276,6 +293,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 15,
         paddingTop: 20,
+        paddingBottom: 20,
         shadowColor: '#000',
         elevation: 3,
         shadowOpacity: .2,
@@ -286,8 +304,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
     },
     dayWeather: {
-        backgroundColor: COLORS.BEIGE,
-        paddingBottom: 10,
+        backgroundColor: COLORS.DARK_BLUE,
         borderRadius: 35,
 
     },
@@ -333,6 +350,14 @@ const styles = StyleSheet.create({
         height: 24,
         resizeMode: 'cover',
         tintColor: COLORS.DARK_BLUE,
+    },
+    sliderContainer: {
+        paddingTop: 15,
+        paddingHorizontal: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.DARK_BLUE
     },
     pulve: {
         paddingHorizontal: 20,

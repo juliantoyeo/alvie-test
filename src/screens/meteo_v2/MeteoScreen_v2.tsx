@@ -16,7 +16,7 @@ import { MeteoContext } from '../../context/meteo.context';
 import { connect } from 'react-redux'
 
 const MeteoScreen_v2 = ({ navigation, parcelles }) => {
-    const { loadMeteo } = React.useContext(MeteoContext)
+    const { loadMeteo, loadConditions } = React.useContext(MeteoContext)
     const [currentTab, setCurrentTab] = useState(0)
     const tabs = ["meteoBriefScreen", "meteoDetailedScreen", "meteoRadarScreen"]
     const switchTab = (i) => {
@@ -38,6 +38,7 @@ const MeteoScreen_v2 = ({ navigation, parcelles }) => {
 
     useEffect(() => {
         loadMeteo(parcelles.fields)
+        loadConditions(parcelles.fields)
     }, [])
     return (
         <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{ top: 'always' }}>

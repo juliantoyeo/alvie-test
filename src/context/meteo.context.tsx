@@ -120,37 +120,37 @@ const MeteoProvider = ({ children, parcelles }) => {
         !!meteo && buildMetrics()
     }, [meteo, currentDay])
 
-    // const loadConditions = async () => {
-    //     let now = moment.utc()
-    //     if (now.minutes() >= 30) {
-    //         now.hours(now.hours() + 1)
-    //     }
-    //     now = now.startOf('day')
-    //     // array of the 5 next days to iterate on
-    //     const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-    //     try {
-    //         const data: Array<dailyConditionType> = await Promise.all(
-    //             dt.map((day) => {
-    //                 return (getConditions_v2({
-    //                     day,
-    //                     products: selectedProducts.map((p) => p.phytoproduct.id),
-    //                     parcelles: selectedFields.map((f) => f.id)
-    //                 }))
-    //             }
-    //             ))
-    //         setConditions(data)
-    //     } catch (e) {
-    //         setConditions(null)
-    //         snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
-    //     }
-    // }
+    // TODO : use the active products or redefine a specific algorithm
+    const loadConditions = async (fields:Array<fieldType>, products:Array<activeProductType>) => {
+        let now = moment.utc()
+        if (now.minutes() >= 30) {
+            now.hours(now.hours() + 1)
+        }
+        now = now.startOf('day')
+        // array of the 5 next days to iterate on
+        const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+        try {
+            const data: Array<dailyConditionType> = await Promise.all(
+                dt.map((day) => {
+                    return (getConditions_v2({
+                        day,
+                        products: [6], //products.map((p) => p.phytoproduct.id),
+                        parcelles: fields.map((f) => f.id)
+                    }))
+                }
+                ))
+            setConditions(data)
+        } catch (e) {
+            setConditions(null)
+            snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
+        }
+    }
     return (
         <MeteoContext.Provider value={{
             dow, currentDay, setCurrentDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
             metrics, setMetrics,
-            conditions,
-            //loadConditions
+            conditions, loadConditions
         }}>
             {children}
         </MeteoContext.Provider>

@@ -22,7 +22,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2 } from '../../api/hygoApi';
-import { meteoByHourType, meteoDataType } from '../../types/meteo.types';
+import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
 import { modulationType } from '../../types/modulation.types';
@@ -266,7 +266,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                         />
                                     </View>
 
-                                    <HourScale hour={'00'/*hour*/} />
+                                    <HourScale hour={'00'} />
 
                                     <ExtraMetrics currentHourMetrics={metrics} />
                                 </View>
