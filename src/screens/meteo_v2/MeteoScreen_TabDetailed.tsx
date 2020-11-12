@@ -19,7 +19,7 @@ import Metrics_v2 from '../../components/v2/Metrics_v2';
 import _ from 'lodash'
 import ModulationBar from '../../components/v2/ModulationBar'
 import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
-import HourScale from '../../components/v2/HourScale'
+import { HourScale2 } from '../../components/v2/HourScale'
 import HygoChart from '../../components/realtime/HygoChart'
 
 const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles }) => {
@@ -185,8 +185,10 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                 onHourChangeEnd={() => { }}
                                                 enabled={false}
                                             />
+                                            <HourScale2 color="#fff" width={Dimensions.get('window').width - 100}/>
+                                            {/* <View style={{backgroundColor:'#000', height:30, width : Dimensions.get('window').width - 100}}></View> */}
                                         </View>
-                                        {/* <HourScale hour={'00'} color="#fff" /> */}
+                                        
                                     </View>
                                 </View>
                                 {/*============= Charts ============*/}
@@ -201,6 +203,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                          const dt = new Date(m.timestamp.replace(' ', 'T'))
                                         return { x: dt, y: (m.maxhumi + m.minhumi) /2 }
                                     })} mainColor={COLORS.DARK_BLUE} secondaryColor={COLORS.DARK_GREEN} />
+                                    
                                 </View>
                             </React.Fragment>
                         )}

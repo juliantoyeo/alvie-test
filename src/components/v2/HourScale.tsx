@@ -39,6 +39,28 @@ const HourScale = ({ hour, color }) => {
     )
 }
 
+export const HourScale2 = ({width, color}) => {
+    
+    return (
+        <View style={{ width: width + 10, display: 'flex', flexDirection: 'row' }}>
+            <Text style={[styles.hoursDetails, {flex:1}]}>0h</Text>
+            <Text style={[styles.hoursDetails, {flex:1}]}>6h</Text>
+            <Text style={[styles.hoursDetails, {flex:1}]}>12h</Text>
+            <View style={{flex:1,display:'flex', justifyContent:'space-between', flexDirection:'row'}}>
+                <Text style={styles.hoursDetails}>18h</Text>
+                <Text style={styles.hoursDetails}>23h</Text>
+            </View>
+        </View>
+    )
+}
 
+const styles = StyleSheet.create({
+    hoursDetails: {
+        fontFamily: 'nunito-bold',
+        fontSize: 12,
+        color: 'white',
+       
+    },
+})
 
 export default HourScale
