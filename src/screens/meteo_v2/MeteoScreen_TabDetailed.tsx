@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { RefreshControl, StyleSheet, View, Dimensions, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Spinner, Text, Content } from 'native-base'
 
@@ -7,7 +7,7 @@ import { getMeteoDetailed } from '../../api/hygoApi'
 import { meteoSynced } from '../../store/actions/metaActions'
 
 import { connect } from 'react-redux'
-
+import { meteoByHourType } from '../../types/meteo.types'
 import COLORS from '../../colors'
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
@@ -16,6 +16,7 @@ const { meteoDetailedScreen } = AMPLITUDE_EVENTS
 import { MeteoContext } from '../../context/meteo.context'
 import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import Metrics_v2 from '../../components/v2/Metrics_v2';
+import _ from 'lodash'
 
 const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
     const context = React.useContext(MeteoContext)
@@ -23,9 +24,25 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [detailed, setDetailed] = useState({})
     const { currentDay, setCurrentDay } = context
-
     const [lastLoad, setLastLoad] = useState(-1)
     const [counter, setCounter] = useState(0);
+
+    const pictos: Array<string> = useMemo(() => {
+        const ret: Array<string> = []
+        if (!context.meteo || context.meteo.length == 0) {
+            return []
+        }
+        // For each day, find the most recurrent picto and place it in variable ret
+        _.forEach(context.meteo, (v: Array<meteoByHourType>, k: number) => {
+            const pictos: Array<string> = v.map((d) => d.pictocode)
+            const r: string = _.head(_(pictos)
+                .countBy()
+                .entries()
+                .maxBy(_.last))
+            ret.push(r)
+        })
+        return ret
+    }, [context.meteo])
 
     useEffect(() => {
         let interval
@@ -103,6 +120,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                                     {context.dow.map((d, i) => {
                                         const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
                                         return (
+
                                             <TouchableOpacity
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
@@ -110,6 +128,9 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                                             //disabled={isRefreshing}
                                             >
                                                 <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                <View style={styles.weatherContainer}>
+                                                    <Image source={PICTO_MAP[PICTO_TO_IMG[pictos[i]]]} style={styles.weatherImage} />
+                                                </View>
                                                 {/* <View style={{ flex: 1, paddingTop: 5 }}>
                                         <ModulationBarTiny
                                             data={context.conditions[i]}

@@ -5,7 +5,6 @@ import getUserAgent from './getUserAgent';
 import { fieldType } from '../types/field.types';
 import { errorType } from '../types/error.types';
 import { activeProductType } from '../types/activeproduct.types';
-import {meteoByHourType, meteoDataType} from '../types/meteo.types';
 import { modulationType} from '../types/modulation.types';
 import { conditionType } from '../types/condition.types'
 import _ from 'lodash';
@@ -220,23 +219,6 @@ export const getMeteoDetailed = async ({ day, product }) => {
         return response.data
     } catch (error) {
         return {}
-    }
-}
-
-export const getMeteoDetailed_v2 = async (day: string): Promise<meteoDataType> => {
-    /**
-     * Retrieve meteo by hour and meteo by 4 hour of the day over the givenFields
-     * faster than getMeteoDetailed
-     * @param day = "2020-09-09"
-     */
-    try {
-        const response = await hygoApi.post('/app/meteo/detailed/v2', { day })
-        return response.data
-    } catch (error) {
-        return {
-            meteoByHour: [],
-            meteoBy4Hour: []
-        }
     }
 }
 

@@ -15,10 +15,3 @@ export interface meteoByHourType {
     pictocode: string,
     winddirection: string
 }
-
-export interface meteoDataType {
-    day?: string
-    meteoByHour?: Array<meteoByHourType>,
-    //meteoBy4Hour?: Array<meteoByHourType>,
-    //pictoDay? :string
-}

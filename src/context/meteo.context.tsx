@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { getEquipment } from '../api/hygoApi';
 import COLORS from '../colors'
 
 import { activeProductType } from '../types/activeproduct.types';
 import { fieldType } from '../types/field.types';
-import { meteoDataType } from '../types/meteo.types';
+import { meteoByHourType } from '../types/meteo.types';
 import { metricsType } from '../types/metrics.types';
 import { dowType } from '../types/dow.types';
 
@@ -26,7 +26,7 @@ export interface MeteoContextProps {
     currentDay?: number,
     setCurrentDay?: any,
 
-    meteo?: meteoDataType,
+    meteo?: Array<meteoByHourType>,
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
@@ -44,7 +44,7 @@ const MeteoProvider = ({ children, parcelles }) => {
 
     const snackbar = React.useContext(SnackbarContext)
 
-    const [meteo, setMeteo] = useState<meteoDataType>()
+    const [meteo, setMeteo] = useState<Array<meteoByHourType>>()
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [metrics, setMetrics] = useState<metricsType>()
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
@@ -71,51 +71,54 @@ const MeteoProvider = ({ children, parcelles }) => {
     }
 
     /*========= Metrics ======*/
-    const buildMetrics = () => {
-        // build metrics for the whole day : between 5h and 22h
-        const minval = -99999, maxval = 99999
-        let chd: metricsType = {}, dir = []
-        _.forEach(meteo[currentDay], (v, k2) => {
-            const h = v.hour.toString().padStart(2, '0')
-            if (parseInt(h) < 5  || parseInt(h) > 22) {
-                return
-            }
-            chd.wind = Math.max((chd.wind || minval), v.wind)
-            chd.gust = Math.max((chd.gust || minval), v.gust)
-
-            chd.precipitation = (chd.precipitation || 0) + v.precipitation
-            chd.probabilityCnt = (chd.probabilityCnt || 0) + 1
-            chd.probabilitySum = (chd.probabilitySum || 0) + parseFloat(v.probability)
-
-            chd.prevprecipitation = (chd.prevprecipitation || 0) + (parseInt(h) < 22 ? v.precipitation : 0)
-
-            chd.mintemp = Math.min((chd.mintemp || maxval), v.mintemp)
-            chd.maxtemp = Math.max((chd.maxtemp || minval), v.maxtemp)
-
-            chd.minhumi = Math.min((chd.minhumi || maxval), v.minhumi)
-            chd.maxhumi = Math.max((chd.maxhumi || minval), v.maxhumi)
-
-            chd.minsoilhumi = Math.min((chd.minsoilhumi || maxval), v.soilhumi)
-            chd.maxsoilhumi = Math.max((chd.maxsoilhumi || minval), v.soilhumi)
-
-            dir.push(v.winddirection)
-
-            chd.r2 = Math.max((chd.r2 || minval), v.r2)
-            chd.r3 = Math.max((chd.r3 || minval), v.r3)
-            chd.r6 = Math.max((chd.r6 || minval), v.r6)
-            chd.t3 = Math.min((chd.t3 || maxval), v.t3)
-
-            chd.deltatemp = Math.max((chd.deltatemp || minval), v.deltatemp)
-        })
-
-        chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
-        chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
-        setMetrics(chd)
-    }
-
     useEffect(() => {
+        const buildMetrics = async () => {
+            // build metrics for the whole day : between 5h and 22h
+            if (!!meteo) {
+                setMetrics(null)
+            }
+            const minval = -99999, maxval = 99999
+            let chd: metricsType = {}, dir = []
+            _.forEach(meteo[currentDay], (v, k2) => {
+                const h = v.hour.toString().padStart(2, '0')
+                if (parseInt(h) < 5 || parseInt(h) > 22) {
+                    return
+                }
+                chd.wind = Math.max((chd.wind || minval), v.wind)
+                chd.gust = Math.max((chd.gust || minval), v.gust)
+
+                chd.precipitation = (chd.precipitation || 0) + v.precipitation
+                chd.probabilityCnt = (chd.probabilityCnt || 0) + 1
+                chd.probabilitySum = (chd.probabilitySum || 0) + parseFloat(v.probability)
+
+                chd.prevprecipitation = (chd.prevprecipitation || 0) + (parseInt(h) < 22 ? v.precipitation : 0)
+
+                chd.mintemp = Math.min((chd.mintemp || maxval), v.mintemp)
+                chd.maxtemp = Math.max((chd.maxtemp || minval), v.maxtemp)
+
+                chd.minhumi = Math.min((chd.minhumi || maxval), v.minhumi)
+                chd.maxhumi = Math.max((chd.maxhumi || minval), v.maxhumi)
+
+                chd.minsoilhumi = Math.min((chd.minsoilhumi || maxval), v.soilhumi)
+                chd.maxsoilhumi = Math.max((chd.maxsoilhumi || minval), v.soilhumi)
+
+                dir.push(v.winddirection)
+
+                chd.r2 = Math.max((chd.r2 || minval), v.r2)
+                chd.r3 = Math.max((chd.r3 || minval), v.r3)
+                chd.r6 = Math.max((chd.r6 || minval), v.r6)
+                chd.t3 = Math.min((chd.t3 || maxval), v.t3)
+
+                chd.deltatemp = Math.max((chd.deltatemp || minval), v.deltatemp)
+            })
+
+            chd.winddirection = _.head(_(dir).countBy().entries().maxBy(_.last));
+            chd.probability = chd.probabilityCnt > 0 ? chd.probabilitySum / chd.probabilityCnt : 0.0
+            setMetrics(chd)
+        }
+
         !!meteo && buildMetrics()
-    }, [meteo])
+    }, [meteo, currentDay])
 
     // const loadConditions = async () => {
     //     let now = moment.utc()
@@ -146,7 +149,7 @@ const MeteoProvider = ({ children, parcelles }) => {
             dow, currentDay, setCurrentDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
             metrics, setMetrics,
-            conditions, 
+            conditions,
             //loadConditions
         }}>
             {children}
