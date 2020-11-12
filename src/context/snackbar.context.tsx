@@ -10,7 +10,7 @@ export type SnackType = 'DEFAULT' | 'OK' | 'WARNING' | 'ALERT'
 
 export const SnackbarContext = React.createContext<SnackbarContextProps>({});
 
-export const SnackbarProvider: React.FunctionComponent = ({ children }) => {
+const SnackbarProvider: React.FunctionComponent = ({ children }) => {
 
     const [snackIsVisible, setSnackIsVisible] = useState<boolean>(false)
     const [snackText, setSnackText] = useState<string>('')
@@ -78,3 +78,5 @@ const styles = StyleSheet.create({
         color: 'white',
     }
 })
+
+export default SnackbarProvider

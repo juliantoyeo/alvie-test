@@ -11,10 +11,12 @@ import MeteoDetailed_v2 from './MeteoScreen_TabDetailed'
 import * as Localization from 'expo-localization';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
-import { now } from 'lodash';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { MeteoContext } from '../../context/meteo.context';
+import { connect } from 'react-redux'
 
-const MeteoScreen = ({ navigation }) => {
+const MeteoScreen_v2 = ({ navigation, parcelles }) => {
+    const { loadMeteo } = React.useContext(MeteoContext)
     const [currentTab, setCurrentTab] = useState(0)
     const tabs = ["meteoBriefScreen", "meteoDetailedScreen", "meteoRadarScreen"]
     const switchTab = (i) => {
@@ -34,6 +36,9 @@ const MeteoScreen = ({ navigation }) => {
         })
     }, [currentTab])
 
+    useEffect(() => {
+        loadMeteo(parcelles.fields)
+    }, [])
     return (
         <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -114,4 +119,11 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MeteoScreen
+const mapStateToProps = (state) => ({
+    parcelles: state.metadata.parcelles,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeteoScreen_v2);

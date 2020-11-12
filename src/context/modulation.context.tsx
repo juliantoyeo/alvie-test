@@ -7,6 +7,9 @@ import { fieldType } from '../types/field.types';
 import { meteoDataType } from '../types/meteo.types';
 import { modulationType } from '../types/modulation.types';
 import { conditionType } from '../types/condition.types';
+import { metricsType } from '../types/metrics.types';
+import { dowType } from '../types/dow.types';
+
 import { getMetrics_v2, getMetrics4h_v2, getConditions_v2 } from '../api/hygoApi';
 import { SnackbarContext } from './snackbar.context';
 import i18n from 'i18n-js';
@@ -68,38 +71,13 @@ export type selectedSlotType = {
     min: number,
     max: number
 }
-export type metricsType ={
-    deltatemp: number,
-    winddirection: string,
-    wind: number,
-    gust: number,
-    precipitation: number,
-    prevprecipitation: number,
-    probabilityCnt: number,
-    probabilitySum: number,
-    probability: number,
-    mintemp: number,
-    maxtemp: number,
-    minhumi: number,
-    maxhumi: number,
-    minsoilhumi: number,
-    maxsoilhumi: number,
-    r2: number,
-    r3: number,
-    r6: number,
-    t3: number,
-}
 
-export type dowType = {
-    dt: string,
-    name: string
-}
 
 export type dailyConditionType = Array<conditionType>
 
 export const ModulationContext = React.createContext<ModulationContextProps>({});
 
-export const ModulationProvider: React.FunctionComponent = ({ children }) => {
+const ModulationProvider: React.FunctionComponent = ({ children }) => {
     
     const snackbar = React.useContext(SnackbarContext)
 
@@ -189,3 +167,5 @@ export const ModulationProvider: React.FunctionComponent = ({ children }) => {
         </ModulationContext.Provider>
     );
 };
+
+export default ModulationProvider

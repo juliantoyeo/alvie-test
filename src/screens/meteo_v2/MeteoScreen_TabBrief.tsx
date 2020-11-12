@@ -7,6 +7,7 @@ import capitalize from '../../utils/capitalize'
 import COLORS from '../../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../../api/hygoApi'
+import { MeteoContext } from '../../context/meteo.context'
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
 
@@ -24,7 +25,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     i18n.t('months.november'),
     i18n.t('months.december'),
   ]
-
+  const { meteo4h } = React.useContext(MeteoContext)
   const [loading, setLoading] = useState(true)
   const [meteoData, setMeteoData] = useState<any>({})
   const [lastLoad, setLastLoad] = useState(-1)
@@ -105,10 +106,9 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
       <View style={styles.iconContainer}>
         <View style={styles.meteoElement}>
           <Image source={require('../../../assets/ICN-Wind.png')} style={styles.image} />
-          { loading && (
+          { loading ? (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
-          )}
-          { !loading && (
+          ): (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.wind)} km/h`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.gust)} km/h`}</Text>

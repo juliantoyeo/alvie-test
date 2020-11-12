@@ -361,7 +361,6 @@ export const getInterventions = async () => {
 // Retrive intervention ID
 export const getInterventionByID = async ({ id }) => {
     try {
-        console.log("=========getIntervention",id)
         const response = await hygoApi.post('/app/interventions/details', { id });
         return response.data
     } catch (error) {
