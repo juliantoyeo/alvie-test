@@ -79,43 +79,43 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     //     }
     // }, [counter])
 
-    // const loadMeteoDetailed = async () => {
-    //     if (!loading) {
-    //         setIsRefreshing(true)
-    //     }
+    const loadMeteoDetailed = async () => {
+        if (!loading) {
+            setIsRefreshing(true)
+        }
 
-    //     let result = await getMeteoDetailed({
-    //         day: null,
-    //         product: null,
-    //     })
-    //     setDetailed(result)
+        let result = await getMeteoDetailed({
+            day: null,
+            product: null,
+        })
+        setDetailed(result)
 
-    //     setCurrentDay(prev => {
-    //         if (prev === null) {
-    //             return result.days[0]
-    //         }
-    //         return prev
-    //     })
+        setCurrentDay(prev => {
+            if (prev === null) {
+                return result.days[0]
+            }
+            return prev
+        })
 
-    //     meteoSynced((new Date()).getTime())
+        meteoSynced((new Date()).getTime())
 
-    //     setLoading(false)
-    //     setIsRefreshing(false)
-    // }
+        setLoading(false)
+        setIsRefreshing(false)
+    }
 
-    // const onRefresh = async () => {
-    //     setIsRefreshing(true)
-    //     await Promise.all([
-    //         loadMeteoDetailed(true),
-    //         context.loadConditions(parcelles.fields),
-    //         context.loadMeteo(parcelles.fields)
-    //     ])
-    //     setIsRefreshing(false)
-    // }
+    const onRefresh = async () => {
+        setIsRefreshing(true)
+        await Promise.all([
+            loadMeteoDetailed(true),
+            context.loadConditions(parcelles.fields),
+            context.loadMeteo(parcelles.fields)
+        ])
+        setIsRefreshing(false)
+    }
 
     return (
         <Content
-           // refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
+           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
             contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
             {
@@ -204,7 +204,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                 </View>
                             </React.Fragment>
                         )}
-                        {/* =============== Loading Spinner =============
+                        {/* =============== Loading Spinner ============= */}
                         { !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt] && !!detailed.days ? (
                             <View style={styles.pulve}>
                                 <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
@@ -244,7 +244,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                 <View style={styles.container}>
                                     <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
                                 </View>
-                            )} */}
+                            )}
                     </View>
                 )
             }
