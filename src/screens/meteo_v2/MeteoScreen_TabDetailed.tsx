@@ -91,23 +91,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
     setIsRefreshing(false)
   }
 
-  const goToDetails = ({ day, product }) => {
-
-    // console.log("Amplitude : ", meteoDetailedScreen.click_goToPulvDetails)
-    Amplitude.logEventWithProperties(meteoDetailedScreen.click_goToPulvDetails, {
-      timestamp: Date.now()
-    })
-
-    navigation.navigate('LoadingScreen', {
-      next: 'MeteoDetailedDetails',
-      params: {
-        day,
-        product
-      },
-      action: getMeteoDetailed
-    })
-  }
-
   return (
     <Content refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       { loading && (
@@ -172,13 +155,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
               { detailed.products.map(p => {
                 let dayProduct = detailed.data[currentDay].hours1[p.id].data
                 return (
-                  <TouchableWithoutFeedback onPress={() => {
-                    goToDetails({
-                      product: p.id,
-                      day: currentDay,
-                    })
-                  }} key={p.id}>
-                    <View style={styles.productContainer}>
+                    <View style={styles.productContainer} key={p.id}>
                       <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
                       <View style={styles.productCondition}>
                         { [...Array(24).keys()].map(i => {
@@ -202,7 +179,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced }) => {
                         <Text style={styles.hours}>24H</Text>
                       </View>
                     </View>
-                  </TouchableWithoutFeedback>
                 )
               })}
             </View>
