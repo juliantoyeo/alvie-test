@@ -102,7 +102,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     }
   }, [counter])
 
-  const ready = !!meteoData
+  const ready = !!meteoData && !!meteoData.next3hours
 
   return (
     <ScrollView>
