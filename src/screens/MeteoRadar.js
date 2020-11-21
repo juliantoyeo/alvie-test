@@ -135,7 +135,7 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
           <Text style={styles.loadingPercent}>{`${loadingPercent}%`}</Text>
         </View>
       )}
-      { region && !loading && (
+      { region && !loading && images.length > 0 && (
         <View style={styles.mapContainer}>
           <Button icon transparent style={styles.posButton} onPress={() => setAgriRegion()}>
             <Icon name="my-location" type="MaterialIcons" style={styles.posIcon} />
