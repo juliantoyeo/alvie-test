@@ -108,7 +108,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.wind)} km/h`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.gust)} km/h`}</Text>
@@ -120,7 +120,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.precipitation)} mm`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.probability)}%`}</Text>
@@ -132,7 +132,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.mintemp)}°C`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxtemp)}°C`}</Text>
@@ -144,7 +144,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.minhumi)}%`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxhumi)}%`}</Text>
