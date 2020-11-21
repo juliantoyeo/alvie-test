@@ -7,6 +7,7 @@ import capitalize from '../utils/capitalize'
 import COLORS from '../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../api/hygoApi'
+import _ from 'lodash'
 
 const MeteoBriefScreen = ({ navigation }) => {
 
@@ -35,8 +36,11 @@ const MeteoBriefScreen = ({ navigation }) => {
   })
   const loadMeteo = async () => {
     let meteo = await getMeteo()
+    setLoading(true)
+    if (_.isEmpty(meteo)) {
+        return 
+    }
     setMeteoData(meteo)
-
     setHourRange({
       start: getHour(false),
       end: getHour(true),
@@ -108,7 +112,7 @@ const MeteoBriefScreen = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.wind)} km/h`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.gust)} km/h`}</Text>
@@ -120,7 +124,7 @@ const MeteoBriefScreen = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.precipitation)} mm`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.probability)}%`}</Text>
@@ -132,7 +136,7 @@ const MeteoBriefScreen = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.mintemp)}°C`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxtemp)}°C`}</Text>
@@ -144,7 +148,7 @@ const MeteoBriefScreen = ({ navigation }) => {
           { loading && (
             <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
           )}
-          { !loading && (
+          { !loading && !!meteoData && !!meteoData.next3hours && (
             <React.Fragment>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.minhumi)}%`}</Text>
               <Text style={styles.iconText}>{`${Math.round(meteoData.next3hours.maxhumi)}%`}</Text>
@@ -159,7 +163,7 @@ const MeteoBriefScreen = ({ navigation }) => {
         )}
        
 
-        {!loading && meteoData.products.map(p => {
+        {!loading && !!meteoData && !!meteoData.products && meteoData.products.map(p => {
             return (
               <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={parseInt(moment().format('HH'))} />
             )

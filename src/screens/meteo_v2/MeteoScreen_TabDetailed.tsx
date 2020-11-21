@@ -95,7 +95,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
         setDetailed(result)
 
         setCurrentDay(prev => {
-            if (prev === null) {
+            if (prev === null && !!result && !!result.days && result.days.length > 0) {
                 return result.days[0]
             }
             return prev

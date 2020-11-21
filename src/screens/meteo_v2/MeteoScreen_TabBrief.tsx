@@ -8,6 +8,7 @@ import COLORS from '../../colors'
 import moment from 'moment-timezone'
 import { getMeteo } from '../../api/hygoApi'
 import { MeteoContext } from '../../context/meteo.context'
+import _ from 'lodash'
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
 
@@ -35,7 +36,11 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     end: ''
   })
   const loadMeteo = async () => {
+    setLoading(true)
     let meteo = await getMeteo()
+    if (_.isEmpty(meteo)) {
+        return 
+    }
     setMeteoData(meteo)
 
     setHourRange({
