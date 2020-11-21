@@ -13,8 +13,8 @@ const Map = ({ region, parcelles, selected, setSelected, currentData }) => {
 
     let r = {
       ...center,
-      longitudeDelta: Math.max(0.0222, 2 * Math.abs(region.lon_max - center.longitude)),
-      latitudeDelta: Math.max(0.0121, 2 * Math.abs(region.lat_max - center.latitude)),
+      longitudeDelta: Math.max(0.0222,  Math.abs(region.lon_max - center.longitude)),
+      latitudeDelta: Math.max(0.0121, Math.abs(region.lat_max - center.latitude)),
     }
 
     return r
