@@ -130,12 +130,12 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
         let r = {
             ...center,
-            longitudeDelta: Math.max(0.0222, Math.abs(parcelles.region.lon_max - center.longitude)),
-            latitudeDelta: Math.max(0.0121, Math.abs(parcelles.region.lat_max - center.latitude)),
+            longitudeDelta: Math.max(0.0222, 2 * Math.abs(parcelles.region.lon_max - center.longitude)),
+            latitudeDelta: Math.max(0.0121, 2 * Math.abs(parcelles.region.lat_max - center.latitude)),
         }
-
         return r
     }
+    const region = getRegion()
 
     const polygons = useRef([]);
     if (polygons.current.length !== parcelles.length) {
@@ -153,7 +153,6 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
     }
 
-    //console.log(cultureList.sort((a,b) => (b.name >= a.name) ? -1 :  1))
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -175,9 +174,11 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
                     <MapView
                         provider="google"
                         mapType="hybrid"
-                        initialRegion={getRegion()}
-                        style={styles.map}>
-
+                        initialRegion={region}
+                        style={styles.map}
+                        loadingEnabled={true}
+                    >
+                        
                         {parcelles.fields.map((field, idx) => {
                             return (
                                 <Polygon2

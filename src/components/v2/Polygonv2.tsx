@@ -21,7 +21,7 @@ export const Polygon2 = ({ strokeWidth, strokeColor, fillColor, _ref, onLayout, 
         strokeWidth={strokeWidth}
         strokeColor= {_strokeColor}
         fillColor= {_fillColor}
-        ref={_ref}
+        
         onLayout={onLayout}
 
         tappable={tappable}

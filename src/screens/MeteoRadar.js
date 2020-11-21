@@ -84,8 +84,8 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
 
     let r = {
       ...center,
-      latitudeDelta: Math.abs(center.latitude - coords.lat_min),
-      longitudeDelta: Math.abs(center.longitude - coords.lon_min),
+      latitudeDelta: 2 * Math.abs(center.latitude - coords.lat_min),
+      longitudeDelta: 2 * Math.abs(center.longitude - coords.lon_min),
     }
 
     if (init) {
@@ -103,8 +103,8 @@ const MeteoRadar = ({ navigation, active, parcelles }) => {
 
     let r = {
       ...center,
-      longitudeDelta: Math.max(0.1502, Math.abs(parcelles.region.lon_max - center.longitude)),
-      latitudeDelta: Math.max(0.1501, Math.abs(parcelles.region.lat_max - center.latitude)),
+      longitudeDelta: Math.max(0.1502, 2 * Math.abs(parcelles.region.lon_max - center.longitude)),
+      latitudeDelta: Math.max(0.1501, 2 * Math.abs(parcelles.region.lat_max - center.latitude)),
     }
 
     if (init) {
