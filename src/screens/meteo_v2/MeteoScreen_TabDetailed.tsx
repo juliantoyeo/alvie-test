@@ -143,13 +143,13 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                 <View style={styles.weatherContainer}>
                                                     <Image source={PICTO_MAP[PICTO_TO_IMG[pictos[i]]]} style={styles.weatherImage} />
                                                 </View>
-                                                <View style={{ flex: 1, paddingTop: 5 }}>
+                                                {/* <View style={{ flex: 1, paddingTop: 5 }}>
                                                     <ModulationBarTiny
                                                         data={context.conditions[i]}
                                                         height={8}
                                                         width={60}
                                                     />
-                                                </View>
+                                                </View> */}
                                             </TouchableOpacity>
                                         )
                                     })}
@@ -179,7 +179,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                             />
                                         )}
                                         {/*=============== Conditions ==============*/}
-                                        <View style={styles.sliderContainer}>
+                                        {/* <View style={styles.sliderContainer}>
 
                                             <ModulationBar
                                                 from={0}
@@ -191,8 +191,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                 enabled={false}
                                             />
                                             <HourScale2 color="#fff" width={Dimensions.get('window').width - 100} />
-                                            {/* <View style={{backgroundColor:'#000', height:30, width : Dimensions.get('window').width - 100}}></View> */}
-                                        </View>
+                                        </View> 
+                                        */}
 
                                     </View>
                                 </View>
