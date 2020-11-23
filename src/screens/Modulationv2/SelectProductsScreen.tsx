@@ -221,7 +221,11 @@ const SelectProductsScreen = ({ navigation }) => {
                 })}
                 <HygoInputModal
                     onClose={() => { }}
-                    onSuccess={(item) => { snackbar.showSnackbar(i18n.t('pulve_productscreen.snack_add'), 'OK'); updateFavs(item) }}
+                    onSuccess={(item) => { 
+                        snackbar.showSnackbar(i18n.t('pulve_productscreen.snack_add'), 'OK')
+                        updateFavs(item)
+                        setViewMode(!viewMode)
+                    }}
                     modalVisible={doseModalVisible}
                     setModalVisible={setDoseModalVisible}
                     defaultValue={'0.6'}
@@ -274,12 +278,12 @@ const SelectProductsScreen = ({ navigation }) => {
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={hygoStyles.h0}>{i18n.t('pulve_productscreen.products')}</Text>
                         <TouchableOpacity onPress={() => { setViewMode(!viewMode) }} >
-                            {viewMode && <Icon type='AntDesign' name='pluscircleo' style={styles.iconTitle} />}
+                            <Icon type='AntDesign' name={ viewMode ? 'pluscircleo' : 'close'} style={styles.iconTitle} />
                         </TouchableOpacity>
                     </View>
                     {viewMode ? <Recap /> : <Finder />}
                 </Content>
-                {viewMode ? (
+                {viewMode && (
                     <Footer style={styles.footer}>
                         <HygoButton
                             label={i18n.t('pulve_productscreen.button_next').toUpperCase()}
@@ -299,18 +303,7 @@ const SelectProductsScreen = ({ navigation }) => {
                             enabled={context.selectedProducts.length > 0}
                         />
                     </Footer>
-                ) : (
-                        <Fab
-                            active={true}
-                            direction="left"
-                            //containerStyle={{ marginLeft: 10 }}
-                            style={styles.fab}
-                            position="bottomRight"
-                            onPress={() => { setViewMode(!viewMode) }}
-                        >
-                            <Icon type='AntDesign' name={'check'} />
-                        </Fab>
-                    )}
+                )}
             </Container>
 
         </SafeAreaView>
