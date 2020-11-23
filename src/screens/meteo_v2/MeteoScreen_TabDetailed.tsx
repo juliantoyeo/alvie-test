@@ -125,7 +125,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
             {
                 (
                     <View style={styles.container}>
-                        {!!context.meteo && !!context.meteo4h && !!context.conditions && context.conditions.length > 0 && (
+                        {!!context.meteo && !!context.meteo4h && !!context.conditions && context.conditions.length > 0 
+                            && context.meteo.length > 0 && context.meteo4h.length > 0 && (
                             <React.Fragment>
                                 {/*============= Week Tab =================*/}
                                 < View style={styles.tabBar}>
