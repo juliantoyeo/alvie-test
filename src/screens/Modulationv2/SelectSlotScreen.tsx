@@ -160,6 +160,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     // }
 
     const loadModulation = async () => {
+        
         setIsRefreshing(true)
         const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
         const cultures: Array<number> = context.selectedFields.map((f: fieldType) => f.culture.id)
@@ -176,13 +177,16 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             }
         }
 
-        const newMod: Array<modulationType> = await getModulationValue_v2(data)
-        context.setMod(newMod)
-        setIsRefreshing(false)
-        if (newMod.length == 0) {
-            snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
+        try {
+            const newMod: Array<modulationType> = await getModulationValue_v2(data)
+            context.setMod(newMod)
+            if (newMod.length == 0) {
+                snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
+            }
+        } catch(error) {
+            snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")    
         }
-
+        setIsRefreshing(false)
     }
 
     return (
@@ -262,7 +266,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                             data={context.conditions[currentDay]}
                                             width={Dimensions.get('window').width - 30}
                                             onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
-                                            enabled={!isRefreshing}
+                                            enabled={true}
                                         />
                                     </View>
 
