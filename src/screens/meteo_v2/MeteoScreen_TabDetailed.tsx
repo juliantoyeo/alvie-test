@@ -82,7 +82,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     useEffect(() => {
         loadMeteoDetailed()
     }, [])
-    
+
     const loadMeteoDetailed = async () => {
         if (!loading) {
             setIsRefreshing(true)
@@ -119,7 +119,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 
     return (
         <Content
-           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
             {
@@ -189,25 +189,25 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                 onHourChangeEnd={() => { }}
                                                 enabled={false}
                                             />
-                                            <HourScale2 color="#fff" width={Dimensions.get('window').width - 100}/>
+                                            <HourScale2 color="#fff" width={Dimensions.get('window').width - 100} />
                                             {/* <View style={{backgroundColor:'#000', height:30, width : Dimensions.get('window').width - 100}}></View> */}
                                         </View>
-                                        
+
                                     </View>
                                 </View>
                                 {/*============= Charts ============*/}
-                                <View style={{backgroundColor: '#fff', borderTopRightRadius: 35,marginTop: 10, paddingTop:20}}>
-                                <Text style={[styles.pulveTitle, {marginLeft:20, paddingBottom:0}]}>{i18n.t('meteo_detailed.graph_title')}</Text>
+                                <View style={{ backgroundColor: '#fff', borderTopRightRadius: 35, marginTop: 10, paddingTop: 20 }}>
+                                    <Text style={[styles.pulveTitle, { marginLeft: 20, paddingBottom: 0 }]}>{i18n.t('meteo_detailed.graph_title')}</Text>
 
                                     <HygoChart label={i18n.t('realtime.temp')} data={context.meteo[currentDay].map(m => {
                                         const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                        return { x: dt, y: (m.maxtemp + m.mintemp)/2 }
+                                        return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
                                     })} mainColor={COLORS.DARK_BLUE} secondaryColor={COLORS.DARK_GREEN} />
-                                     <HygoChart label={i18n.t('realtime.hygro')} data={context.meteo[currentDay].map(m => {
-                                         const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                        return { x: dt, y: (m.maxhumi + m.minhumi) /2 }
+                                    <HygoChart label={i18n.t('realtime.hygro')} data={context.meteo[currentDay].map(m => {
+                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                        return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
                                     })} mainColor={COLORS.DARK_BLUE} secondaryColor={COLORS.DARK_GREEN} />
-                                    
+
                                 </View>
                             </React.Fragment>
                         )}
@@ -247,11 +247,12 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                         )
                                     })}
                                 </View>
-                            </View>) : (
-                                <View style={styles.container}>
-                                    <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
-                                </View>
-                            )}
+                            </View>
+                        ) : (
+                            <View style={styles.container}>
+                                 <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
+                            </View>
+                        )}
                     </View>
                 )
             }
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     dayWeather: {
         backgroundColor: COLORS.DARK_BLUE,
         borderRadius: 35,
-        paddingBottom:35
+        paddingBottom: 35
 
     },
     dayWeatherItemContainer: {

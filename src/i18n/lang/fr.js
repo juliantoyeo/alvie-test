@@ -120,9 +120,9 @@ export default {
 
     },
     'meteo': {
-        'header': 'Ma météo',
+        'header': 'Accueil', //'Ma météo',
         'brief': 'En bref',
-        'detailed': 'Détaillée',
+        'detailed': 'Météo', //'Détaillée',
         'radar': 'Radar',
         'next_3_hours': 'Vos pulvérisations pour le créneau %{from}h - %{to}h',
         'parcelle_percent': '%{percent}% des parcelles peuvent être traitées',
@@ -200,6 +200,7 @@ export default {
         'days_5': 'VEN',
         'days_6': 'SAM',
         'pulve_title': 'Mes pulvérisations (%{value})',
+        'pulve_title2': 'Mes pulvérisations',
         'graph_title': 'Graphiques'
     },
     'meteo_overlay': {

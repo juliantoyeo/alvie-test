@@ -190,6 +190,7 @@ export default {
     'days_5': 'SOB',
     'days_6': 'NED',
     'pulve_title': 'Mé zemědělské postřiky (%{value})',
+    'pulve_title2': 'Mé zemědělské postřiky',
   },
   'meteo_overlay': {
     'header': '%{from}H - %{to}H',

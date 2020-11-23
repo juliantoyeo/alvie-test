@@ -118,7 +118,14 @@ const Navigator = createSwitchNavigator({
                         },
                     }),
 
-                    // Pulverisation: NextPulverisationScreen,
+                    // Pulverisation_v2: createStackNavigator({
+                    //     Pulverisation_Fields: SelectParcelsScreen,
+                    //     Pulverisation_Products: SelectProductsScreen,
+                    //     Pulverisation_Slot: SelectSlotScreen,
+                    //     Pulverisation_Report: ReportScreen,
+                    // }, {
+                    //     headerMode: 'none'
+                    // }),
 
                     RealTime: RealTimeScreen,
 
@@ -133,7 +140,7 @@ const Navigator = createSwitchNavigator({
                         tabBarIcon: ({ focused, horizontal, tintColor }) => {
                             const { routeName } = navigation.state;
 
-                            const r = ['MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention']
+                            const r = ['MeteoScreen', 'Pulverisation_v2', 'RealTime', 'Intervention']
                             let idx = r.indexOf(routeName)
 
                             let props = {
@@ -182,7 +189,7 @@ const Navigator = createSwitchNavigator({
         }, {
             headerMode: 'none'
         }),
-
+        
         InterventionMapScreen: InterventionMapScreen,
         MeteoDetailedDetails: {
             screen: MeteoDetailedDetails,

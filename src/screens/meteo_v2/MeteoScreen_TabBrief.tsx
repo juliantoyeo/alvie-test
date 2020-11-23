@@ -108,7 +108,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     <ScrollView>
       <View style={styles.textContainer}>
         <Text style={styles.date}>{getDay()}</Text>
-        <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours', { from: hourRange.start, to: hourRange.end })}</Text>
+        {/* <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours', { from: hourRange.start, to: hourRange.end })}</Text> */}
       </View>
       <View style={styles.iconContainer}>
         <View style={styles.meteoElement}>
@@ -158,16 +158,6 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
       </View>
       
       <View style={styles.actionCards}>
-        {/*{ loading && (
-          <Spinner size={16} color={COLORS.CYAN} style={{ height: 16, marginTop: 16 }} />
-        )}
-        */}
-
-        {/* !loading && meteoData.products.map(p => {
-            return (
-              <HygoMeteoPhyto key={p.id} product={p} navigation={navigation} day={moment().format('YYYY-MM-DD')} hour={parseInt(moment().format('HH'))} />
-            )
-        })*/}
         <HygoCardTransparent
             title= "Pulvérisation"
             subtitle= ""
