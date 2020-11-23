@@ -169,7 +169,7 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                                         title={n}
                                         items={items.sort((it1, it2) => it1.id - it2.id)}
                                         onPress={updateList}
-                                        active={(!selectedName || n == selectedName)}
+                                        active={true} //{(!selectedName || n == selectedName)}
                                     />
                                 )
                             })

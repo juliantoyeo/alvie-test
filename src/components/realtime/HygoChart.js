@@ -14,7 +14,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
       ] 
     } : { 
       y: [
-        min - 0.15 * (max - min),
+        min - 0.30 * (max - min),
         max
       ] 
     }
@@ -25,7 +25,7 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
     return data.map(d => {
       return {
         ...d,
-        y0: min - 0.10 * (max - min),
+        y0: min - 0.25 * (max - min),
       }
     })
   }
