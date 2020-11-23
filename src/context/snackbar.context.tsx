@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from 'react-native';
-import { Snackbar, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
 import COLORS from '../colors'
 
 export interface SnackbarContextProps {
@@ -29,6 +29,7 @@ const SnackbarProvider: React.FunctionComponent = ({ children }) => {
                 style= {[styles.snackbar, snackStyle[snackType]]}
                 visible={snackIsVisible}
                 onDismiss={() => setSnackIsVisible(false)}
+                duration={3000}
                 action={{
                     label: 'OK',
                     onPress: () => {
