@@ -203,7 +203,11 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                         <Title style={styles.headerTitle}>{i18n.t('pulve_slotscreen.title')}</Title>
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_slotscreen.subtitle')}</Title>
                     </Body>
-                    <Right style={{ flex: 1 }}></Right>
+                    <Right style={{ flex: 1 }}>
+                        <Button transparent onPress={() => navigation.navigate("main_v2")}>
+                            <Icon type='AntDesign' name='close' style={{ color: '#fff' }} />
+                        </Button>
+                    </Right>
                 </Header>
                 <Content style={styles.content}>
                     {!ready ? (
