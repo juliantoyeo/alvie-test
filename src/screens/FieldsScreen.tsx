@@ -217,7 +217,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
                             cultureList={cultureList}
                             onUpdate={setField} />
                     ) : (
-                            <Text style={styles.overlayText}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
+                            <Text style={[styles.overlayText, {paddingLeft:20}]}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
                         )}
                 </View>
             </Content>
