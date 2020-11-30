@@ -52,7 +52,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     const [lastLoad, setLastLoad] = useState(-1)
     const [counter, setCounter] = useState(0);
 
-    const [selectedCharts, setSelectedCharts] = useState({ temp: false, hygro: false, pluvio: false, vent: false })
+    const [selectedCharts, setSelectedCharts] = useState({ temp: true, pluvio: true, hygro: false, vent: false })
     const pictos: Array<string> = useMemo(() => {
         const ret: Array<string> = []
         if (!context.meteo || context.meteo.length == 0) {
@@ -238,22 +238,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                             />)}
                                         </ChartContainer>
                                         <ChartContainer
-                                            title={i18n.t('realtime.hygro')}
-                                            opened={selectedCharts.hygro}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))}
-                                        >
-                                            {selectedCharts.hygro && (<HygoChart
-                                                label={i18n.t('realtime.hygro')}
-                                                data={context.meteo[currentDay].map(m => {
-                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                    return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
-                                                })}
-                                                mainColor={COLORS.DARK_BLUE}
-                                                secondaryColor={COLORS.DARK_GREEN}
-                                                yUnit="%"
-                                            />)}
-                                        </ChartContainer>
-                                        <ChartContainer
                                             title={i18n.t('realtime.pluvio')}
                                             opened={selectedCharts.pluvio}
                                             onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, pluvio: b }))}
@@ -270,6 +254,23 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                     yUnit="mm"
                                                 />)}
                                         </ChartContainer>
+                                        <ChartContainer
+                                            title={i18n.t('realtime.hygro')}
+                                            opened={selectedCharts.hygro}
+                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))}
+                                        >
+                                            {selectedCharts.hygro && (<HygoChart
+                                                label={i18n.t('realtime.hygro')}
+                                                data={context.meteo[currentDay].map(m => {
+                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                    return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
+                                                })}
+                                                mainColor={COLORS.DARK_BLUE}
+                                                secondaryColor={COLORS.DARK_GREEN}
+                                                yUnit="%"
+                                            />)}
+                                        </ChartContainer>
+                                        
                                         <ChartContainer
                                             title={i18n.t('realtime.vent')}
                                             opened={selectedCharts.vent}
