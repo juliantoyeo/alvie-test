@@ -49,8 +49,7 @@ const fetchResources = async () => {
 const store = configureStore();
 
 // disable warning about getNode()
-console.ignoredYellowBox = ['Calling getNode()']
-
+console.disableYellowBox = ['Calling getNode()'];
 
 const DataProviders = ({ children }) => (
     <ModulationProvider>
