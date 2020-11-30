@@ -38,7 +38,8 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
         scale={{ x: "time" }}
         padding={{ top: 30, bottom: 30, left: 50, right: 30 }}
         width={Dimensions.get('window').width}
-        height={210}>
+        height={210}
+        animate={false}>
         <Defs>
           <LinearGradient id="gradientFill"
             x1="0%" y1="0%" x2="0%" y2="100%">
@@ -47,13 +48,15 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
           </LinearGradient>
         </Defs>
         <VictoryAxis dependentAxis />
-        <VictoryAxis tickFormat={(x) => formatTime(x, 'h')} />
+        <VictoryAxis 
+            tickFormat={(x) => formatTime(x, 'h')} 
+            offsetY={30}/>
         <VictoryArea
           style={{ data: { fill: 'url(#gradientFill)', stroke: mainColor, strokeWidth: 2 } }}
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 }
-          }}
+        //   animate={{
+        //     duration: 2000,
+        //     onLoad: { duration: 1000 }
+        //   }}
           domain={getDomain()}
           data={getAreaData()}
         />
