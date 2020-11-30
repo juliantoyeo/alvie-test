@@ -150,7 +150,11 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                         <Title style={styles.headerTitle}>{i18n.t('pulve_parcelscreen.title')}</Title>
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_parcelscreen.subtitle')}</Title>
                     </Body>
-                    <Right style={{ flex: 1 }}></Right>
+                    <Right style={{ flex: 1 }}>
+                        <Button transparent onPress={() => navigation.navigate("main_v2")}>
+                            <Icon type='AntDesign' name='close' style={{ color: '#fff' }} />
+                        </Button>
+                    </Right>
                 </Header>
                 <Content style={styles.content}>
                     <View>
@@ -165,7 +169,7 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
                                         title={n}
                                         items={items.sort((it1, it2) => it1.id - it2.id)}
                                         onPress={updateList}
-                                        active={(!selectedName || n == selectedName)}
+                                        active={true} //{(!selectedName || n == selectedName)}
                                     />
                                 )
                             })

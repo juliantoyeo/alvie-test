@@ -56,7 +56,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
     }
 
     const sendEmail = () => {
-        const email = 'editab@alvie.fr'
+        const email = 'morganr@alvie.fr'
         const subject = i18n.t('drawer.email_subject')
         const body = `
     
