@@ -22,20 +22,24 @@ import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
 import { HourScale2 } from '../../components/v2/HourScale'
 import HygoChart from '../../components/realtime/HygoChart'
 
-const ChartContainer = ({ onPress, opened, title }) => {
+const ChartContainer = ({ children, onPress, opened, title }) => {
     return (
-        <TouchableOpacity
-            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}
-            onPress={() => {
-                onPress(!opened)
-            }}>
-            <Text style={styles.cardTitle}>{title}</Text>
-            <Icon
-                type='AntDesign'
-                name={opened ? 'down' : 'right'}
-                style={{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }}
-            />
-        </TouchableOpacity>
+        <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
+            <TouchableOpacity
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+                onPress={() => {
+                    onPress(!opened)
+                }}>
+                <Text style={styles.chartContainer}>{title}</Text>
+                <Icon
+                    type='AntDesign'
+                    name={opened ? 'down' : 'right'}
+                    style={{ fontSize: 16, color: COLORS.DARK_BLUE, paddingBottom: 0, paddingRight: 20 }}
+                />
+            </TouchableOpacity>
+            {children}
+        </View>
+
     )
 }
 
@@ -221,64 +225,68 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                         <ChartContainer
                                             title={i18n.t('realtime.temp')}
                                             opened={selectedCharts.temp}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))} />
-                                        {selectedCharts.temp && (<HygoChart
-                                            label={i18n.t('realtime.temp')}
-                                            data={context.meteo[currentDay].map(m => {
-                                                const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
-                                            })}
-                                            mainColor={COLORS.DARK_BLUE}
-                                            secondaryColor={COLORS.DARK_GREEN}
-                                            yUnit="°C"
-                                        />)}
-
+                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))}>
+                                            {selectedCharts.temp && (<HygoChart
+                                                label={i18n.t('realtime.temp')}
+                                                data={context.meteo[currentDay].map(m => {
+                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                    return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
+                                                })}
+                                                mainColor={COLORS.DARK_BLUE}
+                                                secondaryColor={COLORS.DARK_GREEN}
+                                                yUnit="°C"
+                                            />)}
+                                        </ChartContainer>
                                         <ChartContainer
                                             title={i18n.t('realtime.hygro')}
                                             opened={selectedCharts.hygro}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))} />
-                                        {selectedCharts.hygro && (<HygoChart
-                                            label={i18n.t('realtime.hygro')}
-                                            data={context.meteo[currentDay].map(m => {
-                                                const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
-                                            })}
-                                            mainColor={COLORS.DARK_BLUE}
-                                            secondaryColor={COLORS.DARK_GREEN}
-                                            yUnit="%"
-                                        />)}
-
+                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))}
+                                        >
+                                            {selectedCharts.hygro && (<HygoChart
+                                                label={i18n.t('realtime.hygro')}
+                                                data={context.meteo[currentDay].map(m => {
+                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                    return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
+                                                })}
+                                                mainColor={COLORS.DARK_BLUE}
+                                                secondaryColor={COLORS.DARK_GREEN}
+                                                yUnit="%"
+                                            />)}
+                                        </ChartContainer>
                                         <ChartContainer
                                             title={i18n.t('realtime.pluvio')}
                                             opened={selectedCharts.pluvio}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, pluvio: b }))} />
-                                        {selectedCharts.hygro && (
-                                            <HygoChart
-                                                label={i18n.t('realtime.pluvio')}
-                                                data={context.meteo[currentDay].map(m => {
-                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                    return { x: dt, y: m.precipitation }
-                                                })}
-                                                mainColor={COLORS.DARK_BLUE}
-                                                secondaryColor={COLORS.DARK_GREEN}
-                                                yUnit="mm"
-                                            />)}
-
+                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, pluvio: b }))}
+                                        >
+                                            {selectedCharts.pluvio && (
+                                                <HygoChart
+                                                    label={i18n.t('realtime.pluvio')}
+                                                    data={context.meteo[currentDay].map(m => {
+                                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                        return { x: dt, y: m.precipitation }
+                                                    })}
+                                                    mainColor={COLORS.DARK_BLUE}
+                                                    secondaryColor={COLORS.DARK_GREEN}
+                                                    yUnit="mm"
+                                                />)}
+                                        </ChartContainer>
                                         <ChartContainer
                                             title={i18n.t('realtime.vent')}
                                             opened={selectedCharts.vent}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, vent: b }))} />
-                                        {selectedCharts.hygro && (
-                                            <HygoChart
-                                                label={i18n.t('realtime.vent')}
-                                                data={context.meteo[currentDay].map(m => {
-                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                    return { x: dt, y: m.wind }
-                                                })}
-                                                mainColor={COLORS.DARK_BLUE}
-                                                secondaryColor={COLORS.DARK_GREEN}
-                                                yUnit="km/h"
-                                            />)}
+                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, vent: b }))}
+                                        >
+                                            {selectedCharts.vent && (
+                                                <HygoChart
+                                                    label={i18n.t('realtime.vent')}
+                                                    data={context.meteo[currentDay].map(m => {
+                                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                        return { x: dt, y: m.wind }
+                                                    })}
+                                                    mainColor={COLORS.DARK_BLUE}
+                                                    secondaryColor={COLORS.DARK_GREEN}
+                                                    yUnit="km/h"
+                                                />)}
+                                        </ChartContainer>
 
                                     </View>
                                 </React.Fragment>
@@ -473,6 +481,14 @@ const styles = StyleSheet.create({
         color: COLORS.DARK_BLUE,
         textTransform: 'uppercase',
         marginBottom: 8,
+    },
+    chartContainer: {
+        fontFamily: 'nunito-regular',
+        fontSize: 16,
+        color: COLORS.DARK_BLUE,
+        marginLeft: 20,
+        //textTransform: 'uppercase',
+        //marginBottom: 8,
     },
     productContainer: {
         marginTop: 10,
