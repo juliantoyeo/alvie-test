@@ -4,7 +4,7 @@ import formatTime from '../../utils/formatTime'
 import { Defs, LinearGradient, Stop } from "react-native-svg";
 import { VictoryArea, VictoryChart, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel } from "victory-native";
 
-const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
+const HygoChart = ({ data, mainColor, secondaryColor, label, yUnit }) => {
   const getDomain = () => {
     let min = Math.min(...data.map(d => d.y)), max = Math.max(...data.map(d => d.y))
     return (min == max) ? { 
@@ -47,7 +47,9 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
             <Stop offset="100%" stopColor={mainColor} />
           </LinearGradient>
         </Defs>
-        <VictoryAxis dependentAxis />
+        <VictoryAxis 
+            dependentAxis 
+            label={yUnit ? yUnit : ''}/>
         <VictoryAxis 
             tickFormat={(x) => formatTime(x, 'h')} 
             offsetY={30}/>
