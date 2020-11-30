@@ -4,7 +4,7 @@ import formatTime from '../../utils/formatTime'
 import { Defs, LinearGradient, Stop } from "react-native-svg";
 import { VictoryArea, VictoryChart, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel } from "victory-native";
 
-const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
+const HygoChart = ({ data, mainColor, secondaryColor, label, yUnit }) => {
   const getDomain = () => {
     let min = Math.min(...data.map(d => d.y)), max = Math.max(...data.map(d => d.y))
     return (min == max) ? { 
@@ -37,8 +37,9 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
         domainPadding={{x: 15 }}
         scale={{ x: "time" }}
         padding={{ top: 30, bottom: 30, left: 50, right: 30 }}
-        width={Dimensions.get('window').width}
-        height={210}>
+        width={Dimensions.get('window').width-10}
+        height={210}
+        animate={false}>
         <Defs>
           <LinearGradient id="gradientFill"
             x1="0%" y1="0%" x2="0%" y2="100%">
@@ -46,14 +47,30 @@ const HygoChart = ({ data, mainColor, secondaryColor, label }) => {
             <Stop offset="100%" stopColor={mainColor} />
           </LinearGradient>
         </Defs>
-        <VictoryAxis dependentAxis />
-        <VictoryAxis tickFormat={(x) => formatTime(x, 'h')} />
+        <VictoryAxis 
+            tickFormat={(x) => formatTime(x, 'h')} 
+            offsetY={30}
+            style={{
+                ticks: {stroke: "black", size: 5},
+                
+            }}
+        />
+        <VictoryAxis 
+            dependentAxis 
+            crossAxis={false}
+            label={yUnit ? yUnit : ''}
+            style={{
+                grid: {stroke: "#DDDDDD", strokeDasharray: "15, 10"},
+                ticks: {stroke: "black", size: 5},
+                axisLabel:{padding:35}
+            }}
+            />
         <VictoryArea
           style={{ data: { fill: 'url(#gradientFill)', stroke: mainColor, strokeWidth: 2 } }}
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 }
-          }}
+        //   animate={{
+        //     duration: 2000,
+        //     onLoad: { duration: 1000 }
+        //   }}
           domain={getDomain()}
           data={getAreaData()}
         />
