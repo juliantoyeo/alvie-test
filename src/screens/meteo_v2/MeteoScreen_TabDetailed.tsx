@@ -22,6 +22,12 @@ import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
 import { HourScale2 } from '../../components/v2/HourScale'
 import HygoChart from '../../components/realtime/HygoChart'
 
+interface detailedType {
+    data: any,
+    products: any,
+    days: any
+}
+
 const ChartContainer = ({ children, onPress, opened, title }) => {
     return (
         <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
@@ -47,12 +53,15 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     const context = React.useContext(MeteoContext)
     const [loading, setLoading] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const [detailed, setDetailed] = useState({})
+    const [detailed, setDetailed] = useState<detailedType>({} as detailedType)
     const { dow, currentDay, setCurrentDay } = context
     const [lastLoad, setLastLoad] = useState(-1)
     const [counter, setCounter] = useState(0);
 
-    const [selectedCharts, setSelectedCharts] = useState({ temp: true, pluvio: true, hygro: false, vent: false })
+    const [selectedCharts, setSelectedCharts] = useState({ temp: true, pluvio: true, hygro: true, vent: true })
+    const contextReady = !!context.meteo && !!context.meteo4h && !!context.conditions && !!context.dow && context.dow.length > 0 && context.conditions.length > 0
+        && context.meteo.length > 0 && context.meteo4h.length > 0
+
     const pictos: Array<string> = useMemo(() => {
         const ret: Array<string> = []
         if (!context.meteo || context.meteo.length == 0) {
@@ -132,7 +141,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
     const onRefresh = async () => {
         setIsRefreshing(true)
         await Promise.all([
-            loadMeteoDetailed(true),
+            loadMeteoDetailed(),
             context.loadConditions(parcelles.fields),
             context.loadMeteo(parcelles.fields)
         ])
@@ -147,61 +156,60 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
             {
                 (
                     <View style={styles.container}>
-                        {!!context.meteo && !!context.meteo4h && !!context.conditions && context.conditions.length > 0
-                            && context.meteo.length > 0 && context.meteo4h.length > 0 && (
-                                <React.Fragment>
-                                    {/*============= Week Tab =================*/}
-                                    < View style={styles.tabBar}>
-                                        {context.dow.map((d, i) => {
-                                            const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
-                                            return (
+                        {contextReady && (
+                            <React.Fragment>
+                                {/*============= Week Tab =================*/}
+                                < View style={styles.tabBar}>
+                                    {context.dow.map((d, i) => {
+                                        const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
+                                        return (
 
-                                                <TouchableOpacity
-                                                    key={i}
-                                                    style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
-                                                    onPress={() => { setCurrentDay(i) }}
-                                                >
-                                                    <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
-                                                    <View style={styles.weatherContainer}>
-                                                        <Image source={PICTO_MAP[PICTO_TO_IMG[pictos[i]]]} style={styles.weatherImage} />
-                                                    </View>
-                                                    {/* <View style={{ flex: 1, paddingTop: 5 }}>
+                                            <TouchableOpacity
+                                                key={i}
+                                                style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
+                                                onPress={() => { setCurrentDay(i) }}
+                                            >
+                                                <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                <View style={styles.weatherContainer}>
+                                                    <Image source={PICTO_MAP[PICTO_TO_IMG[pictos[i]]]} style={styles.weatherImage} />
+                                                </View>
+                                                {/* <View style={{ flex: 1, paddingTop: 5 }}>
                                                     <ModulationBarTiny
                                                         data={context.conditions[i]}
                                                         height={8}
                                                         width={60}
                                                     />
                                                 </View> */}
-                                                </TouchableOpacity>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+
+                                <View style={styles.dayContent}>
+                                    {/*=============== Day weather ==============*/}
+                                    <View style={styles.hour4Weather}>
+                                        {context.meteo4h[currentDay].map((m, i) => {
+                                            return (
+                                                <View key={i} style={styles.hour4WeatherContainer}>
+                                                    <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
+                                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[PICTO_TO_IMG[m.pictocode]]} />
+                                                </View>
                                             )
                                         })}
                                     </View>
 
-                                    <View style={styles.dayContent}>
-                                        {/*=============== Day weather ==============*/}
-                                        <View style={styles.hour4Weather}>
-                                            {context.meteo4h[currentDay].map((m, i) => {
-                                                return (
-                                                    <View key={i} style={styles.hour4WeatherContainer}>
-                                                        <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
-                                                        <Image style={styles.hour4WeatherImage} source={PICTO_MAP[PICTO_TO_IMG[m.pictocode]]} />
-                                                    </View>
-                                                )
-                                            })}
-                                        </View>
 
-
-                                        <View style={styles.dayWeather}>
-                                            {/*=============== Metrics ==============*/}
-                                            {!!context.metrics && (
-                                                <Metrics_v2
-                                                    currentHourMetrics={context.metrics}
-                                                    hasRacinaire={true}
-                                                    color="#fff"
-                                                />
-                                            )}
-                                            {/*=============== Conditions ==============*/}
-                                            {/* <View style={styles.sliderContainer}>
+                                    <View style={styles.dayWeather}>
+                                        {/*=============== Metrics ==============*/}
+                                        {!!context.metrics && (
+                                            <Metrics_v2
+                                                currentHourMetrics={context.metrics}
+                                                hasRacinaire={true}
+                                                color="#fff"
+                                            />
+                                        )}
+                                        {/*=============== Conditions ==============*/}
+                                        {/* <View style={styles.sliderContainer}>
 
                                             <ModulationBar
                                                 from={0}
@@ -216,124 +224,129 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                         </View> 
                                         */}
 
-                                        </View>
                                     </View>
-                                    {/*============= Charts ============*/}
-                                    <View style={{ backgroundColor: '#fff', borderTopRightRadius: 35, marginTop: 10, paddingTop: 20 }}>
-                                        <Text style={[styles.pulveTitle, { marginLeft: 20, paddingBottom: 0 }]}>{i18n.t('meteo_detailed.graph_title')}</Text>
-
-                                        <ChartContainer
-                                            title={i18n.t('realtime.temp')}
-                                            opened={selectedCharts.temp}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))}>
-                                            {selectedCharts.temp && (<HygoChart
-                                                label={i18n.t('realtime.temp')}
-                                                data={context.meteo[currentDay].map(m => {
-                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                    return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
-                                                })}
-                                                mainColor={COLORS.DARK_BLUE}
-                                                secondaryColor={COLORS.DARK_GREEN}
-                                                yUnit="°C"
-                                            />)}
-                                        </ChartContainer>
-                                        <ChartContainer
-                                            title={i18n.t('realtime.pluvio')}
-                                            opened={selectedCharts.pluvio}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, pluvio: b }))}
-                                        >
-                                            {selectedCharts.pluvio && (
-                                                <HygoChart
-                                                    label={i18n.t('realtime.pluvio')}
-                                                    data={context.meteo[currentDay].map(m => {
-                                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                        return { x: dt, y: m.precipitation }
-                                                    })}
-                                                    mainColor={COLORS.DARK_BLUE}
-                                                    secondaryColor={COLORS.DARK_GREEN}
-                                                    yUnit="mm"
-                                                />)}
-                                        </ChartContainer>
-                                        <ChartContainer
-                                            title={i18n.t('realtime.hygro')}
-                                            opened={selectedCharts.hygro}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))}
-                                        >
-                                            {selectedCharts.hygro && (<HygoChart
-                                                label={i18n.t('realtime.hygro')}
-                                                data={context.meteo[currentDay].map(m => {
-                                                    const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                    return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
-                                                })}
-                                                mainColor={COLORS.DARK_BLUE}
-                                                secondaryColor={COLORS.DARK_GREEN}
-                                                yUnit="%"
-                                            />)}
-                                        </ChartContainer>
-                                        
-                                        <ChartContainer
-                                            title={i18n.t('realtime.vent')}
-                                            opened={selectedCharts.vent}
-                                            onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, vent: b }))}
-                                        >
-                                            {selectedCharts.vent && (
-                                                <HygoChart
-                                                    label={i18n.t('realtime.vent')}
-                                                    data={context.meteo[currentDay].map(m => {
-                                                        const dt = new Date(m.timestamp.replace(' ', 'T'))
-                                                        return { x: dt, y: m.wind }
-                                                    })}
-                                                    mainColor={COLORS.DARK_BLUE}
-                                                    secondaryColor={COLORS.DARK_GREEN}
-                                                    yUnit="km/h"
-                                                />)}
-                                        </ChartContainer>
-
-                                    </View>
-                                </React.Fragment>
-                            )}
-                        {/* =============== Loading Spinner ============= */}
-                        { !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt] && !!detailed.days ? (
-                            <View style={styles.pulve}>
-                                <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
-
-                                <View style={styles.pulveContainer}>
-                                    {detailed.products.map(p => {
-                                        let dayProduct = detailed.data[dow[currentDay].dt].hours1[p.id].data
-                                        return (
-                                            <View style={styles.productContainer} key={p.id}>
-                                                <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
-                                                <View style={styles.productCondition}>
-                                                    {[...Array(24).keys()].map(i => {
-                                                        let padded = `${i}`.padStart(2, '0')
-                                                        return (
-                                                            <View key={i} style={[styles.parcelle, {
-                                                                backgroundColor: COLORS[dayProduct[padded].condition]
-                                                            }]}>
-                                                                { dayProduct[padded].conflict && (
-                                                                    <Text style={styles.parcelleExclamation}>!</Text>
-                                                                )}
-                                                            </View>
-                                                        )
-                                                    })}
-                                                </View>
-                                                <View style={styles.hoursContainer}>
-                                                    <Text style={styles.hours}>00H</Text>
-                                                    <Text style={styles.hours}>06H</Text>
-                                                    <Text style={styles.hours}>12H</Text>
-                                                    <Text style={styles.hours}>18H</Text>
-                                                    <Text style={styles.hours}>24H</Text>
-                                                </View>
-                                            </View>
-                                        )
-                                    })}
                                 </View>
-                            </View>
-                        ) : (
+                            </React.Fragment>
+                        )}
+                        {/* =============== Loading Spinner ============= */}
+                        { !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt] && !!detailed.days ?
+                            (
+                                <View style={styles.pulve}>
+                                    <Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
+
+                                    <View>
+                                        {detailed.products.map(p => {
+                                            let dayProduct = detailed.data[dow[currentDay].dt].hours1[p.id].data
+                                            return (
+                                                <View style={styles.productContainer} key={p.id}>
+                                                    <Text style={styles.productName}>{i18n.t(`products.${p.name}`)}</Text>
+                                                    <View style={styles.productCondition}>
+                                                        {[...Array(24).keys()].map(i => {
+                                                            const str = `${i}`
+                                                            let padded = str.padStart(2, '0')
+                                                            return (
+                                                                <View key={i} style={[styles.parcelle, {
+                                                                    backgroundColor: COLORS[dayProduct[padded].condition]
+                                                                }]}>
+                                                                    { dayProduct[padded].conflict && (
+                                                                        <Text style={styles.parcelleExclamation}>!</Text>
+                                                                    )}
+                                                                </View>
+                                                            )
+                                                        })}
+                                                    </View>
+                                                    <View style={styles.hoursContainer}>
+                                                        <Text style={styles.hours}>00H</Text>
+                                                        <Text style={styles.hours}>06H</Text>
+                                                        <Text style={styles.hours}>12H</Text>
+                                                        <Text style={styles.hours}>18H</Text>
+                                                        <Text style={styles.hours}>24H</Text>
+                                                    </View>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                            ) : (
                                 <View style={styles.container}>
                                     <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
                                 </View>
-                            )}
+                            )
+                        }
+                        {/*============= Charts ============*/}
+                        {contextReady && (
+                            <View style={{ backgroundColor: '#fff', borderTopRightRadius: 35, marginTop: 10, paddingTop: 20 }}>
+                                <Text style={[styles.pulveTitle, { marginLeft: 20, paddingBottom: 0 }]}>{i18n.t('meteo_detailed.graph_title')}</Text>
+
+                                <ChartContainer
+                                    title={i18n.t('realtime.temp')}
+                                    opened={selectedCharts.temp}
+                                    onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))}>
+                                    {selectedCharts.temp && (<HygoChart
+                                        label={i18n.t('realtime.temp')}
+                                        data={context.meteo[currentDay].map(m => {
+                                            const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                            return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
+                                        })}
+                                        mainColor={COLORS.DARK_BLUE}
+                                        secondaryColor={COLORS.DARK_GREEN}
+                                        yUnit="°C"
+                                    />)}
+                                </ChartContainer>
+                                <ChartContainer
+                                    title={i18n.t('realtime.pluvio')}
+                                    opened={selectedCharts.pluvio}
+                                    onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, pluvio: b }))}
+                                >
+                                    {selectedCharts.pluvio && (
+                                        <HygoChart
+                                            label={i18n.t('realtime.pluvio')}
+                                            data={context.meteo[currentDay].map(m => {
+                                                const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                return { x: dt, y: m.precipitation }
+                                            })}
+                                            mainColor={COLORS.DARK_BLUE}
+                                            secondaryColor={COLORS.DARK_GREEN}
+                                            yUnit="mm"
+                                        />)}
+                                </ChartContainer>
+                                <ChartContainer
+                                    title={i18n.t('realtime.hygro')}
+                                    opened={selectedCharts.hygro}
+                                    onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, hygro: b }))}
+                                >
+                                    {selectedCharts.hygro && (<HygoChart
+                                        label={i18n.t('realtime.hygro')}
+                                        data={context.meteo[currentDay].map(m => {
+                                            const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                            return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
+                                        })}
+                                        mainColor={COLORS.DARK_BLUE}
+                                        secondaryColor={COLORS.DARK_GREEN}
+                                        yUnit="%"
+                                    />)}
+                                </ChartContainer>
+
+                                <ChartContainer
+                                    title={i18n.t('realtime.vent')}
+                                    opened={selectedCharts.vent}
+                                    onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, vent: b }))}
+                                >
+                                    {selectedCharts.vent && (
+                                        <HygoChart
+                                            label={i18n.t('realtime.vent')}
+                                            data={context.meteo[currentDay].map(m => {
+                                                const dt = new Date(m.timestamp.replace(' ', 'T'))
+                                                return { x: dt, y: m.wind }
+                                            })}
+                                            mainColor={COLORS.DARK_BLUE}
+                                            secondaryColor={COLORS.DARK_GREEN}
+                                            yUnit="km/h"
+                                        />)}
+                                </ChartContainer>
+
+                            </View>
+                        )}
                     </View>
                 )
             }
