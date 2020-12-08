@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Picker, Grid, Row, Col, Fab } from 'native-base';
 import { FinderList } from './FinderList';
 import HygoInputModal from './HygoInputModal';
+import HygoInputModalDose from './HygoInputModalDose';
 import HygoPickerModal from './HygoPickerModal';
 import HygoButton from '../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
@@ -25,7 +26,11 @@ const { pulv2_product } = AMPLITUDE_EVENTS
 
 import _ from 'lodash';
 
-export const ProductList = ({ items, onPress }) => {
+interface ProductListProps{
+    items: activeProductType[],
+    onPress: (id: number) => void
+}
+export const ProductList = ({ items, onPress }: ProductListProps) => {
     return (
         <View style={productStyles.container}>
             <View style={{ minHeight: 26, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
@@ -42,7 +47,7 @@ export const ProductList = ({ items, onPress }) => {
                             <Icon type='AntDesign' name='delete' style={{ fontSize: 16, paddingTop: 2, color: COLORS.DARK_BLUE }} />
                         </TouchableOpacity>
                         <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>{item.name}</Text>
-                        <Text style={hygoStyles.text}>{item.dose.toString() + ' L/ha'}</Text>
+                        <Text style={hygoStyles.text}>{item.dose.toString()} L/ha</Text>
                     </View>
                 )})}
             </View>
@@ -96,7 +101,7 @@ const SelectProductsScreen = ({ navigation }) => {
         load()
     }, [])
 
-    const removeProduct = (id) => {
+    const removeProduct = (id: number) => {
         context.removeProduct(id)
         const item: any = products.find((p) => p.id == id)
         setProducts([...products.filter((p) => p.id != id), { ...item, selected: false }])
@@ -219,7 +224,8 @@ const SelectProductsScreen = ({ navigation }) => {
                         />
                     )
                 })}
-                <HygoInputModal
+                {select &&
+                <HygoInputModalDose
                     onClose={() => { }}
                     onSuccess={(item) => { 
                         snackbar.showSnackbar(i18n.t('pulve_productscreen.snack_add'), 'OK')
@@ -236,7 +242,7 @@ const SelectProductsScreen = ({ navigation }) => {
                     }}
                     title={select && i18n.t('pulve_productscreen.modal_product', {product: select.name})}
                     item={select}
-                />
+                />}
             </View>
         )
     }

@@ -21,7 +21,7 @@ import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2 } from '../../api/hygoApi';
+import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v2Ratio } from '../../api/hygoApi';
 import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -177,8 +177,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             }
         }
 
+        // The ratio between dose planed and dose max is used to reduce the modulation
+        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number , index, arr) => {
+            return acc + cur / arr.length
+        }, 0)
+
         try {
-            const newMod: Array<modulationType> = await getModulationValue_v2(data)
+            const newMod: Array<modulationType> = await getModulationValue_v2Ratio(data, ratio)
             context.setMod(newMod)
             if (newMod.length == 0) {
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")

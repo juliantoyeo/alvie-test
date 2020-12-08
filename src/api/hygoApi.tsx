@@ -13,7 +13,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', //'http://192.168.1.35:3000',// 'https://hygo-api.alvie.fr', //
+    baseURL: 'http://192.168.1.35:3000',//'http://ec2-3-250-220-120.eu-west-1.compute.amazonaws.com:3000', // 'https://hygo-api.alvie.fr', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -71,12 +71,13 @@ export interface getActiveProductsReturnType {
 }
 export const getActiveProducts = async (): Promise<Array<activeProductType>> => {
     try {
-        const response = await hygoApi.get('/app/activeproducts');
+        const response = await hygoApi.get('/app/activeproducts/v2');
         return response.data
     } catch (error) {
         return []
     }
 }
+
 
 // Get favorite products
 export const getFavorites = async () => {
@@ -315,6 +316,15 @@ export const getModulationValue = async (data) => {
 export const getModulationValue_v2 = async (data): Promise<Array<modulationType>> => {
     try {
         const response = await hygoApi.post('/app/modulation/v2', { ...data })
+        return response.data
+    } catch (error) {
+        return []
+    }
+}
+
+export const getModulationValue_v2Ratio = async (data, ratio): Promise<Array<modulationType>> => {
+    try {
+        const response = await hygoApi.post('/app/modulation/v2/ratio', { ...data, ratio })
         return response.data
     } catch (error) {
         return []
