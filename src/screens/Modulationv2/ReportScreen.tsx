@@ -85,11 +85,11 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         <Title style={styles.headerTitle}>{i18n.t('pulve_reportscreen.title')}</Title>
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_reportscreen.subtitle')}</Title>
                     </Body>
-                    {saveContext && <Right style={{ flex: 1 }}>
+                    {/* {saveContext && (<Right style={{ flex: 1 }}>
                         <Button transparent onPress={() => {}}>
                             <Icon name='trash' style={{ color: '#fff' }} />
                         </Button>
-                    </Right>}
+                    </Right>)} */}
                 </Header>
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
