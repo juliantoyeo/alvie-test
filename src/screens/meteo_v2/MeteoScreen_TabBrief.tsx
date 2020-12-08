@@ -9,7 +9,6 @@ import moment from 'moment-timezone'
 import { getMeteo, getModulationContext } from '../../api/hygoApi'
 import { MeteoContext } from '../../context/meteo.context'
 import _ from 'lodash'
-import { modulationType } from '../../types/modulation.types'
 import { ModulationContext, ModulationContextProps } from '../../context/modulation.context'
 
 
@@ -28,9 +27,10 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         i18n.t('months.november'),
         i18n.t('months.december'),
     ]
-
+    const now = new Date()
     const { setContext, isReady, debit } = React.useContext(ModulationContext)
     const { meteo4h } = React.useContext(MeteoContext)
+    const [clickToReports, setClickToReports]= useState<boolean>(false)
     const [loading, setLoading] = useState(true)
     const [meteoData, setMeteoData] = useState<any>({})
     const [lastLoad, setLastLoad] = useState(-1)
@@ -46,10 +46,13 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         setSavedModContext(mc)
     }
 
-    // navigate to the report screen when click a saved report and context ready
+    // navigate to the report screen when click a saved report and context is ready
     useEffect(()=> {    
-        isReady && navigation.navigate('SavedReportScreen', {savedContext: true})
-    },[isReady])
+        if (isReady && clickToReports) {
+            setClickToReports(false)
+            navigation.navigate('SavedReportScreen', {savedContext: true})
+        }
+    },[isReady, clickToReports])
 
     const loadMeteo = async () => {
         setLoading(true)
@@ -68,10 +71,8 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         setLoading(false)
     }
 
-    const getDay = () => {
-        console.log(MONTHS)
-        let now = new Date()
-        return `${now.getDate()} ${capitalize(MONTHS[now.getMonth()])}`
+    const getDay = (dt: Date) => {
+        return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])}`
     }
 
     const getHour = (isEnd) => {
@@ -91,7 +92,10 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     useEffect(() => {
         let interval
 
+        loadSavedReports()
+
         const u1 = navigation.addListener('didFocus', () => {
+            loadSavedReports()
             interval = setInterval(() => {
                 setCounter(new Date().getTime());
             }, 30000);
@@ -115,7 +119,6 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 
     useEffect(() => {
         if (counter - lastLoad >= 600000) {
-            loadSavedReports()
             loadMeteo()
         }
     }, [counter])
@@ -125,7 +128,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     return (
         <ScrollView>
             <View style={styles.textContainer}>
-                <Text style={styles.date}>{getDay()}</Text>
+                <Text style={styles.date}>{getDay(now)}</Text>
                 {/* <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours', { from: hourRange.start, to: hourRange.end })}</Text> */}
             </View>
             <View style={styles.iconContainer}>
@@ -183,18 +186,20 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                     buttonText="Démarrer"
                     onPress={() => navigation.navigate("Pulverisation_v2")}
                 />
-                {savedModContext.map((savedContext: ModulationContextProps, index: number) =>
-                    <HygoCardTransparent
+                {savedModContext.map((savedContext: ModulationContextProps, index: number) =>{
+                    const dt = new Date(savedContext.selectedDay)
+                    return (<HygoCardTransparent
                         key={index}
-                        title="Pulvérisation"
-                        subtitle={`${savedContext.selectedSlot.min}h - ${savedContext.selectedSlot.max + 1}h`}
+                        title={`${getDay(dt)} - ${savedContext.selectedSlot.min}h / ${savedContext.selectedSlot.max + 1}h`}
+                        subtitle="Pulvérisation"
                         text="État sauvegardé"
                         buttonText="Visualiser"
                         onPress={() => {
-                            setContext(savedContext) 
+                            setContext(savedContext)
+                            setClickToReports(true)
                         }}
                     />
-                )}
+                )})}
 
                 <View style={{ height: 80 }}></View>
             </View>

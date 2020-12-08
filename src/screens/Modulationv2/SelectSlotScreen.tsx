@@ -28,37 +28,37 @@ import { fieldType } from '../../types/field.types';
 import { modulationType } from '../../types/modulation.types';
 import { conditionType } from '../../types/condition.types';
 import { SnackbarContext } from '../../context/snackbar.context';
-
+import { metricsType } from '../../types/metrics.types'
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_slot } = AMPLITUDE_EVENTS
 
 
-type metricsType = {
-    wind?: any,
-    gust?: any
-    precipitation?: any,
-    probabilityCnt?: any,
-    probabilitySum?: any,
-    prevprecipitation?: any,
-    mintemp?: any,
-    maxtemp?: any,
-    minhumi?: any,
-    maxhumi?: any,
-    minsoilhumi?: any,
-    maxsoilhumi?: any,
-    r2?: any,
-    r3?: any,
-    r6?: any,
-    deltatemp?: any,
-    t3?: any,
-    winddirection?: any,
-    probability?: any
-}
+// type metricsType = {
+//     wind?: any,
+//     gust?: any
+//     precipitation?: any,
+//     probabilityCnt?: any,
+//     probabilitySum?: any,
+//     prevprecipitation?: any,
+//     mintemp?: any,
+//     maxtemp?: any,
+//     minhumi?: any,
+//     maxhumi?: any,
+//     minsoilhumi?: any,
+//     maxsoilhumi?: any,
+//     r2?: any,
+//     r3?: any,
+//     r6?: any,
+//     deltatemp?: any,
+//     t3?: any,
+//     winddirection?: any,
+//     probability?: any
+// }
 
 const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
-    const { currentDay, setCurrentDay, metrics, setMetrics } = context
+    const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
 
     const ready = !!context.meteo && !!metrics && !!context.conditions
@@ -70,6 +70,9 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     useEffect(() => {
         (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
         loadMetrics()
+        const dt = new Date()
+        dt.setDate(dt.getDate() + currentDay)
+        setSelectedDay(dt)
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
@@ -95,7 +98,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
-        let chd: metricsType = {}, dir = []
+        let chd: metricsType = {} as metricsType, dir = []
         _.forEach(context.meteo[currentDay], (v, k2) => {
             const h = v.hour.toString().padStart(2, '0')
             if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
@@ -160,7 +163,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     // }
 
     const loadModulation = async () => {
-        
+
         setIsRefreshing(true)
         const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
         const cultures: Array<number> = context.selectedFields.map((f: fieldType) => f.culture.id)
@@ -178,7 +181,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }
 
         // The ratio between dose planed and dose max is used to reduce the modulation
-        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number , index, arr) => {
+        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
             return acc + cur / arr.length
         }, 0)
 
@@ -188,8 +191,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             if (newMod.length == 0) {
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
-        } catch(error) {
-            snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")    
+        } catch (error) {
+            snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
         }
         setIsRefreshing(false)
     }
@@ -228,7 +231,9 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                             <TouchableOpacity
                                                 key={i}
                                                 style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
-                                                onPress={() => { setCurrentDay(i) }}
+                                                onPress={() => {
+                                                    setCurrentDay(i)
+                                                }}
                                             //disabled={isRefreshing}
                                             >
                                                 <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
@@ -316,7 +321,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
-                                navigation.navigate('Pulverisation_Report', {savedContext: false})
+                                navigation.navigate('Pulverisation_Report', { savedContext: false })
                             }
                             }
                             enabled={currentDay < 3 && !isRefreshing}

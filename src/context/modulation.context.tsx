@@ -17,41 +17,43 @@ import moment from 'moment';
 
 export interface ModulationContextProps {
     selectedFields?: Array<fieldType>,
-    addField?: any,
-    removeField?: any,
-    cleanFields?: any,
-    setSelectedFields?: any,
+    addField?: (fieldType) => void,
+    removeField?: (fieldType) => void,
+    cleanFields?: () => void,
+    setSelectedFields?: React.Dispatch<React.SetStateAction<fieldType>>,
 
     selectedProducts?: Array<activeProductType>,
-    addProduct?: any,
-    removeProduct?: any,
-    cleanProducts?: any,
-    setSelectedProducts?: any
+    addProduct?: (activeProductType) => void,
+    removeProduct?: (activeProductType) => void,
+    cleanProducts?: () => void,
+    setSelectedProducts?: React.Dispatch<React.SetStateAction<activeProductType>>,
 
     debit?: number,
-    setDebit?: any,
+    setDebit?: React.Dispatch<React.SetStateAction<number>>,
     buses? :string,
-    setBuses? : any,
+    setBuses? : React.Dispatch<React.SetStateAction<string>>,
 
     selectedSlot?: selectedSlotType,
-    setSelectedSlot?: any,
+    setSelectedSlot?: React.Dispatch<React.SetStateAction<selectedSlotType>>,
     mod?: Array<modulationType>,
-    setMod?: any,
+    setMod?: React.Dispatch<React.SetStateAction<modulationType[]>>,
     metrics?: metricsType,
-    setMetrics? : any
+    setMetrics? : React.Dispatch<React.SetStateAction<metricsType>>,
 
     dow?: Array<dowType>,
     currentDay?: number,
-    setCurrentDay?: any,
-
+    setCurrentDay?: React.Dispatch<React.SetStateAction<number>>,
+    selectedDay: Date,
+    setSelectedDay: React.Dispatch<React.SetStateAction<Date>>,
+    
     meteo?: Array<Array<meteoByHourType>>,
-    setMeteo?: any
+    setMeteo?: React.Dispatch<React.SetStateAction<Array<Array<meteoByHourType>>>>,
     meteo4h?: Array<any>
-    setMeteo4h?: any,
-    loadMeteo?: any,
+    setMeteo4h?: (any)=>any,
+    loadMeteo?: () => void,
 
     conditions?: Array<dailyConditionType>,
-    loadConditions?: any,
+    loadConditions?: () => void,
 
     setContext: (c: ModulationContextProps) => void,
     isReady: boolean,
@@ -83,8 +85,8 @@ export const ModulationContext = React.createContext<ModulationContextProps>({} 
 
 const ModulationProvider: React.FunctionComponent = ({ children }) => {
     
+    const now = new Date()
     const snackbar = React.useContext(SnackbarContext)
-
     const [selectedFields, setSelectedFields] = useState<Array<fieldType>>([])
     const [selectedProducts, setSelectedProducts] = useState<Array<activeProductType>>([])
     const [debit, setDebit] = useState<number>(100)
@@ -96,6 +98,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [meteo4h, setMeteo4h] = useState<Array<any>>(null)
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
     const [currentDay, setCurrentDay] = useState<number>(0)
+    const [selectedDay, setSelectedDay] = useState<Date>(now)
     const [isReady, setIsReady] = useState<boolean>(false)
 
     useEffect(() => {
@@ -188,6 +191,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
 
     /*=============== Set the whole context =============*/
     const setContext = (savedContext: ModulationContextProps) => {
+        
         setSelectedFields(savedContext.selectedFields)
         setSelectedProducts(savedContext.selectedProducts)
         setDebit(savedContext.debit)
@@ -199,6 +203,9 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setMeteo(savedContext.meteo)
         setMeteo4h(savedContext.meteo4h)
         setConditions(savedContext.conditions)
+        const dt =new Date(savedContext.selectedDay)
+        console.log("=====!!!", dt)
+        setSelectedDay(dt)
     }
 
     const initContext = () => {
@@ -213,6 +220,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setMeteo(null)
         setMeteo4h(null)
         setConditions(null)
+        setSelectedDay(now)
     } 
     return (
         <ModulationContext.Provider value={{ 
@@ -220,7 +228,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
             debit, setDebit, buses, setBuses,
             selectedSlot, setSelectedSlot, mod, setMod, metrics, setMetrics,
-            dow, currentDay, setCurrentDay,
+            dow, currentDay, setCurrentDay, selectedDay, setSelectedDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
             conditions, loadConditions,
             setContext, isReady, initContext

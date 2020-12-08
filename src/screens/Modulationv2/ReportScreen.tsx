@@ -16,7 +16,6 @@ import capitalize from '../../utils/capitalize';
 // import moment from 'moment';
 // import 'moment/min/moment-with-locales'
 import { saveModulationContext } from '../../api/hygoApi';
-
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_report } = AMPLITUDE_EVENTS
 
@@ -24,8 +23,22 @@ const { pulv2_report } = AMPLITUDE_EVENTS
 
 const ReportScreen = ({ navigation, phytoProductList }) => {
 
-    const { savedContext } = navigation.state.params
+    const MONTHS = [
+        i18n.t('months.january'),
+        i18n.t('months.february'),
+        i18n.t('months.march'),
+        i18n.t('months.april'),
+        i18n.t('months.may'),
+        i18n.t('months.june'),
+        i18n.t('months.july'),
+        i18n.t('months.august'),
+        i18n.t('months.september'),
+        i18n.t('months.october'),
+        i18n.t('months.november'),
+        i18n.t('months.december'),
+    ]
 
+    const { savedContext } = navigation.state.params
     const context = useContext(ModulationContext)
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -40,6 +53,10 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
             return family && family.isRacinaire
         }).length > 0
     }, [])
+
+    const getDay = (dt: Date) => {
+        return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])}`
+    }
 
     const saveContext = async () => {
         const { error } = await saveModulationContext(context)
@@ -73,6 +90,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
+                        <Title style={styles.hourTitle}>{getDay(context.selectedDay)}</Title>
                         <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
                         {/* <Title style={styles.hourSubtitle}>{dt}</Title> */}
                         <View style={{ paddingBottom: 20 }}>
