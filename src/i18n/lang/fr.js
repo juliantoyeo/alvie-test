@@ -121,7 +121,7 @@ export default {
     },
     'meteo': {
         'header': 'Accueil', //'Ma météo',
-        'brief': 'En bref',
+        'brief': 'Travaux',  //'En Bref'
         'detailed': 'Météo', //'Détaillée',
         'radar': 'Radar',
         'next_3_hours': 'Vos pulvérisations pour le créneau %{from}h - %{to}h',

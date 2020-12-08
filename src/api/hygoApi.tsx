@@ -498,3 +498,13 @@ export const getModulationContext = async () => {
         return ({error})
     }
 }
+
+export const deleteModulationContext = async (id: number) => {
+    try {
+        const response = await hygoApi.post('/app/deleteModulationContext', { id })
+        return (response.data)
+    } catch(error) {
+        console.log(error)
+        return ({error})
+    }
+}

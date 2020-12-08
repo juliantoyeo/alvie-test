@@ -9,7 +9,7 @@ import moment from 'moment-timezone'
 import { getMeteo, getModulationContext } from '../../api/hygoApi'
 import { MeteoContext } from '../../context/meteo.context'
 import _ from 'lodash'
-import { ModulationContext, ModulationContextProps } from '../../context/modulation.context'
+import { ModulationContext, ModulationContextProps, savedReportType } from '../../context/modulation.context'
 
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
@@ -39,7 +39,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         start: '',
         end: ''
     })
-    const [savedModContext, setSavedModContext] = useState<ModulationContextProps[]>([])
+    const [savedModContext, setSavedModContext] = useState<savedReportType[]>([])
 
     const loadSavedReports = async () => {
         const mc = await getModulationContext()
@@ -131,7 +131,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                 <Text style={styles.date}>{getDay(now)}</Text>
                 {/* <Text style={styles.next_3hours}>{i18n.t('meteo.next_3_hours', { from: hourRange.start, to: hourRange.end })}</Text> */}
             </View>
-            <View style={styles.iconContainer}>
+            {/* <View style={styles.iconContainer}>
                 <View style={styles.meteoElement}>
                     <Image source={require('../../../assets/ICN-Wind.png')} style={styles.image} />
                     {(loading || !ready) ? (
@@ -176,7 +176,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                             </React.Fragment>
                         )}
                 </View>
-            </View>
+            </View> */}
 
             <View style={styles.actionCards}>
                 <HygoCardTransparentButton
@@ -186,10 +186,10 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                     buttonText="Démarrer"
                     onPress={() => navigation.navigate("Pulverisation_v2")}
                 />
-                {savedModContext.map((savedContext: ModulationContextProps, index: number) =>{
+                {savedModContext.map(({context: savedContext, id}) =>{
                     const dt = new Date(savedContext.selectedDay)
                     return (<HygoCardTransparent
-                        key={index}
+                        key={id}
                         title={`${getDay(dt)} - ${savedContext.selectedSlot.min}h / ${savedContext.selectedSlot.max + 1}h`}
                         subtitle="Pulvérisation"
                         text="État sauvegardé"

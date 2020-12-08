@@ -59,6 +59,11 @@ export interface ModulationContextProps {
     isReady: boolean,
     initContext: () => void
 }
+
+export interface savedReportType {
+    context: ModulationContextProps,
+    id: number
+}
 // export type selectedFieldType = {
 //     type: string,
 //     name: string,
@@ -204,7 +209,6 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setMeteo4h(savedContext.meteo4h)
         setConditions(savedContext.conditions)
         const dt =new Date(savedContext.selectedDay)
-        console.log("=====!!!", dt)
         setSelectedDay(dt)
     }
 

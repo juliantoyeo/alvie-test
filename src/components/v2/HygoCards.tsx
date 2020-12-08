@@ -42,7 +42,7 @@ export const HygoCardTransparent = ({ title, subtitle, text, buttonText, onPress
 
     return (
         <View style={stylesTransparent.container}>
-            <View style={[stylesTransparent.left, { backgroundColor: COLORS.CYAN }]}></View>
+            <View style={[stylesTransparent.left, { backgroundColor: "#fff" }]}></View>
             <View style={stylesTransparent.right}>
                 <Text style={stylesTransparent.cardTitle}>{title}</Text>
                 <Text style={stylesTransparent.cardCondition}>{subtitle}</Text>
