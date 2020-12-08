@@ -23,10 +23,11 @@ interface params {
     title: string, 
     item: activeProductType
 }
-const regex = new RegExp("^([0-9]*)(.?)([0-9]*)$")
+const regex = new RegExp("^[0-9]*[0-9\.]?[0-9]*$")
 
 const HygoInputModalDose = ({onClose, onSuccess, modalVisible, setModalVisible, defaultValue, setInput, title, item}: params) => {
-    const [value, setValue] = useState<any>(item ? item.dosemax.toFixed(2) : '0')
+    const [value, setValue] = useState<string>(item ? item.dosemax.toFixed(2) : '0')
+    const testValue = (value: string) => regex.test(value) && (value == '' || parseFloat(value) <= item.dosemax)
     return (
         <Modal
             animationType='fade'
@@ -49,7 +50,7 @@ const HygoInputModalDose = ({onClose, onSuccess, modalVisible, setModalVisible, 
                     <View style={{flex:1}}/>
                     <View style={styles.inputBorder}>
                       <TextInput 
-                        onChangeText={text => regex.test(text) && setValue(text)}
+                        onChangeText={text => testValue(text) && setValue(text)}
                         value={value}
                         style={{ textAlign:'left', flex:1}}
                         keyboardType='numeric'
