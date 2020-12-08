@@ -189,7 +189,7 @@ const Navigator = createSwitchNavigator({
         }, {
             headerMode: 'none'
         }),
-        
+        SavedReportScreen: ReportScreen,
         InterventionMapScreen: InterventionMapScreen,
         MeteoDetailedDetails: {
             screen: MeteoDetailedDetails,

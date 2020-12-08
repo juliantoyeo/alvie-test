@@ -23,6 +23,9 @@ const { pulv2_report } = AMPLITUDE_EVENTS
 
 
 const ReportScreen = ({ navigation, phytoProductList }) => {
+
+    const { savedContext } = navigation.state.params
+
     const context = useContext(ModulationContext)
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -39,7 +42,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     }, [])
 
     const saveContext = async () => {
-        const {error} = await saveModulationContext(context)
+        const { error } = await saveModulationContext(context)
         if (error) {
             snackbar.showSnackbar(i18n.t('snackbar.context_not_saved'), 'WARNING')
         }
@@ -89,12 +92,16 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                             (mod.length > 0) && (
                                                 <Row key={p.id} style={{ paddingLeft: 20 }}>
                                                     <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
-                                                    <Col style={{ flex: 1, paddingRight: 5 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                        {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
-                                                </Text></Col>
-                                                    <Col style={{ flex: 0.5 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                        {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
-                                                </Text></Col>
+                                                    <Col style={{ flex: 1, paddingRight: 5 }}>
+                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                            {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
+                                                        </Text>
+                                                    </Col>
+                                                    <Col style={{ flex: 0.7 }}>
+                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                            {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
+                                                        </Text>
+                                                    </Col>
                                                 </Row>
                                             )
                                         )
@@ -103,12 +110,12 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             </HygoCardSmall>
                             <Grid style={{ paddingTop: 10 }}>
                                 <Row>
-                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.bouillie')}</Text></Col>
-                                    <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{volume.toFixed(1)} L</Text></Col>
-                                </Row>
-                                <Row>
                                     <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.eau')}</Text></Col>
                                     <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{water.toFixed(1)} L</Text></Col>
+                                </Row>
+                                <Row>
+                                    <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.bouillie')}</Text></Col>
+                                    <Col><Text style={[hygoStyles.text, { textAlign: 'right' }]}>{volume.toFixed(1)} L</Text></Col>
                                 </Row>
                                 <Row>
                                     <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.surface')}</Text></Col>
@@ -127,6 +134,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         </HygoCard>
                     </View>
                 </Content>
+                {!savedContext &&
                 <Footer style={styles.footer}>
                     <HygoButton
                         label={i18n.t('pulve_reportscreen.button_next')}
@@ -143,7 +151,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             name: 'arrowright',
                             fontSize: 26,
                         }} />
-                </Footer>
+                </Footer>}
             </Container>
         </SafeAreaView>
     )

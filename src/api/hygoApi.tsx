@@ -487,5 +487,14 @@ export const saveModulationContext = async (context) => {
         console.log(error)
         return ({error})
     }
+}
 
+export const getModulationContext = async () => {
+    try {
+        const response = await hygoApi.get('/app/modulationContext')
+        return (response.data)
+    } catch(error) {
+        console.log(error)
+        return ({error})
+    }
 }

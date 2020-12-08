@@ -48,10 +48,14 @@ export interface ModulationContextProps {
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
-    loadMeteo?: any
+    loadMeteo?: any,
 
-    conditions?: Array<dailyConditionType>
-    loadConditions?: any
+    conditions?: Array<dailyConditionType>,
+    loadConditions?: any,
+
+    setContext: (c: ModulationContextProps) => void,
+    isReady: boolean,
+    initContext: () => void
 }
 // export type selectedFieldType = {
 //     type: string,
@@ -75,7 +79,7 @@ export type selectedSlotType = {
 
 export type dailyConditionType = Array<conditionType>
 
-export const ModulationContext = React.createContext<ModulationContextProps>({});
+export const ModulationContext = React.createContext<ModulationContextProps>({} as ModulationContextProps);
 
 const ModulationProvider: React.FunctionComponent = ({ children }) => {
     
@@ -84,14 +88,42 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedFields, setSelectedFields] = useState<Array<fieldType>>([])
     const [selectedProducts, setSelectedProducts] = useState<Array<activeProductType>>([])
     const [debit, setDebit] = useState<number>(100)
-    const [buses, setBuses] = useState<string>()
+    const [buses, setBuses] = useState<string>(null)
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
     const [mod, setMod] = useState<Array<modulationType>>([])
-    const [metrics, setMetrics] = useState<metricsType>()
-    const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>()
-    const [meteo4h, setMeteo4h] = useState<Array<any>>()
+    const [metrics, setMetrics] = useState<metricsType>(null)
+    const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>(null)
+    const [meteo4h, setMeteo4h] = useState<Array<any>>(null)
     const [conditions, setConditions] = useState<Array<dailyConditionType>>(null)
     const [currentDay, setCurrentDay] = useState<number>(0)
+    const [isReady, setIsReady] = useState<boolean>(false)
+
+    useEffect(() => {
+        const r = !!selectedFields && 
+            !!selectedProducts &&
+            !!debit &&
+            !!buses &&
+            !!selectedSlot &&
+            !!mod &&
+            !!metrics &&
+            !!meteo &&
+            !!meteo4h &&
+            !!conditions &&
+            (typeof currentDay !== 'undefined')
+        setIsReady(r)
+    },[
+        selectedFields , 
+        selectedProducts ,
+        debit ,
+        buses ,
+        selectedSlot ,
+        mod ,
+        metrics ,
+        meteo ,
+        meteo4h ,
+        conditions ,
+        currentDay]
+    )
 
     // The five days we analyse over
     const dow: Array<dowType> = [...Array(5).keys()].map((i) => (
@@ -153,6 +185,35 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
         }
     }
+
+    /*=============== Set the whole context =============*/
+    const setContext = (savedContext: ModulationContextProps) => {
+        setSelectedFields(savedContext.selectedFields)
+        setSelectedProducts(savedContext.selectedProducts)
+        setDebit(savedContext.debit)
+        setBuses(savedContext.buses)
+        setSelectedSlot(savedContext.selectedSlot)
+        setMod(savedContext.mod)
+        setMetrics(savedContext.metrics)
+        setCurrentDay(savedContext.currentDay)
+        setMeteo(savedContext.meteo)
+        setMeteo4h(savedContext.meteo4h)
+        setConditions(savedContext.conditions)
+    }
+
+    const initContext = () => {
+        setSelectedFields([])
+        setSelectedProducts([])
+        setDebit(100)
+        setBuses(null)
+        setSelectedSlot({min:9, max:12})
+        setMod([])
+        setMetrics(null)
+        setCurrentDay(0)
+        setMeteo(null)
+        setMeteo4h(null)
+        setConditions(null)
+    } 
     return (
         <ModulationContext.Provider value={{ 
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
@@ -161,7 +222,8 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             selectedSlot, setSelectedSlot, mod, setMod, metrics, setMetrics,
             dow, currentDay, setCurrentDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
-            conditions, loadConditions
+            conditions, loadConditions,
+            setContext, isReady, initContext
         }}>
             {children}
         </ModulationContext.Provider>

@@ -1,6 +1,6 @@
 export type modulationType = {
-    mod?: number,
-    product?: {
+    mod: number,
+    product: {
         id: number, 
         name: string
     }

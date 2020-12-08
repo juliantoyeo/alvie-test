@@ -316,7 +316,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
-                                navigation.navigate('Pulverisation_Report')
+                                navigation.navigate('Pulverisation_Report', {savedContext: false})
                             }
                             }
                             enabled={currentDay < 3 && !isRefreshing}
