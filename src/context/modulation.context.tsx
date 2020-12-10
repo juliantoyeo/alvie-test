@@ -253,18 +253,20 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     }
 
     const toText = (header = '', footer= '') => {
-        if (!isReady) {
-            return ''
-        }
-        const getDay = (dt: Date) => {
-            return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])} ${dt.getFullYear()}`
-        }
-        const totalArea = selectedFields.reduce((r, f) => r + f.area, 0)
-        const volume = totalArea / 10000 * debit
-        const totalPhyto = totalArea / 10000 * selectedProducts.reduce((r, p) => r + p.dose, 0)
-        const water = volume - totalPhyto
-        const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m.mod, 0) / mod.length : 0
-        return (`
+        try {
+
+            const getDay = (dt: Date) => {
+                return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])} ${dt.getFullYear()}`
+            }
+            const textParcel = (f)=>`     ${f.name} - ${(f.area/10000).toFixed(1)}ha\n `
+            const  textProduct = (p)=>`     ${p.name} (${(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L\n `
+
+            const totalArea = selectedFields.reduce((r, f) => r + f.area, 0)
+            const volume = totalArea / 10000 * debit
+            const totalPhyto = totalArea / 10000 * selectedProducts.reduce((r, p) => r + p.dose, 0)
+            const water = volume - totalPhyto
+            const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m.mod, 0) / mod.length : 0
+            const text = `
 ${header}
 Intervention du ${getDay(selectedDay)}
 ${selectedSlot.min}h - ${selectedSlot.max + 1}h
@@ -274,16 +276,20 @@ Type de buses: ${buses}
 Total économisé: ${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)
 
 Surface totale: ${(totalArea / 10000).toFixed(1)}ha
-Parcelles: \n${selectedFields.map((f) => `     ${f.name} - ${f.area/10000}ha\n`)}
+Parcelles: \n${selectedFields.map((f) => textParcel(f))}
 
 Volume de bouillie: ${volume.toFixed(1)}L
 Eau: ${water.toFixed(1)}L
-Produits: \n${selectedProducts.map((p) => 
-`     ${p.name} (${(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L`)}
+Produits: \n${selectedProducts.map((p) => textProduct(p))}
 ${footer}
 --
-Calculé grâce à Hygo`)
+Calculé grâce à Hygo`
+                return text
+            }catch(e){
+                return ('')
+            }
     }
+
     return (
         <ModulationContext.Provider value={{ 
             id, setId,
