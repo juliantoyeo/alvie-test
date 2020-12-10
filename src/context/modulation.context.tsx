@@ -16,17 +16,20 @@ import i18n from 'i18n-js';
 import moment from 'moment';
 
 export interface ModulationContextProps {
+    id : number,
+    setId: React.Dispatch<React.SetStateAction<number>>,
+    
     selectedFields?: Array<fieldType>,
     addField?: (fieldType) => void,
     removeField?: (fieldType) => void,
     cleanFields?: () => void,
-    setSelectedFields?: React.Dispatch<React.SetStateAction<fieldType>>,
+    setSelectedFields?: React.Dispatch<React.SetStateAction<fieldType[]>>,
 
     selectedProducts?: Array<activeProductType>,
     addProduct?: (activeProductType) => void,
     removeProduct?: (activeProductType) => void,
     cleanProducts?: () => void,
-    setSelectedProducts?: React.Dispatch<React.SetStateAction<activeProductType>>,
+    setSelectedProducts?: React.Dispatch<React.SetStateAction<activeProductType[]>>,
 
     debit?: number,
     setDebit?: React.Dispatch<React.SetStateAction<number>>,
@@ -92,6 +95,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     
     const now = new Date()
     const snackbar = React.useContext(SnackbarContext)
+    const [id, setId] = useState<number>()  //id in db
     const [selectedFields, setSelectedFields] = useState<Array<fieldType>>([])
     const [selectedProducts, setSelectedProducts] = useState<Array<activeProductType>>([])
     const [debit, setDebit] = useState<number>(100)
@@ -107,7 +111,8 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [isReady, setIsReady] = useState<boolean>(false)
 
     useEffect(() => {
-        const r = !!selectedFields && 
+        const r = !!id &&
+            !!selectedFields && 
             !!selectedProducts &&
             !!debit &&
             !!buses &&
@@ -120,6 +125,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             (typeof currentDay !== 'undefined')
         setIsReady(r)
     },[
+        id,
         selectedFields , 
         selectedProducts ,
         debit ,
@@ -196,7 +202,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
 
     /*=============== Set the whole context =============*/
     const setContext = (savedContext: ModulationContextProps) => {
-        
+        setId(savedContext.id)
         setSelectedFields(savedContext.selectedFields)
         setSelectedProducts(savedContext.selectedProducts)
         setDebit(savedContext.debit)
@@ -213,6 +219,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     }
 
     const initContext = () => {
+        setId(null)
         setSelectedFields([])
         setSelectedProducts([])
         setDebit(100)
@@ -228,6 +235,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     } 
     return (
         <ModulationContext.Provider value={{ 
+            id, setId,
             selectedFields, addField, removeField, cleanFields, setSelectedFields,
             selectedProducts, addProduct, removeProduct, cleanProducts, setSelectedProducts,
             debit, setDebit, buses, setBuses,

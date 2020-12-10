@@ -39,7 +39,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
         start: '',
         end: ''
     })
-    const [savedModContext, setSavedModContext] = useState<savedReportType[]>([])
+    const [savedModContext, setSavedModContext] = useState<ModulationContextProps[]>([])
 
     const loadSavedReports = async () => {
         const mc = await getModulationContext()
@@ -186,10 +186,10 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                     buttonText="Démarrer"
                     onPress={() => navigation.navigate("Pulverisation_v2")}
                 />
-                {savedModContext.map(({context: savedContext, id}) =>{
+                {savedModContext.map((savedContext) =>{
                     const dt = new Date(savedContext.selectedDay)
                     return (<HygoCardTransparent
-                        key={id}
+                        key={savedContext.id}
                         title={`${getDay(dt)} - ${savedContext.selectedSlot.min}h / ${savedContext.selectedSlot.max + 1}h`}
                         subtitle="Pulvérisation"
                         text="État sauvegardé"

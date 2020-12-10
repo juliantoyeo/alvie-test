@@ -15,7 +15,7 @@ import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import capitalize from '../../utils/capitalize';
 // import moment from 'moment';
 // import 'moment/min/moment-with-locales'
-import { saveModulationContext } from '../../api/hygoApi';
+import { saveModulationContext, deleteModulationContext } from '../../api/hygoApi';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_report } = AMPLITUDE_EVENTS
 
@@ -38,7 +38,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         i18n.t('months.december'),
     ]
 
-    const { savedContext } = navigation.state.params
+    // const { savedContext } = navigation.state.params
     const context = useContext(ModulationContext)
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -63,10 +63,10 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         const { error } = await saveModulationContext(context)
         if (error) {
             snackbar.showSnackbar(i18n.t('snackbar.context_not_saved'), 'WARNING')
+            setSaved(false)
         }
         else {
             snackbar.showSnackbar(i18n.t('snackbar.context_saved'), 'OK')
-            setSaved(true)
         }
         return
     }
@@ -91,11 +91,6 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_reportscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}></Right>
-                    {/* {saveContext && (<Right style={{ flex: 1 }}>
-                        <Button transparent onPress={() => {}}>
-                            <Icon name='trash' style={{ color: '#fff' }} />
-                        </Button>
-                    </Right>)} */}
                 </Header>
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
@@ -161,8 +156,6 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             </View>
                         </HygoCard>
                     </View>
-                
-                {!savedContext &&
                     <View>
                         <HygoButton
                             label={i18n.t('pulve_reportscreen.button_next')}
@@ -179,40 +172,61 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                 fontSize: 26,
                             }}
                         />
-                        <HygoButton
-                            label="Sauvegarder"
-                            onPress={async () => {
-                                saveContext()
-                                Amplitude.logEventWithProperties(pulv2_report.click_save, {
-                                    timestamp: Date.now(),
-                                    context
-                                })
-                            }}
-                            enabled= {saved}
-                            icon={{
-                                type: 'AntDesign',
-                                name: 'arrowright',
-                                fontSize: 26,
-                            }}
-                        />
-                        <HygoButton
-                            label="Partager"
-                            onPress={async () => {
-                                Share.share({
-                                    message: 'testsharing',
-                                    title: 'messageTtile',
-                                    url: '',
-                                })
-                            }}
-                            icon={{
-                                type: 'AntDesign',
-                                name: 'arrowright',
-                                fontSize: 26,
-                            }}
-                        />
+                        {context.id ? (
+                            <HygoButton
+                                label="Supprimer"
+                                onPress={async () => {
+                                    Amplitude.logEventWithProperties(pulv2_report.click_delete, {
+                                        timestamp: Date.now(),
+                                        context
+                                    })
+                                    await deleteModulationContext(context.id)
+                                    navigation.navigate('main_v2')
+                                }}
+                                icon={{
+                                    type: 'AntDesign',
+                                    name: 'arrowright',
+                                    fontSize: 26,
+                                }}
+                            />
+                        ) : (
+                                <React.Fragment>
+                                    <HygoButton
+                                        label="Sauvegarder"
+                                        onPress={async () => {
+                                            setSaved(true)
+                                            saveContext()
+                                            Amplitude.logEventWithProperties(pulv2_report.click_save, {
+                                                timestamp: Date.now(),
+                                                context
+                                            })
+                                        }}
+                                        enabled={!saved}
+                                        icon={{
+                                            type: 'AntDesign',
+                                            name: 'arrowright',
+                                            fontSize: 26,
+                                        }}
+                                    />
+                                    <HygoButton
+                                        label="Partager"
+                                        onPress={async () => {
+                                            Share.share({
+                                                message: 'testsharing',
+                                                title: 'messageTtile',
+                                                url: '',
+                                            })
+                                        }}
+                                        icon={{
+                                            type: 'AntDesign',
+                                            name: 'arrowright',
+                                            fontSize: 26,
+                                        }}
+                                    />
+                                </React.Fragment>
+                            )}
                     </View>
-                    }
-                    </Content>
+                </Content>
             </Container>
         </SafeAreaView>
     )

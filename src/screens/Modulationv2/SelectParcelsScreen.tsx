@@ -14,6 +14,7 @@ import { cultureType } from '../../types/culture.types';
 import { getFields_v2, getFieldsReturnType } from '../../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+import { setUserId } from 'expo-analytics-amplitude';
 const { pulv2_parcel } = AMPLITUDE_EVENTS
 // Amplitude.logEventWithProperties(pulv2_parcel.click_toPulv2Product, {
 //     timestamp: Date.now(),
@@ -100,7 +101,7 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
     useEffect(() => {
         // Init fields and retrieve culture_names
         const load = async () => {
-
+            context.setId(null)
             const { fields: fld }: getFieldsReturnType = await getFields_v2()
             if (!!fld) {
                 setFields(fld)
