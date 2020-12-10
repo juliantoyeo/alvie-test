@@ -14,11 +14,12 @@ import { getMetrics_v2, getMetrics4h_v2, getConditions_v2 } from '../api/hygoApi
 import { SnackbarContext } from './snackbar.context';
 import i18n from 'i18n-js';
 import moment from 'moment';
+import capitalize from '../utils/capitalize';
 
 export interface ModulationContextProps {
-    id : number,
+    id: number,
     setId: React.Dispatch<React.SetStateAction<number>>,
-    
+
     selectedFields?: Array<fieldType>,
     addField?: (fieldType) => void,
     removeField?: (fieldType) => void,
@@ -33,26 +34,26 @@ export interface ModulationContextProps {
 
     debit?: number,
     setDebit?: React.Dispatch<React.SetStateAction<number>>,
-    buses? :string,
-    setBuses? : React.Dispatch<React.SetStateAction<string>>,
+    buses?: string,
+    setBuses?: React.Dispatch<React.SetStateAction<string>>,
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: React.Dispatch<React.SetStateAction<selectedSlotType>>,
     mod?: Array<modulationType>,
     setMod?: React.Dispatch<React.SetStateAction<modulationType[]>>,
     metrics?: metricsType,
-    setMetrics? : React.Dispatch<React.SetStateAction<metricsType>>,
+    setMetrics?: React.Dispatch<React.SetStateAction<metricsType>>,
 
     dow?: Array<dowType>,
     currentDay?: number,
     setCurrentDay?: React.Dispatch<React.SetStateAction<number>>,
     selectedDay: Date,
     setSelectedDay: React.Dispatch<React.SetStateAction<Date>>,
-    
+
     meteo?: Array<Array<meteoByHourType>>,
     setMeteo?: React.Dispatch<React.SetStateAction<Array<Array<meteoByHourType>>>>,
     meteo4h?: Array<any>
-    setMeteo4h?: (any)=>any,
+    setMeteo4h?: (any) => any,
     loadMeteo?: () => void,
 
     conditions?: Array<dailyConditionType>,
@@ -61,6 +62,8 @@ export interface ModulationContextProps {
     setContext: (c: ModulationContextProps) => void,
     isReady: boolean,
     initContext: () => void
+
+    toText: () => string
 }
 
 export interface savedReportType {
@@ -92,7 +95,22 @@ export type dailyConditionType = Array<conditionType>
 export const ModulationContext = React.createContext<ModulationContextProps>({} as ModulationContextProps);
 
 const ModulationProvider: React.FunctionComponent = ({ children }) => {
-    
+    const MONTHS = [
+        i18n.t('months.january'),
+        i18n.t('months.february'),
+        i18n.t('months.march'),
+        i18n.t('months.april'),
+        i18n.t('months.may'),
+        i18n.t('months.june'),
+        i18n.t('months.july'),
+        i18n.t('months.august'),
+        i18n.t('months.september'),
+        i18n.t('months.october'),
+        i18n.t('months.november'),
+        i18n.t('months.december'),
+    ]
+
+
     const now = new Date()
     const snackbar = React.useContext(SnackbarContext)
     const [id, setId] = useState<number>()  //id in db
@@ -100,7 +118,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [selectedProducts, setSelectedProducts] = useState<Array<activeProductType>>([])
     const [debit, setDebit] = useState<number>(100)
     const [buses, setBuses] = useState<string>(null)
-    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({min:9, max:12})
+    const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({ min: 9, max: 12 })
     const [mod, setMod] = useState<Array<modulationType>>([])
     const [metrics, setMetrics] = useState<metricsType>(null)
     const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>(null)
@@ -112,7 +130,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
 
     useEffect(() => {
         const r = !!id &&
-            !!selectedFields && 
+            !!selectedFields &&
             !!selectedProducts &&
             !!debit &&
             !!buses &&
@@ -124,18 +142,18 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             !!conditions &&
             (typeof currentDay !== 'undefined')
         setIsReady(r)
-    },[
+    }, [
         id,
-        selectedFields , 
-        selectedProducts ,
-        debit ,
-        buses ,
-        selectedSlot ,
-        mod ,
-        metrics ,
-        meteo ,
-        meteo4h ,
-        conditions ,
+        selectedFields,
+        selectedProducts,
+        debit,
+        buses,
+        selectedSlot,
+        mod,
+        metrics,
+        meteo,
+        meteo4h,
+        conditions,
         currentDay]
     )
 
@@ -143,7 +161,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const dow: Array<dowType> = [...Array(5).keys()].map((i) => (
         moment.utc().add(i, 'day'))
     ).map((d) => ({ dt: d.format('YYYY-MM-DD'), name: d.format('dddd') }))
-    
+
     /*====== Fields ======*/
     const addField = (field: fieldType) => {
         setSelectedFields([...selectedFields, field])
@@ -174,7 +192,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             snackbar.showSnackbar(i18n.t('snackbar.meteo_error'), "ALERT")
         }
     }
-    
+
     const loadConditions = async () => {
         let now = moment.utc()
         if (now.minutes() >= 30) {
@@ -214,7 +232,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setMeteo(savedContext.meteo)
         setMeteo4h(savedContext.meteo4h)
         setConditions(savedContext.conditions)
-        const dt =new Date(savedContext.selectedDay)
+        const dt = new Date(savedContext.selectedDay)
         setSelectedDay(dt)
     }
 
@@ -224,7 +242,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setSelectedProducts([])
         setDebit(100)
         setBuses(null)
-        setSelectedSlot({min:9, max:12})
+        setSelectedSlot({ min: 9, max: 12 })
         setMod([])
         setMetrics(null)
         setCurrentDay(0)
@@ -232,7 +250,40 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
         setMeteo4h(null)
         setConditions(null)
         setSelectedDay(now)
-    } 
+    }
+
+    const toText = (header = '', footer= '') => {
+        if (!isReady) {
+            return ''
+        }
+        const getDay = (dt: Date) => {
+            return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])} ${dt.getFullYear()}`
+        }
+        const totalArea = selectedFields.reduce((r, f) => r + f.area, 0)
+        const volume = totalArea / 10000 * debit
+        const totalPhyto = totalArea / 10000 * selectedProducts.reduce((r, p) => r + p.dose, 0)
+        const water = volume - totalPhyto
+        const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m.mod, 0) / mod.length : 0
+        return (`
+${header}
+Intervention du ${getDay(selectedDay)}
+${selectedSlot.min}h - ${selectedSlot.max + 1}h
+
+Débit: ${debit}L/ha
+Type de buses: ${buses}
+Total économisé: ${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)
+
+Surface totale: ${(totalArea / 10000).toFixed(1)}ha
+Parcelles: \n${selectedFields.map((f) => `     ${f.name} - ${f.area/10000}ha\n`)}
+
+Volume de bouillie: ${volume.toFixed(1)}L
+Eau: ${water.toFixed(1)}L
+Produits: \n${selectedProducts.map((p) => 
+`     ${p.name} (${(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L`)}
+${footer}
+--
+Calculé grâce à Hygo`)
+    }
     return (
         <ModulationContext.Provider value={{ 
             id, setId,
@@ -243,7 +294,8 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
             dow, currentDay, setCurrentDay, selectedDay, setSelectedDay,
             meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
             conditions, loadConditions,
-            setContext, isReady, initContext
+            setContext, isReady, initContext,
+            toText
         }}>
             {children}
         </ModulationContext.Provider>

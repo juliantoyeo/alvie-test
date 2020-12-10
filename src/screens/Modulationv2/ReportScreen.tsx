@@ -161,7 +161,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                     <View style={styles.buttonContainer}>
                         <Button
                             transparent
-                            style={{height:60}}
+                            style={{ height: 60 }}
                             onPress={async () => {
                                 Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
                                     timestamp: Date.now(),
@@ -173,54 +173,52 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             <Icon type='Ionicons' name='md-home' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />
                         </Button>
 
-                        {context.id ? (<Button
+                        <Button
                             transparent
-                            style={{height:60}}
+                            style={{ height: 60 }}
                             onPress={async () => {
-                                Amplitude.logEventWithProperties(pulv2_report.click_delete, {
-                                    timestamp: Date.now(),
-                                    context
+                                Share.share({
+                                    message: context.toText(),
+                                    title: `Intervention Hygo - ${getDay(context.selectedDay)}`,
+                                    url: '',
                                 })
-                                await deleteModulationContext(context.id)
-                                navigation.navigate('main_v2')
                             }}
                         >
-                            <Icon type='Ionicons' name='md-trash' style={{ color: COLORS.DARK_BLUE, fontSize: 40  }} />
+                            <Icon type='Ionicons' name='md-share' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />
                         </Button>
+                        {context.id ? (
+                            <Button
+                                transparent
+                                style={{ height: 60 }}
+                                onPress={async () => {
+                                    Amplitude.logEventWithProperties(pulv2_report.click_delete, {
+                                        timestamp: Date.now(),
+                                        context
+                                    })
+                                    await deleteModulationContext(context.id)
+                                    navigation.navigate('main_v2')
+                                }}
+                            >
+                                <Icon type='Ionicons' name='md-trash' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />
+                            </Button>
                         ) : (
-                                <React.Fragment>
-                                    <Button
-                                        transparent
-                                        style={{height:60}}
-                                        onPress={async () => {
-                                            Share.share({
-                                                message: 'testsharing',
-                                                title: 'messageTtile',
-                                                url: '',
-                                            })
-                                        }}
-                                    >
-                                        <Icon type='Ionicons' name='md-share' style={{ color: COLORS.DARK_BLUE, fontSize: 40  }} />
-                                    </Button>
-
-                                    <Button
-                                        transparent
-                                        style={{height:60}}
-                                        onPress={async () => {
-                                            setSaved(true)
-                                            saveContext()
-                                            Amplitude.logEventWithProperties(pulv2_report.click_save, {
-                                                timestamp: Date.now(),
-                                                context
-                                            })
-                                        }}
-                                    >
-                                        <Icon type='Ionicons' name='md-save' style={{ color: saved ? COLORS.GREY : COLORS.DARK_BLUE, fontSize: 40  }} />
-                                    </Button>
-                                </React.Fragment>
+                                <Button
+                                    transparent
+                                    style={{ height: 60 }}
+                                    onPress={async () => {
+                                        setSaved(true)
+                                        saveContext()
+                                        Amplitude.logEventWithProperties(pulv2_report.click_save, {
+                                            timestamp: Date.now(),
+                                            context
+                                        })
+                                    }}
+                                >
+                                    <Icon type='Ionicons' name='md-save' style={{ color: saved ? COLORS.GREY : COLORS.DARK_BLUE, fontSize: 40 }} />
+                                </Button>
                             )}
                     </View>
-                    <View style={{height:20}}></View>
+                    <View style={{ height: 20 }}></View>
                 </Content>
             </Container>
         </SafeAreaView>
