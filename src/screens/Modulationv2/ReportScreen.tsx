@@ -156,9 +156,12 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             </View>
                         </HygoCard>
                     </View>
-                    <View>
-                        <HygoButton
-                            label={i18n.t('pulve_reportscreen.button_next')}
+
+                    {/*========================== Buttons =================================*/}
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            transparent
+                            style={{height:60}}
                             onPress={async () => {
                                 Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
                                     timestamp: Date.now(),
@@ -166,33 +169,43 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                 })
                                 navigation.navigate('main_v2')
                             }}
-                            icon={{
-                                type: 'AntDesign',
-                                name: 'arrowright',
-                                fontSize: 26,
+                        >
+                            <Icon type='Ionicons' name='md-home' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />
+                        </Button>
+
+                        {context.id ? (<Button
+                            transparent
+                            style={{height:60}}
+                            onPress={async () => {
+                                Amplitude.logEventWithProperties(pulv2_report.click_delete, {
+                                    timestamp: Date.now(),
+                                    context
+                                })
+                                await deleteModulationContext(context.id)
+                                navigation.navigate('main_v2')
                             }}
-                        />
-                        {context.id ? (
-                            <HygoButton
-                                label="Supprimer"
-                                onPress={async () => {
-                                    Amplitude.logEventWithProperties(pulv2_report.click_delete, {
-                                        timestamp: Date.now(),
-                                        context
-                                    })
-                                    await deleteModulationContext(context.id)
-                                    navigation.navigate('main_v2')
-                                }}
-                                icon={{
-                                    type: 'AntDesign',
-                                    name: 'arrowright',
-                                    fontSize: 26,
-                                }}
-                            />
+                        >
+                            <Icon type='Ionicons' name='md-trash' style={{ color: COLORS.DARK_BLUE, fontSize: 40  }} />
+                        </Button>
                         ) : (
                                 <React.Fragment>
-                                    <HygoButton
-                                        label="Sauvegarder"
+                                    <Button
+                                        transparent
+                                        style={{height:60}}
+                                        onPress={async () => {
+                                            Share.share({
+                                                message: 'testsharing',
+                                                title: 'messageTtile',
+                                                url: '',
+                                            })
+                                        }}
+                                    >
+                                        <Icon type='Ionicons' name='md-share' style={{ color: COLORS.DARK_BLUE, fontSize: 40  }} />
+                                    </Button>
+
+                                    <Button
+                                        transparent
+                                        style={{height:60}}
                                         onPress={async () => {
                                             setSaved(true)
                                             saveContext()
@@ -201,31 +214,13 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                                 context
                                             })
                                         }}
-                                        enabled={!saved}
-                                        icon={{
-                                            type: 'AntDesign',
-                                            name: 'arrowright',
-                                            fontSize: 26,
-                                        }}
-                                    />
-                                    <HygoButton
-                                        label="Partager"
-                                        onPress={async () => {
-                                            Share.share({
-                                                message: 'testsharing',
-                                                title: 'messageTtile',
-                                                url: '',
-                                            })
-                                        }}
-                                        icon={{
-                                            type: 'AntDesign',
-                                            name: 'arrowright',
-                                            fontSize: 26,
-                                        }}
-                                    />
+                                    >
+                                        <Icon type='Ionicons' name='md-save' style={{ color: saved ? COLORS.GREY : COLORS.DARK_BLUE, fontSize: 40  }} />
+                                    </Button>
                                 </React.Fragment>
                             )}
                     </View>
+                    <View style={{height:20}}></View>
                 </Content>
             </Container>
         </SafeAreaView>
@@ -300,6 +295,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         paddingTop: 5,
         paddingBottom: 10
+    },
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
     }
 })
 
