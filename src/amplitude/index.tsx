@@ -43,7 +43,9 @@ export const AMPLITUDE_EVENTS = {
     },
     pulv2_report: {
         render: "render_pulv2report",
-        click_toHome: "click_pulv2report_tohome", 
+        click_toHome: "click_pulv2report_tohome",
+        click_save: "click_pulv2report_save",
+        click_share: "click_pulv2report_share" 
     },
     nextPulvScreen : {
         render: "render_nextpulverisationscreen", 

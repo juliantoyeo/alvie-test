@@ -642,6 +642,7 @@ export default {
         'condition_error': "Erreur dans le chargement des conditions",
         'welcome_beta': "Bienvenue dans le mode Beta Test. Nous sommes ravi de cette nouvelle expérience avec vous. Contactez-nous pour découvrir les nouveautés !",
         'bye_beta': 'Mode Beta Test désactivé',
-        'context_not_saved': 'Intervention non enregistrée'
+        'context_not_saved': 'Intervention non enregistrée',
+        'context_saved': 'Intervention enregistrée'
     }
 }

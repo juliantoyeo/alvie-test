@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
+import { StyleSheet, RefreshControl, StatusBar, View, Platform, Share, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Left, Body, Title, Subtitle, Right, Button, Content, Icon, Text, Footer, Grid, Col, Row } from 'native-base';
-import HygoButton from '../../components/HygoButton';
+import HygoButton from '../../components/v2/HygoButton';
 import { ModulationContext } from '../../context/modulation.context';
 import { SnackbarContext } from '../../context/snackbar.context';
 import { HygoCard, HygoCardSmall } from '../../components/v2/HygoCards';
@@ -46,6 +46,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
     const water = volume - totalPhyto
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+    const [saved, setSaved] = useState<boolean>(false)
     // const dt = moment(context.dow[context.currentDay].dt).locale('fr').format('L')   => problem with locals
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {
@@ -62,6 +63,10 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         const { error } = await saveModulationContext(context)
         if (error) {
             snackbar.showSnackbar(i18n.t('snackbar.context_not_saved'), 'WARNING')
+        }
+        else {
+            snackbar.showSnackbar(i18n.t('snackbar.context_saved'), 'OK')
+            setSaved(true)
         }
         return
     }
@@ -85,6 +90,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         <Title style={styles.headerTitle}>{i18n.t('pulve_reportscreen.title')}</Title>
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_reportscreen.subtitle')}</Title>
                     </Body>
+                    <Right style={{ flex: 1 }}></Right>
                     {/* {saveContext && (<Right style={{ flex: 1 }}>
                         <Button transparent onPress={() => {}}>
                             <Icon name='trash' style={{ color: '#fff' }} />
@@ -114,12 +120,12 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                             (mod.length > 0) && (
                                                 <Row key={p.id} style={{ paddingLeft: 20 }}>
                                                     <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
-                                                    <Col style={{ flex: 1, paddingRight: 5 }}>
+                                                    <Col style={{ flex: 1.5, paddingRight: 5 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                             {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
                                                         </Text>
                                                     </Col>
-                                                    <Col style={{ flex: 0.7 }}>
+                                                    <Col style={{ flex: 1 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                             {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
                                                         </Text>
@@ -155,25 +161,58 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             </View>
                         </HygoCard>
                     </View>
-                </Content>
+                
                 {!savedContext &&
-                <Footer style={styles.footer}>
-                    <HygoButton
-                        label={i18n.t('pulve_reportscreen.button_next')}
-                        onPress={async () => {
-                            saveContext()
-                            Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
-                                timestamp: Date.now(),
-                                context
-                            })
-                            navigation.navigate('main_v2')
-                        }}
-                        icon={{
-                            type: 'AntDesign',
-                            name: 'arrowright',
-                            fontSize: 26,
-                        }} />
-                </Footer>}
+                    <View>
+                        <HygoButton
+                            label={i18n.t('pulve_reportscreen.button_next')}
+                            onPress={async () => {
+                                Amplitude.logEventWithProperties(pulv2_report.click_toHome, {
+                                    timestamp: Date.now(),
+                                    context
+                                })
+                                navigation.navigate('main_v2')
+                            }}
+                            icon={{
+                                type: 'AntDesign',
+                                name: 'arrowright',
+                                fontSize: 26,
+                            }}
+                        />
+                        <HygoButton
+                            label="Sauvegarder"
+                            onPress={async () => {
+                                saveContext()
+                                Amplitude.logEventWithProperties(pulv2_report.click_save, {
+                                    timestamp: Date.now(),
+                                    context
+                                })
+                            }}
+                            enabled= {saved}
+                            icon={{
+                                type: 'AntDesign',
+                                name: 'arrowright',
+                                fontSize: 26,
+                            }}
+                        />
+                        <HygoButton
+                            label="Partager"
+                            onPress={async () => {
+                                Share.share({
+                                    message: 'testsharing',
+                                    title: 'messageTtile',
+                                    url: '',
+                                })
+                            }}
+                            icon={{
+                                type: 'AntDesign',
+                                name: 'arrowright',
+                                fontSize: 26,
+                            }}
+                        />
+                    </View>
+                    }
+                    </Content>
             </Container>
         </SafeAreaView>
     )
