@@ -69,9 +69,11 @@ const SelectProductsScreen = ({ navigation }) => {
         // Init product list and retrieve product families and favorites
         const load = async () => {
             const prd: Array<activeProductType> = await getActiveProducts()
-            if (prd.length > 0) {
-                setProducts(prd)
-                const nm = prd.map((f) => f.phytoproduct.name)
+            // Filtrage uniquement aux produits liquides
+            const liquidPrd = prd.filter((p) => p.unit == 'L/ha')
+            if (liquidPrd.length > 0) {
+                setProducts(liquidPrd)
+                const nm = liquidPrd.map((f) => f.phytoproduct.name)
                 setFamilies(_.uniq(nm))     //delete duplicate
             }
         }
