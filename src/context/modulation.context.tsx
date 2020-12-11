@@ -283,7 +283,8 @@ Eau: ${water.toFixed(1)}L
 Produits: \n${selectedProducts.map((p) => textProduct(p))}
 ${footer}
 --
-Calculé grâce à Hygo`
+Calculé grâce à Hygo, by Alvie.
+www.alvie.fr`
                 return text
             }catch(e){
                 return ('')

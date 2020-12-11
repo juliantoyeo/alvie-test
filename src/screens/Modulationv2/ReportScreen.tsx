@@ -117,12 +117,12 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                                     <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
                                                     <Col style={{ flex: 1.5, paddingRight: 5 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} L/ha
+                                                            {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} {p.unit}
                                                         </Text>
                                                     </Col>
                                                     <Col style={{ flex: 1 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L
+                                                            {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
                                                         </Text>
                                                     </Col>
                                                 </Row>

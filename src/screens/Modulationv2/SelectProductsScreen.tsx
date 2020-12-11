@@ -47,7 +47,7 @@ export const ProductList = ({ items, onPress }: ProductListProps) => {
                             <Icon type='AntDesign' name='delete' style={{ fontSize: 16, paddingTop: 2, color: COLORS.DARK_BLUE }} />
                         </TouchableOpacity>
                         <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }]}>{item.name}</Text>
-                        <Text style={hygoStyles.text}>{item.dose.toString()} L/ha</Text>
+                        <Text style={hygoStyles.text}>{item.dose.toString()} {item.unit}</Text>
                     </View>
                 )})}
             </View>
