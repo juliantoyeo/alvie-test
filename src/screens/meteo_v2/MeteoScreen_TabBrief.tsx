@@ -188,9 +188,10 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                 />
                 {savedModContext.map((savedContext) =>{
                     const dt = new Date(savedContext.selectedDay)
+                    const day = savedContext.selectedDay ? getDay(dt) : ""
                     return (<HygoCardTransparent
                         key={savedContext.id}
-                        title={`${getDay(dt)} - ${savedContext.selectedSlot.min}h / ${savedContext.selectedSlot.max + 1}h`}
+                        title={`${day} - ${savedContext.selectedSlot.min}h / ${savedContext.selectedSlot.max + 1}h`}
                         subtitle="Pulvérisation"
                         text="État sauvegardé"
                         buttonText="Visualiser"
