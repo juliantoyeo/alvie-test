@@ -13,5 +13,12 @@ export interface meteoByHourType {
     soiltemp: number,
     soilhumi: number,
     pictocode: string,
-    winddirection: string
+    winddirection: string,
+    r2: number,
+    r3: number,
+    r6: number,
+    t3: number,
+    maxsoilhumi: number,
+    minsoilhumi: number,
+    deltatemp: number
 }

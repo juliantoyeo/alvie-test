@@ -21,7 +21,7 @@ import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v2Ratio } from '../../api/hygoApi';
+import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio } from '../../api/hygoApi';
 import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -68,12 +68,20 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
     //Updating modulation when selected slot change or day change
     useEffect(() => {
-        (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
-        loadMetrics()
+        // (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
+        // Store the day for the reportScreen
         const dt = new Date()
         dt.setDate(dt.getDate() + currentDay)
         setSelectedDay(dt)
+        loadMetrics()
+        
+        
     }, [context.selectedSlot, currentDay])
+
+    useEffect(() => {
+        // When metrics changed: update modulation
+        loadModulation(context.metrics)
+    }, [context.metrics])
 
     useEffect(() => {
         loadMetrics()
@@ -99,11 +107,12 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         const minval = -99999, maxval = 99999
         const selected = context.selectedSlot
         let chd: metricsType = {} as metricsType, dir = []
-        _.forEach(context.meteo[currentDay], (v, k2) => {
+        _.forEach(context.meteo[currentDay], (v: meteoByHourType, k2) => {
             const h = v.hour.toString().padStart(2, '0')
             if (parseInt(h) > selected.max || parseInt(h) < selected.min) {
                 return
             }
+
             chd.wind = Math.max((chd.wind || minval), v.wind)
             chd.gust = Math.max((chd.gust || minval), v.gust)
 
@@ -162,22 +171,18 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     //     }
     // }
 
-    const loadModulation = async () => {
+    const loadModulation = async (metrics: metricsType) => {
+
+        if  (context.metrics == null) {
+            context.setMod([])
+            return
+        }
 
         setIsRefreshing(true)
         const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
-        const cultures: Array<number> = context.selectedFields.map((f: fieldType) => f.culture.id)
-        const now = moment.utc()
-        const hour = context.selectedSlot.min.toString().padStart(2, '0')
         const data = {
-            hour,
-            day: now.add(currentDay, 'day').format('YYYY-MM-DD'),
-            cultures,
             products,
-            selected: {
-                min: 0,
-                max: context.selectedSlot.max - context.selectedSlot.min
-            }
+            metrics
         }
 
         // The ratio between dose planed and dose max is used to reduce the modulation
@@ -186,12 +191,16 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }, 0)
 
         try {
-            const newMod: Array<modulationType> = await getModulationValue_v2Ratio(data, ratio)
-            context.setMod(newMod)
+            const newMod: Array<modulationType> = await getModulationValue_v3Ratio(data, ratio)
             if (newMod.length == 0) {
+                console.log('===:(')
+                context.setMod([])
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
+            context.setMod(newMod)
         } catch (error) {
+            console.log('===crash')
+            context.setMod([])
             snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
         }
         setIsRefreshing(false)
@@ -296,7 +305,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
                                 {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
                                 <View style={{ paddingTop: 20, paddingBottom: 40 }}>
-                                    {currentDay < 3 && (
+                                    {currentDay < 6 && (
                                         <HygoCard>
                                             {isRefreshing ? <Spinner /> : (
                                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>

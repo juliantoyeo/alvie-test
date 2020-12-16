@@ -331,6 +331,15 @@ export const getModulationValue_v2Ratio = async (data, ratio): Promise<Array<mod
     }
 }
 
+export const getModulationValue_v3Ratio = async (data, ratio): Promise<Array<modulationType>> => {
+    try {
+        const response = await hygoApi.post('/app/modulation/v3/ratio', { ...data, ratio })
+        return response.data
+    } catch (error) {
+        return []
+    }
+}
+
 export const getModulationList = async (data: Array<getModulationValueProps>): Promise<Array<number>> => {
     try {
         const response = await hygoApi.post('/app/modulationList', { ...data })
