@@ -32,29 +32,6 @@ import { metricsType } from '../../types/metrics.types'
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_slot } = AMPLITUDE_EVENTS
 
-
-// type metricsType = {
-//     wind?: any,
-//     gust?: any
-//     precipitation?: any,
-//     probabilityCnt?: any,
-//     probabilitySum?: any,
-//     prevprecipitation?: any,
-//     mintemp?: any,
-//     maxtemp?: any,
-//     minhumi?: any,
-//     maxhumi?: any,
-//     minsoilhumi?: any,
-//     maxsoilhumi?: any,
-//     r2?: any,
-//     r3?: any,
-//     r6?: any,
-//     deltatemp?: any,
-//     t3?: any,
-//     winddirection?: any,
-//     probability?: any
-// }
-
 const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
@@ -175,7 +152,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             context.setMod([])
             return
         }
-        
+
         if  (context.metrics == null) {
             context.setMod([])
             return
