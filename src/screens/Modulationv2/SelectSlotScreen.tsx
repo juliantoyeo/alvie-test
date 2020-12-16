@@ -73,7 +73,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }, [context.selectedProducts])
 
     useEffect(() => {
-        console.log("=====mod", modDay)
+        
     },[modDay])
 
     const hasRacinaire = useCallback(() => {
@@ -304,6 +304,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                             width={Dimensions.get('window').width - 30}
                                             onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
                                             enabled={true}
+                                            sizes={modDay}
                                         />
                                     </View>
 

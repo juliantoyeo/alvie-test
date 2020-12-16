@@ -6,13 +6,13 @@ import _ from 'lodash';
 import { CONDITIONS } from '../../constants';
 
 const NUM_ITEMS = 24
-const CURSOR_HEIGHT = 120
+const CURSOR_HEIGHT = 45
 
 const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd, enabled }) => {
+const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd, enabled, sizes }) => {
     /**
      * 
      * @param props
@@ -28,6 +28,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
         min: parseInt(initialMin ? initialMin : 0),
         max: parseInt(initialMax ? initialMax : 0)
     })
+
     //useRef needed for onPanResponderRelease
     const selectedRef = useRef(selected)
     selectedRef.current = selected
@@ -172,12 +173,37 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
     }
 
     const getContainerHeight = () => {
-        const w = width, margin = parseFloat(w) / NUM_ITEMS * 0.14
+        const w = width, 
+        margin = parseFloat(w) / NUM_ITEMS * 0.14
         return 45 + margin
+    }
+
+    const getItemHeight = (i) => {
+        if (!sizes || sizes == [])
+            return 45
+        try {
+            const maxSize = Math.max(...sizes)
+            return 15 + 30 * sizes[i] / maxSize
+        }catch(e) {
+            return 45
+        }
+    }
+    const getSelectedHeight = () => {
+        if (!sizes || sizes == [])
+            return 45
+        try {
+            const maxSize = Math.max(...sizes)
+            const selSize = Math.max(...sizes.slice(selected.min, selected.max + 1))
+            const r = 15 + 30 * selSize / maxSize
+            return r < 0 ? 45 : r
+        } catch(e) {
+            return 45
+        }
     }
 
     return (
         <View style={[styles.container, { width: width, height: getContainerHeight() }]}>
+            {/* Curseur réactif à la souris*/}
             <View style={[styles.parcelleCursor, {
                 left: -1 * parseFloat(Dimensions.get('window').width - width) / 2,
                 width: Dimensions.get('window').width,
@@ -186,17 +212,17 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
                 {...panResponder.panHandlers}></View>
 
             {/* The background rectangle*/}
-            <View style={[styles.selected, { ...getSelectedWidth() }]}></View>
+            <View style={[styles.selected, { ...getSelectedWidth(), height: getSelectedHeight() }]}></View>
 
             {/* The slots */}
             {[...Array(NUM_ITEMS).keys()].map(i => {
                 return (
                     <TouchableWithoutFeedback key={i} onPress={() => { }}>
                         <View style={[styles.parcelle, {
-                            ...getItemWidth(i)
+                            ...getItemWidth(i), height: getItemHeight(i)
                         },
                         ]}>
-                            <View style={[styles.subTile, { backgroundColor: getColor(i), }]}></View>
+                            <View style={[styles.subTile, { backgroundColor: getColor(i), height: getItemHeight(i)}]}></View>
                         </View>
                     </TouchableWithoutFeedback>
                 )
@@ -211,7 +237,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 5,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     parcelleCursor: {
         position: 'absolute',
