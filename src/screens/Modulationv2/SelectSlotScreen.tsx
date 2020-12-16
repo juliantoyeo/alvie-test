@@ -68,14 +68,11 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
     //Updating modulation when selected slot change or day change
     useEffect(() => {
-        // (currentDay < 3) ? loadModulation() : snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
         // Store the day for the reportScreen
         const dt = new Date()
         dt.setDate(dt.getDate() + currentDay)
         setSelectedDay(dt)
         loadMetrics()
-        
-        
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
@@ -173,6 +170,12 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
     const loadModulation = async (metrics: metricsType) => {
 
+        if (currentDay >= 6){
+            snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
+            context.setMod([])
+            return
+        }
+        
         if  (context.metrics == null) {
             context.setMod([])
             return
