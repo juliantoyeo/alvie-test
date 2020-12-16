@@ -21,7 +21,7 @@ import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio } from '../../api/hygoApi';
+import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio, getModulationByDay } from '../../api/hygoApi';
 import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -37,12 +37,17 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const snackbar = React.useContext(SnackbarContext)
     const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const [modDay,  setmodDay] = useState<number[]>([])
 
     const ready = !!context.meteo && !!metrics && !!context.conditions
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
+
+    useEffect(() => {
+
+    },[])
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         // Store the day for the reportScreen
@@ -50,11 +55,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         dt.setDate(dt.getDate() + currentDay)
         setSelectedDay(dt)
         loadMetrics()
+        loadModulationbyDay(context.meteo[currentDay])
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
         // When metrics changed: update modulation
         loadModulation(context.metrics)
+        loadModulationbyDay(context.meteo[currentDay])
     }, [context.metrics])
 
     useEffect(() => {
@@ -65,6 +72,10 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         context.loadConditions()
     }, [context.selectedProducts])
 
+    useEffect(() => {
+        console.log("=====mod", modDay)
+    },[modDay])
+
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {
             const family = phytoProductList.find((p) => p.id == sp.phytoproduct.id)
@@ -73,7 +84,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }, [])
 
     const loadMetrics = useCallback(async () => {
-
+        
         if (context.meteo == null) {
             setMetrics(null)
             return
@@ -173,19 +184,42 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         try {
             const newMod: Array<modulationType> = await getModulationValue_v3Ratio(data, ratio)
             if (newMod.length == 0) {
-                console.log('===:(')
                 context.setMod([])
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
             context.setMod(newMod)
         } catch (error) {
-            console.log('===crash')
             context.setMod([])
             snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
         }
         setIsRefreshing(false)
     }
 
+    const loadModulationbyDay = async (meteo: meteoByHourType[]) => {
+        if (currentDay >= 6){
+            snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
+            context.setMod([])
+            return
+        }
+
+        if  (context.metrics == null) {
+            context.setMod([])
+            return
+        }
+        const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
+
+        // The ratio between dose planed and dose max is used to reduce the modulation
+        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
+            return acc + cur / arr.length
+        }, 0)
+        const data = {
+            products,
+            meteo,
+            ratio
+        }
+        const mods = await getModulationByDay(data, ratio)
+        setmodDay(mods)
+    }
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
