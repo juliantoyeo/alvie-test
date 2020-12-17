@@ -220,13 +220,11 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }
 
     const onMinChange = (event, date: Date) => {
-        setShowPickerMin(false)
         context.setSelectedSlot({ ...context.selectedSlot, min: date.getHours() })
     }
 
     const onMaxChange = (event, date: Date) => {
-        setShowPickerMax(false)
-        context.setSelectedSlot({ ...context.selectedSlot, max: date.getHours() })
+        context.setSelectedSlot({ ...context.selectedSlot, max: date.getHours() - 1 })
     }
 
     return (
@@ -299,66 +297,45 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                     </View>
                                     {/*=============== Slot Picker ===============*/}
                                     <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
-                                        {/* <Button onPress={() => setShowPickerMin(true)}></Button> */}
+                                        {/* Hours title */}
                                         <View style={styles.hoursView}>
-                                            <Button transparent onPress={() => setShowPickerMin(true)} style={styles.hoursButton}>
+                                            <Button transparent onPress={() => setShowPickerMin(true)} style={[styles.hoursButton]}>
                                                 <Text style={styles.hourTitle}>{context.selectedSlot.min}h</Text>
                                             </Button>
                                             <Button transparent style={styles.hoursButton}>
                                                 <Text style={styles.hourTitle}>-</Text>
                                             </Button>
-                                            <Button transparent onPress={() => setShowPickerMax(true)} style={styles.hoursButton}>
+                                            <Button transparent onPress={() => setShowPickerMax(true)} style={[styles.hoursButton]}>
                                                 <Text style={styles.hourTitle}>{context.selectedSlot.max + 1}h</Text>
                                             </Button>
                                         </View>
 
-
+                                        {/*======= TimePickers =======*/}
                                         {showPickerMin && (
                                             <HygoDateTimePicker
                                                 hour={context.selectedSlot.min}
                                                 onChange={onMinChange}
+                                                onClose={() => setShowPickerMin(false)}
+                                                minHour={Math.max(context.selectedSlot.max - 11)}
+                                                maxHour={context.selectedSlot.max}
                                             />
                                         )}
-                                        {showPickerMax&& (
+                                        {showPickerMax && (
                                             <HygoDateTimePicker
-                                                hour={context.selectedSlot.max}
+                                                hour={context.selectedSlot.max +  1}
                                                 onChange={onMaxChange}
+                                                onClose={() => setShowPickerMax(false)}
+                                                minHour={context.selectedSlot.min + 1}
+                                                maxHour={context.selectedSlot.min + 12}
                                             />
                                         )}
-                                        {/* <Picker
-                                        note
-                                        mode="dropdown"
-                                        style={{height:120}}
-                                        textStyle={styles.hourTitle}
-                                        selectedValue={context.selectedSlot.min}
-                                        onValueChange={(value: number) => context.setSelectedSlot({ ...context.selectedSlot, min: value, })}
-                                    >
-                                        {
-                                            _.range(
-                                                Math.max(0, context.selectedSlot.max - 11), Math.min(23, context.selectedSlot.min + 11, context.selectedSlot.max) + 1
-                                            ).map((n: number) => <Picker.Item label={n.toString() + "h"} value={n} key={n}/>)
-                                        }
-                                    </Picker>
 
-                                    <Picker
-                                        note
-                                        mode="dropdown"
-                                        style={{height:120}}
-                                        textStyle={styles.hourTitle}
-                                        selectedValue={context.selectedSlot.max + 1}
-                                        onValueChange={(value: number) => context.setSelectedSlot({ ...context.selectedSlot, max: value - 1, })}
-                                    >
-                                        {
-                                            _.range(
-                                                Math.max(1, context.selectedSlot.max - 11, context.selectedSlot.min + 1), Math.min(24, context.selectedSlot.min + 12) + 1
-                                            ).map((n: number) => <Picker.Item label={n.toString() + "h"} value={n} key={n}/>)
-                                        }
-                                    </Picker> */}
-
+                                        {/* ======== Metrics ====== */}
                                         <View style={{ paddingBottom: 20 }}>
                                             <Metrics currentHourMetrics={metrics} hasRacinaire={hasRacinaire()} />
                                         </View>
 
+                                        {/* ========= ModulationBar ========= */}
                                         <View style={styles.sliderContainer}>
                                             {/*<HygoParcelleIntervention/>*/}
                                             <ModulationBar
@@ -588,7 +565,8 @@ const styles = StyleSheet.create({
     hoursView: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        paddingHorizontal: 60
     },
     hoursButton: {
         height: 40,
