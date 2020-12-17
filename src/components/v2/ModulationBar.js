@@ -24,10 +24,18 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
      */
 
 
+    
     const [selected, setSelected] = useState({
         min: parseInt(initialMin ? initialMin : 0),
         max: parseInt(initialMax ? initialMax : 0)
     })
+
+    useEffect(() => {
+        setSelected({
+            min: parseInt(initialMin ? initialMin : 0),
+            max: parseInt(initialMax ? initialMax : 0)
+        })
+    }, [initialMax, initialMin])
 
     //useRef needed for onPanResponderRelease
     const selectedRef = useRef(selected)
@@ -179,7 +187,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
     }
 
     const getItemHeight = (i) => {
-        if (!sizes || sizes == [])
+        if (!sizes || !sizes.length || sizes.length == 0)
             return 45
         try {
             const maxSize = Math.max(...sizes)
@@ -189,7 +197,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
         }
     }
     const getSelectedHeight = () => {
-        if (!sizes || sizes == [])
+        if (!sizes || !sizes.length || sizes.length == 0)
             return 45
         try {
             const maxSize = Math.max(...sizes)

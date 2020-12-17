@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Spinner } from 'native-base';
+import { Container, Header, Left, Body, Title, Right, Button, Content, Icon, Text, Footer, Spinner, Picker } from 'native-base';
 import HygoButton from '../../components/v2/HygoButton';
 import { HygoCard } from '../../components/v2/HygoCards';
 import { ModulationContext } from '../../context/modulation.context';
@@ -37,7 +37,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const snackbar = React.useContext(SnackbarContext)
     const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const [modDay,  setmodDay] = useState<number[]>([])
+    const [modDay, setmodDay] = useState<number[]>([])
 
     const ready = !!context.meteo && !!metrics && !!context.conditions
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
@@ -47,7 +47,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
     useEffect(() => {
 
-    },[])
+    }, [])
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         // Store the day for the reportScreen
@@ -73,8 +73,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }, [context.selectedProducts])
 
     useEffect(() => {
-        
-    },[modDay])
+
+    }, [modDay])
 
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {
@@ -84,7 +84,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }, [])
 
     const loadMetrics = useCallback(async () => {
-        
+
         if (context.meteo == null) {
             setMetrics(null)
             return
@@ -158,13 +158,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
     const loadModulation = async (metrics: metricsType) => {
 
-        if (currentDay >= 6){
+        if (currentDay >= 6) {
             snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
             context.setMod([])
             return
         }
 
-        if  (context.metrics == null) {
+        if (context.metrics == null) {
             context.setMod([])
             return
         }
@@ -196,13 +196,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }
 
     const loadModulationbyDay = async (meteo: meteoByHourType[]) => {
-        if (currentDay >= 6){
+        if (currentDay >= 6) {
             snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
             context.setMod([])
             return
         }
 
-        if  (context.metrics == null) {
+        if (context.metrics == null) {
             context.setMod([])
             return
         }
@@ -290,6 +290,36 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                 {/*=============== Slot Picker ===============*/}
                                 <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
                                     <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
+                                    {/* <Picker
+                                        note
+                                        mode="dropdown"
+                                        style={{height:120}}
+                                        textStyle={styles.hourTitle}
+                                        selectedValue={context.selectedSlot.min}
+                                        onValueChange={(value: number) => context.setSelectedSlot({ ...context.selectedSlot, min: value, })}
+                                    >
+                                        {
+                                            _.range(
+                                                Math.max(0, context.selectedSlot.max - 11), Math.min(23, context.selectedSlot.min + 11, context.selectedSlot.max) + 1
+                                            ).map((n: number) => <Picker.Item label={n.toString() + "h"} value={n} key={n}/>)
+                                        }
+                                    </Picker>
+
+                                    <Picker
+                                        note
+                                        mode="dropdown"
+                                        style={{height:120}}
+                                        textStyle={styles.hourTitle}
+                                        selectedValue={context.selectedSlot.max + 1}
+                                        onValueChange={(value: number) => context.setSelectedSlot({ ...context.selectedSlot, max: value - 1, })}
+                                    >
+                                        {
+                                            _.range(
+                                                Math.max(1, context.selectedSlot.max - 11, context.selectedSlot.min + 1), Math.min(24, context.selectedSlot.min + 12) + 1
+                                            ).map((n: number) => <Picker.Item label={n.toString() + "h"} value={n} key={n}/>)
+                                        }
+                                    </Picker> */}
+
                                     <View style={{ paddingBottom: 20 }}>
                                         <Metrics currentHourMetrics={metrics} hasRacinaire={hasRacinaire()} />
                                     </View>
