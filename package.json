@@ -10,6 +10,7 @@
   "dependencies": {
     "@material-ui/core": "^4.5.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
+    "@react-native-community/datetimepicker": "2.4.0",
     "@react-native-community/masked-view": "0.1.10",
     "axios": "^0.19.0",
     "expo": "^38.0.0",

@@ -15,6 +15,7 @@ import HourScale from '../../components/v2/HourScale';
 import ExtraMetrics from '../../components/pulverisation-detailed/ExtraMetrics';
 import ModulationBar from '../../components/v2/ModulationBar';
 import ModulationBarTiny from '../../components/v2/ModulationBarTiny';
+import HygoDateTimePicker from '../../components/v2/HygoDateTimePicker';
 
 import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 
@@ -38,16 +39,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [modDay, setmodDay] = useState<number[]>([])
-
+    const [showPickerMin, setShowPickerMin] = useState<boolean>(false)
+    const [showPickerMax, setShowPickerMax] = useState<boolean>(false)
     const ready = !!context.meteo && !!metrics && !!context.conditions
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
-
-    useEffect(() => {
-
-    }, [])
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         // Store the day for the reportScreen
@@ -220,6 +218,17 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         const mods = await getModulationByDay(data, ratio)
         setmodDay(mods)
     }
+
+    const onMinChange = (event, date: Date) => {
+        setShowPickerMin(false)
+        context.setSelectedSlot({ ...context.selectedSlot, min: date.getHours() })
+    }
+
+    const onMaxChange = (event, date: Date) => {
+        setShowPickerMax(false)
+        context.setSelectedSlot({ ...context.selectedSlot, max: date.getHours() })
+    }
+
     return (
         <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -241,56 +250,82 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                     </Right>
                 </Header>
                 <Content style={styles.content}>
-                    {!ready ? (
-                        <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
-                    )
-                        : (
-                            <View>
-                                {/*============= Week Tab =================*/}
-                                <View style={styles.tabBar}>
-                                    {context.dow.map((d, i) => {
-                                        const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
-                                        return (
-                                            <TouchableOpacity
-                                                key={i}
-                                                style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
-                                                onPress={() => {
-                                                    setCurrentDay(i)
-                                                }}
-                                            //disabled={isRefreshing}
-                                            >
-                                                <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
-                                                <View style={{ flex: 1, paddingTop: 5 }}>
-                                                    <ModulationBarTiny
-                                                        data={context.conditions[i]}
-                                                        height={8}
-                                                        width={60}
-                                                    />
-                                                </View>
-                                                {/* <View style={styles.weatherContainer}>
+                    {
+                        !ready ? (
+                            <Spinner size={16} color={COLORS.CYAN} style={{ height: 48, marginTop: 48 }} />
+                        )
+                            : (
+                                <View>
+                                    {/*============= Week Tab =================*/}
+                                    <View style={styles.tabBar}>
+                                        {context.dow.map((d, i) => {
+                                            const dayName = i18n.t(`days.${d.name.toLowerCase()}`).toUpperCase().slice(0, 3)
+                                            return (
+                                                <TouchableOpacity
+                                                    key={i}
+                                                    style={[styles.tabHeading, { backgroundColor: currentDay == i ? '#fff' : COLORS.DARK_BLUE }]}
+                                                    onPress={() => {
+                                                        setCurrentDay(i)
+                                                    }}
+                                                //disabled={isRefreshing}
+                                                >
+                                                    <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
+                                                    <View style={{ flex: 1, paddingTop: 5 }}>
+                                                        <ModulationBarTiny
+                                                            data={context.conditions[i]}
+                                                            height={8}
+                                                            width={60}
+                                                        />
+                                                    </View>
+                                                    {/* <View style={styles.weatherContainer}>
                                         <Image source={PICTO_MAP[d.pictoDay]} style={styles.weatherImage} />
                                     </View> */}
-                                            </TouchableOpacity>
-                                        )
-                                    })}
-                                </View>
-                                {/*=============== Day Weather ==============*/}
-                                <View style={styles.dayContent}>
-                                    <View style={styles.hour4Weather}>
-                                        {context.meteo4h[currentDay].map((m, i) => {
-                                            return (
-                                                <View key={i} style={styles.hour4WeatherContainer}>
-                                                    <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
-                                                    <Image style={styles.hour4WeatherImage} source={PICTO_MAP[PICTO_TO_IMG[m.pictocode]]} />
-                                                </View>
+                                                </TouchableOpacity>
                                             )
                                         })}
                                     </View>
-                                </View>
-                                {/*=============== Slot Picker ===============*/}
-                                <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
-                                    <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
-                                    {/* <Picker
+                                    {/*=============== Day Weather ==============*/}
+                                    <View style={styles.dayContent}>
+                                        <View style={styles.hour4Weather}>
+                                            {context.meteo4h[currentDay].map((m, i) => {
+                                                return (
+                                                    <View key={i} style={styles.hour4WeatherContainer}>
+                                                        <Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
+                                                        <Image style={styles.hour4WeatherImage} source={PICTO_MAP[PICTO_TO_IMG[m.pictocode]]} />
+                                                    </View>
+                                                )
+                                            })}
+                                        </View>
+                                    </View>
+                                    {/*=============== Slot Picker ===============*/}
+                                    <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
+                                        {/* <Button onPress={() => setShowPickerMin(true)}></Button> */}
+                                        <View style={styles.hoursView}>
+                                            <Button transparent onPress={() => setShowPickerMin(true)} style={styles.hoursButton}>
+                                                <Text style={styles.hourTitle}>{context.selectedSlot.min}h</Text>
+                                            </Button>
+                                            <Button transparent style={styles.hoursButton}>
+                                                <Text style={styles.hourTitle}>-</Text>
+                                            </Button>
+                                            <Button transparent onPress={() => setShowPickerMax(true)} style={styles.hoursButton}>
+                                                <Text style={styles.hourTitle}>{context.selectedSlot.max + 1}h</Text>
+                                            </Button>
+                                        </View>
+
+
+                                        {showPickerMin && (
+                                            <HygoDateTimePicker
+                                                hour={context.selectedSlot.min}
+                                                onChange={onMinChange}
+                                            />
+                                        )}
+                                        {showPickerMax&& (
+                                            <HygoDateTimePicker
+                                                hour={context.selectedSlot.max}
+                                                onChange={onMaxChange}
+                                            />
+                                        )}
+                                        {/* <Picker
                                         note
                                         mode="dropdown"
                                         style={{height:120}}
@@ -320,51 +355,52 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                         }
                                     </Picker> */}
 
-                                    <View style={{ paddingBottom: 20 }}>
-                                        <Metrics currentHourMetrics={metrics} hasRacinaire={hasRacinaire()} />
+                                        <View style={{ paddingBottom: 20 }}>
+                                            <Metrics currentHourMetrics={metrics} hasRacinaire={hasRacinaire()} />
+                                        </View>
+
+                                        <View style={styles.sliderContainer}>
+                                            {/*<HygoParcelleIntervention/>*/}
+                                            <ModulationBar
+                                                from={0/*parseInt(hour)*/}
+                                                initialMax={context.selectedSlot.max}
+                                                initialMin={context.selectedSlot.min}
+                                                data={context.conditions[currentDay]}
+                                                width={Dimensions.get('window').width - 30}
+                                                onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
+                                                enabled={true}
+                                                sizes={modDay}
+                                            />
+                                        </View>
+
+                                        <HourScale hour={'00'} />
+
+                                        <ExtraMetrics currentHourMetrics={metrics} />
                                     </View>
 
-                                    <View style={styles.sliderContainer}>
-                                        {/*<HygoParcelleIntervention/>*/}
-                                        <ModulationBar
-                                            from={0/*parseInt(hour)*/}
-                                            initialMax={context.selectedSlot.max}
-                                            initialMin={context.selectedSlot.min}
-                                            data={context.conditions[currentDay]}
-                                            width={Dimensions.get('window').width - 30}
-                                            onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
-                                            enabled={true}
-                                            sizes={modDay}
-                                        />
-                                    </View>
-
-                                    <HourScale hour={'00'} />
-
-                                    <ExtraMetrics currentHourMetrics={metrics} />
-                                </View>
-
-                                {/**
+                                    {/**
                                  * ================= Result ==================
                                  * display only for the first 3 days
                                  *=========================================*/}
 
-                                {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
-                                <View style={{ paddingTop: 20, paddingBottom: 40 }}>
-                                    {currentDay < 6 && (
-                                        <HygoCard>
-                                            {isRefreshing ? <Spinner /> : (
-                                                <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>{i18n.t('pulve_slotscreen.total')}</Text>
-                                                    <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
-                                                        {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
-                                                    </Text>
-                                                </View>
-                                            )}
-                                        </HygoCard>
-                                    )}
+                                    {/* <Modulation day={day} hour={hour} selected={context.selected} modulationChanged={modulationChanged} setModulationChanged={setModulationChanged} /> */}
+                                    <View style={{ paddingTop: 20, paddingBottom: 40 }}>
+                                        {currentDay < 6 && (
+                                            <HygoCard>
+                                                {isRefreshing ? <Spinner /> : (
+                                                    <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>{i18n.t('pulve_slotscreen.total')}</Text>
+                                                        <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
+                                                            {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
+                                                        </Text>
+                                                    </View>
+                                                )}
+                                            </HygoCard>
+                                        )}
+                                    </View>
                                 </View>
-                            </View>
-                        )}
+                            )}
+
                 </Content>
                 {ready && (
                     <Footer style={styles.footer}>
@@ -547,7 +583,15 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         fontFamily: 'nunito-bold',
         fontSize: 26,
-        paddingTop: 20
+        //paddingTop: 20
+    },
+    hoursView: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
+    },
+    hoursButton: {
+        height: 40,
     }
 });
 
