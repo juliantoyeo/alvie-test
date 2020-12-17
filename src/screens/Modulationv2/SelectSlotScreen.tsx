@@ -220,11 +220,17 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     }
 
     const onMinChange = (event, date: Date) => {
-        context.setSelectedSlot({ ...context.selectedSlot, min: date.getHours() })
+        const min = date.getHours()
+        if ( min <= context.selectedSlot.max) {
+            context.setSelectedSlot({ ...context.selectedSlot, min })
+        }
     }
 
     const onMaxChange = (event, date: Date) => {
-        context.setSelectedSlot({ ...context.selectedSlot, max: date.getHours() - 1 })
+        const max = date.getHours() - 1
+        if (max >= context.selectedSlot.min) {
+            context.setSelectedSlot({ ...context.selectedSlot, max })
+        }
     }
 
     return (
