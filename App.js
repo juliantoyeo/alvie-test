@@ -11,7 +11,6 @@ import { AppLoading } from 'expo';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './src/i18n/i18n.js'
-
 import SnackbarProvider from './src/context/snackbar.context'
 import ModulationProvider from './src/context/modulation.context'
 import MeteoProvider from './src/context/meteo.context';

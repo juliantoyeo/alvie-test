@@ -213,7 +213,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         collapseEnabled={search != ''}
                     />
                 }
-                {families.length > 0 && families.map((f, k) => {
+                {families.length > 0 && families.sort((a, b) => a.localeCompare(b)).map((f, k) => {
                     const items: Array<activeProductType> = products.filter((p) => p.phytoproduct.name == f && p.name.toLowerCase().match(search.toLowerCase()))
                     return (
                         items.length > 0 &&

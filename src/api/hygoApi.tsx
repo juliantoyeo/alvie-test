@@ -13,7 +13,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //'http://192.168.1.35:3000',// 'https://hygo-api.alvie.fr', //
+    baseURL: 'http://192.168.1.10:3000',//'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', // 'https://hygo-api.alvie.fr', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -520,6 +520,16 @@ export const getModulationContext = async () => {
 export const deleteModulationContext = async (id: number) => {
     try {
         const response = await hygoApi.post('/app/deleteModulationContext', { id })
+        return (response.data)
+    } catch(error) {
+        console.log(error)
+        return ({error})
+    }
+}
+
+export const logError = async (errorMessage: string) => {
+    try {
+        const response = await hygoApi.post('/app/logError', {errorMessage})
         return (response.data)
     } catch(error) {
         console.log(error)

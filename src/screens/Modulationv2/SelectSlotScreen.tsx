@@ -22,7 +22,7 @@ import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio, getModulationByDay } from '../../api/hygoApi';
+import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio, getModulationByDay, logError } from '../../api/hygoApi';
 import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -204,17 +204,20 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             context.setMod([])
             return
         }
-        const products: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
+        const selectedProductIds: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
+
+        //logError(JSON.stringify(selectedProductIds)));
 
         // The ratio between dose planed and dose max is used to reduce the modulation
         const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
             return acc + cur / arr.length
         }, 0)
         const data = {
-            products,
+            selectedProductIds,
             meteo,
             ratio
         }
+
         const mods = await getModulationByDay(data, ratio)
         setmodDay(mods)
     }
