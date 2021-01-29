@@ -213,7 +213,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             return acc + cur / arr.length
         }, 0)
         const data = {
-            selectedProductIds,
+            products: selectedProductIds,
             meteo,
             ratio
         }

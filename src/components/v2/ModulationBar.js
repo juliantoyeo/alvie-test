@@ -16,7 +16,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
     /**
      * 
      * @param props
-     * { from, initialMin, initialMax, data ,width, onHourChangeEnd}
+     * { from, initialMin, initialMax, data ,width, onHourChangeEnd, enabled, sizes}
      * 
      * Main idea : using a panResponder to handle dragging
      * the selected slots are made transparent, and there is a rectangle behind 
@@ -191,9 +191,12 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             return 45
         try {
             const maxSize = Math.max(...sizes)
+            if (maxSize == 0) {
+                return 15
+            }
             return 15 + 30 * sizes[i] / maxSize
         }catch(e) {
-            return 45
+            return 15
         }
     }
     const getSelectedHeight = () => {
@@ -201,6 +204,8 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             return 45
         try {
             const maxSize = Math.max(...sizes)
+            if (maxSize == 0)
+                return 15
             const selSize = Math.max(...sizes.slice(selected.min, selected.max + 1))
             const r = 15 + 30 * selSize / maxSize
             return r < 0 ? 45 : r
