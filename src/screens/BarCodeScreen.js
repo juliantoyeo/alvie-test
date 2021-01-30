@@ -119,7 +119,7 @@ class BarCodeScreen extends React.Component {
       // await this.registerForPushNotificationsAsync(deviceid)
   
       if (hasEquipment) {
-          this.props.navigation.replace(tester ? 'main_v2' : 'main');
+          this.props.navigation.replace('main_v2');
       } else {
         this.props.navigation.replace('BarCodeValidationScreen')
       }

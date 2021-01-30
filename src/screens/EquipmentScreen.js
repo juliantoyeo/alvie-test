@@ -89,7 +89,7 @@ const EquipmentScreen = ({ navigation }) => {
     }
 
     navigation.replace('LoadingScreen', {
-      next: 'main',
+      next: 'main_v2',
       params: params,
       action: storeEquipmentInformation
     })

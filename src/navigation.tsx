@@ -40,71 +40,72 @@ const Navigator = createSwitchNavigator({
     mainFlow: createStackNavigator({
         BarCode: BarCodeScreen,
         WaitActivation: WaitActivationScreen,
-        main: createDrawerNavigator({
-            Drawer: {
-                screen: createBottomTabNavigator({
-                    MeteoScreen: createStackNavigator({
-                        MeteoScreen: {
-                            screen: MeteoScreen,
-                            navigationOptions: {
-                                header: null,
-                            },
-                        },
-                    }),
+        // ======= Previous menus and screens ======== //
+        // main: createDrawerNavigator({
+        //     Drawer: {
+        //         screen: createBottomTabNavigator({
+        //             MeteoScreen: createStackNavigator({
+        //                 MeteoScreen: {
+        //                     screen: MeteoScreen,
+        //                     navigationOptions: {
+        //                         header: null,
+        //                     },
+        //                 },
+        //             }),
 
-                    Pulverisation: NextPulverisationScreen,
+        //             Pulverisation: NextPulverisationScreen,
 
-                    RealTime: RealTimeScreen,
+        //             RealTime: RealTimeScreen,
 
-                    Intervention: createStackNavigator({
-                        Interventions: InterventionsScreen,
-                    }, {
-                        headerMode: 'none',
-                        defaultNavigationOptions: {}
-                    }),
-                }, {
-                    defaultNavigationOptions: ({ navigation }) => ({
-                        tabBarIcon: ({ focused, horizontal, tintColor }) => {
-                            const { routeName } = navigation.state;
+        //             Intervention: createStackNavigator({
+        //                 Interventions: InterventionsScreen,
+        //             }, {
+        //                 headerMode: 'none',
+        //                 defaultNavigationOptions: {}
+        //             }),
+        //         }, {
+        //             defaultNavigationOptions: ({ navigation }) => ({
+        //                 tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        //                     const { routeName } = navigation.state;
 
-                            const r = ['MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention']
-                            let idx = r.indexOf(routeName)
+        //                     const r = ['MeteoScreen', 'Pulverisation', 'RealTime', 'Intervention']
+        //                     let idx = r.indexOf(routeName)
 
-                            let props = {
-                                style: {
-                                    height: 20,
-                                    tintColor,
-                                },
-                            }
+        //                     let props = {
+        //                         style: {
+        //                             height: 20,
+        //                             tintColor,
+        //                         },
+        //                     }
 
-                            switch (idx) {
-                                case 0:
-                                    return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
-                                case 1:
-                                    return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
-                                case 2:
-                                    return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
-                                case 3:
-                                    return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
-                            }
+        //                     switch (idx) {
+        //                         case 0:
+        //                             return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
+        //                         case 1:
+        //                             return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
+        //                         case 2:
+        //                             return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
+        //                         case 3:
+        //                             return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
+        //                     }
 
-                        }
-                    }),
+        //                 }
+        //             }),
 
-                    tabBarComponent: TabBar,
-                    tabBarOptions: {
-                        activeTintColor: COLORS.DARK_GREEN,
-                        inactiveTintColor: '#fff',
-                        labelStyle: {
-                            fontSize: 14,
-                        },
-                    },
-                })
-            }
-        }, {
-            contentComponent: DrawerScreen,
-            drawerWidth: 310
-        }),
+        //             tabBarComponent: TabBar,
+        //             tabBarOptions: {
+        //                 activeTintColor: COLORS.DARK_GREEN,
+        //                 inactiveTintColor: '#fff',
+        //                 labelStyle: {
+        //                     fontSize: 14,
+        //                 },
+        //             },
+        //         })
+        //     }
+        // }, {
+        //     contentComponent: DrawerScreen,
+        //     drawerWidth: 310
+        // }),
 
         main_v2: createDrawerNavigator({
             Drawer: {
@@ -140,7 +141,7 @@ const Navigator = createSwitchNavigator({
                         tabBarIcon: ({ focused, horizontal, tintColor }) => {
                             const { routeName } = navigation.state;
 
-                            const r = ['MeteoScreen', 'Pulverisation_v2', 'RealTime', 'Intervention']
+                            const r = ['MeteoScreen', 'RealTime', 'Intervention']
                             let idx = r.indexOf(routeName)
 
                             let props = {
@@ -154,10 +155,8 @@ const Navigator = createSwitchNavigator({
                                 case 0:
                                     return <Image {...props} source={require("../assets/ICN-Nav1.png")} />
                                 case 1:
-                                    return <Image {...props} source={require("../assets/ICN-Nav2.png")} />
-                                case 2:
                                     return <Image {...props} source={require("../assets/ICN-Nav3.png")} />
-                                case 3:
+                                case 2:
                                     return <Image {...props} source={require("../assets/ICN-Nav4.png")} />
                             }
 
