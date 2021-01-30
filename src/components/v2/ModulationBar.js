@@ -180,6 +180,21 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
         }
     }
 
+    const getSelectedHeight = () => {
+        if (!sizes || !sizes.length || sizes.length == 0)
+            return 45
+        try {
+            const maxSize = Math.max(...sizes)
+            if (maxSize == 0)
+                return 15
+            const selSize = Math.min(...sizes.slice(selected.min, selected.max + 1))
+            const r = 15 + 30 * selSize / maxSize
+            return r < 0 ? 45 : r
+        } catch(e) {
+            return 45
+        }
+    }
+
     const getContainerHeight = () => {
         const w = width, 
         margin = parseFloat(w) / NUM_ITEMS * 0.14
@@ -197,20 +212,6 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             return 15 + 30 * sizes[i] / maxSize
         }catch(e) {
             return 15
-        }
-    }
-    const getSelectedHeight = () => {
-        if (!sizes || !sizes.length || sizes.length == 0)
-            return 45
-        try {
-            const maxSize = Math.max(...sizes)
-            if (maxSize == 0)
-                return 15
-            const selSize = Math.max(...sizes.slice(selected.min, selected.max + 1))
-            const r = 15 + 30 * selSize / maxSize
-            return r < 0 ? 45 : r
-        } catch(e) {
-            return 45
         }
     }
 
