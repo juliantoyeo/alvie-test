@@ -206,8 +206,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }
         const selectedProductIds: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
 
-        //logError(JSON.stringify(selectedProductIds)));
-
         // The ratio between dose planed and dose max is used to reduce the modulation
         const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
             return acc + cur / arr.length
