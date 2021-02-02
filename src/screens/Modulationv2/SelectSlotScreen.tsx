@@ -187,7 +187,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
             const modulationsWithRatio: number[] = modulations.map((mod, index) => mod * ratios[index])
-            console.log("=======", context.selectedProducts.map(s => s.name), modulationsWithRatio);
             context.setMod(modulationsWithRatio)
         } catch (error) {
             context.setMod([])
