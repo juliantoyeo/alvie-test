@@ -22,7 +22,7 @@ import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getModulationValue_v2, getMetrics_v2, getMetrics4h_v2, getModulationValue_v3Ratio, getModulationByDay, logError } from '../../api/hygoApi';
+import { getModulationValue_v4, getModulationByDay, logError } from '../../api/hygoApi';
 import { meteoByHourType } from '../../types/meteo.types';
 import { activeProductType } from '../../types/activeproduct.types';
 import { fieldType } from '../../types/field.types';
@@ -44,7 +44,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
     const totalArea: number = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
     const totalPhyto: number = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
-    const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+    const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
     //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
@@ -179,18 +179,16 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }
 
         // The ratio between dose planed and dose max is used to reduce the modulation
-        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
-            return acc + cur / arr.length
-        }, 0)
-
+        const ratios: number[] = context.selectedProducts.map((s) => s.dose / s.dosemax)
         try {
-            const newMod: Array<modulationType> = await getModulationValue_v3Ratio(data, ratio)
-            console.log("=======",newMod)
-            if (newMod.length == 0) {
+            const modulations: Array<number> = await getModulationValue_v4(data)
+            if (modulations.length == 0 || modulations.length !=  ratios.length) {
                 context.setMod([])
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
-            context.setMod(newMod)
+            const modulationsWithRatio: number[] = modulations.map((mod, index) => mod * ratios[index])
+            console.log("=======", products, modulationsWithRatio);
+            context.setMod(modulationsWithRatio)
         } catch (error) {
             context.setMod([])
             snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")

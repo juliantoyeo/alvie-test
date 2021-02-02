@@ -45,7 +45,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     const volume = totalArea / 10000 * context.debit
     const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
     const water = volume - totalPhyto
-    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
     const [saved, setSaved] = useState<boolean>(false)
     // const dt = moment(context.dow[context.currentDay].dt).locale('fr').format('L')   => problem with locals
     const hasRacinaire = useCallback(() => {
@@ -109,24 +109,22 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         <HygoCard title='Remplissage de cuve'>
                             <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
-                                    {context.selectedProducts.map((p) => {
-                                        const mod = context.mod.filter((m) => m.product.id == p.phytoproduct.id)
+                                    {context.selectedProducts.map((p, index) => {
+                                        
                                         return (
-                                            (mod.length > 0) && (
                                                 <Row key={p.id} style={{ paddingLeft: 20 }}>
                                                     <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
                                                     <Col style={{ flex: 1.5, paddingRight: 5 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} {p.unit}
+                                                            {(p.dose * (100 - context.mod[index]) / 100).toFixed(3)} {p.unit}
                                                         </Text>
                                                     </Col>
                                                     <Col style={{ flex: 1 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
+                                                            {(p.dose * totalArea / 10000 * (100 - context.mod[index]) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
                                                         </Text>
                                                     </Col>
-                                                </Row>
-                                            )
+                                                </Row>    
                                         )
                                     })}
                                 </Grid>

@@ -39,8 +39,8 @@ export interface ModulationContextProps {
 
     selectedSlot?: selectedSlotType,
     setSelectedSlot?: React.Dispatch<React.SetStateAction<selectedSlotType>>,
-    mod?: Array<modulationType>,
-    setMod?: React.Dispatch<React.SetStateAction<modulationType[]>>,
+    mod?: Array<number>,
+    setMod?: React.Dispatch<React.SetStateAction<number[]>>,
     metrics?: metricsType,
     setMetrics?: React.Dispatch<React.SetStateAction<metricsType>>,
 
@@ -119,7 +119,7 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
     const [debit, setDebit] = useState<number>(100)
     const [buses, setBuses] = useState<string>(null)
     const [selectedSlot, setSelectedSlot] = useState<selectedSlotType>({ min: 9, max: 12 })
-    const [mod, setMod] = useState<Array<modulationType>>([])
+    const [mod, setMod] = useState<Array<number>>([])
     const [metrics, setMetrics] = useState<metricsType>(null)
     const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>(null)
     const [meteo4h, setMeteo4h] = useState<Array<any>>(null)
@@ -259,13 +259,13 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
                 return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])} ${dt.getFullYear()}`
             }
             const textParcel = (f)=>`     ${f.name} - ${(f.area/10000).toFixed(1)}ha\n `
-            const  textProduct = (p)=>`     ${p.name} (${(p.dose * (100 - mod[0].mod) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L\n `
+            const  textProduct = (p)=>`     ${p.name} (${(p.dose * (100 - mod[0]) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L\n `
 
             const totalArea = selectedFields.reduce((r, f) => r + f.area, 0)
             const volume = totalArea / 10000 * debit
             const totalPhyto = totalArea / 10000 * selectedProducts.reduce((r, p) => r + p.dose, 0)
             const water = volume - totalPhyto
-            const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m.mod, 0) / mod.length : 0
+            const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m, 0) / mod.length : 0
             const text = `
 ${header}
 Intervention du ${getDay(selectedDay)}
