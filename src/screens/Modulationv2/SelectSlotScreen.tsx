@@ -37,15 +37,19 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const context = React.useContext(ModulationContext)
     const snackbar = React.useContext(SnackbarContext)
     const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
-    const [isRefreshing, setIsRefreshing] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
     const [modDay, setmodDay] = useState<number[]>([])
     const [showPickerMin, setShowPickerMin] = useState<boolean>(false)
     const [showPickerMax, setShowPickerMax] = useState<boolean>(false)
-    const ready = !!context.meteo && !!metrics && !!context.conditions
-    const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
-    const totalPhyto = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
-    const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
+    const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
+    const totalArea: number = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
+    const totalPhyto: number = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
+    const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m.mod, 0) / context.mod.length : 0
 
+    // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
+    //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
+    //     modulations.forEach((mod, index, mods) => mods[index] * )
+    // }
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         // Store the day for the reportScreen
@@ -181,6 +185,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 
         try {
             const newMod: Array<modulationType> = await getModulationValue_v3Ratio(data, ratio)
+            console.log("=======",newMod)
             if (newMod.length == 0) {
                 context.setMod([])
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
