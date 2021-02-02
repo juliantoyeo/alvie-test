@@ -186,7 +186,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
                     buttonText="Démarrer"
                     onPress={() => navigation.navigate("Pulverisation_v2")}
                 />
-                {savedModContext.map((savedContext) =>{
+                {savedModContext.length > 0 && savedModContext.map((savedContext) =>{
                     const dt = new Date(savedContext.selectedDay)
                     const day = savedContext.selectedDay ? getDay(dt) : ""
                     return (<HygoCardTransparent
