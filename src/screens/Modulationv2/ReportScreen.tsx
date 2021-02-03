@@ -126,6 +126,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                     })}
                                 </Grid>
                             </HygoCardSmall>
+                            {/* ============== Others quantities =======================*/}
                             <Grid style={{ paddingTop: 10 }}>
                                 <Row>
                                     <Col><Text style={hygoStyles.text}>{i18n.t('pulve_reportscreen.eau')}</Text></Col>
@@ -145,10 +146,27 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                 </Row>
 
                             </Grid>
-                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
+                            {/*=============== Pourcentages =======================*/}
+                            <View style={{ 
+                                display: 'flex', justifyContent: 'space-between', flexDirection: 'row', 
+                                alignItems: 'center', paddingTop: 10, borderTopWidth: 1, borderTopColor: COLORS.GREY }}>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, paddingTop: 5 }]}>{i18n.t('pulve_reportscreen.total')}</Text>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${modAvg.toFixed(0)}%`}</Text>
                             </View>
+                            <Grid style={{ paddingTop: 10 }}>
+                                    {context.selectedProducts.map((p, index) => {
+                                        return (
+                                                <Row key={p.id} style={{ paddingLeft: 20 }}>
+                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left'}]}>{capitalize(p.name)}</Text></Col>
+                                                    <Col style={{ flex: 1 }}>
+                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                            {(`${context.mod[index].toFixed(0)}%`)}
+                                                        </Text>
+                                                    </Col>
+                                                </Row>    
+                                        )
+                                    })}
+                                </Grid>
                         </HygoCard>
                     </View>
 
