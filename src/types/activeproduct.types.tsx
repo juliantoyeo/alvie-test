@@ -10,4 +10,5 @@ export interface activeProductType {
     }
     selected?: boolean
     dose?: number
+    doseCoop? :number
 }
