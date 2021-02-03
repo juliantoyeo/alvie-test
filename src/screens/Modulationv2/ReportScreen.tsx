@@ -19,8 +19,6 @@ import { saveModulationContext, deleteModulationContext } from '../../api/hygoAp
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_report } = AMPLITUDE_EVENTS
 
-
-
 const ReportScreen = ({ navigation, phytoProductList }) => {
 
     const MONTHS = [

@@ -44,6 +44,14 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
     const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
+    const computeRatio = (selectedProduct) => { 
+        const thresholdCoop = 0.7;
+        const thresholdHygo = 0.5;
+
+        if (!!selectedProduct.doseCoop)
+            return (selectedProduct.dose < selectedProduct.doseCoop * thresholdCoop ? 0 : selectedProduct.dose / selectedProduct.dosemax )
+        return (selectedProduct.dose / selectedProduct.dosemax < thresholdHygo ? 0 : selectedProduct.dose / selectedProduct.dosemax )
+    }
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
     //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
     //     modulations.forEach((mod, index, mods) => mods[index] * )
@@ -177,7 +185,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         }
 
         // The ratio between dose planed and dose max is used to reduce the modulation
-        const ratios: number[] = context.selectedProducts.map((s) => s.dose / s.dosemax)
+        const ratios: number[] = context.selectedProducts.map((selectedProduct) => computeRatio(selectedProduct))
         try {
             const modulations: Array<number> = await getModulationValue_v4(data)
             if (modulations.length == 0 || modulations.length !=  ratios.length) {
@@ -207,7 +215,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         const selectedProductIds: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
 
         // The ratio between dose planed and dose max is used to reduce the modulation
-        const ratio: number = context.selectedProducts.map((s) => s.dose / s.dosemax).reduce((acc: number, cur: number, index, arr) => {
+        const ratio: number = context.selectedProducts.map((s) => computeRatio(s)).reduce((acc: number, cur: number, index, arr) => {
             return acc + cur / arr.length
         }, 0)
         const data = {
