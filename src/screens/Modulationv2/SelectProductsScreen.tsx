@@ -70,10 +70,10 @@ const SelectProductsScreen = ({ navigation }) => {
         const load = async () => {
             const prd: Array<activeProductType> = await getActiveProducts()
             // Filtrage uniquement aux produits liquides
-            const liquidPrd = prd.filter((p) => p.unit == 'L/ha')
-            if (liquidPrd.length > 0) {
-                setProducts(liquidPrd)
-                const nm = liquidPrd.map((f) => f.phytoproduct.name)
+            const findableProducts = prd.filter((p) => p.unit == 'L/ha' || p.unit == 'kg/ha')
+            if (findableProducts.length > 0) {
+                setProducts(findableProducts)
+                const nm = findableProducts.map((f) => f.phytoproduct.name)
                 setFamilies(_.uniq(nm))     //delete duplicate
             }
         }

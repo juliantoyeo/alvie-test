@@ -1,6 +1,6 @@
 export interface activeProductType {
     id: number, 
-    ammId: number,      
+    amm_id: number,      
     name: string,
     unit: string,
     dosemax: number,
@@ -10,5 +10,5 @@ export interface activeProductType {
     }
     selected?: boolean
     dose?: number
-    doseCoop? :number
+    dosecoop? :number
 }

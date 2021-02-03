@@ -45,6 +45,7 @@ const HygoInputModalDose = ({ onClose, onSuccess, modalVisible, setModalVisible,
                         <React.Fragment>
                             <View>
                                 <Text style={[hygoStyles.text, { textAlign: 'center' }]}>Dose max: {item.dosemax.toFixed(2)} {item.unit}</Text>
+                                {item.dosecoop && <Text style={[hygoStyles.text, { textAlign: 'center' }]}>Dose reco: {item.dosecoop.toFixed(2)} {item.unit}</Text>}
                             </View>
 
                             <View style={styles.input}>

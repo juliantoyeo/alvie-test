@@ -48,8 +48,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         const thresholdCoop = 0.7;
         const thresholdHygo = 0.5;
 
-        if (!!selectedProduct.doseCoop)
-            return (selectedProduct.dose < selectedProduct.doseCoop * thresholdCoop ? 0 : selectedProduct.dose / selectedProduct.dosemax )
+        if (!!selectedProduct.dosecoop)
+            return (selectedProduct.dose < selectedProduct.dosecoop * thresholdCoop ? 0 : selectedProduct.dose / selectedProduct.dosemax )
         return (selectedProduct.dose / selectedProduct.dosemax < thresholdHygo ? 0 : selectedProduct.dose / selectedProduct.dosemax )
     }
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {

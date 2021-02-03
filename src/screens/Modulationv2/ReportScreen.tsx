@@ -107,21 +107,35 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                         <HygoCard title='Remplissage de cuve'>
                             <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
+                                    <Row style={{ paddingLeft: 10 }}>
+                                        <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left'}]}>Nom</Text></Col>
+                                        <Col style={{ flex: 1.5, paddingRight: 5 }}>
+                                            <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>Dose</Text></Col>
+                                        <Col style={{ flex: 1 }}>
+                                            <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>
+                                                Quantité
+                                            </Text>
+                                        </Col>
+                                    </Row>
                                     {context.selectedProducts.map((p, index) => {
                                         return (
-                                                <Row key={p.id} style={{ paddingLeft: 20 }}>
-                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.textBold, { color: COLORS.DARK_BLUE, textAlign: 'left', fontSize: 16}]}>{capitalize(p.name)}</Text></Col>
-                                                    <Col style={{ flex: 1.5, paddingRight: 5 }}>
-                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * (100 - context.mod[index]) / 100).toFixed(3)} {p.unit}
-                                                        </Text>
-                                                    </Col>
-                                                    <Col style={{ flex: 1 }}>
-                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(p.dose * totalArea / 10000 * (100 - context.mod[index]) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
-                                                        </Text>
-                                                    </Col>
-                                                </Row>    
+                                            <Row key={p.id} style={{ paddingLeft: 10 }}>
+                                                <Col style={{ flex: 2, paddingRight: 10 }}>
+                                                    <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left', textTransform: 'uppercase' }]}>
+                                                        {p.name}
+                                                    </Text>
+                                                </Col>
+                                                <Col style={{ flex: 1.5, paddingRight: 5 }}>
+                                                    <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>
+                                                        {(p.dose * (100 - context.mod[index]) / 100).toFixed(3)} {p.unit}
+                                                    </Text>
+                                                </Col>
+                                                <Col style={{ flex: 1 }}>
+                                                    <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                        {(p.dose * totalArea / 10000 * (100 - context.mod[index]) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
+                                                    </Text>
+                                                </Col>
+                                            </Row>
                                         )
                                     })}
                                 </Grid>
@@ -147,26 +161,31 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
 
                             </Grid>
                             {/*=============== Pourcentages =======================*/}
-                            <View style={{ 
-                                display: 'flex', justifyContent: 'space-between', flexDirection: 'row', 
-                                alignItems: 'center', paddingTop: 10, borderTopWidth: 1, borderTopColor: COLORS.GREY }}>
+                            <View style={{
+                                display: 'flex', justifyContent: 'space-between', flexDirection: 'row',
+                                alignItems: 'center', paddingTop: 10, borderTopWidth: 1, borderTopColor: COLORS.GREY
+                            }}>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, paddingTop: 5 }]}>{i18n.t('pulve_reportscreen.total')}</Text>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${modAvg.toFixed(0)}%`}</Text>
                             </View>
                             <Grid style={{ paddingTop: 10 }}>
-                                    {context.selectedProducts.map((p, index) => {
-                                        return (
-                                                <Row key={p.id} style={{ paddingLeft: 20 }}>
-                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left'}]}>{capitalize(p.name)}</Text></Col>
-                                                    <Col style={{ flex: 1 }}>
-                                                        <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                            {(`${context.mod[index].toFixed(0)}%`)}
-                                                        </Text>
-                                                    </Col>
-                                                </Row>    
-                                        )
-                                    })}
-                                </Grid>
+                                {context.selectedProducts.map((p, index) => {
+                                    return (
+                                        <Row key={p.id} style={{ paddingLeft: 20 }}>
+                                            <Col style={{ flex: 2, paddingRight: 10 }}>
+                                                <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left', textTransform: 'uppercase' }]}>
+                                                    {p.name}
+                                                </Text>
+                                            </Col>
+                                            <Col style={{ flex: 1 }}>
+                                                <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
+                                                    {(`${context.mod[index].toFixed(0)}%`)}
+                                                </Text>
+                                            </Col>
+                                        </Row>
+                                    )
+                                })}
+                            </Grid>
                         </HygoCard>
                     </View>
 
