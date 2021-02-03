@@ -42,8 +42,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const [showPickerMin, setShowPickerMin] = useState<boolean>(false)
     const [showPickerMax, setShowPickerMax] = useState<boolean>(false)
     const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
-    const totalArea: number = context.selectedFields.reduce((r, f) => r + f.area, 0)        //in meters^2
-    const totalPhyto: number = totalArea * context.selectedProducts.reduce((r, p) => r + p.dose, 0) / 10000
     const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
@@ -377,7 +375,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                                     <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                                         <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, }]}>{i18n.t('pulve_slotscreen.total')}</Text>
                                                         <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>
-                                                            {`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}
+                                                            {`${modAvg.toFixed(0)}%`}
                                                         </Text>
                                                     </View>
                                                 )}

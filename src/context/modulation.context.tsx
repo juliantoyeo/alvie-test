@@ -259,11 +259,11 @@ const ModulationProvider: React.FunctionComponent = ({ children }) => {
                 return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])} ${dt.getFullYear()}`
             }
             const textParcel = (f)=>`     ${f.name} - ${(f.area/10000).toFixed(1)}ha\n `
-            const  textProduct = (p)=>`     ${p.name} (${(p.dose * (100 - mod[0]) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[0].mod) / 100).toFixed(1)} L\n `
+            const  textProduct = (p, index)=>`     ${p.name} (${(p.dose * (100 - mod[index]) / 100).toFixed(3)} ${p.unit}): ${(p.dose * totalArea / 10000 * (100 - mod[index]) / 100).toFixed(1)} L\n `
 
             const totalArea = selectedFields.reduce((r, f) => r + f.area, 0)
             const volume = totalArea / 10000 * debit
-            const totalPhyto = totalArea / 10000 * selectedProducts.reduce((r, p) => r + p.dose, 0)
+            const totalPhyto = totalArea / 10000 * selectedProducts.reduce((prev, cur, index) => prev + cur.dose * (100 - mod[index]) / 100, 0)
             const water = volume - totalPhyto
             const modAvg = mod.length > 0 ? mod.reduce((sum, m) => sum + m, 0) / mod.length : 0
             const text = `
@@ -280,7 +280,7 @@ Parcelles: \n${selectedFields.map((f) => textParcel(f))}
 
 Volume de bouillie: ${volume.toFixed(1)}L
 Eau: ${water.toFixed(1)}L
-Produits: \n${selectedProducts.map((p) => textProduct(p))}
+Produits: \n${selectedProducts.map((p, index) => textProduct(p, index))}
 ${footer}
 --
 Calculé grâce à Hygo, by Alvie.

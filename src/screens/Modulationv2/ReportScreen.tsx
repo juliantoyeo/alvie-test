@@ -43,7 +43,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const volume = totalArea / 10000 * context.debit
-    const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((r, p) => r + p.dose, 0)
+    const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((prev, cur, index) => prev + cur.dose * (100 - context.mod[index]) / 100, 0)
     const water = volume - totalPhyto
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
     const [saved, setSaved] = useState<boolean>(false)
