@@ -108,10 +108,9 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
                                     {context.selectedProducts.map((p, index) => {
-                                        
                                         return (
                                                 <Row key={p.id} style={{ paddingLeft: 20 }}>
-                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>{capitalize(p.name)}</Text></Col>
+                                                    <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.textBold, { color: COLORS.DARK_BLUE, textAlign: 'left', fontSize: 16}]}>{capitalize(p.name)}</Text></Col>
                                                     <Col style={{ flex: 1.5, paddingRight: 5 }}>
                                                         <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                             {(p.dose * (100 - context.mod[index]) / 100).toFixed(3)} {p.unit}
@@ -148,7 +147,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             </Grid>
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                 <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 16, paddingTop: 5 }]}>{i18n.t('pulve_reportscreen.total')}</Text>
-                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${(totalPhyto * modAvg / 100).toFixed(1)}L (${modAvg.toFixed(0)}%)`}</Text>
+                                <Text style={[hygoStyles.h0, { padding: 0, paddingBottom: 0, fontSize: 24 }]}>{`${modAvg.toFixed(0)}%`}</Text>
                             </View>
                         </HygoCard>
                     </View>

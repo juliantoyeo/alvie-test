@@ -26,6 +26,12 @@ const hygoStyles = StyleSheet.create({
         fontSize: 14,
         color: '#AAAAAA',
         paddingBottom: paddingSmall
+    },
+    textBold: {
+        fontFamily: 'nunito-bold',
+        fontSize: 14,
+        color: '#AAAAAA',
+        paddingBottom: paddingSmall
     }
 })
 
