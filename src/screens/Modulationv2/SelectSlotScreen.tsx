@@ -47,10 +47,13 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const computeRatio = (selectedProduct: activeProductType) => { 
         const thresholdCoop = 0.7;
         const thresholdHygo = 0.5;
+        let ratio;
 
         if (!!selectedProduct.dosecoop)
-            return (selectedProduct.dose < selectedProduct.dosecoop * thresholdCoop ? 0 : selectedProduct.dose / selectedProduct.dosemax )
-        return (selectedProduct.dose / selectedProduct.dosemax < thresholdHygo ? 0 : selectedProduct.dose / selectedProduct.dosemax )
+            ratio = selectedProduct.dose < selectedProduct.dosecoop * thresholdCoop ? 0 : selectedProduct.dose / selectedProduct.dosemax;
+        else
+            ratio = selectedProduct.dose / selectedProduct.dosemax < thresholdHygo ? 0 : selectedProduct.dose / selectedProduct.dosemax;
+        return (ratio > 1 ? 1 : ratio)
     }
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
     //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
