@@ -27,7 +27,7 @@ import FieldsScreen from './screens/FieldsScreen'
 import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
-import WaitActivationScreen from './screens/WaitActivationScreen'
+import WaitActivationScreen from './screens/authentication/WaitActivationScreen'
 import SelectParcelsScreen from './screens/Modulationv2/SelectParcelsScreen';
 import SelectProductsScreen from './screens/Modulationv2/SelectProductsScreen';
 import SelectSlotScreen from './screens/Modulationv2/SelectSlotScreen';
@@ -39,12 +39,11 @@ import COLORS from './colors'
 
 const Navigator = createSwitchNavigator({
     mainFlow: createStackNavigator({
-        Authentication : createStackNavigator({
+
             BarCode: BarCodeScreen,
             WaitActivation: WaitActivationScreen,
             BarCodeValidation: BarCodeValidationScreen,
             BarCodeActivation: BarCodeActivationScreen,
-        }),
         
         // ======= Previous menus and screens ======== //
         // main: createDrawerNavigator({

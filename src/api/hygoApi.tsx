@@ -13,7 +13,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //'https://hygo-api.alvie.fr', //'http://192.168.1.10:3000',// 
+    baseURL: 'http://192.168.1.10:3000', //'https://hygo-api.alvie.fr', //'http://192.168.1.10:3000',// 
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -143,14 +143,13 @@ export const signInWithBarCode = async (barcode) => {
             errorMessage: ''
         };
     } catch (err) {
-        console.log(err);
         if (err.message.trim().match(/^Network Error/)) {
             return {
                 errorMessage: 'NETWORK_ERROR'
             }
         } else {
             return {
-                errorMessage: err.message.trim()
+                errorMessage: err.response.data.error
             };
         }
     }
@@ -166,10 +165,9 @@ interface activationDataType {
     hasEquipment: boolean,
     agri: number
 }
-export const ActivateDevice = async (barcode: string, activationCode: string) => {
+export const activateDevice = async (barcode: string, activationCode: string) => {
     try {
         const response = await hygoApi.post('/app/auth/activatedevice', { barcode, activationCode });
-
         const activationData: activationDataType = response.data;
         return {activationData};
     } catch (error) {

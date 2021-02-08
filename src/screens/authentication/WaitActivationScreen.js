@@ -2,9 +2,9 @@ import * as React from 'react';
 import { StyleSheet, StatusBar, ImageBackground, View, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Text, Button, Icon } from 'native-base';
-import LogoLoading from '../components/LogoLoading';
+import LogoLoading from '../../components/LogoLoading';
 import i18n from 'i18n-js'
-import { deleteToken } from '../store/actions/authActions'
+import { deleteToken } from '../../store/actions/authActions'
 
 
 const WaitActivationScreen = ({navigation}) => {
@@ -22,7 +22,7 @@ const WaitActivationScreen = ({navigation}) => {
         
           <React.Fragment>
           <StatusBar translucent backgroundColor="transparent" />
-          <ImageBackground source={require('../../assets/blue_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
+          <ImageBackground source={require('../../../assets/blue_back.png')} imageStyle={{  resizeMode: 'cover', flex: 1 }} style={styles.container}>
 
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
             <View style={[StyleSheet.absoluteFill]}>

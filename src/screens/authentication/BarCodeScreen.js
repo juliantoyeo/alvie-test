@@ -86,54 +86,6 @@ class BarCodeScreen extends React.Component {
         } catch(e){
             
         }
-        // await AsyncStorage.setItem('token', token);
-
-        // Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
-        // // console.log("Amplitude : ", ampEvent.loggedin)
-        // Amplitude.logEventWithProperties(ampEvent.loggedin, {
-        //     timestamp: Date.now(),
-        //     token,
-        //     userName,
-        //     familyName,
-        //     deviceid,
-        //     deviceType,
-        //     hasEquipment
-        // })
-
-        // let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
-        // let culturesSelected = await AsyncStorage.getItem('culturesSelected');
-        // await this.props.updateAuthInfo({
-        //     token,
-        //     userName, familyName, deviceid, deviceType, tester
-        // })
-        // phytoProductSelected = phytoProductSelected == null ? [] : JSON.parse(phytoProductSelected)
-        // culturesSelected = culturesSelected == null ? [] : JSON.parse(culturesSelected)
-
-        // await this.props.updatePulvInfo({
-        //     phytoProductSelected,
-        //     culturesSelected
-        // })
-
-        // const { result, error } = await checkSetup()
-        // if (!result)
-        //     this.props.navigation.replace('WaitActivation', { error });
-        // else {
-        //     let [fields, cultures] = await Promise.all([
-        //         getFields(),
-        //         getCultures(),
-        //     ])
-        //     this.props.updateParcellesList(fields)
-        //     this.props.updateCulturesList(cultures)
-
-        //     // TODO debug this
-        //     // await this.registerForPushNotificationsAsync(deviceid)
-
-        //     if (hasEquipment) {
-        //         this.props.navigation.replace('main_v2');
-        //     } else {
-        //         this.props.navigation.replace('BarCodeValidation')
-        //     }
-        // }
     }
 
     handleBarCodeScanned = async ({ type, data }) => {
@@ -142,7 +94,7 @@ class BarCodeScreen extends React.Component {
         if (!errorMessage && token) {
             await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType, hasEquipment)
         } else if (errorMessage == 'NOT_ACTIVATED') {
-            this.props.navigation.replace('BarCodeActivationScreen', {barcode: data})
+            this.props.navigation.navigate('BarCodeActivation', {barcode: data})
         } else {
             this.setState({ qrError: errorMessage })
             this.setState({ tokenLoading: false });
