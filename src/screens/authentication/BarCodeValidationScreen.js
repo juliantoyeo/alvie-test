@@ -3,12 +3,12 @@ import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, View, Text, StatusBar, AsyncStorage } from 'react-native';
 import { Content, Header, Left, Button, Icon } from 'native-base';
 import { connect } from 'react-redux'
-import { deleteToken } from '../store/actions/authActions'
-import COLORS from '../colors';
+import { deleteToken } from '../../store/actions/authActions'
+import COLORS from '../../colors';
 import i18n from 'i18n-js';
-import { Amplitude } from '../amplitude'
+import { Amplitude } from '../../amplitude'
 
-import HygoButton from '../components/HygoButton'
+import HygoButton from '../../components/HygoButton'
 
 const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
     const logout = async () => {

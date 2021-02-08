@@ -13,7 +13,9 @@ import i18n from 'i18n-js'
 import HygoProductPicker from './components/HygoProductPicker';
 import HygoCulturePicker from './components/HygoCulturePicker';
 import RealTimeScreen from './screens/RealTimeScreen';
-import BarCodeScreen from './screens/BarCodeScreen';
+import BarCodeScreen from './screens/authentication/BarCodeScreen';
+import BarCodeValidationScreen from './screens/authentication/BarCodeValidationScreen'
+import BarCodeActivationScreen from './screens/authentication/BarCodeActivationScreen'
 import MeteoScreen from './screens/MeteoScreen';
 import MeteoScreen_v2 from './screens/meteo_v2/MeteoScreen_v2'
 import InterventionsScreen from './screens/InterventionsScreen';
@@ -23,7 +25,6 @@ import LoadingScreen from './screens/LoadingScreen';
 import DrawerScreen from './screens/DrawerScreen'
 import FieldsScreen from './screens/FieldsScreen'
 import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
-import BarCodeValidationScreen from './screens/BarCodeValidationScreen'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
 import WaitActivationScreen from './screens/WaitActivationScreen'
@@ -38,8 +39,13 @@ import COLORS from './colors'
 
 const Navigator = createSwitchNavigator({
     mainFlow: createStackNavigator({
-        BarCode: BarCodeScreen,
-        WaitActivation: WaitActivationScreen,
+        Authentication : createStackNavigator({
+            BarCode: BarCodeScreen,
+            WaitActivation: WaitActivationScreen,
+            BarCodeValidation: BarCodeValidationScreen,
+            BarCodeActivation: BarCodeActivationScreen,
+        }),
+        
         // ======= Previous menus and screens ======== //
         // main: createDrawerNavigator({
         //     Drawer: {
@@ -177,9 +183,6 @@ const Navigator = createSwitchNavigator({
             contentComponent: DrawerScreen,
             drawerWidth: 310
         }),
-
-        BarCodeValidationScreen: BarCodeValidationScreen,
-
         Pulverisation_v2: createStackNavigator({
             Pulverisation_Fields: SelectParcelsScreen,
             Pulverisation_Products: SelectProductsScreen,
