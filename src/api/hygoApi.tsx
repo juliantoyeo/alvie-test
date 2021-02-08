@@ -150,13 +150,32 @@ export const signInWithBarCode = async (barcode) => {
             }
         } else {
             return {
-                errorMessage: 'SIGNIN_ERROR'
+                errorMessage: err.message.trim()
             };
         }
-
     }
 }
 
+interface activationDataType {
+    token: string,
+    deviceid: string,
+    userName: string,
+    familyName: string,
+    barcode,
+    deviceType: string,
+    hasEquipment: boolean,
+    agri: number
+}
+export const ActivateDevice = async (barcode: string, activationCode: string) => {
+    try {
+        const response = await hygoApi.post('/app/auth/activatedevice', { barcode, activationCode });
+
+        const activationData: activationDataType = response.data;
+        return {activationData};
+    } catch (error) {
+        return ({error});
+    }
+}
 // Store a new pushToken for this device
 export const storePushToken = async (token, deviceid) => {
     try {

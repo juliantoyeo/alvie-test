@@ -21,6 +21,7 @@ import pkg from '../../../app.json'
 import { OTA } from '../../constants'
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+import { authValidate } from './authValidate';
 
 const { barCodeScreen: ampEvent } = AMPLITUDE_EVENTS
 
@@ -69,8 +70,6 @@ class BarCodeScreen extends React.Component {
 
         if (!errorMessage) {
             await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment, tester)
-        } else if (errorMessage == 'INVALID_CODE') {
-            this.props.navigation.replace('BarCodeActivationScreen', {barcode: data})
         } else {
             this.setState({ loading: false, qrError: errorMessage })
             this.getPermissionsAsync();
@@ -78,69 +77,76 @@ class BarCodeScreen extends React.Component {
     }
 
     gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment, tester) => {
-        await AsyncStorage.setItem('token', token);
-
-        Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
-        // console.log("Amplitude : ", ampEvent.loggedin)
-        Amplitude.logEventWithProperties(ampEvent.loggedin, {
-            timestamp: Date.now(),
-            token,
-            userName,
-            familyName,
-            deviceid,
-            deviceType,
-            hasEquipment
-        })
-
-        let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
-        let culturesSelected = await AsyncStorage.getItem('culturesSelected');
-        await this.props.updateAuthInfo({
-            token,
-            userName, familyName, deviceid, deviceType, tester
-        })
-        phytoProductSelected = phytoProductSelected == null ? [] : JSON.parse(phytoProductSelected)
-        culturesSelected = culturesSelected == null ? [] : JSON.parse(culturesSelected)
-
-        await this.props.updatePulvInfo({
-            phytoProductSelected,
-            culturesSelected
-        })
-
-        const { result, error } = await checkSetup()
-        if (!result)
-            this.props.navigation.replace('WaitActivation', { error });
-        else {
-            let [fields, cultures] = await Promise.all([
-                getFields(),
-                getCultures(),
-            ])
-            this.props.updateParcellesList(fields)
-            this.props.updateCulturesList(cultures)
-
-            // TODO debug this
-            // await this.registerForPushNotificationsAsync(deviceid)
-
-            if (hasEquipment) {
-                this.props.navigation.replace('main_v2');
-            } else {
-                this.props.navigation.replace('BarCodeValidation')
-            }
+        try {
+            await authValidate(
+                { token, userName, familyName, deviceid, deviceType, hasEquipment}, 
+                tester,
+                this.props,
+            )
+        } catch(e){
+            
         }
-    }
+        // await AsyncStorage.setItem('token', token);
 
+        // Amplitude.setUserId(`${deviceid}-${userName}-${familyName}`)
+        // // console.log("Amplitude : ", ampEvent.loggedin)
+        // Amplitude.logEventWithProperties(ampEvent.loggedin, {
+        //     timestamp: Date.now(),
+        //     token,
+        //     userName,
+        //     familyName,
+        //     deviceid,
+        //     deviceType,
+        //     hasEquipment
+        // })
+
+        // let phytoProductSelected = await AsyncStorage.getItem('phytoProductSelected');
+        // let culturesSelected = await AsyncStorage.getItem('culturesSelected');
+        // await this.props.updateAuthInfo({
+        //     token,
+        //     userName, familyName, deviceid, deviceType, tester
+        // })
+        // phytoProductSelected = phytoProductSelected == null ? [] : JSON.parse(phytoProductSelected)
+        // culturesSelected = culturesSelected == null ? [] : JSON.parse(culturesSelected)
+
+        // await this.props.updatePulvInfo({
+        //     phytoProductSelected,
+        //     culturesSelected
+        // })
+
+        // const { result, error } = await checkSetup()
+        // if (!result)
+        //     this.props.navigation.replace('WaitActivation', { error });
+        // else {
+        //     let [fields, cultures] = await Promise.all([
+        //         getFields(),
+        //         getCultures(),
+        //     ])
+        //     this.props.updateParcellesList(fields)
+        //     this.props.updateCulturesList(cultures)
+
+        //     // TODO debug this
+        //     // await this.registerForPushNotificationsAsync(deviceid)
+
+        //     if (hasEquipment) {
+        //         this.props.navigation.replace('main_v2');
+        //     } else {
+        //         this.props.navigation.replace('BarCodeValidation')
+        //     }
+        // }
+    }
 
     handleBarCodeScanned = async ({ type, data }) => {
         this.setState({ tokenLoading: true });
         const { token, errorMessage, userName, familyName, deviceid, deviceType, hasEquipment } = await signInWithBarCode(data);
         if (!errorMessage && token) {
             await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType, hasEquipment)
-        } else if (errorMessage == 'INVALID_CODE') {
+        } else if (errorMessage == 'NOT_ACTIVATED') {
             this.props.navigation.replace('BarCodeActivationScreen', {barcode: data})
         } else {
             this.setState({ qrError: errorMessage })
             this.setState({ tokenLoading: false });
             this.setState({ scanned: true });
-
         }
     };
 
