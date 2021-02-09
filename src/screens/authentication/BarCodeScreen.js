@@ -63,12 +63,24 @@ class BarCodeScreen extends React.Component {
     async componentDidMount() {
         //await getLocationPermissionAsync(i18n.t('geolocation.text'))
 
+        this.setState({
+            hasCameraPermission: null,
+            scanned: false,
+            loading: true,
+            tokenLoading: false,
+            qrError: null
+        });
         this.props.updatePhytoProductList(await getPhytoProducts())
 
         let storedToken = await AsyncStorage.getItem('token');
         let { errorMessage, userName, familyName, deviceid, deviceType, hasEquipment, tester } = await checkToken(storedToken);
 
         if (!errorMessage) {
+            this.setState({
+                scanned: false,
+                tokenLoading: false,
+                qrError: null
+            });
             await this.gotoNextScreen(storedToken, userName, familyName, deviceid, deviceType, hasEquipment, tester)
         } else {
             this.setState({ loading: false, qrError: errorMessage })
@@ -94,6 +106,11 @@ class BarCodeScreen extends React.Component {
         if (!errorMessage && token) {
             await this.gotoNextScreen(token, userName, familyName, deviceid, deviceType, hasEquipment)
         } else if (errorMessage == 'NOT_ACTIVATED') {
+            this.setState({
+                scanned: false,
+                tokenLoading: false,
+                qrError: null
+            });
             this.props.navigation.navigate('BarCodeActivation', {barcode: data})
         } else {
             this.setState({ qrError: errorMessage })

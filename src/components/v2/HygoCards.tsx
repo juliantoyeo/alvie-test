@@ -73,7 +73,6 @@ export const HygoCardTransparentButton = ({ title, subtitle, text, buttonText, o
     )
 }
 
-
 const styles = StyleSheet.create({
     container: {
         borderTopRightRadius: 20,
