@@ -92,12 +92,12 @@ const BarCodeActivationScreen = (props) => {
                     </TouchableOpacity> 
                 </View>
             </Content>
-            {/* <Footer style={styles.footer}>
+            <Footer style={styles.footer}>
                 <HygoButton
                     onPress={onPress}
                     label="Activer HYGO"
                 />
-            </Footer> */}
+            </Footer>
             </Container>
         </SafeAreaView>
 
