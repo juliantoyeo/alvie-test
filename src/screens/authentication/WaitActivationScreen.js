@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, StatusBar, ImageBackground, View, AsyncStorage } from 'react-native';
+import { StyleSheet, StatusBar, ImageBackground, View, AsyncStorage, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Text, Button, Icon } from 'native-base';
 import LogoLoading from '../../components/LogoLoading';
@@ -26,15 +26,14 @@ const WaitActivationScreen = ({navigation}) => {
 
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
             <View style={[StyleSheet.absoluteFill]}>
-            <Button transparent onPress={() => logout()} style ={{paddingTop:50}}>
-                    <Icon name='close' style={{ color: '#fff' }} />
-            </Button>
+            <TouchableOpacity  onPress={() => logout()} style ={{marginTop:50, marginLeft: 20}}>
+                    <Icon name='close' style={{ color: '#fff', fontSize: 40 }} />
+            </TouchableOpacity>
             </View>
             <View style={{ display: 'flex', alignItems: 'center' }}>
                 <LogoLoading duration={1000} color={"#fff"} />
                 <Text style= {styles.subtitle}>{i18n.t(`wait_screen.${error}.msg1`)}</Text>
                 <Text style= {styles.title}>{i18n.t(`wait_screen.${error}.msg2`)}</Text>
-                
             </View>
           </ImageBackground>
           </React.Fragment>
