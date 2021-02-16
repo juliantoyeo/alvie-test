@@ -67,14 +67,16 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                     name={item.selected ? 'square' : 'square-o'}
                                     style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
                                 />
-                                <Text style={[hygoStyles.text, { flex: 1, paddingLeft: 10 }, !active && ListStyles.hidden]}>
-                                    {item.name == 'unknown' ? (
+                                <Text style={[hygoStyles.text, { flex: 2, paddingLeft: 10 }, !active && ListStyles.hidden]}>
+                                    {(item.name == 'unknown' ? (
                                         `Parcelle ${item.id}`
                                     ) : (
                                             `${item.id} - ${item.name}`
+                                    )) + (
+                                    item.nomCommune && `\n(${item.nomCommune})`
                                         )}
                                 </Text>
-                                <View style={{flex: 1}}>  
+                                <View style={{flex: 1, alignContent: "flex-end"}}>  
                                     <ParcelSVG path={item.svg} height={30} width={30} />
                                 </View>
                                

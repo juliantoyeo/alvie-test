@@ -12,5 +12,6 @@ export interface fieldType {
     id: number,
     selected? : boolean,
     name: string,
-    svg: string
+    svg: string,
+    nomCommune?: string
 }
