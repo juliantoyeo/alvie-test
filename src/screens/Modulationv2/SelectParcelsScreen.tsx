@@ -67,19 +67,24 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                     name={item.selected ? 'square' : 'square-o'}
                                     style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
                                 />
-                                <Text style={[hygoStyles.text, { flex: 2, paddingLeft: 10 }, !active && ListStyles.hidden]}>
-                                    {(item.name == 'unknown' ? (
-                                        `Parcelle ${item.id}`
-                                    ) : (
-                                            `${item.id} - ${item.name}`
-                                    )) + (
-                                    item.nomCommune && `\n(${item.nomCommune})`
-                                        )}
-                                </Text>
-                                <View style={{flex: 1, alignContent: "flex-end"}}>  
+                                <View style={{ flex: 2, paddingLeft: 10 }}>
+                                    <Text style={[hygoStyles.textBold, {color: '#888888'},!active && ListStyles.hidden, {paddingBottom:0}]}>
+                                        {(item.name == 'unknown' ? (
+                                            `Parcelle ${item.id}`
+                                        ) : (
+                                                `${item.id} - ${item.name}`
+                                            ))}
+                                    </Text>
+                                    {item.nomCommune &&
+                                        <Text style={[hygoStyles.text, !active && ListStyles.hidden]}>
+                                            {item.nomCommune}
+                                        </Text>}
+                                </View>
+
+                                <View style={{ flex: 1 }}>
                                     <ParcelSVG path={item.svg} height={30} width={30} />
                                 </View>
-                               
+
                                 <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
                                     {(item.area / 10000).toFixed(1)}ha
                                 </Text>
