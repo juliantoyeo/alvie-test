@@ -17,16 +17,18 @@ class SVGminifier {
         const maxX = Math.max(...Xs)
         const minY = Math.min(...Ys)
         const maxY = Math.max(...Ys)
-        Xs = Xs.map(el => el - minX)
-        Ys = Ys.map(el => el - minY)
+        const ratio = this.isLambertCoordinates(maxX, maxY) ? 1 : 10000
+        Xs = Xs.map(el => (el - minX)*ratio)
+        Ys = Ys.map(el => (el - minY)*ratio)
 
         this.minifiedPath = `M ${Xs[0]} ${Ys[0]} L ${Xs.slice(1).map((el, index) => `${el} ${Ys.slice(1)[index]} `).join(' ')}Z`
-        this.viewportXmax = Math.max(maxX - minX, maxY - minY)
+        this.viewportXmax = Math.max(maxX - minX, maxY - minY) * ratio
         this.viewportYmax = this.viewportXmax
-        this.viewportXmin = maxX - minX > maxY - minY ? 0 : ((maxX - minX) - (maxY - minY))/ 2
-        this.viewportYmin = maxY - minY > maxX - minX ? 0 : ((maxY - minY) - (maxX - minX)) / 2
+        this.viewportXmin = maxX - minX > maxY - minY ? 0 : ((maxX - minX) - (maxY - minY)) * ratio / 2
+        this.viewportYmin = maxY - minY > maxX - minX ? 0 : ((maxY - minY) - (maxX - minX)) * ratio / 2
     }
 
+    private isLambertCoordinates = (x, y) => Math.max(x, y) > 100 ? 1 : 0
     getMinifiedPath = () => this.minifiedPath
     getViewportXmin = () => this.viewportXmin
     getViewportXmax = () => this.viewportXmax
