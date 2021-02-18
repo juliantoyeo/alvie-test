@@ -264,7 +264,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         <Title style={styles.headerSubtitle}>{i18n.t('pulve_productscreen.subtitle')}</Title>
                     </Body>
                     <Right style={{ flex: 1 }}>
-                        <Button transparent onPress={() => navigation.navigate("main_v2")}>
+                        <Button transparent onPress={() => navigation.replace("main_v2")}>
                             <Icon type='AntDesign' name='close' style={{ color: '#fff' }} />
                         </Button>
                     </Right>

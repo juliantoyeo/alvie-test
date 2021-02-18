@@ -252,7 +252,8 @@ export const getMetrics_v2 = async ({days, fields}) => {
      * fields : Array<fieldType>
      */
     try {
-        const response = await hygoApi.post('/app/meteo/metrics/v2', { days, fields })
+        const parcellesId = fields.map(f => ({id: f.id}))
+        const response = await hygoApi.post('/app/meteo/metrics/v2', { days, fields: parcellesId })
         return response.data
     } catch (error) {
         return []
@@ -268,7 +269,8 @@ export const getMetrics4h_v2 = async ({days, fields}) => {
      * fields : Array<fieldType>
      */
     try {
-        const response = await hygoApi.post('/app/meteo/metrics4h/v2', { days, fields })
+        const parcellesId = fields.map(f => ({id: f.id}))
+        const response = await hygoApi.post('/app/meteo/metrics4h/v2', { days, fields: parcellesId })
         return response.data
     } catch (error) {
         return []

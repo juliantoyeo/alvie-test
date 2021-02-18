@@ -199,7 +199,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
-                                navigation.navigate('main_v2')
+                                navigation.replace('main_v2')
                             }}
                         >
                             <Icon type='Ionicons' name='md-home' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />
@@ -228,7 +228,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                         context
                                     })
                                     await deleteModulationContext(context.id)
-                                    navigation.navigate('main_v2')
+                                    navigation.replace('main_v2')
                                 }}
                             >
                                 <Icon type='Ionicons' name='md-trash' style={{ color: COLORS.DARK_BLUE, fontSize: 40 }} />

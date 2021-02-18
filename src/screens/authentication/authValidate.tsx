@@ -53,7 +53,7 @@ export const authValidate = async (
         // await this.registerForPushNotificationsAsync(deviceid)
 
         if (hasEquipment) {
-            navigation.navigate('main_v2');
+            navigation.replace('main_v2');
         } else {
             navigation.replace('BarCodeValidation')
         }
