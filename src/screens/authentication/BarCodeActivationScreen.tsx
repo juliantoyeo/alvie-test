@@ -76,7 +76,7 @@ const BarCodeActivationScreen = (props) => {
                                 <Input
                                     onChangeText={(text) => setActivationCode(text)}
                                     keyboardType='numeric'
-                                    placeholder="0123456789"
+                                    placeholder="votre code ici"
                                 />
                             </Item>
                         </Form>
