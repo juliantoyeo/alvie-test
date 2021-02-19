@@ -14,7 +14,7 @@ const WaitActivationScreen = ({navigation}) => {
     
         deleteToken();
         
-        navigation.navigate('BarCode');
+        navigation.replace('BarCode');
       }
     
     return (

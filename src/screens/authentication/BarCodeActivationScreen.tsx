@@ -58,7 +58,7 @@ const BarCodeActivationScreen = (props) => {
             <Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
             <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
                 <Left style={{ flex: 1 }}>
-                    <Button transparent onPress={() => props.navigation.navigate('BarCode')}>
+                    <Button transparent onPress={() => props.navigation.replace('BarCode')}>
                         <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
                     </Button>
                 </Left>

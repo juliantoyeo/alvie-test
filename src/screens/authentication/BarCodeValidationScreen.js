@@ -16,7 +16,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
 
         deleteToken();
         Amplitude.setUserId(null)
-        navigation.navigate('BarCode');
+        navigation.replace('BarCode');
     }
     return (
 

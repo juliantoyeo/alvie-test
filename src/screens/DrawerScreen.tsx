@@ -52,7 +52,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         )
         snackbar.showSnackbar(welcome,"OK")
         navigation.dispatch(DrawerActions.closeDrawer())
-        navigation.navigate('BarCode')
+        navigation.replace('BarCode')
     }
 
     const sendEmail = () => {
