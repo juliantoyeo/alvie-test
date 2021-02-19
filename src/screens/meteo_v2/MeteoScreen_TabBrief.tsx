@@ -50,7 +50,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     useEffect(()=> {    
         if (isReady && clickToReports) {
             setClickToReports(false)
-            navigation.navigate('SavedReportScreen', {savedContext: true})
+            navigation.navigate('SavedReportScreen', {isSavedContext: true})
         }
     },[isReady, clickToReports])
 

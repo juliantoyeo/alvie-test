@@ -36,7 +36,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         i18n.t('months.december'),
     ]
 
-    // const { savedContext } = navigation.state.params
+    const isSavedContext = navigation.getParam('isSavedContext', false)
     const context = useContext(ModulationContext)
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
@@ -57,13 +57,13 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         return `${dt.getDate()} ${capitalize(MONTHS[dt.getMonth()])}`
     }
 
-    const saveContext = async () => {
-        const { error } = await saveModulationContext(context)
-        if (error) {
+    const saveContext = async ({show}) => {
+        const { error } = await saveModulationContext({...context, show})
+        if (show && error) {
             snackbar.showSnackbar(i18n.t('snackbar.context_not_saved'), 'WARNING')
             setSaved(false)
         }
-        else {
+        else if (show) {
             snackbar.showSnackbar(i18n.t('snackbar.context_saved'), 'OK')
         }
         return
@@ -199,6 +199,8 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                     timestamp: Date.now(),
                                     context
                                 })
+                                if (saved != true && isSavedContext != true)
+                                    saveContext({show: false})
                                 navigation.navigate('main_v2')
                             }}
                         >
@@ -239,7 +241,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                     style={{ height: 60 }}
                                     onPress={async () => {
                                         setSaved(true)
-                                        saveContext()
+                                        saveContext({show: true})
                                         Amplitude.logEventWithProperties(pulv2_report.click_save, {
                                             timestamp: Date.now(),
                                             context
