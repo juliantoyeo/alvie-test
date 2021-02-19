@@ -39,7 +39,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 
         deleteToken();
         Amplitude.setUserId(null)
-        navigation.navigate('BarCode');
+        navigation.replace('BarCode');
     }
 
     const becomeTester = async (t) => {
