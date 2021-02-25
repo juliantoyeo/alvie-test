@@ -34,7 +34,17 @@ class SVGminifier {
     getViewportXmax = () => this.viewportXmax
     getViewportYmin = () => this.viewportYmin
     getViewportYmax = () => this.viewportYmax
-    getViewportAsString = () => `${this.viewportXmin} ${this.viewportYmin} ${this.viewportXmax} ${this.viewportYmax}`
+    getViewportAsString = () => {
+        if (
+            Number.isNaN(this.viewportXmin) ||
+            Number.isNaN(this.viewportXmax) ||
+            Number.isNaN(this.viewportYmin) ||
+            Number.isNaN(this.viewportYmax)
+        )
+            return ''
+        else
+            return `${this.viewportXmin} ${this.viewportYmin} ${this.viewportXmax} ${this.viewportYmax}`
+    }
 }
 
 export default SVGminifier

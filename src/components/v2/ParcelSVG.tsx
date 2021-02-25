@@ -7,9 +7,11 @@ const ParcelSVG = ({path, height, width}) => {
     
     const minifiedSVG = new SVGminifier(path)
     return (
+        minifiedSVG.getViewportAsString() != '' && (
         <Svg height={height} width={width} viewBox={minifiedSVG.getViewportAsString()}>
             <Path d={minifiedSVG.getMinifiedPath()} stroke="white" stroke-width="0" fill={COLORS.DARK_BLUE} />
         </Svg>
+        )
     )
 }
 
