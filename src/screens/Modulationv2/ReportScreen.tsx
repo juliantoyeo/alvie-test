@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useEffect, useMemo, useState, useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { StyleSheet, RefreshControl, StatusBar, View, Platform, Share, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
@@ -17,6 +17,7 @@ import capitalize from '../../utils/capitalize';
 // import 'moment/min/moment-with-locales'
 import { saveModulationContext, deleteModulationContext } from '../../api/hygoApi';
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
+import { convertDoseToVolume, convertProductUnit } from '../../utils/quantityConverters';
 const { pulv2_report } = AMPLITUDE_EVENTS
 
 const ReportScreen = ({ navigation, phytoProductList }) => {
@@ -35,13 +36,16 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
         i18n.t('months.november'),
         i18n.t('months.december'),
     ]
-
     const isSavedContext = navigation.getParam('isSavedContext', false)
     const context = useContext(ModulationContext)
     const snackbar = useContext(SnackbarContext)
     const totalArea = context.selectedFields.reduce((r, f) => r + f.area, 0)
     const volume = totalArea / 10000 * context.debit
-    const totalPhyto = totalArea / 10000 * context.selectedProducts.reduce((prev, cur, index) => prev + cur.dose * (100 - context.mod[index]) / 100, 0)
+    const totalPhyto: number = useMemo(() => {
+        return (totalArea / 10000 * context.selectedProducts.reduce((prev, cur, index) => (
+            prev + convertDoseToVolume(cur) * (100 - context.mod[index]) / 100
+            ), 0)
+    )}, [totalArea, context])
     const water = volume - totalPhyto
     const modAvg = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
     const [saved, setSaved] = useState<boolean>(false)
@@ -108,11 +112,11 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                             <HygoCardSmall title='Produits' cardStyle={{ borderWidth: 1, borderColor: '#B4B1B1' }}>
                                 <Grid style={{ paddingTop: 10 }}>
                                     <Row style={{ paddingLeft: 10 }}>
-                                        <Col style={{ flex: 2, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left'}]}>Nom</Text></Col>
+                                        <Col style={{ flex: 1.5, paddingRight: 10 }}><Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left'}]}>Nom</Text></Col>
                                         <Col style={{ flex: 1.5, paddingRight: 5 }}>
                                             <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>Dose</Text></Col>
                                         <Col style={{ flex: 1 }}>
-                                            <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left' }]}>
+                                            <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
                                                 Quantité
                                             </Text>
                                         </Col>
@@ -120,7 +124,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                     {context.selectedProducts.map((p, index) => {
                                         return (
                                             <Row key={p.id} style={{ paddingLeft: 10 }}>
-                                                <Col style={{ flex: 2, paddingRight: 10 }}>
+                                                <Col style={{ flex: 1.5, paddingRight: 10 }}>
                                                     <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'left', textTransform: 'uppercase' }]}>
                                                         {p.name}
                                                     </Text>
@@ -132,7 +136,7 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                                                 </Col>
                                                 <Col style={{ flex: 1 }}>
                                                     <Text style={[hygoStyles.text, { color: COLORS.DARK_BLUE, textAlign: 'right' }]}>
-                                                        {(p.dose * totalArea / 10000 * (100 - context.mod[index]) / 100).toFixed(1)} {p.unit == 'L/ha' ? 'L' : (p.unit == 'kg/ha' ? 'kg' : '')}
+                                                        {(p.dose * totalArea / 10000 * (100 - context.mod[index]) / 100).toFixed(1)} {convertProductUnit(p.unit)}
                                                     </Text>
                                                 </Col>
                                             </Row>
