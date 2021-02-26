@@ -70,7 +70,7 @@ const SelectProductsScreen = ({ navigation }) => {
         const load = async () => {
             const prd: Array<activeProductType> = await getActiveProducts()
             // Filtrage uniquement aux produits liquides
-            const findableProducts = prd.filter((p) => p.unit == 'L/ha' || p.unit == 'kg/ha')
+            const findableProducts = prd.filter((p) => p.unit == 'L/ha' || p.unit == 'kg/ha' || p.unit =='g/ha')
             if (findableProducts.length > 0) {
                 setProducts(findableProducts)
                 const nm = findableProducts.map((f) => f.phytoproduct.name)
