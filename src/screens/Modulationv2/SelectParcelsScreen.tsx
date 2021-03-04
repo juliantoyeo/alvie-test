@@ -80,11 +80,10 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                             {item.nomCommune}
                                         </Text>}
                                 </View>
-
+                                
                                 <View style={{ flex: 1 }}>
-                                    <ParcelSVG path={item.svg} height={30} width={30} />
+                                    { item.svg && <ParcelSVG path={item.svg} height={30} width={30} /> }
                                 </View>
-
                                 <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
                                     {(item.area / 10000).toFixed(1)}ha
                                 </Text>

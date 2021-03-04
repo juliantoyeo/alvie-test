@@ -233,10 +233,8 @@ export const getMeteo = async () => {
 // Retrieve detailed meteo
 export const getMeteoDetailed = async ({ day, product }) => {
     try {
-        console.log("meteo/detailed")
         const  d = Date.now()
         const response = await hygoApi.post('/app/meteo/detailed', { day, product })
-        console.log(d - Date.now())
         return response.data
     } catch (error) {
         return {}
