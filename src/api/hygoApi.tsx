@@ -450,6 +450,15 @@ export const updateField = async (field) => {
     }
 }
 
+export const updateField_v2 = async (field) => {
+    try {
+        const response = await hygoApi.post('/app/fields/v2/update', {field});
+        return response.data
+    } catch(error) {
+        return {}
+    }
+}
+
 // Get cultures used by the farmer
 export const getCultures = async () => {
     try {

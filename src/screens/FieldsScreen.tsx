@@ -11,7 +11,7 @@ import { Left, Right, Body, Title, Header, Button, Icon, Content, Picker, Contai
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
-import { getFields, updateField, getAllCultures, getFieldsReturnType, getFields_v2 } from '../api/hygoApi';
+import { getFields, updateField, updateField_v2, getAllCultures, getFieldsReturnType, getFields_v2 } from '../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 import { fieldType } from '../types/field.types';
@@ -108,77 +108,77 @@ const Card = ({ field, cultureList, onUpdate }) => {
 
 
 interface ParcelListProps {
-    title: string,
-    items: Array<fieldType>,
-    onPress: ((id: number, selected: boolean) => any),
-    active: boolean
+	title: string,
+	items: Array<fieldType>,
+	onPress: ((id: number) => any),
+	active: boolean
 }
 
 export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) => {
-    const [opened, setOpened] = useState(false)
-    return (
-        <View style={ListStyles.container}>
-            <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <TouchableOpacity onPress={() => setOpened(!opened)}>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
+	const [opened, setOpened] = useState(false)
+	return (
+		<View style={ListStyles.container}>
+			<View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+				<TouchableOpacity onPress={() => setOpened(!opened)}>
+					<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
 
-                        {/* <Icon
+						{/* <Icon
                       type='AntDesign'
                       name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'}
                       style={{fontSize: 16, color: COLORS.CYAN}} /> */}
 
-                        <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
+						<Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
 
-                        <Icon
-                            type='AntDesign'
-                            name={opened ? 'down' : 'right'}
-                            style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
-                        />
+						<Icon
+							type='AntDesign'
+							name={opened ? 'down' : 'right'}
+							style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
+						/>
 
-                    </View>
-                </TouchableOpacity>
-                {opened &&
-                    <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
-                        {items.map((item, k) => (
-                            <TouchableOpacity
-                                key={k}
-                                onPress={() => { active && onPress(item.id, !item.selected) }}
-                                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}
-                                disabled={!active}
-                            >
-                                <Icon
-                                    type='FontAwesome'
-                                    name={item.selected ? 'square' : 'square-o'}
-                                    style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
-                                />
-                                <View style={{ flex: 2, paddingLeft: 10 }}>
-                                    <Text style={[hygoStyles.textBold, {color: '#888888'},!active && ListStyles.hidden, {paddingBottom:0}]}>
-                                        {(item.name == 'unknown' ? (
-                                            `Parcelle ${item.id}`
-                                        ) : (
-                                                `${item.id} - ${item.name}`
-                                            ))}
-                                    </Text>
-                                    {item.nomCommune &&
-                                        <Text style={[hygoStyles.text, !active && ListStyles.hidden]}>
-                                            {item.nomCommune}
-                                        </Text>}
-                                </View>
+					</View>
+				</TouchableOpacity>
+				{opened &&
+					<View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
+						{items.map((item, k) => (
+							<TouchableOpacity
+								key={k}
+								onPress={() => { active && onPress(item.id) }}
+								style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}
+								disabled={!active}
+							>
+								<Icon
+									type='FontAwesome'
+									name={'edit'}
+									style={[{ fontSize: 16, color: COLORS.DARK_BLUE, paddingTop: 3 }, !active && ListStyles.hidden]}
+								/>
+								<View style={{ flex: 2, paddingLeft: 10 }}>
+									<Text style={[hygoStyles.textBold, { color: '#888888' }, !active && ListStyles.hidden, { paddingBottom: 0 }]}>
+										{(item.name == 'unknown' ? (
+											`Parcelle ${item.id}`
+										) : (
+											`${item.id} - ${item.name}`
+										))}
+									</Text>
+									{item.nomCommune &&
+										<Text style={[hygoStyles.text, !active && ListStyles.hidden]}>
+											{item.nomCommune}
+										</Text>}
+								</View>
 
-                                <View style={{ flex: 1 }}>
-                                    { item.svg && <ParcelSVG path={item.svg} height={30} width={30} /> }
-                                </View>
-                                <Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
-                                    {(item.area / 10000).toFixed(1)}ha
+								<View style={{ flex: 1 }}>
+									{item.svg && <ParcelSVG path={item.svg} height={30} width={30} />}
+								</View>
+								<Text style={[hygoStyles.text, { textAlign: 'right' }, !active && ListStyles.hidden]}>
+									{(item.area / 10000).toFixed(1)}ha
                                 </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                }
-            </View>
-        </View>
+							</TouchableOpacity>
+						))}
+					</View>
+				}
+			</View>
+		</View>
 
-    )
+	)
 }
 
 const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) => {
@@ -186,8 +186,23 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 	const [cultureList, setCultureList] = useState<Array<any>>([])
 	const [fields, setFields] = useState<Array<fieldType>>([])
 	const [ready, setReady] = useState<boolean>(false)
+	const [editMode, setEditMode] = useState<boolean>(false)
 	const [cultureNames, setCulturesNames] = useState<Array<string>>([])
 	const [selectedName, setSelectedName] = useState<string>(null)
+
+	const loadFields = async () => {
+		const { fields: fld }: getFieldsReturnType = await getFields_v2()
+		if (!!fld) {
+			setFields(fld)
+			// filtering out useless cultures like "Jachère", "Bande Tampon",...
+			const fld_filter = fld.filter((f) => {
+				const c = cultures.find((c) => c.id == f.culture.id)
+				return !c.hidden
+			})
+			let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
+			setCulturesNames([... new Set(nm)])     //delete duplicate
+		}
+	}
 
 	useEffect(() => {
 		// console.log("Amplitude : ", ampEvent.render)
@@ -198,21 +213,8 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
 	useEffect(() => {
 		// Init fields and retrieve culture_names
-		const load = async () => {
-			const { fields: fld }: getFieldsReturnType = await getFields_v2()
-			if (!!fld) {
-				setFields(fld)
-				// filtering out useless cultures like "Jachère", "Bande Tampon",...
-				const fld_filter = fld.filter((f) => {
-					const c = cultures.find((c) => c.id == f.culture.id)
-					return !c.hidden
-				})
-				let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
-				setCulturesNames([... new Set(nm)])     //delete duplicate
-			}
-		}
 		if (fields.length == 0) {
-			load()
+			loadFields()
 		}
 	}, [])
 
@@ -246,17 +248,21 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
 	const setField = async (newField) => {
 		try {
-			await updateField(newField)
-			const fields = await getFields()
-			updateParcellesList(fields)
+			await updateField_v2(newField)
+			loadFields()
+			//updateParcellesList(fields)
 		} catch (error) {
 
 		}
-
 	}
-	const updateList = () => {
-		return
+	const updateList = (index) => {
+		setSelectedFieldIdx(index)
 	}
+	useEffect(() =>  {
+		if (selectedFieldIdx !== null) {
+			setEditMode(true)
+		}
+	}, [selectedFieldIdx])
 	return (
 		<SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
 			<StatusBar translucent backgroundColor="transparent" />
@@ -278,25 +284,37 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 					</Right>
 				</Header>
 				<Content style={styles.content}>
-					<View>
-						<Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text>
-						{fields.length > 0 && cultureNames.length > 0 ? (
-							cultureNames.map((n, k) => {
-								const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
-								return (
-									items.length > 0 &&
-									<ParcelList
-										key={k}
-										title={n}
-										items={items.sort((it1, it2) => it1.id - it2.id)}
-										onPress={updateList}
-										active={true} //{(!selectedName || n == selectedName)}
-									/>
-								)
-							})
-						) : (<Spinner />)
-						}
-					</View>
+					{!editMode ? (
+						<View>
+							<Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text>
+							{fields.length > 0 && cultureNames.length > 0 ? (
+								cultureNames.map((n, k) => {
+									const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
+									return (
+										items.length > 0 &&
+										<ParcelList
+											key={k}
+											title={n}
+											items={items.sort((it1, it2) => it1.id - it2.id)}
+											onPress={updateList}
+											active={true} //{(!selectedName || n == selectedName)}
+										/>
+									)
+								})
+							) : (<Spinner />)
+							}
+						</View>
+					) : (
+						<EditField
+							field={fields.find((f) => f.id == selectedFieldIdx)}
+							cultureList={cultureList}
+							onCancel={() => setEditMode(false)}
+							onConfirm={(field) => {
+								setField(field)
+								setEditMode(false)
+							}}
+						/>
+					)}
 				</Content>
 			</Container>
 
@@ -370,6 +388,73 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 		//     </Content>
 		// </SafeAreaView >
 	);
+}
+
+const EditField = ({field, cultureList, onCancel, onConfirm}) => {
+
+	const [editMode, setEditMode] = useState<boolean>(false)
+	const [name, setName] = useState<string>(field.name)
+	const [cultureId, setCultureId] = useState<string>(field.culture.id)
+
+	const confirmEdit = async () => {
+		const newField = { id: field.id, name, cultureId: cultureId }
+		//await onUpdate(newField)
+		setEditMode(!editMode)
+	}
+	const cancelEdit = () => {
+		reset()
+		setEditMode(!editMode)
+	}
+	const reset = () => {
+		setName(field.name)
+		setCultureId(field.culture.id)
+	}
+	useEffect(() => {
+		reset()
+	}, [field])
+
+
+	return (
+		<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+			<View style={styles.editButtons}>
+				<Button transparent onPress={onCancel}>
+					<Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft: 0 }} />
+				</Button>
+
+				<Button transparent onPress={onConfirm}>
+					<Icon type='AntDesign' name='check' style={{ color: '#000', marginRight: 0 }} />
+				</Button>
+			</View>
+
+			<View style={{ display: 'flex', flexDirection: 'row' }}>
+				<TextInput
+					onChangeText={text => setName(text)}
+					value={name}
+					style={[{ textAlign: 'left' }, styles.overlayText]}
+				/>
+			</View>
+			<View style={{ display: 'flex', flexDirection: 'row' }}>
+				<Picker
+					mode='dropdown'
+					itemTextStyle={styles.overlayText}
+					textStyle={[styles.overlayText, { paddingLeft: 0 }]}
+					// iosIcon={<Icon name="arrow-down" />}
+					selectedValue={cultureId}
+					onValueChange={(v, i) => {
+						setCultureId(v)
+					}}
+				>
+					{cultureList.slice().sort(
+						(a, b) => (b.name >= a.name) ? -1 : 1
+					).map(
+						(v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
+					)}
+				</Picker>
+
+			</View>
+		</View>
+
+	)
 }
 
 
