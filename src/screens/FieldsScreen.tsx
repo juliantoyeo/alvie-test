@@ -248,7 +248,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
 	const setField = async (newField) => {
 		try {
-			await updateField_v2(newField)
+			await updateField(newField)
 			loadFields()
 			//updateParcellesList(fields)
 		} catch (error) {
@@ -258,7 +258,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 	const updateList = (index) => {
 		setSelectedFieldIdx(index)
 	}
-	useEffect(() =>  {
+	useEffect(() => {
 		if (selectedFieldIdx !== null) {
 			setEditMode(true)
 		}
@@ -269,9 +269,9 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 			<Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
 				<Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
 					<Left style={{ flex: 1 }}>
-						<Button transparent onPress={() => navigation.navigate("main_v2")}>
+						{/* <Button transparent onPress={() => navigation.navigate("main_v2")}>
 							<Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
-						</Button>
+						</Button> */}
 					</Left>
 					<Body style={styles.headerBody}>
 						<Title style={styles.headerTitle}>{i18n.t('pulve_parcelscreen.title')}</Title>
@@ -306,12 +306,17 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 						</View>
 					) : (
 						<EditField
-							field={fields.find((f) => f.id == selectedFieldIdx)}
 							cultureList={cultureList}
-							onCancel={() => setEditMode(false)}
+							fields={fields}
+							selectedFieldIdx={selectedFieldIdx}
+							onCancel={() => {
+								setEditMode(false)
+								setSelectedFieldIdx(null)
+							}}
 							onConfirm={(field) => {
 								setField(field)
 								setEditMode(false)
+								setSelectedFieldIdx(null)
 							}}
 						/>
 					)}
@@ -390,70 +395,114 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 	);
 }
 
-const EditField = ({field, cultureList, onCancel, onConfirm}) => {
+const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }) => {
 
 	const [editMode, setEditMode] = useState<boolean>(false)
-	const [name, setName] = useState<string>(field.name)
-	const [cultureId, setCultureId] = useState<string>(field.culture.id)
-
+	const [name, setName] = useState<string>(null)
+	const [cultureId, setCultureId] = useState<string>(null)
+	const field = fields.find((f) => f.id == selectedFieldIdx)
 	const confirmEdit = async () => {
 		const newField = { id: field.id, name, cultureId: cultureId }
-		//await onUpdate(newField)
-		setEditMode(!editMode)
+		onConfirm(newField)
 	}
-	const cancelEdit = () => {
-		reset()
-		setEditMode(!editMode)
-	}
+	// const cancelEdit = () => {
+	// 	reset()
+	// 	setEditMode(!editMode)
+	// }
 	const reset = () => {
 		setName(field.name)
 		setCultureId(field.culture.id)
 	}
 	useEffect(() => {
-		reset()
+		if (!!field) {
+			reset()
+			setName(field.name)
+			setCultureId(field.culture.id)
+		}
 	}, [field])
 
 
 	return (
-		<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-			<View style={styles.editButtons}>
-				<Button transparent onPress={onCancel}>
-					<Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft: 0 }} />
-				</Button>
+		field &&
+		<View>
+			<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
+				<View style={styles.editButtons}>
+					<Button transparent onPress={onCancel}>
+						<Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft: 0 }} />
+					</Button>
 
-				<Button transparent onPress={onConfirm}>
-					<Icon type='AntDesign' name='check' style={{ color: '#000', marginRight: 0 }} />
-				</Button>
-			</View>
+					<Button transparent onPress={confirmEdit}>
+						<Icon type='AntDesign' name='check' style={{ color: '#000', marginRight: 0 }} />
+					</Button>
+				</View>
 
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<TextInput
-					onChangeText={text => setName(text)}
-					value={name}
-					style={[{ textAlign: 'left' }, styles.overlayText]}
-				/>
+				<View style={{ display: 'flex', flexDirection: 'row' }}>
+					<TextInput
+						onChangeText={text => setName(text)}
+						value={name}
+						style={[{ textAlign: 'left' }, styles.overlayText]}
+					/>
+				</View>
+				<View style={{ display: 'flex', flexDirection: 'row' }}>
+					<Picker
+						mode='dropdown'
+						itemTextStyle={styles.overlayText}
+						textStyle={[styles.overlayText, { paddingLeft: 0 }]}
+						// iosIcon={<Icon name="arrow-down" />}
+						selectedValue={cultureId}
+						onValueChange={(v, i) => {
+							setCultureId(v)
+						}}
+					>
+						{cultureList.slice().sort(
+							(a, b) => (b.name >= a.name) ? -1 : 1
+						).map(
+							(v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
+						)}
+					</Picker>
+
+				</View>
 			</View>
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<Picker
-					mode='dropdown'
-					itemTextStyle={styles.overlayText}
-					textStyle={[styles.overlayText, { paddingLeft: 0 }]}
-					// iosIcon={<Icon name="arrow-down" />}
-					selectedValue={cultureId}
-					onValueChange={(v, i) => {
-						setCultureId(v)
-					}}
+			{/* <View style={styles.mapview}>
+				<MapView
+					provider="google"
+					mapType="hybrid"
+					initialRegion={region}
+					style={styles.map}
+					loadingEnabled={true}
 				>
-					{cultureList.slice().sort(
-						(a, b) => (b.name >= a.name) ? -1 : 1
-					).map(
-						(v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
-					)}
-				</Picker>
 
-			</View>
+					{parcelles.fields.map((field, idx) => {
+						return (
+							<Polygon2
+								key={field.id}
+								strokeWidth={selectedFieldIdx === idx ? 4 : 1}
+								strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
+								fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
+								_ref={ref => (polygons.current[idx] = ref)}
+								onLayout={() => polygons.current[idx].setNativeProps({
+									fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
+								})}
+
+								tappable={true}
+								onPress={() => {
+									let i = idx
+
+									let newValue = selectedFieldIdx === i ? null : i
+									setSelectedFieldIdx(newValue)
+								}}
+								coordinates={field.features.coordinates[0].map((coordinate) => {
+									return {
+										latitude: coordinate[1],
+										longitude: coordinate[0],
+									}
+								})}
+							/>
+						);
+					})}
+				</MapView>
+			</View> */}
 		</View>
-
 	)
 }
 
