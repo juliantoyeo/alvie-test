@@ -13,7 +13,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'http://192.168.1.10:3000',//'https://hygo-api.alvie.fr', //'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //
+    baseURL: 'https://hygo-api.alvie.fr', //'http://192.168.1.10:3000',//'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -435,6 +435,7 @@ export const getFields_v2 = async (): Promise<getFieldsReturnType> => {
         const response = await hygoApi.get('/app/fields/v2');
         return response.data
     } catch (error) {
+		console.log(error)
         return {}
     }
 }
@@ -444,15 +445,6 @@ export const getFields_v2 = async (): Promise<getFieldsReturnType> => {
 export const updateField = async (field) => {
     try {
         const response = await hygoApi.post('/app/fields/update', {field});
-        return response.data
-    } catch(error) {
-        return {}
-    }
-}
-
-export const updateField_v2 = async (field) => {
-    try {
-        const response = await hygoApi.post('/app/fields/v2/update', {field});
         return response.data
     } catch(error) {
         return {}

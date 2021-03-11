@@ -11,7 +11,7 @@ import { Left, Right, Body, Title, Header, Button, Icon, Content, Picker, Contai
 import COLORS from '../colors';
 import i18n from 'i18n-js';
 
-import { getFields, updateField, updateField_v2, getAllCultures, getFieldsReturnType, getFields_v2 } from '../api/hygoApi';
+import { updateField, getAllCultures, getFieldsReturnType, getFields_v2 } from '../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 import { fieldType } from '../types/field.types';
@@ -185,12 +185,12 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 	const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
 	const [cultureList, setCultureList] = useState<Array<any>>([])
 	const [fields, setFields] = useState<Array<fieldType>>([])
-	const [ready, setReady] = useState<boolean>(false)
+	const [isReady, setIsReady] = useState<boolean>(false)
 	const [editMode, setEditMode] = useState<boolean>(false)
 	const [cultureNames, setCulturesNames] = useState<Array<string>>([])
-	const [selectedName, setSelectedName] = useState<string>(null)
 
 	const loadFields = async () => {
+		setIsReady(false)
 		const { fields: fld }: getFieldsReturnType = await getFields_v2()
 		if (!!fld) {
 			setFields(fld)
@@ -202,6 +202,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 			let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
 			setCulturesNames([... new Set(nm)])     //delete duplicate
 		}
+		setIsReady(true)
 	}
 
 	useEffect(() => {
@@ -274,8 +275,8 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 						</Button> */}
 					</Left>
 					<Body style={styles.headerBody}>
-						<Title style={styles.headerTitle}>{i18n.t('pulve_parcelscreen.title')}</Title>
-						<Title style={styles.headerSubtitle}>{i18n.t('pulve_parcelscreen.subtitle')}</Title>
+						<Title style={styles.headerTitle}>Mes Parcelles</Title>
+						{/* <Title style={styles.headerSubtitle}>{i18n.t('pulve_parcelscreen.subtitle')}</Title> */}
 					</Body>
 					<Right style={{ flex: 1 }}>
 						<Button transparent onPress={() => navigation.navigate("main_v2")}>
@@ -284,11 +285,14 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 					</Right>
 				</Header>
 				<Content style={styles.content}>
+					<View style={{height: 30}}></View>
 					{!editMode ? (
 						<View>
-							<Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text>
+							{/* <Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text> */}
 							{fields.length > 0 && cultureNames.length > 0 ? (
-								cultureNames.map((n, k) => {
+								<View>
+								{ !isReady && <Spinner />}
+								{cultureNames.map((n, k) => {
 									const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
 									return (
 										items.length > 0 &&
@@ -300,7 +304,8 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 											active={true} //{(!selectedName || n == selectedName)}
 										/>
 									)
-								})
+								})}
+								</View>
 							) : (<Spinner />)
 							}
 						</View>
@@ -325,74 +330,6 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 			</Container>
 
 		</SafeAreaView>
-		// <SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
-		//     <StatusBar translucent backgroundColor="transparent" />
-		//     <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
-		//         <Left style={{ flex: 1 }}>
-		//             {parcelles && (
-		//                 <Button transparent onPress={() => navigation.goBack()}>
-		//                     <Icon name='close' style={{ color: '#fff' }} />
-		//                 </Button>
-		//             )}
-		//         </Left>
-		//         <Body style={styles.headerBody}>
-		//             <Title style={styles.headerTitle}>{i18n.t('fields.header')}</Title>
-		//         </Body>
-		//         <Right style={{ flex: 1 }}></Right>
-		//     </Header>
-		//     <Content style={styles.content}>
-		//         <View style={styles.mapview}>
-		//             <MapView
-		//                 provider="google"
-		//                 mapType="hybrid"
-		//                 initialRegion={region}
-		//                 style={styles.map}
-		//                 loadingEnabled={true}
-		//             >
-
-		//                 {parcelles.fields.map((field, idx) => {
-		//                     return (
-		//                         <Polygon2
-		//                             key={field.id}
-		//                             strokeWidth={selectedFieldIdx === idx ? 4 : 1}
-		//                             strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
-		//                             fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
-		//                             _ref={ref => (polygons.current[idx] = ref)}
-		//                             onLayout={() => polygons.current[idx].setNativeProps({
-		//                                 fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
-		//                             })}
-
-		//                             tappable={true}
-		//                             onPress={() => {
-		//                                 let i = idx
-
-		//                                 let newValue = selectedFieldIdx === i ? null : i
-		//                                 setSelectedFieldIdx(newValue)
-		//                             }}
-		//                             coordinates={field.features.coordinates[0].map((coordinate) => {
-		//                                 return {
-		//                                     latitude: coordinate[1],
-		//                                     longitude: coordinate[0],
-		//                                 }
-		//                             })}
-		//                         />
-		//                     );
-		//                 })}
-		//             </MapView>
-		//         </View>
-
-		//         <View>
-		//             {selectedFieldIdx != null ? (
-		//                 <Card
-		//                     field={parcelles.fields[selectedFieldIdx]}
-		//                     cultureList={cultureList}
-		//                     onUpdate={setField} />
-		//             ) : (
-		//                     <Text style={[styles.overlayText, {paddingLeft:20}]}>{i18n.t('fields.parcelles', { value: parcelles.fields.length })}</Text>
-		//                 )}
-		//         </View>
-		//     </Content>
-		// </SafeAreaView >
 	);
 }
 
