@@ -226,25 +226,25 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 		getCultureList()
 	}, [])
 
-	const getRegion = () => {
-		let center = {
-			longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
-			latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
-		}
+	// const getRegion = () => {
+	// 	let center = {
+	// 		longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
+	// 		latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
+	// 	}
 
-		let r = {
-			...center,
-			longitudeDelta: Math.max(0.0222, 2 * Math.abs(parcelles.region.lon_max - center.longitude)),
-			latitudeDelta: Math.max(0.0121, 2 * Math.abs(parcelles.region.lat_max - center.latitude)),
-		}
-		return r
-	}
-	const region = getRegion()
+	// 	let r = {
+	// 		...center,
+	// 		longitudeDelta: Math.max(0.0222, 2 * Math.abs(parcelles.region.lon_max - center.longitude)),
+	// 		latitudeDelta: Math.max(0.0121, 2 * Math.abs(parcelles.region.lat_max - center.latitude)),
+	// 	}
+	// 	return r
+	// }
+	// const region = getRegion()
 
-	const polygons = useRef([]);
-	if (polygons.current.length !== parcelles.length) {
-		polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
-	}
+	// const polygons = useRef([]);
+	// if (polygons.current.length !== parcelles.length) {
+	// 	polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
+	// }
 
 	const setField = async (newField) => {
 		try {
@@ -308,7 +308,8 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 						<EditField
 							cultureList={cultureList}
 							fields={fields}
-							selectedFieldIdx={selectedFieldIdx}
+							selectedFieldIndex={selectedFieldIdx}
+							parcelles={parcelles}
 							onCancel={() => {
 								setEditMode(false)
 								setSelectedFieldIdx(null)
@@ -395,16 +396,17 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 	);
 }
 
-const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }) => {
+const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel, onConfirm }) => {
 
 	const [editMode, setEditMode] = useState<boolean>(false)
 	const [name, setName] = useState<string>(null)
 	const [cultureId, setCultureId] = useState<string>(null)
-	const field = fields.find((f) => f.id == selectedFieldIdx)
+	const field = fields.find((f) => f.id == selectedFieldIndex)
 	const confirmEdit = async () => {
 		const newField = { id: field.id, name, cultureId: cultureId }
 		onConfirm(newField)
 	}
+	console.log(fields)
 	// const cancelEdit = () => {
 	// 	reset()
 	// 	setEditMode(!editMode)
@@ -421,9 +423,31 @@ const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }
 		}
 	}, [field])
 
+	const getRegion = () => {
+		const bbox = field.features.bbox
+		let center = {
+			// longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
+			// latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
+			longitude: (bbox[2] + bbox[0]) / 2,
+			latitude: (bbox[3] + bbox[1]) / 2
+		}
+
+		let r = {
+			...center,
+			longitudeDelta: Math.max(0.0222, Math.abs(bbox[2] - bbox[0])),
+			latitudeDelta: Math.max(0.0121, Math.abs(bbox[3] - bbox[1])),
+		}
+		return r
+	}
+	const region = getRegion()
+
+	const polygons = useRef([]);
+	if (polygons.current.length !== parcelles.length) {
+		polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
+	}
 
 	return (
-		field &&
+		field ? (
 		<View>
 			<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
 				<View style={styles.editButtons}>
@@ -463,7 +487,7 @@ const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }
 
 				</View>
 			</View>
-			{/* <View style={styles.mapview}>
+			<View style={styles.mapview}>
 				<MapView
 					provider="google"
 					mapType="hybrid"
@@ -476,21 +500,22 @@ const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }
 						return (
 							<Polygon2
 								key={field.id}
-								strokeWidth={selectedFieldIdx === idx ? 4 : 1}
-								strokeColor={selectedFieldIdx === idx ? '#fff' : COLORS.DARK_GREEN}
-								fillColor={selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
+								strokeWidth={selectedFieldIndex === field.id ? 4 : 1}
+								strokeColor={selectedFieldIndex === field.id ? '#fff' : COLORS.DARK_GREEN}
+								fillColor={selectedFieldIndex === field.id ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY}
 								_ref={ref => (polygons.current[idx] = ref)}
 								onLayout={() => polygons.current[idx].setNativeProps({
-									fillColor: selectedFieldIdx === idx ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
+									fillColor: selectedFieldIndex === field.id ? COLORS.CYAN : COLORS.DEFAULT_FIELD_MY
 								})}
 
 								tappable={true}
-								onPress={() => {
-									let i = idx
+								onPress={() => {}}
+								// {
+								// 	let i = idx
 
-									let newValue = selectedFieldIdx === i ? null : i
-									setSelectedFieldIdx(newValue)
-								}}
+								// 	let newValue = selectedFieldIndex === i ? null : i
+								// 	setSelectedFieldIndex(newValue)
+								// }}
 								coordinates={field.features.coordinates[0].map((coordinate) => {
 									return {
 										latitude: coordinate[1],
@@ -501,8 +526,11 @@ const EditField = ({cultureList, fields, selectedFieldIdx, onCancel, onConfirm }
 						);
 					})}
 				</MapView>
-			</View> */}
+			</View>
 		</View>
+		) : (
+			<View><Text>Error</Text></View>
+		)
 	)
 }
 
