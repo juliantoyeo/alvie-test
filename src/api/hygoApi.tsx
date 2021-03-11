@@ -13,7 +13,7 @@ import pkg from '../../app.json'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-    baseURL: 'https://hygo-api.alvie.fr', //'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //  'http://192.168.1.10:3000',//
+    baseURL: 'http://192.168.1.10:3000',//'https://hygo-api.alvie.fr', //'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
@@ -245,7 +245,7 @@ export const getMetrics_v2 = async ({days, fields}) => {
     /**
      * Retrieve meteo by hour and meteo by 4 hour of the days over the givenFields
      * faster than getMeteoDetailed
-     * @param 
+     * @param
      * day = ["2020-09-09", "2020-09-08"]
      * fields : Array<fieldType>
      */
@@ -262,7 +262,7 @@ export const getMetrics4h_v2 = async ({days, fields}) => {
     /**
      * Retrieve meteo by hour and meteo by 4 hour of the days over the givenFields
      * faster than getMeteoDetailed
-     * @param 
+     * @param
      * day = ["2020-09-09", "2020-09-08"]
      * fields : Array<fieldType>
      */
@@ -291,7 +291,7 @@ export const getConditions_v2 = async (data:getConditionV2Props): Promise<Array<
         const response = await hygoApi.post('/app/meteo/condition/v2', { products, parcelles, day })
         const conditions = response.data.map(
             ({condition, parcelleId, productId, timestamp }) => ({
-                condition, parcelleId, productId, timestamp 
+                condition, parcelleId, productId, timestamp
             }))
         const ret = _(conditions)
             .groupBy(x => x.timestamp)

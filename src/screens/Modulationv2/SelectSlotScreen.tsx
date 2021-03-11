@@ -44,7 +44,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
     const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
-    const computeRatio = (selectedProduct: activeProductType) => { 
+    const computeRatio = (selectedProduct: activeProductType) => {
         const thresholdCoop = 0.7;
         const thresholdHygo = 0.5;
         let ratio;
@@ -55,7 +55,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             ratio = selectedProduct.dose / selectedProduct.dosemax < thresholdHygo ? 0 : selectedProduct.dose / selectedProduct.dosemax;
         return (ratio > 1 ? 1 : ratio)
     }
-    
+
     // const computeAverageModulation = (modulations: number[], doses: number[] ) => {
     //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
     //     modulations.forEach((mod, index, mods) => mods[index] * )
@@ -194,12 +194,15 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
             const modulations: Array<number> = await getModulationValue_v4(data)
             if (modulations.length == 0 || modulations.length !=  ratios.length) {
                 context.setMod([])
+				console.log("==mod",modulations)
+				console.log("==rat", ratios)
                 snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
             }
             const modulationsWithRatio: number[] = modulations.map((mod, index) => mod * ratios[index])
             context.setMod(modulationsWithRatio)
         } catch (error) {
             context.setMod([])
+			console.log("here2")
             snackbar.showSnackbar(i18n.t('snackbar.mod_error'), "ALERT")
         }
         setIsRefreshing(false)
