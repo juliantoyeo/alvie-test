@@ -611,7 +611,7 @@ export default {
         'surface': 'Total surface',
         'info': 'Ajoutez les produits phytosaitaires que vous voulez utiliser',
         'search': 'Rechercher un produit',
-        'modal_product': 'Concentration pour %{product}',
+        'modal_product': 'Dose hectare pour %{product}',
         'snack_add': 'Produit ajouté',
         'button_next': 'Choix du créneau',
         'favoris': 'Favoris',
