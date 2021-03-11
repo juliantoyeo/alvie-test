@@ -19,6 +19,7 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 
 import ParcelSVG from '../components/v2/ParcelSVG';
 import hygoStyles from '../styles';
+import { SnackbarContext } from '../context/snackbar.context';
 
 interface ParcelListProps {
 	title: string,
@@ -86,13 +87,14 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
 	)
 }
 
-const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) => {
+const FieldsScreen = ({ navigation, parcelles }) => {
 	const [selectedFieldIdx, setSelectedFieldIdx] = useState<number>(null)
 	const [cultureList, setCultureList] = useState<Array<any>>([])
 	const [fields, setFields] = useState<Array<fieldType>>([])
 	const [isReady, setIsReady] = useState<boolean>(false)
 	const [editMode, setEditMode] = useState<boolean>(false)
 	const [cultureNames, setCulturesNames] = useState<Array<string>>([])
+	const snackbar = React.useContext(SnackbarContext)
 
 	const loadFields = async () => {
 		setIsReady(false)
@@ -101,8 +103,10 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 			setFields(fld)
 			// filtering out useless cultures like "Jachère", "Bande Tampon",...
 			const fld_filter = fld.filter((f) => {
-				const c = cultures.find((c) => c.id == f.culture.id)
-				return !c.hidden
+				const c = cultureList.find((c) => c.id == f.culture.id)
+				if (!c)
+					console.log("======",f)
+				return !c ? false : !c.hidden
 			})
 			let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
 			setCulturesNames([... new Set(nm)])     //delete duplicate
@@ -122,7 +126,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 		if (fields.length == 0) {
 			loadFields()
 		}
-	}, [])
+	}, [cultureList])
 
 	useEffect(() => {
 		const getCultureList = async () => {
@@ -134,11 +138,14 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
 	const setField = async (newField) => {
 		try {
+			setEditMode(false)
+			setSelectedFieldIdx(null)
 			await updateField(newField)
 			loadFields()
+			snackbar.showSnackbar("Modification réussie", "OK")
 			//updateParcellesList(fields)
 		} catch (error) {
-
+			snackbar.showSnackbar("Modification échouée", "ERROR")
 		}
 	}
 	const updateList = (index) => {
@@ -199,11 +206,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 								setEditMode(false)
 								setSelectedFieldIdx(null)
 							}}
-							onConfirm={(field) => {
-								setField(field)
-								setEditMode(false)
-								setSelectedFieldIdx(null)
-							}}
+							onConfirm={setField}
 						/>
 					)}
 				</Content>
@@ -215,7 +218,6 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 
 const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel, onConfirm }) => {
 
-	const [editMode, setEditMode] = useState<boolean>(false)
 	const [name, setName] = useState<string>(null)
 	const [cultureId, setCultureId] = useState<string>(null)
 	const field = fields.find((f) => f.id == selectedFieldIndex)
@@ -470,11 +472,11 @@ const ListStyles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
 	parcelles: state.metadata.parcelles,
-	cultures: state.metadata.cultures,
+	// cultures: state.metadata.cultures,
 });
 
-const mapDispatchToProps = (dispatch, props) => ({
-	updateParcellesList: (l) => dispatch(updateParcellesList(l)),
-})
+// const mapDispatchToProps = (dispatch, props) => ({
+// 	updateParcellesList: (l) => dispatch(updateParcellesList(l)),
+// })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FieldsScreen);
+export default connect(mapStateToProps)(FieldsScreen);
