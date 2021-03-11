@@ -20,93 +20,6 @@ const { fieldsScreen: ampEvent } = AMPLITUDE_EVENTS
 import ParcelSVG from '../components/v2/ParcelSVG';
 import hygoStyles from '../styles';
 
-const Card = ({ field, cultureList, onUpdate }) => {
-	const [editMode, setEditMode] = useState<boolean>(false)
-	const [name, setName] = useState<string>(field.name)
-	const [cultureId, setCultureId] = useState<string>(field.culture_id)
-
-	const confirmEdit = async () => {
-		const newField = { id: field.id, name, cultureId: cultureId }
-		await onUpdate(newField)
-		setEditMode(!editMode)
-	}
-	const cancelEdit = () => {
-		reset()
-		setEditMode(!editMode)
-	}
-	const reset = () => {
-		setName(field.name)
-		setCultureId(field.culture_id)
-	}
-	useEffect(() => {
-		reset()
-	}, [field])
-
-	return (
-		<View>
-			{editMode ? (
-				//===========Card in Edit Mode==================//
-				<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-					<View style={styles.editButtons}>
-						<Button transparent onPress={cancelEdit}>
-							<Icon type='AntDesign' name='arrowleft' style={{ color: '#000', marginLeft: 0 }} />
-						</Button>
-
-						<Button transparent onPress={confirmEdit}>
-							<Icon type='AntDesign' name='check' style={{ color: '#000', marginRight: 0 }} />
-						</Button>
-					</View>
-
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<TextInput
-							onChangeText={text => setName(text)}
-							value={name}
-							style={[{ textAlign: 'left' }, styles.overlayText]}
-						/>
-					</View>
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<Picker
-							mode='dropdown'
-							itemTextStyle={styles.overlayText}
-							textStyle={[styles.overlayText, { paddingLeft: 0 }]}
-							// iosIcon={<Icon name="arrow-down" />}
-							selectedValue={cultureId}
-							onValueChange={(v, i) => {
-								setCultureId(v)
-							}}
-						>
-							{cultureList.slice().sort(
-								(a, b) => (b.name >= a.name) ? -1 : 1
-							).map(
-								(v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
-							)}
-						</Picker>
-
-					</View>
-				</View>
-			) : (
-				//============== Card in View Mode =======================//
-				<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
-					<View style={[styles.editButtons, { flexDirection: 'row-reverse' }]}>
-						<Button transparent onPress={() => { setEditMode(!editMode) }}>
-							<Icon type='AntDesign' name={editMode ? 'arrowleft' : 'edit'} style={{ color: '#000', marginRight: 0 }} />
-						</Button>
-					</View>
-					<Text style={styles.overlayText}>{i18n.t('fields.name')} : {field.name}</Text>
-					<Text style={styles.overlayText}>
-						{i18n.t('fields.culture', { value: i18n.t(`cultures.${field.culture_name}`) || i18n.t('fields.unknown') })}
-					</Text>
-					<Text style={styles.overlayText}>
-						{field.area ? `${i18n.t('fields.area', { value: (field.area / 10000).toFixed(2) })}` : ''}
-					</Text>
-
-				</View>
-			)}
-		</View>
-	)
-}
-
-
 interface ParcelListProps {
 	title: string,
 	items: Array<fieldType>,
@@ -121,20 +34,12 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
 			<View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
 				<TouchableOpacity onPress={() => setOpened(!opened)}>
 					<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
-
-						{/* <Icon
-                      type='AntDesign'
-                      name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'}
-                      style={{fontSize: 16, color: COLORS.CYAN}} /> */}
-
 						<Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
-
 						<Icon
 							type='AntDesign'
 							name={opened ? 'down' : 'right'}
 							style={[{ fontSize: 16, color: COLORS.DARK_BLUE, padding: 10, paddingRight: 20 }, !active && ListStyles.hidden]}
 						/>
-
 					</View>
 				</TouchableOpacity>
 				{opened &&
@@ -227,26 +132,6 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 		getCultureList()
 	}, [])
 
-	// const getRegion = () => {
-	// 	let center = {
-	// 		longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
-	// 		latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
-	// 	}
-
-	// 	let r = {
-	// 		...center,
-	// 		longitudeDelta: Math.max(0.0222, 2 * Math.abs(parcelles.region.lon_max - center.longitude)),
-	// 		latitudeDelta: Math.max(0.0121, 2 * Math.abs(parcelles.region.lat_max - center.latitude)),
-	// 	}
-	// 	return r
-	// }
-	// const region = getRegion()
-
-	// const polygons = useRef([]);
-	// if (polygons.current.length !== parcelles.length) {
-	// 	polygons.current = Array(parcelles.length).fill().map((_, i) => polygons.current[i] || createRef())
-	// }
-
 	const setField = async (newField) => {
 		try {
 			await updateField(newField)
@@ -270,13 +155,9 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 			<Container contentContainerStyle={[styles.container, StyleSheet.absoluteFill]}>
 				<Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
 					<Left style={{ flex: 1 }}>
-						{/* <Button transparent onPress={() => navigation.navigate("main_v2")}>
-							<Icon type='AntDesign' name='arrowleft' style={{ color: '#fff' }} />
-						</Button> */}
 					</Left>
 					<Body style={styles.headerBody}>
 						<Title style={styles.headerTitle}>Mes Parcelles</Title>
-						{/* <Title style={styles.headerSubtitle}>{i18n.t('pulve_parcelscreen.subtitle')}</Title> */}
 					</Body>
 					<Right style={{ flex: 1 }}>
 						<Button transparent onPress={() => navigation.navigate("main_v2")}>
@@ -288,7 +169,6 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 					<View style={{height: 30}}></View>
 					{!editMode ? (
 						<View>
-							{/* <Text style={hygoStyles.h0}>{i18n.t('pulve_parcelscreen.parcels')}</Text> */}
 							{fields.length > 0 && cultureNames.length > 0 ? (
 								<View>
 								{ !isReady && <Spinner />}
@@ -301,7 +181,7 @@ const FieldsScreen = ({ navigation, parcelles, updateParcellesList, cultures }) 
 											title={n}
 											items={items.sort((it1, it2) => it1.id - it2.id)}
 											onPress={updateList}
-											active={true} //{(!selectedName || n == selectedName)}
+											active={true}
 										/>
 									)
 								})}
@@ -343,11 +223,6 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 		const newField = { id: field.id, name, cultureId: cultureId }
 		onConfirm(newField)
 	}
-	console.log(fields)
-	// const cancelEdit = () => {
-	// 	reset()
-	// 	setEditMode(!editMode)
-	// }
 	const reset = () => {
 		setName(field.name)
 		setCultureId(field.culture.id)
@@ -363,8 +238,6 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 	const getRegion = () => {
 		const bbox = field.features.bbox
 		let center = {
-			// longitude: (parcelles.region.lon_max - parcelles.region.lon_min) / 2 + parcelles.region.lon_min,
-			// latitude: (parcelles.region.lat_max - parcelles.region.lat_min) / 2 + parcelles.region.lat_min,
 			longitude: (bbox[2] + bbox[0]) / 2,
 			latitude: (bbox[3] + bbox[1]) / 2
 		}
@@ -384,7 +257,7 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 	}
 
 	return (
-		field ? (
+		field &&
 		<View>
 			<View style={[styles.hygocard, { backgroundColor: '#fff' }]}>
 				<View style={styles.editButtons}>
@@ -397,7 +270,7 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 					</Button>
 				</View>
 
-				<View style={{ display: 'flex', flexDirection: 'row' }}>
+				<View style={{paddingLeft: 10}}>
 					<TextInput
 						onChangeText={text => setName(text)}
 						value={name}
@@ -409,7 +282,6 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 						mode='dropdown'
 						itemTextStyle={styles.overlayText}
 						textStyle={[styles.overlayText, { paddingLeft: 0 }]}
-						// iosIcon={<Icon name="arrow-down" />}
 						selectedValue={cultureId}
 						onValueChange={(v, i) => {
 							setCultureId(v)
@@ -447,12 +319,6 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 
 								tappable={true}
 								onPress={() => {}}
-								// {
-								// 	let i = idx
-
-								// 	let newValue = selectedFieldIndex === i ? null : i
-								// 	setSelectedFieldIndex(newValue)
-								// }}
 								coordinates={field.features.coordinates[0].map((coordinate) => {
 									return {
 										latitude: coordinate[1],
@@ -465,9 +331,6 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 				</MapView>
 			</View>
 		</View>
-		) : (
-			<View><Text>Error</Text></View>
-		)
 	)
 }
 
@@ -548,9 +411,10 @@ const styles = StyleSheet.create({
 		top: -25,
 	},
 	overlayText: {
+		...hygoStyles.text,
 		fontSize: 16,
-		fontFamily: 'nunito-bold',
-		color: COLORS.DARK_GREEN,
+		fontFamily: 'nunito-regular',
+		color: '#000',
 	},
 	// content: {
 	// 	backgroundColor: COLORS.BEIGE
@@ -602,80 +466,6 @@ const ListStyles = StyleSheet.create({
 		color: '#DDD'
 	}
 })
-
-// const styles = StyleSheet.create({
-
-//     header: {
-//         backgroundColor: COLORS.CYAN
-//     },
-//     headerBody: {
-//         flex: 4,
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     headerTitle: {
-//         color: '#fff',
-//         fontFamily: 'nunito-regular',
-//         fontSize: 20
-//     },
-//     statusbar: { backgroundColor: 'black', flex: 1 },
-//     map: {
-//         justifyContent: "center",
-//         flexDirection: 'column',
-//         width: Dimensions.get('window').width,
-//         height: Dimensions.get('window').width,
-//     },
-//     mapview: {
-//         justifyContent: 'center',
-//         flex: 1, display: 'flex',
-//         paddingLeft: 15,
-//         paddingRight: 15,
-//         paddingBottom: 20,
-//         alignItems: 'center',
-//         backgroundColor: COLORS.BEIGE
-//     },
-//     overlay: {
-//         paddingHorizontal: 20,
-//         paddingVertical: 15,
-//         backgroundColor: '#fff',
-//         shadowColor: '#000',
-//         shadowOffset: {
-//             width: 0,
-//             height: 2
-//         },
-//         shadowOpacity: .2,
-//         shadowRadius: 3,
-//         elevation: 3,
-//         width: Dimensions.get('window').width - 30,
-//         top: -25,
-//     },
-//     overlayText: {
-//         fontSize: 16,
-//         fontFamily: 'nunito-bold',
-//         color: COLORS.DARK_GREEN,
-//     },
-//     content: {
-//         backgroundColor: COLORS.BEIGE
-//     },
-//     hygocard: {
-//         borderTopRightRadius: 20,
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowColor: '#000000',
-//         shadowRadius: 2,
-//         shadowOpacity: .2,
-//         padding: 20,
-//         paddingTop: 5,
-//         display: 'flex',
-//         elevation: 2,
-//         marginBottom: 10
-//     },
-//     editButtons: {
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         flexDirection: 'row'
-//     }
-// });
 
 
 const mapStateToProps = (state) => ({
