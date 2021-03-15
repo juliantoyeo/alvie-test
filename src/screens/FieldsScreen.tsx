@@ -104,8 +104,8 @@ const FieldsScreen = ({ navigation, parcelles }) => {
 			// filtering out useless cultures like "Jachère", "Bande Tampon",...
 			const fld_filter = fld.filter((f) => {
 				const c = cultureList.find((c) => c.id == f.culture.id)
-				if (!c)
-					console.log("======",f)
+				// if (!c)
+				// 	console.log("======",f)
 				return !c ? false : !c.hidden
 			})
 			let nm = fld_filter.map((f) => f.culture.name).sort((a, b) => a.localeCompare(b))
@@ -123,9 +123,7 @@ const FieldsScreen = ({ navigation, parcelles }) => {
 
 	useEffect(() => {
 		// Init fields and retrieve culture_names
-		if (fields.length == 0) {
-			loadFields()
-		}
+		loadFields()
 	}, [cultureList])
 
 	useEffect(() => {
