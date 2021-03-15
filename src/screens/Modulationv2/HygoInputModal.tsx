@@ -12,7 +12,7 @@ import hygoStyles from '../../styles';
 import COLORS from  '../../colors';
 import HygoButton from '../../components/v2/HygoButton';
 
-const regex = new RegExp("^[0-9]*[0-9\.]?[0-9]*$")
+const regex = new RegExp("^[0-9]*[0-9\.,]?[0-9]*$")
 const HygoInputModal = ({onClose, onSuccess, modalVisible, setModalVisible, defaultValue, setInput, title, item}) => {
     const [value, setValue] = useState<any>(defaultValue)
     return (
@@ -31,8 +31,8 @@ const HygoInputModal = ({onClose, onSuccess, modalVisible, setModalVisible, defa
                   <View style={styles.input}>
                     <View style={{flex:1}}/>
                     <View style={styles.inputBorder}>
-                      <TextInput 
-                        onChangeText={text => regex.test(text) && setValue(text)}
+                      <TextInput
+                        onChangeText={text => regex.test(text) && setValue(text.replace(',', '.'))}
                         value={value}
                         style={{ textAlign:'left', flex:1}}
                         keyboardType='numeric'
@@ -41,7 +41,7 @@ const HygoInputModal = ({onClose, onSuccess, modalVisible, setModalVisible, defa
                     </View>
                     <View style={{flex:1}}/>
                   </View>
-                    <HygoButton 
+                    <HygoButton
                       label='OK'
                       onPress={() => {
                         setInput(value)
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
         elevation: 5,
         },
       title: {
-        borderColor: '#D1CFCF', 
-        borderBottomWidth: 1, 
+        borderColor: '#D1CFCF',
+        borderBottomWidth: 1,
         alignItems:'center'
       },
       input: {
