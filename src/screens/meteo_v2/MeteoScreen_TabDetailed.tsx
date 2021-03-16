@@ -17,9 +17,6 @@ import { MeteoContext } from '../../context/meteo.context'
 import { PICTO_MAP, PICTO_TO_IMG } from '../../constants';
 import Metrics_v2 from '../../components/v2/Metrics_v2';
 import _ from 'lodash'
-import ModulationBar from '../../components/v2/ModulationBar'
-import ModulationBarTiny from '../../components/v2/ModulationBarTiny'
-import { HourScale2 } from '../../components/v2/HourScale'
 import HygoChart from '../../components/realtime/HygoChart'
 
 interface detailedType {
@@ -221,7 +218,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
                                                 enabled={false}
                                             />
                                             <HourScale2 color="#fff" width={Dimensions.get('window').width - 100} />
-                                        </View> 
+                                        </View>
                                         */}
 
                                     </View>

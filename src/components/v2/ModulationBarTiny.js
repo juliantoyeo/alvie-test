@@ -12,7 +12,7 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-const ModulationBarTiny = ({data, width, height, sizes }) => {
+const ModulationBarTiny = ({ width, height, sizes }) => {
 	/**
 	 *
 	 * @param props
@@ -22,10 +22,6 @@ const ModulationBarTiny = ({data, width, height, sizes }) => {
 
 	const h = height || 10
 	const w = width || 60
-	const getColor = (i) => {
-		const color_name = `${CONDITIONS[data[i]]}_CARDS`
-		return COLORS[color_name];
-	}
 
 	const computeColorFromSize = (size) => {
 		if (size > 7)
@@ -52,7 +48,7 @@ const ModulationBarTiny = ({data, width, height, sizes }) => {
 								style={[
 									styles.subTile,
 									{
-										backgroundColor: sizes !== null ? computeColorFromSize(sizes[i]) : getColor(i),
+										backgroundColor: computeColorFromSize(sizes[i]),
 										height:h
 									}
 								]}>

@@ -12,7 +12,7 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd, enabled, sizes }) => {
+const ModulationBar = ({ from, initialMin, initialMax, width, onHourChangeEnd, enabled, sizes }) => {
 	/**
 	 *
 	 * @param props
@@ -136,8 +136,6 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
 		const isSelected = i <= selected.max && selected.min <= i
 		if (isSelected)
 			return 'transparent'
-		// const color_name = `${CONDITIONS[data[i + from]]}_CARDS`
-		// return COLORS[color_name];
 		return computeColorFromSize(sizes[i])
 	}
 
@@ -167,14 +165,9 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
 			}
 		}
 
-		// let curCond = null
 		let smallerSize = null
 		for (let i = selected.min; i <= selected.max; i++) {
-			// // find worst condition over the selected slot
-			// if (!curCond || CONDITIONS.indexOf(curCond) >= data[i + from]) {
-			//     curCond = CONDITIONS[data[i + from]]
-			// }
-			// find smaller size over the selected slot
+			// find smaller size over the selected slots
 			if (!smallerSize || smallerSize > sizes[i + from]) {
 				smallerSize = sizes[i + from]
 			}
@@ -189,7 +182,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
 			height: 45 + margin,
 			position: 'absolute',
 			left: selected.min * width / NUM_ITEMS,
-			backgroundColor: computeColorFromSize(smallerSize) //COLORS[`${curCond}_CARDS`],
+			backgroundColor: computeColorFromSize(smallerSize)
 		}
 	}
 
