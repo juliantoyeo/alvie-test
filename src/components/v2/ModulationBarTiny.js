@@ -12,66 +12,81 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 // previously named HygoParcelleIntervention
 
-const ModulationBarTiny = ({data, width, height }) => {
-    /**
-     * 
-     * @param props
-     * { from, initialMin, initialMax, data ,width, onHourChangeEnd}
-     * 
-     */
+const ModulationBarTiny = ({data, width, height, sizes }) => {
+	/**
+	 *
+	 * @param props
+	 * { from, initialMin, initialMax, data ,width, onHourChangeEnd}
+	 *
+	 */
 
-    const h = height || 10
-    const w = width || 60
-    const getColor = (i) => {
-        const color_name = `${CONDITIONS[data[i]]}_CARDS`
-        return COLORS[color_name];
-    }
+	const h = height || 10
+	const w = width || 60
+	const getColor = (i) => {
+		const color_name = `${CONDITIONS[data[i]]}_CARDS`
+		return COLORS[color_name];
+	}
 
-    
+	const computeColorFromSize = (size) => {
+		if (size > 7)
+			return COLORS["EXCELLENT_CARDS"]
+		else if (size > 2)
+			return COLORS["CORRECT_CARDS"]
+		else
+			return  COLORS["BAD_CARDS"]
+	}
 
-    return (
-        <View style={[styles.container, { width: w, height: h}]}>
+	return (
+		<View style={[styles.container, { width: w, height: h}]}>
 
-            {/* The slots */}
-            {[...Array(NUM_ITEMS).keys()].map(i => {
-                return (
-                    <TouchableWithoutFeedback key={i} onPress={() => { }}>
-                        <View style={[styles.parcelle, {
-                            width: parseFloat(w) / NUM_ITEMS,
-                            height: h, 
-                        },
-                        ]}>
-                            <View style={[styles.subTile, { backgroundColor: getColor(i), height:h}]}></View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                )
-            })}
-        </View>
-    )
+			{/* The slots */}
+			{[...Array(NUM_ITEMS).keys()].map(i => {
+				return (
+					<TouchableWithoutFeedback key={i} onPress={() => { }}>
+						<View style={[styles.parcelle, {
+							width: parseFloat(w) / NUM_ITEMS,
+							height: h,
+						},
+						]}>
+							<View
+								style={[
+									styles.subTile,
+									{
+										backgroundColor: sizes !== null ? computeColorFromSize(sizes[i]) : getColor(i),
+										height:h
+									}
+								]}>
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
+				)
+			})}
+		</View>
+	)
 }
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        paddingVertical: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    parcelleCursor: {
-        position: 'absolute',
-        backgroundColor: 'transparent',
-        zIndex: 10,
-    },
-    parcelle: {
-        height: 45,
-        zIndex: 5,
-    },
-    subTile: {
-        height: 45,
-        zIndex: 5
-    },
-    
+	container: {
+		display: 'flex',
+		flexDirection: 'row',
+		paddingVertical: 5,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	parcelleCursor: {
+		position: 'absolute',
+		backgroundColor: 'transparent',
+		zIndex: 10,
+	},
+	parcelle: {
+		height: 45,
+		zIndex: 5,
+	},
+	subTile: {
+		height: 45,
+		zIndex: 5
+	},
+
 })
 
 export default ModulationBarTiny

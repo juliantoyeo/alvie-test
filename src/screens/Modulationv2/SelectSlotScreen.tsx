@@ -38,10 +38,10 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     const snackbar = React.useContext(SnackbarContext)
     const { currentDay, setCurrentDay, setSelectedDay, metrics, setMetrics } = context
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
-    const [modDay, setmodDay] = useState<number[]>([])
+	const [weeklyModulations, setWeeklyModulations] = useState<number[][]>(null)
     const [showPickerMin, setShowPickerMin] = useState<boolean>(false)
     const [showPickerMax, setShowPickerMax] = useState<boolean>(false)
-    const ready: boolean = !!context.meteo && !!metrics && !!context.conditions
+    const ready: boolean = !!context.meteo && !!metrics && !!weeklyModulations
     const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
     const computeRatio = (selectedProduct: activeProductType) => {
@@ -60,6 +60,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
     //     const totalDoses: number = doses.reduce((sum, d) => sum + d, 0);
     //     modulations.forEach((mod, index, mods) => mods[index] * )
     // }
+
     //Updating modulation when selected slot change or day change
     useEffect(() => {
         // Store the day for the reportScreen
@@ -67,26 +68,24 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         dt.setDate(dt.getDate() + currentDay)
         setSelectedDay(dt)
         loadMetrics()
-        loadModulationbyDay(context.meteo[currentDay])
     }, [context.selectedSlot, currentDay])
 
     useEffect(() => {
         // When metrics changed: update modulation
         loadModulation(context.metrics)
-        loadModulationbyDay(context.meteo[currentDay])
     }, [context.metrics])
 
     useEffect(() => {
         loadMetrics()
     }, [context.meteo])
 
+	useEffect(() => {
+		loadWeeklyModulations()
+	}, [])
+
     useEffect(() => {
         context.loadConditions()
     }, [context.selectedProducts])
-
-    useEffect(() => {
-
-    }, [modDay])
 
     const hasRacinaire = useCallback(() => {
         return context.selectedProducts.filter(sp => {
@@ -143,31 +142,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         setMetrics(chd)
     }, [context.selectedSlot, context.meteo, currentDay])
 
-    // const loadConditions = async () => {
-    //     let now = moment.utc()
-    //     if (now.minutes() >= 30) {
-    //         now.hours(now.hours() + 1)
-    //     }
-    //     now = now.startOf('day')
-    //     // array of the 5 next days to iterate on
-    //     const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-    //     try {
-    //         const data: Array<dailyConditionType> = await Promise.all(
-    //             dt.map((day) => {
-    //                 return (getConditions_v2({
-    //                     day,
-    //                     products: context.selectedProducts.map((p) => p.phytoproduct.id),
-    //                     parcelles: context.selectedFields.map((f) => f.id)
-    //                 }))
-    //             }
-    //             ))
-    //         setConditions(data)
-    //     } catch (e) {
-    //         setConditions(null)
-    //         snackbar.showSnackbar("Erreur dans le chargement des conditions", "ALERT")
-    //     }
-    // }
-
     const loadModulation = async (metrics: metricsType) => {
 
         if (currentDay >= 6) {
@@ -205,32 +179,24 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
         setIsRefreshing(false)
     }
 
-    const loadModulationbyDay = async (meteo: meteoByHourType[]) => {
-        if (currentDay >= 6) {
-            snackbar.showSnackbar(i18n.t('pulve_slotscreen.snack_nomod'), "WARNING")
-            context.setMod([])
-            return
-        }
+	const loadWeeklyModulations = async () => {
+		const mods = await Promise.all([...Array(5).keys()].map(async (i) => {
+			const meteo = context.meteo[i]
+			const selectedProductIds: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
 
-        if (context.metrics == null) {
-            context.setMod([])
-            return
-        }
-        const selectedProductIds: Array<number> = context.selectedProducts.map((p: activeProductType) => p.phytoproduct.id)
-
-        // The ratio between dose planed and dose max is used to reduce the modulation
-        const ratio: number = context.selectedProducts.map((s) => computeRatio(s)).reduce((acc: number, cur: number, index, arr) => {
-            return acc + cur / arr.length
-        }, 0)
-        const data = {
-            products: selectedProductIds,
-            meteo,
-            ratio
-        }
-
-        const mods = await getModulationByDay(data, ratio)
-        setmodDay(mods)
-    }
+			// The ratio between dose planed and dose max is used to reduce the modulation
+			const ratio: number = context.selectedProducts.map((s) => computeRatio(s)).reduce((acc: number, cur: number, index, arr) => {
+				return acc + cur / arr.length
+			}, 0)
+			const data = {
+				products: selectedProductIds,
+				meteo,
+				ratio
+			}
+			return await getModulationByDay(data, ratio)
+		}))
+		setWeeklyModulations(mods);
+	}
 
     const onMinChange = (event, date: Date) => {
         const min = date.getHours()
@@ -289,9 +255,10 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                                     <Text style={[styles.tabText, { flex: 1, color: currentDay == i ? COLORS.DARK_BLUE : '#fff' }]}>{dayName}</Text>
                                                     <View style={{ flex: 1, paddingTop: 5 }}>
                                                         <ModulationBarTiny
-                                                            data={context.conditions[i]}
+                                                            data={[]}//{context.conditions[i]}
                                                             height={8}
                                                             width={60}
+															sizes={weeklyModulations[i]}
                                                         />
                                                     </View>
                                                     {/* <View style={styles.weatherContainer}>
@@ -361,11 +328,11 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                                 from={0/*parseInt(hour)*/}
                                                 initialMax={context.selectedSlot.max}
                                                 initialMin={context.selectedSlot.min}
-                                                data={context.conditions[currentDay]}
+                                                data={[]}//context.conditions[currentDay]}
                                                 width={Dimensions.get('window').width - 30}
                                                 onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
                                                 enabled={true}
-                                                sizes={modDay}
+                                                sizes={weeklyModulations[currentDay]}
                                             />
                                         </View>
 
