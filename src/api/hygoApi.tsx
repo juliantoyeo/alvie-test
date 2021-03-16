@@ -9,6 +9,7 @@ import { modulationType} from '../types/modulation.types';
 import { conditionType } from '../types/condition.types'
 import _ from 'lodash';
 import pkg from '../../app.json'
+import { OTA } from '../constants'
 
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
@@ -518,7 +519,7 @@ export const createIntervention = async () => {
 // Check if the database is ready (parcels and meteo datas loaded => 24h),and if a new version is needed
 export const checkSetup = async () => {
     try {
-        const response = await hygoApi.post('/app/checkSetup', { version: pkg.expo.version })
+        const response = await hygoApi.post('/app/checkSetup', { version: pkg.expo.version, OTA })
         return (response.data);
     } catch (error) {
         console.log(error)
