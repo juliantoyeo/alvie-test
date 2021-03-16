@@ -24,7 +24,12 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
      */
 
 	const computeColorFromSize = (size) => {
-		return  COLORS["GREY"]
+		if (size > 7)
+			return COLORS["EXCELLENT_CARDS"]
+		else if (size > 2)
+			return COLORS["CORRECT_CARDS"]
+		else
+			return  COLORS["BAD_CARDS"]
 	}
 
     const [selected, setSelected] = useState({
@@ -162,11 +167,16 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             }
         }
 
-        let curCond = null
+        // let curCond = null
+		let smallerSize = null
         for (let i = selected.min; i <= selected.max; i++) {
-            // find worst condition over the selected slot
-            if (!curCond || CONDITIONS.indexOf(curCond) >= data[i + from]) {
-                curCond = CONDITIONS[data[i + from]]
+            // // find worst condition over the selected slot
+            // if (!curCond || CONDITIONS.indexOf(curCond) >= data[i + from]) {
+            //     curCond = CONDITIONS[data[i + from]]
+            // }
+			// find smaller size over the selected slot
+            if (!smallerSize || smallerSize > sizes[i + from]) {
+                smallerSize = sizes[i + from]
             }
         }
 
@@ -179,7 +189,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             height: 45 + margin,
             position: 'absolute',
             left: selected.min * width / NUM_ITEMS,
-            backgroundColor: computeColorFromSize(size[0]) //COLORS[`${curCond}_CARDS`],
+            backgroundColor: computeColorFromSize(smallerSize) //COLORS[`${curCond}_CARDS`],
         }
     }
 
