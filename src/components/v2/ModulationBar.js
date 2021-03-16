@@ -14,17 +14,19 @@ const conditionsOrdering = ['FORBIDDEN', 'BAD', 'CORRECT', 'GOOD', 'EXCELLENT']
 
 const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChangeEnd, enabled, sizes }) => {
     /**
-     * 
+     *
      * @param props
      * { from, initialMin, initialMax, data ,width, onHourChangeEnd, enabled, sizes}
-     * 
+     *
      * Main idea : using a panResponder to handle dragging
-     * the selected slots are made transparent, and there is a rectangle behind 
+     * the selected slots are made transparent, and there is a rectangle behind
      * that do the color of the selected slot
      */
 
+	const computeColorFromSize = (size) => {
+		return  COLORS["GREY"]
+	}
 
-    
     const [selected, setSelected] = useState({
         min: parseInt(initialMin ? initialMin : 0),
         max: parseInt(initialMax ? initialMax : 0)
@@ -69,13 +71,13 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
         if (posInsideBar < 0) { posInsideBar = 0 }
 
         // be careful with the problem of stale closure with react Hooks
-        
+
         setSelected(({min, max}) => {
             // if we touch outside of the selection : update selection
             return (posInsideBar > max + 1) || (posInsideBar < min - 1) ? ({
                 min: posInsideBar,
                 max: posInsideBar
-            }) : ({min, max})  
+            }) : ({min, max})
         })
     }
 
@@ -129,8 +131,9 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
         const isSelected = i <= selected.max && selected.min <= i
         if (isSelected)
             return 'transparent'
-        const color_name = `${CONDITIONS[data[i + from]]}_CARDS`
-        return COLORS[color_name];
+        // const color_name = `${CONDITIONS[data[i + from]]}_CARDS`
+        // return COLORS[color_name];
+		return computeColorFromSize(sizes[i])
     }
 
     const getItemWidth = (i, isSub) => {
@@ -176,7 +179,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
             height: 45 + margin,
             position: 'absolute',
             left: selected.min * width / NUM_ITEMS,
-            backgroundColor: COLORS[`${curCond}_CARDS`],
+            backgroundColor: computeColorFromSize(size[0]) //COLORS[`${curCond}_CARDS`],
         }
     }
 
@@ -196,7 +199,7 @@ const ModulationBar = ({ from, initialMin, initialMax, data, width, onHourChange
     }
 
     const getContainerHeight = () => {
-        const w = width, 
+        const w = width,
         margin = parseFloat(w) / NUM_ITEMS * 0.14
         return 45 + margin
     }
