@@ -28,6 +28,74 @@ interface ParcelListProps {
 	active: boolean
 }
 
+const filteredCultureList = [
+	{name: "Blé tendre d’hiver", id: 2},
+	{name: "Maïs ensilage", id: 5},
+	{name: "Maïs", id: 6},
+	{name: "Orge d'hiver", id: 7},
+	{name: "Orge de printemps", id: 8},
+	{name: "Avoine d’hiver", id: 9},
+	{name: "Avoine de printemps", id: 10},
+	{name: "Blé dur d’hiver", id: 11},
+	{name: "Autre céréale d’un autre genre", id: 14},
+	{name: "Épeautre", id: 29},
+	{name: "Mélange de céréales", id: 30},
+	{name: "Seigle d’hiver", id: 32},
+	{name: "Sorgho", id: 34},
+	{name: "Sarrasin", id: 35},
+	{name: "Triticale d’hiver", id: 36},
+	{name: "Colza d’hiver", id: 38},
+	{name: "Tournesol", id: 40},
+	{name: "Lin non textile d’hiver", id: 42},
+	{name: "Lin non textile de printemps", id: 43},
+	{name: "Œillette", id: 49},
+	{name: "Soja", id: 54},
+	{name: "Fève", id: 55},
+	{name: "Féverole semée avant le 31/05", id: 56},
+	{name: "Pois d’hiver", id: 64},
+	{name: "Pois de printemps semé avant le 31/05", id: 65},
+	{name: "Chanvre", id: 67},
+	{name: "Lin fibres", id: 68},
+	{name: "Jachère de 5 ans ou moins", id: 69},
+	{name: "Jachère de 6 ans ou plus", id: 70},
+	{name: "Jachère de 6 ans ou plus déclarée comme Surface d’intérêt écologique", id: 71},
+	{name: "Lentille cultivée (non fourragère)", id: 74},
+	{name: "Pois chiche", id: 75},
+	{name: "Betterave fourragère", id: 76},
+	{name: "Dactyle de 5 ans ou moins", id: 80},
+	{name: "Autre fourrage annuel d’un autre genre", id: 81},
+	{name: "Fétuque de 5 ans ou moins", id: 82},
+	{name: "Autre graminée fourragère pure de 5 ans ou moins", id: 90},
+	{name: "Luzerne implantée pour la récolte 2016", id: 104},
+	{name: "Luzerne déshydratée", id: 105},
+	{name: "Autre luzerne", id: 106},
+	{name: "Mélange de légumineuses", id: 119},
+	{name: "Autre pois fourrager d’hiver", id: 123},
+	{name: "Autre trèfle", id: 141},
+	{name: "Autre vesce", id: 145},
+	{name: "Prairie permanente", id: 150},
+	{name: "Prairie en rotation longue (6 ans ou plus)", id: 151},
+	{name: "Autre prairie temporaire de 5 ans ou moins", id: 152},
+	{name: "Ray-grass de 5 ans ou moins", id: 153},
+	{name: "Betterave non fourragère / Bette", id: 190},
+	{name: "Lavande / Lavandin", id: 204},
+	{name: "Plante à parfum aromatique et médicinale annuelle", id: 214},
+	{name: "Tabac", id: 223},
+	{name: "Chicorée / Endive / Scarole", id: 240},
+	{name: "Autre légume ou fruit annuel", id: 249},
+	{name: "Haricot / Flageolet", id: 253},
+	{name: "Oignon / Échalote", id: 262},
+	{name: "Petits pois", id: 269},
+	{name: "Pomme de terre de consommation", id: 271},
+	{name: "Pomme de terre féculière", id: 272},
+	{name: "Bande admissible le long d’une forêt sans production", id: 288},
+	{name: "Bordure de champ", id: 289},
+	{name: "Brome de 5 ans ou moins", id: 290},
+	{name: "Bande tampon", id: 291},
+	{name: "Phacélie de 5 ans ou moins", id: 301},
+	{name: "Surface agricole temporairement non exploitée", id: 306},
+	{name: "Taillis à courte rotation", id: 308},
+	]
 export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) => {
 	const [opened, setOpened] = useState(false)
 	return (
@@ -171,25 +239,25 @@ const FieldsScreen = ({ navigation, parcelles }) => {
 					</Right>
 				</Header>
 				<Content style={styles.content}>
-					<View style={{height: 30}}></View>
+					<View style={{ height: 30 }}></View>
 					{!editMode ? (
 						<View>
 							{fields.length > 0 && cultureNames.length > 0 ? (
 								<View>
-								{ !isReady && <Spinner />}
-								{cultureNames.map((n, k) => {
-									const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
-									return (
-										items.length > 0 &&
-										<ParcelList
-											key={k}
-											title={n}
-											items={items.sort((it1, it2) => it1.id - it2.id)}
-											onPress={updateList}
-											active={true}
-										/>
-									)
-								})}
+									{ !isReady && <Spinner />}
+									{cultureNames.map((n, k) => {
+										const items: Array<fieldType> = fields.filter((f) => f.culture.name == n)
+										return (
+											items.length > 0 &&
+											<ParcelList
+												key={k}
+												title={n}
+												items={items.sort((it1, it2) => it1.id - it2.id)}
+												onPress={updateList}
+												active={true}
+											/>
+										)
+									})}
 								</View>
 							) : (<Spinner />)
 							}
@@ -214,7 +282,7 @@ const FieldsScreen = ({ navigation, parcelles }) => {
 	);
 }
 
-const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel, onConfirm }) => {
+const EditField = ({ cultureList, fields, selectedFieldIndex, parcelles, onCancel, onConfirm }) => {
 
 	const [name, setName] = useState<string>(null)
 	const [cultureId, setCultureId] = useState<string>(null)
@@ -270,7 +338,7 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 					</Button>
 				</View>
 
-				<View style={{paddingLeft: 10}}>
+				<View style={{ paddingLeft: 10 }}>
 					<TextInput
 						onChangeText={text => setName(text)}
 						value={name}
@@ -287,7 +355,7 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 							setCultureId(v)
 						}}
 					>
-						{cultureList.slice().sort(
+						{filteredCultureList.slice().sort(
 							(a, b) => (b.name >= a.name) ? -1 : 1
 						).map(
 							(v, i) => <Picker.Item label={i18n.t(`cultures.${v.name.trim()}`)} value={v.id} key={i} />
@@ -318,7 +386,7 @@ const EditField = ({cultureList, fields, selectedFieldIndex, parcelles, onCancel
 								})}
 
 								tappable={true}
-								onPress={() => {}}
+								onPress={() => { }}
 								coordinates={field.features.coordinates[0].map((coordinate) => {
 									return {
 										latitude: coordinate[1],

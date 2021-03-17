@@ -317,6 +317,7 @@ export default {
         'Lupin doux d’hiver': 'Lupin doux d’hiver',
         'Lupin doux de printemps semé avant le 31/05': 'Lupin doux de printemps semé avant le 31/05',
         'Lupin doux de printemps semé tardivement (après le 31/05)': 'Lupin doux de printemps semé tardivement (après le 31/05)',
+		'Mélange de légumineuses': 'Mélange de légumineuses',
         'Mélange de protéagineux (pois et/ou lupin et/ou féverole) prépondérants semés avant le 31/05 et de céréales': 'Mélange de protéagineux (pois et/ou lupin et/ou féverole) prépondérants semés avant le 31/05 et de céréales',
         'Mélange de protéagineux semés tardivement (après le 31/05)': 'Mélange de protéagineux semés tardivement (après le 31/05)',
         'Autre protéagineux d’un autre genre': 'Autre protéagineux d’un autre genre',
@@ -407,6 +408,7 @@ export default {
         'Surface pastorale - herbe prédominante et ressources fourragères ligneuses présentes': 'Surface pastorale - herbe prédominante et ressources fourragères ligneuses présentes',
         'Surface pastorale - ressources fourragères ligneuses prédominantes': 'Surface pastorale - ressources fourragères ligneuses prédominantes',
         'Prairie permanente - herbe prédominante (ressources fourragères ligneuses absentes ou peu présentes)': 'Prairie permanente',
+		'Prairie permanente' : 'Prairie permanente',
         'Prairie en rotation longue (6 ans ou plus)': 'Prairie (rotation longue)',
         'Autre prairie temporaire de 5 ans ou moins': 'Autre prairie temporaire',
         'Ray-grass de 5 ans ou moins': 'Ray-grass de 5 ans ou moins',
@@ -570,7 +572,8 @@ export default {
         'Pistache': 'Pistache',
         'Oliveraie': 'Oliveraie',
         'Arachide': 'Arachide',
-        'Artichaut': 'Artichaut'
+        'Artichaut': 'Artichaut',
+		'Plante à parfum aromatique et médicinale annuelle': 'Plante à parfum aromatique et médicinale annuelle'
     },
     'products': {
         'Fongicide systemique': 'Fongicide systemique',
