@@ -86,7 +86,15 @@ export default {
         'need_update': {
             'msg1': 'C\'est la moisson pour votre application !',
             'msg2': 'Pour continuer, merci d\'installer la nouvelle mise à jour.'
-        }
+        },
+		'ota_update': {
+            'msg1': 'C\'est la moisson pour votre application !',
+            'msg2': "Pour continuer, merci de redémarrer l'application."
+        },
+		'version_update': {
+            'msg1': 'C\'est la moisson pour votre application !',
+            'msg2': 'Pour continuer, merci de télécharger la nouvelle mise à jour.'
+        },
     },
     'equipment': {
         'header': 'Mes équipements agricoles',
