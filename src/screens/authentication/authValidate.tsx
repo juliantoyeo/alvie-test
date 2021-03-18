@@ -8,7 +8,7 @@ const { barCodeScreen: ampEvent } = AMPLITUDE_EVENTS
 
 export const authValidate = async (
     {token, userName, familyName, deviceid, deviceType, hasEquipment},
-    tester, 
+    tester,
     {navigation, updateAuthInfo, updatePulvInfo, updateParcellesList, updateCulturesList}) => {
 
     await AsyncStorage.setItem('token', token);
@@ -38,9 +38,9 @@ export const authValidate = async (
         culturesSelected
     })
 
-    const { result, error } = await checkSetup()
+    const { result, error, error2 } = await checkSetup()
     if (!result)
-        navigation.replace('WaitActivation', { error });
+        navigation.replace('WaitActivation', { error, error2 });
     else {
         let [fields, cultures] = await Promise.all([
             getFields(),
