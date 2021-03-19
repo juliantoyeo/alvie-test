@@ -26,8 +26,8 @@ interface params {
 const regex = new RegExp("^[0-9]*[0-9\.,]?[0-9]*$")
 
 const HygoInputModalDose = ({ onClose, onSuccess, modalVisible, setModalVisible, defaultValue, setInput, title, item }: params) => {
-    const [value, setValue] = useState<string>(item ? item.dosemax.toFixed(2) : '0')
-    const testValue = (value: string) => regex.test(value) && (value == '' || parseFloat(value) <= item.dosemax)
+    const [value, setValue] = useState<string>('') //item ? item.dosemax.toFixed(2) : '0')
+    const testValue = (value: string) => regex.test(value)// && (value == '' || parseFloat(value) <= item.dosemax)
     return (
         <Modal
             animationType='fade'
@@ -43,10 +43,10 @@ const HygoInputModalDose = ({ onClose, onSuccess, modalVisible, setModalVisible,
                     </View>
                     {item &&
                         <React.Fragment>
-                            <View>
+                            {/* <View>
                                 <Text style={[hygoStyles.text, { textAlign: 'center' }]}>Dose max: {item.dosemax.toFixed(2)} {item.unit}</Text>
                                 {item.dosecoop && <Text style={[hygoStyles.text, { textAlign: 'center' }]}>Dose reco: {item.dosecoop.toFixed(2)} {item.unit}</Text>}
-                            </View>
+                            </View> */}
 
                             <View style={styles.input}>
                                 <View style={{ flex: 1 }} />
