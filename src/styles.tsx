@@ -54,7 +54,8 @@ const hygoStyles = StyleSheet.create({
 		marginHorizontal: 3,
 		display: 'flex',
 		textAlign: 'center',
-		padding:paddingSmall / 2
+		padding: paddingSmall / 2,
+		flexDirection: 'row'
 	}
 })
 
