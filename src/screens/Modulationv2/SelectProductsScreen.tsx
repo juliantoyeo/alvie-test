@@ -126,13 +126,13 @@ const SelectProductsScreen = ({ navigation }) => {
                     <View style={styles.grid}>
                         <View style={styles.row}>
                             <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.debit')}</Text>
-                            <TouchableOpacity onPress={() => setDebitModalVisible(true)}>
+                            <TouchableOpacity onPress={() => setDebitModalVisible(true)} style={hygoStyles.editBox}>
                                 <Text style={styles.colRight}>{context.debit} L/ha</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.colLeft}>{i18n.t('pulve_productscreen.buse')}</Text>
-                            <TouchableOpacity onPress={() => changeBuses()}>
+                            <TouchableOpacity onPress={() => changeBuses()} style={hygoStyles.editBox}>
                                 <Text style={styles.colRight}>{i18n.t(`equipment.${context.buses}`)}</Text>
                             </TouchableOpacity>
                         </View>
@@ -156,7 +156,7 @@ const SelectProductsScreen = ({ navigation }) => {
                         const i = BUSES.map((b) => i18n.t(`equipment.${b}`)).indexOf(item)
                         context.setBuses(BUSES[i])
                     }}
-                    
+
                     title={i18n.t('pulve_productscreen.modal_buses')}
                 />
             </View >
@@ -229,7 +229,7 @@ const SelectProductsScreen = ({ navigation }) => {
                 {select &&
                 <HygoInputModalDose
                     onClose={() => { }}
-                    onSuccess={(item) => { 
+                    onSuccess={(item) => {
                         snackbar.showSnackbar(i18n.t('pulve_productscreen.snack_add'), 'OK')
                         updateFavs(item)
                         setViewMode(!viewMode)
@@ -386,11 +386,12 @@ const styles = StyleSheet.create({
     colRight: {
         ...hygoStyles.text,
         textAlign: 'right',
-        borderWidth: 1,
-        borderColor: '#AAA',
-        flex: 1,
-        padding: 2,
-        paddingBottom: 2
+		paddingBottom: 0
+        // borderWidth: 1,
+        // borderColor: '#AAA',
+        // flex: 1,
+        // padding: 2,
+        // paddingBottom: 2
     },
     colLeft: {
         ...hygoStyles.text,
