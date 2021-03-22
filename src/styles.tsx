@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import COLORS from './colors';
 
-const paddingBig = 20 
+const paddingBig = 20
 const paddingSmall = 10
 
 const hygoStyles = StyleSheet.create({
@@ -32,7 +32,13 @@ const hygoStyles = StyleSheet.create({
         fontSize: 14,
         color: '#AAAAAA',
         paddingBottom: paddingSmall
-    }
+    },
+	textEdit: {
+		backgroundColor: '#FFFFFF',
+		borderColor: COLORS.DARK_BLUE,
+		borderWidth: 1,
+		borderRadius: 8,
+	}
 })
 
 export default hygoStyles

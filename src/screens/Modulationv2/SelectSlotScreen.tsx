@@ -282,16 +282,16 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
                                         </View>
                                     </View>
                                     {/*=============== Slot Picker ===============*/}
-                                    <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
+                                    <View style={{ backgroundColor: COLORS.DARK_BLUE, paddingTop: 10 }}>
                                         {/* Hours title */}
                                         <View style={styles.hoursView}>
-                                            <Button transparent onPress={() => setShowPickerMin(true)} style={[styles.hoursButton]}>
+                                            <Button onPress={() => setShowPickerMin(true)} style={hygoStyles.textEdit}>
                                                 <Text style={styles.hourTitle}>{context.selectedSlot.min}h</Text>
                                             </Button>
                                             <Button transparent style={styles.hoursButton}>
                                                 <Text style={styles.hourTitle}>-</Text>
                                             </Button>
-                                            <Button transparent onPress={() => setShowPickerMax(true)} style={[styles.hoursButton]}>
+                                            <Button onPress={() => setShowPickerMax(true)} style={hygoStyles.textEdit}>
                                                 <Text style={styles.hourTitle}>{context.selectedSlot.max + 1}h</Text>
                                             </Button>
                                         </View>
@@ -542,7 +542,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     hourTitle: {
-        color: '#FFF',
+		color: 'rgba(0, 28, 32, 0.5)',
+        // color: '#FFF',
         textTransform: 'uppercase',
         fontFamily: 'nunito-bold',
         fontSize: 26,
@@ -556,6 +557,7 @@ const styles = StyleSheet.create({
     },
     hoursButton: {
         height: 40,
+		alignItems: 'center',
     }
 });
 
