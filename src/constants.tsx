@@ -79,6 +79,17 @@ export const BUSES = [
     'white',
 ]
 
+export const BUSES_COLORS = {
+	'orange': 'orange',
+    'green': 'green',
+    'yellow': 'yellow',
+    'blue': 'blue',
+    'lilas': '#B666D2',
+    'red': 'red',
+    'brown': 'brown',
+    'grey': 'grey',
+    'white': 'white',
+}
 export const MONTHS = [
     i18n.t('months.january'),
     i18n.t('months.february'),

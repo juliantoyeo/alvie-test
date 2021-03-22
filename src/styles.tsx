@@ -46,16 +46,17 @@ const hygoStyles = StyleSheet.create({
 			width: 0,
 			height: 2,
 		},
-		shadowOpacity: 0.25,
+		shadowOpacity: 0.5,
 		shadowRadius: 2,
 		elevation: 1,
 		backgroundColor: "white",
 		marginBottom: 5,
 		marginHorizontal: 3,
+		padding: paddingSmall / 2,
 		display: 'flex',
 		textAlign: 'center',
-		padding: paddingSmall / 2,
-		flexDirection: 'row'
+		flexDirection: 'row',
+		alignItems: 'center'
 	}
 })
 

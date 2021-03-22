@@ -13,7 +13,7 @@ import { ModulationContext } from '../../context/modulation.context';
 import { SnackbarContext } from '../../context/snackbar.context';
 import i18n from 'i18n-js';
 import COLORS from '../../colors';
-import { BUSES } from '../../constants';
+import { BUSES, BUSES_COLORS } from '../../constants';
 
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -21,13 +21,12 @@ import { getEquipment, getActiveProducts, getActiveProductsReturnType, getFavori
 import { activeProductType } from '../../types/activeproduct.types';
 import { Snackbar } from 'react-native-paper';
 
-import HygoIconPencil from '../../icons/HygoIconPencil'
+import { HygoIconsPencil, HygoIconsCircle, HygoIconsNuzzle } from '../../icons/HygoIcons'
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 const { pulv2_product } = AMPLITUDE_EVENTS
 
 import _ from 'lodash';
-
 interface ProductListProps{
 	items: activeProductType[],
 	onPress: (id: number) => void
@@ -127,26 +126,29 @@ const SelectProductsScreen = ({ navigation }) => {
 				<HygoCard>
 					<View style={styles.grid}>
 						<View style={styles.row}>
-							<Text style={styles.colLeft}>{i18n.t('pulve_productscreen.debit')}</Text>
+							<View>
+								<Text style={styles.colLeft}>{i18n.t('pulve_productscreen.debit')}</Text>
+							</View>
 							<TouchableOpacity
 								onPress={() => setDebitModalVisible(true)}
 								style={hygoStyles.editBox}>
 								<Text style={styles.colRight}>{context.debit} L/ha</Text>
-								<HygoIconPencil style={{paddingTop: 15}}/>
+								<HygoIconsPencil/>
 							</TouchableOpacity>
 						</View>
 						<View style={styles.row}>
 							<Text style={styles.colLeft}>{i18n.t('pulve_productscreen.buse')}</Text>
 							<TouchableOpacity onPress={() => changeBuses()} style={hygoStyles.editBox}>
+								<HygoIconsCircle style={{marginRight: 5}} fill={context.buses ? BUSES_COLORS[context.buses]: 'black'}/>
 								<Text style={styles.colRight}>{i18n.t(`equipment.${context.buses}`)}</Text>
-								<HygoIconPencil style={{paddingTop: 15}}/>
+								<HygoIconsPencil/>
 							</TouchableOpacity>
 						</View>
-						<View style={styles.row}>
+						<View style={[styles.row, {paddingVertical: 5}]}>
 							<Text style={styles.colLeft}>{i18n.t('pulve_productscreen.bouillie')}</Text>
 							<Text style={[styles.colRight, { borderWidth: 0 }]}>{(context.debit * totalArea).toFixed(1)} L</Text>
 						</View>
-						<View style={styles.row}>
+						<View style={[styles.row, {paddingVertical: 5}]}>
 							<Text style={styles.colLeft}>{i18n.t('pulve_productscreen.surface')}</Text>
 							<Text style={[styles.colRight, { borderWidth: 0 }]}>{(totalArea).toFixed(1)} ha</Text>
 						</View>
@@ -404,7 +406,7 @@ const styles = StyleSheet.create({
 		...hygoStyles.text,
 		flex: 3,
 		padding: 2,
-		paddingBottom: 2
+		paddingBottom: 2,
 	},
 	searchbox: {
 		display: 'flex',
