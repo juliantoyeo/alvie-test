@@ -47,7 +47,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
     }
 
     // navigate to the report screen when click a saved report and context is ready
-    useEffect(()=> {    
+    useEffect(()=> {
         if (isReady && clickToReports) {
             setClickToReports(false)
             navigation.navigate('SavedReportScreen', {isSavedContext: true})
