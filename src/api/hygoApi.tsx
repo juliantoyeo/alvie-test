@@ -14,11 +14,7 @@ import { OTA } from '../constants'
 import { CONDITIONS_ORDERING, CONDITIONS } from '../constants';
 
 export const hygoApi = axios.create({
-<<<<<<< HEAD
     baseURL: 'https://hygo-api.alvie.fr', //'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //''http://192.168.1.21:3000',//
-=======
-    baseURL: 'https://hygo-api.alvie.fr', //'http://ec2-54-216-119-26.eu-west-1.compute.amazonaws.com:3000', //'http://192.168.1.21:3000',//
->>>>>>> develop
     timeout: 300000,
     headers: {
         'User-Agent': getUserAgent()
