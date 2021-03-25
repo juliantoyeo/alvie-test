@@ -28,23 +28,25 @@ import MeteoDetailedDetails from './screens/MeteoDetailedDetails'
 import NextPulverisationScreen from './screens/NextPulverisationScreen'
 import NextPulverisationDetails from './screens/NextPulverisationDetailsTop'
 import WaitActivationScreen from './screens/authentication/WaitActivationScreen'
-import SelectParcelsScreen from './screens/Modulationv2/SelectParcelsScreen';
-import SelectProductsScreen from './screens/Modulationv2/SelectProductsScreen';
-import SelectSlotScreen from './screens/Modulationv2/SelectSlotScreen';
-import ReportScreen from './screens/Modulationv2/ReportScreen';
+import SelectParcelsScreen from './screens/modulation_v2/SelectParcelsScreen';
+import SelectProductsScreen from './screens/modulation_v2/SelectProductsScreen';
+import SelectSlotScreen from './screens/modulation_v2/SelectSlotScreen';
+import ReportScreen from './screens/modulation_v2/ReportScreen';
 import HeaderText from './components/HeaderText';
+import Onboarding1 from './screens/onboarding/onboarding1';
 
 import COLORS from './colors'
 
 
 const Navigator = createSwitchNavigator({
+	onboarding: Onboarding1,
     mainFlow: createStackNavigator({
 
             BarCode: BarCodeScreen,
             WaitActivation: WaitActivationScreen,
             BarCodeValidation: BarCodeValidationScreen,
             BarCodeActivation: BarCodeActivationScreen,
-        
+
         // ======= Previous menus and screens ======== //
         // main: createDrawerNavigator({
         //     Drawer: {
