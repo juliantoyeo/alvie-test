@@ -214,12 +214,9 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 	}
 
 	const formatSizes = (sizes) => {
-		console.log("==", sizes, sizes.length, sizes.length > 0)
 		const formated = sizes?.length >= 0 ? (
 			sizes.concat(new Array(24 - sizes.length).fill(0))
 		):( new Array(24).fill(0) )
-		console.log("==", formated, formated.length)
-		console.log("===")
 		return (formated)
 	}
 	return (
