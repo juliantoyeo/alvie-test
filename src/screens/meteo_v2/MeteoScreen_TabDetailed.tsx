@@ -152,8 +152,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 			{
 				(
 					<View style={styles.container}>
-						{/* {contextReady && ( */}
-						{true && (
+						{(contextReady || true ) && (
 							<React.Fragment>
 								{/*============= Week Tab =================*/}
 								< View style={styles.tabBar}>
@@ -185,7 +184,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 								<View style={styles.dayContent}>
 									{/*=============== Day weather ==============*/}
 									<View style={styles.hour4Weather}>
-										{context.meteo4h[currentDay].map((m, i) => {
+										{context.meteo4h && context.meteo4h.length > 0 && context.meteo4h[currentDay].map((m, i) => {
 											return (
 												<View key={i} style={styles.hour4WeatherContainer}>
 													<Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
@@ -282,7 +281,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))}>
 									{selectedCharts.temp && (<HygoChart
 										label={i18n.t('realtime.temp')}
-										data={context.meteo[0].length <= 0 ? [] : context.meteo[currentDay].map(m => {
+										data={!contextReady ? [] : context.meteo[currentDay].map(m => {
 											const dt = new Date(m.timestamp.replace(' ', 'T'))
 											return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
 										})}
@@ -299,7 +298,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									{selectedCharts.pluvio && (
 										<HygoChart
 											label={i18n.t('realtime.pluvio')}
-											data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
+											data={!contextReady ? [] : context.meteo[currentDay].map(m => {
 												const dt = new Date(m.timestamp.replace(' ', 'T'))
 												return { x: dt, y: m.precipitation }
 											})}
@@ -315,7 +314,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 								>
 									{selectedCharts.hygro && (<HygoChart
 										label={i18n.t('realtime.hygro')}
-										data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
+										data={!contextReady ? [] : context.meteo[currentDay].map(m => {
 											const dt = new Date(m.timestamp.replace(' ', 'T'))
 											return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
 										})}
@@ -333,7 +332,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									{selectedCharts.vent && (
 										<HygoChart
 											label={i18n.t('realtime.vent')}
-											data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
+											data={!contextReady ? [] : context.meteo[currentDay].map(m => {
 												const dt = new Date(m.timestamp.replace(' ', 'T'))
 												return { x: dt, y: m.wind }
 											})}
