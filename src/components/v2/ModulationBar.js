@@ -24,7 +24,9 @@ const ModulationBar = ({ from, initialMin, initialMax, width, onHourChangeEnd, e
 	 */
 
 	const computeColorFromSize = (size) => {
-		if (size > 7)
+		if (size == undefined)
+			return COLORS.GREY
+		else if (size > 7)
 			return COLORS["EXCELLENT_CARDS"]
 		else if (size > 2)
 			return COLORS["CORRECT_CARDS"]
