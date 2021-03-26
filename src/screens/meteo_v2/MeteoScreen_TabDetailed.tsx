@@ -55,8 +55,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 	const [lastLoad, setLastLoad] = useState(-1)
 	const [counter, setCounter] = useState(0);
 
-	console.log("=====", !loading, detailed.data, !!detailed.days)
-
 	const [selectedCharts, setSelectedCharts] = useState({ temp: true, pluvio: true, hygro: true, vent: true })
 	const contextReady = !!context.meteo && !!context.meteo4h && !!context.conditions && !!context.dow && context.dow.length > 0 && context.conditions.length > 0
 		&& context.meteo.length > 0 && context.meteo4h.length > 0 && context.meteo[0].length > 0
@@ -122,7 +120,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 			day: null,
 			product: null,
 		})
-
+		setDetailed(result)
 		setCurrentDay(prev => {
 			if (prev === null && !!result && !!result.days && result.days.length > 0) {
 				return result.days[0]
