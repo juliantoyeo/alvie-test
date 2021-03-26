@@ -213,6 +213,15 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 		}
 	}
 
+	const formatSizes = (sizes) => {
+		console.log("==", sizes, sizes.length, sizes.length > 0)
+		const formated = sizes?.length >= 0 ? (
+			sizes.concat(new Array(24 - sizes.length).fill(0))
+		):( new Array(24).fill(0) )
+		console.log("==", formated, formated.length)
+		console.log("===")
+		return (formated)
+	}
 	return (
 		<SafeAreaView style={styles.statusbar} forceInset={{ top: 'always' }}>
 			<StatusBar translucent backgroundColor="transparent" />
@@ -272,7 +281,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 									{/*=============== Day Weather ==============*/}
 									<View style={styles.dayContent}>
 										<View style={styles.hour4Weather}>
-											{context.meteo4h[currentDay].map((m, i) => {
+											{context?.meteo4h?.length > 0 && context.meteo4h[currentDay].map((m, i) => {
 												return (
 													<View key={i} style={styles.hour4WeatherContainer}>
 														<Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
@@ -335,7 +344,7 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 												width={Dimensions.get('window').width - 30}
 												onHourChangeEnd={(selected) => context.setSelectedSlot(selected)}
 												enabled={true}
-												sizes={weeklyModulations[currentDay]}
+												sizes={formatSizes(weeklyModulations[currentDay])}
 											/>
 										</View>
 

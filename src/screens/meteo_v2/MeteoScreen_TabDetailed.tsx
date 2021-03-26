@@ -184,7 +184,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 								<View style={styles.dayContent}>
 									{/*=============== Day weather ==============*/}
 									<View style={styles.hour4Weather}>
-										{context.meteo4h && context.meteo4h.length > 0 && context.meteo4h[currentDay].map((m, i) => {
+										{context?.meteo4h?.length > 0 && context.meteo4h[currentDay].map((m, i) => {
 											return (
 												<View key={i} style={styles.hour4WeatherContainer}>
 													<Text style={styles.hour4WeatherText}>{`${m.dthour}h`}</Text>
