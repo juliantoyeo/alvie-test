@@ -60,8 +60,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 		&& context.meteo.length > 0 && context.meteo4h.length > 0 && context.meteo[0].length > 0
 
 	const pictos: Array<string> = useMemo(() => {
-		console.log("=====meteo")
-		console.log(context.meteo)
 		const ret: Array<string> = []
 		if (!context.meteo || context.meteo.length == 0) {
 			return []
@@ -122,9 +120,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 			day: null,
 			product: null,
 		})
-		console.log("=========")
-		console.log(result)
-		setDetailed(result)
 
 		setCurrentDay(prev => {
 			if (prev === null && !!result && !!result.days && result.days.length > 0) {
@@ -157,7 +152,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 			{
 				(
 					<View style={styles.container}>
-						{contextReady && (
+						{/* {contextReady && ( */}
+						{true && (
 							<React.Fragment>
 								{/*============= Week Tab =================*/}
 								< View style={styles.tabBar}>
@@ -202,13 +198,13 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 
 									<View style={styles.dayWeather}>
 										{/*=============== Metrics ==============*/}
-										{!!context.metrics && (
-											<Metrics_v2
-												currentHourMetrics={context.metrics}
-												hasRacinaire={true}
-												color="#fff"
-											/>
-										)}
+										{/* {!!context.metrics && ( */}
+										<Metrics_v2
+											currentHourMetrics={context.metrics}
+											hasRacinaire={true}
+											color="#fff"
+										/>
+										{/* )} */}
 										{/*=============== Conditions ==============*/}
 										{/* <View style={styles.sliderContainer}>
 
@@ -275,7 +271,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 							)
 						}
 						{/*============= Charts ============*/}
-						{contextReady && (
+						{/* {contextReady && ( */}
+						{true && (
 							<View style={{ backgroundColor: '#fff', borderTopRightRadius: 35, marginTop: 10, paddingTop: 20 }}>
 								<Text style={[styles.pulveTitle, { marginLeft: 20, paddingBottom: 0 }]}>{i18n.t('meteo_detailed.graph_title')}</Text>
 
@@ -285,7 +282,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									onPress={(b: boolean) => setSelectedCharts((state) => ({ ...state, temp: b }))}>
 									{selectedCharts.temp && (<HygoChart
 										label={i18n.t('realtime.temp')}
-										data={context.meteo[currentDay].map(m => {
+										data={context.meteo[0].length <= 0 ? [] : context.meteo[currentDay].map(m => {
 											const dt = new Date(m.timestamp.replace(' ', 'T'))
 											return { x: dt, y: (m.maxtemp + m.mintemp) / 2 }
 										})}
@@ -302,7 +299,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									{selectedCharts.pluvio && (
 										<HygoChart
 											label={i18n.t('realtime.pluvio')}
-											data={context.meteo[currentDay].map(m => {
+											data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
 												const dt = new Date(m.timestamp.replace(' ', 'T'))
 												return { x: dt, y: m.precipitation }
 											})}
@@ -318,7 +315,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 								>
 									{selectedCharts.hygro && (<HygoChart
 										label={i18n.t('realtime.hygro')}
-										data={context.meteo[currentDay].map(m => {
+										data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
 											const dt = new Date(m.timestamp.replace(' ', 'T'))
 											return { x: dt, y: (m.maxhumi + m.minhumi) / 2 }
 										})}
@@ -336,7 +333,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 									{selectedCharts.vent && (
 										<HygoChart
 											label={i18n.t('realtime.vent')}
-											data={context.meteo[currentDay].map(m => {
+											data={!context.meteo ? [] : context.meteo[currentDay].map(m => {
 												const dt = new Date(m.timestamp.replace(' ', 'T'))
 												return { x: dt, y: m.wind }
 											})}
@@ -345,7 +342,6 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 											yUnit="km/h"
 										/>)}
 								</ChartContainer>
-
 							</View>
 						)}
 					</View>

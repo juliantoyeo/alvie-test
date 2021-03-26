@@ -196,8 +196,6 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 			}
 			return await getModulationByDay(data, ratio)
 		}))
-		console.log("=====")
-		console.log(mods)
 		setWeeklyModulations(mods);
 	}
 
