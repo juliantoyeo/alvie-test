@@ -57,8 +57,11 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 
 	const [selectedCharts, setSelectedCharts] = useState({ temp: true, pluvio: true, hygro: true, vent: true })
 	const contextReady = !!context.meteo && !!context.meteo4h && !!context.conditions && !!context.dow && context.dow.length > 0 && context.conditions.length > 0
-		&& context.meteo.length > 0 && context.meteo4h.length > 0
+		&& context.meteo.length > 0 && context.meteo4h.length > 0 && context.meteo[0].length > 0
+
 	const pictos: Array<string> = useMemo(() => {
+		console.log("=====meteo")
+		console.log(context.meteo)
 		const ret: Array<string> = []
 		if (!context.meteo || context.meteo.length == 0) {
 			return []
@@ -119,6 +122,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 			day: null,
 			product: null,
 		})
+		console.log("=========")
+		console.log(result)
 		setDetailed(result)
 
 		setCurrentDay(prev => {
