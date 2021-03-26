@@ -4,9 +4,10 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { OnboardingIcon1, OnboardingIcon2, OnboardingIcon3, OnboardingIcon4 } from '../../icons/HygoOnboardingIcons'
 import hygoStyles, { heightRatio } from '../../styles'
 import COLORS from '../../colors'
+import OnboardingFinal from './OnboardingFinal';
+import { HygoIconsArrowRight } from '../../icons/HygoIcons';
 
-const Onboarding = () => {
-
+const Onboarding = ({ navigation }) => {
 	const [pagePosition, setPagePosition] = useState<number>(0)
 	const screenHeight = Dimensions.get('screen').height
 	const screenWidth = Dimensions.get('screen').width
@@ -43,54 +44,71 @@ const Onboarding = () => {
 					onScroll={onScrollHandler}
 				>
 					<View style={styles.onboardingView}>
-						<View style={{flex:1}}></View>
+						<View style={{ flex: 1 }}></View>
 						<Image
-							source={require('../../../assets/Background_onboarding1.png')}
+							source={require('../../../assets/Background_onboarding1.jpg')}
 							style={{ width: screenWidth, height: screenHeight }}
 						/>
-						<View style={{flex:1}}></View>
+						<View style={{ flex: 1 }}></View>
 					</View>
 					<View style={styles.onboardingView}>
 						<Image
-							source={require('../../../assets/Background_onboarding2.png')}
-							style={{ width: screenWidth, height: screenHeight }}
-						/>
-					</View>
-					<View style={styles.onboardingView}>
-						<Image
-							source={require('../../../assets/Background_onboarding3.png')}
+							source={require('../../../assets/Background_onboarding2.jpg')}
 							style={{ width: screenWidth, height: screenHeight }}
 						/>
 					</View>
 					<View style={styles.onboardingView}>
-					<Image
+						<Image
+							source={require('../../../assets/Background_onboarding3.jpg')}
+							style={{ width: screenWidth, height: screenHeight }}
+						/>
+					</View>
+					<View style={styles.onboardingView}>
+						<Image
 							source={require('../../../assets/Background_onboarding4.gif')}
 							style={{ width: screenWidth, height: screenHeight }}
 						/>
 					</View>
 				</ScrollView>
-				<View style={styles.bottomOptions}>
-					<View style={{ marginTop: 25, marginHorizontal: 40, height: 20 }}>
-						<Text style={styles.text}>{texts[pagePosition]}</Text>
-					</View>
-					<View style={styles.positionIndicatorsRow}>
-						<View
-							style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 0 ? COLORS.DARK_BLUE : 'white' }]} />
-						<View
-							style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 1 ? COLORS.DARK_BLUE : 'white' }]} />
-						<View
-							style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 2 ? COLORS.DARK_BLUE : 'white' }]} />
-						<View
-							style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 3 ? COLORS.DARK_BLUE : 'white' }]} />
-					</View>
+				{pagePosition !== 4 &&
+					<React.Fragment>
+						<View style={styles.bottomOptions}>
+							<View style={{ marginTop: 25, marginHorizontal: 40, height: 20 }}>
+								<Text style={styles.text}>{texts[pagePosition]}</Text>
+							</View>
+							<View style={styles.bottomIcons}>
+								<View style={{ flex: 1 }} />
+								<View style={[styles.positionIndicatorsRow, {flex: 1}]}>
+									<View
+										style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 0 ? COLORS.DARK_BLUE : 'white' }]}
+									/>
+									<View
+										style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 1 ? COLORS.DARK_BLUE : 'white' }]}
+									/>
+									<View
+										style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 2 ? COLORS.DARK_BLUE : 'white' }]}
+									/>
+									<View
+										style={[styles.positionIndicatorCircle, { backgroundColor: pagePosition === 3 ? COLORS.DARK_BLUE : 'white' }]}
+									/>
+								</View>
+								<TouchableOpacity
+									style={{ flex: 1, alignItems:'flex-end', paddingRight: 20}}
+									onPress={() => navigation.navigate('BarCodeValidation')}
+									>
+									{pagePosition === 3 && <HygoIconsArrowRight />}
+								</TouchableOpacity>
+							</View>
 
-				</View>
-				<View style={styles.icon}>
-					{pagePosition === 0 && <OnboardingIcon1 />}
-					{pagePosition === 1 && <OnboardingIcon2 />}
-					{pagePosition === 2 && <OnboardingIcon3 />}
-					{pagePosition === 3 && <OnboardingIcon4 />}
-				</View>
+						</View>
+						<View style={styles.icon}>
+							{pagePosition === 0 && <OnboardingIcon1 />}
+							{pagePosition === 1 && <OnboardingIcon2 />}
+							{pagePosition === 2 && <OnboardingIcon3 />}
+							{pagePosition === 3 && <OnboardingIcon4 />}
+						</View>
+					</React.Fragment>
+				}
 			</View>
 		</SafeAreaView>
 	);
@@ -122,7 +140,6 @@ const styles = StyleSheet.create({
 		left: 0,
 		width: Dimensions.get('screen').width,
 		backgroundColor: 'white',
-		alignItems: 'center',
 	},
 	icon: {
 		position: 'absolute',
@@ -132,9 +149,16 @@ const styles = StyleSheet.create({
 		// backgroundColor: 'white',
 		// alignItems: 'center'
 	},
+	bottomIcons: {
+		flexDirection: 'row',
+		flex:1,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
 	positionIndicatorsRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		alignItems:'center',
 		width: 150,
 		marginVertical: 10
 	},

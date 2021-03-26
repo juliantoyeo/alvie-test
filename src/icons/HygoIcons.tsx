@@ -1,6 +1,26 @@
 import * as React from "react"
 import Svg, { Path, Circle, Rect } from "react-native-svg"
 
+export const HygoIconsArrowRight = (props) => {
+	return (
+		<Svg
+			width={60}
+			height={60}
+			viewBox="0 0 60 60"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			{...props}
+		>
+			<Circle cx={30} cy={26} r={26} fill="#009FB3" />
+
+			<Path
+				d="M16 24.25h21.297l-9.782-9.783L30 12l14 14-14 14-2.468-2.468 9.765-9.782H16v-3.5z"
+				fill="#fff"
+			/>
+
+		</Svg>
+	)
+}
 export const HygoIconsPencil = (props) => {
 	return (
 		<Svg

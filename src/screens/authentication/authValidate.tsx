@@ -55,7 +55,7 @@ export const authValidate = async (
         if (hasEquipment) {
             navigation.replace('main_v2');
         } else {
-            navigation.replace('BarCodeValidation')
+            navigation.replace('Onboarding')
         }
     }
 }

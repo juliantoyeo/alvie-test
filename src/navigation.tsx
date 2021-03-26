@@ -33,19 +33,19 @@ import SelectProductsScreen from './screens/modulation_v2/SelectProductsScreen';
 import SelectSlotScreen from './screens/modulation_v2/SelectSlotScreen';
 import ReportScreen from './screens/modulation_v2/ReportScreen';
 import HeaderText from './components/HeaderText';
-import Onboarding1 from './screens/onboarding/onboarding1';
+import OnboardingScreen from './screens/onboarding/OnboardingScreen';
 
 import COLORS from './colors'
 
 
 const Navigator = createSwitchNavigator({
-	onboarding: Onboarding1,
     mainFlow: createStackNavigator({
 
             BarCode: BarCodeScreen,
             WaitActivation: WaitActivationScreen,
-            BarCodeValidation: BarCodeValidationScreen,
             BarCodeActivation: BarCodeActivationScreen,
+			Onboarding: OnboardingScreen,
+			BarCodeValidation: BarCodeValidationScreen,
 
         // ======= Previous menus and screens ======== //
         // main: createDrawerNavigator({
