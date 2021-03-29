@@ -16,7 +16,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
 
         deleteToken();
         Amplitude.setUserId(null)
-        navigation.replace('BarCode');
+        navigation.navigate('BarCode');
     }
     return (
 
@@ -28,7 +28,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
                         <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
                     </Button>
                 </Left>
-                
+
             </Header>
             <Content contentContainerStyle={styles.container}>
                 <View style={{ flex: 2 }} />
@@ -39,7 +39,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
 
                 <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
                     <HygoButton onPress={() => {
-                        navigation.replace('EquipmentSettingsScreen')
+                        navigation.navigate('EquipmentSettingsScreen')
                     }} label={i18n.t('button.next')} icon={{
                         type: 'AntDesign',
                         name: 'arrowright',
