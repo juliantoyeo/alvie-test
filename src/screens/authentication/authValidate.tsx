@@ -53,7 +53,7 @@ export const authValidate = async (
         // await this.registerForPushNotificationsAsync(deviceid)
 
         if (hasEquipment) {
-            navigation.replace('main_v2');
+            navigation.navigate('main_v2');
         } else {
             navigation.navigate('onboarding')
         }

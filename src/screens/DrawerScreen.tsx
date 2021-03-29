@@ -19,7 +19,7 @@ import { SnackbarContext } from '../context/snackbar.context';
 
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken, tester }) => {
     const snackbar = React.useContext(SnackbarContext)
-    
+
     const goToEquipment = () => {
         navigation.dispatch(DrawerActions.closeDrawer())
         navigation.navigate('LoadingScreen', {
@@ -39,7 +39,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 
         deleteToken();
         Amplitude.setUserId(null)
-        navigation.replace('BarCode');
+        navigation.navigate('BarCode');
     }
 
     const becomeTester = async (t) => {
@@ -52,14 +52,14 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         )
         snackbar.showSnackbar(welcome,"OK")
         navigation.dispatch(DrawerActions.closeDrawer())
-        navigation.replace('BarCode')
+        navigation.navigate('BarCode')
     }
 
     const sendEmail = () => {
         const email = 'morganr@alvie.fr'
         const subject = i18n.t('drawer.email_subject')
         const body = `
-    
+
     <br> ---- <br>
     ${i18n.t('drawer.app_version', { version: pkg.expo.version })}<br>
     ${i18n.t('drawer.build_number', { build: pkg.extra.build })}<br>

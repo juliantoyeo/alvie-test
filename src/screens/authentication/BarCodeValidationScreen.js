@@ -39,7 +39,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
 
                 <View style={[StyleSheet.absoluteFill, styles.buttonView]}>
                     <HygoButton onPress={() => {
-                        navigation.navigate('EquipmentSettingsScreen')
+                        navigation.navigate('OnboardingSettingsScreen')
                     }} label={i18n.t('button.next')} icon={{
                         type: 'AntDesign',
                         name: 'arrowright',

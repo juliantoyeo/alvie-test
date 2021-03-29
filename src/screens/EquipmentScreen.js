@@ -38,7 +38,7 @@ const EquipmentScreen = ({ navigation }) => {
     validated: false
   })
 
-  const [pressure, setPressure] = useState(result ? { 
+  const [pressure, setPressure] = useState(result ? {
     pressure: result.pressure,
     validated: true
   } : {
@@ -71,8 +71,8 @@ const EquipmentScreen = ({ navigation }) => {
 
   const updateBuses = (val) => {
     setBuses(prev => {
-      let ns = { 
-        buses: val, 
+      let ns = {
+        buses: val,
       }
       ns.validated = Object.values(ns.buses).filter(p => p).length > 0
       return ns
@@ -88,7 +88,7 @@ const EquipmentScreen = ({ navigation }) => {
       family: family.family,
     }
 
-    navigation.replace('LoadingScreen', {
+    navigation.navigate('LoadingScreen', {
       next: 'main_v2',
       params: params,
       action: storeEquipmentInformation
@@ -164,7 +164,7 @@ const EquipmentScreen = ({ navigation }) => {
           </Body>
           <Right style={{ flex: 1 }}></Right>
           </Header>
-           
+
         {step === 'INIT' && (
           <Content contentContainerStyle={styles.container}>
              <View style={{ flex: 2 }} />
@@ -311,9 +311,9 @@ const EquipmentScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  statusbar: { 
+  statusbar: {
     backgroundColor: Platform.OS === 'ios' ? 'black' : "transparent",
-    flex: 1 
+    flex: 1
   },
   header: {
     backgroundColor: COLORS.CYAN
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'nunito-regular',
     fontSize: 20
-  },  
+  },
   statusbar: { backgroundColor: 'black', flex: 1 },
   container: { justifyContent: 'center', flex: 1, display: 'flex', paddingLeft: 38, paddingRight: 38, alignItems: 'center', backgroundColor: COLORS.BEIGE },
   containerSelect: { justifyContent: 'flex-start', flex: 1, display: 'flex', paddingLeft: 0, paddingRight: 15, backgroundColor: COLORS.BEIGE },
@@ -352,12 +352,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'nunito-regular'
   },
-  buttonView: { 
-    display: 'flex', 
+  buttonView: {
+    display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center', 
-    justifyContent: 'flex-end' 
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   cardTitle: {
     textTransform: 'uppercase',
@@ -372,5 +372,5 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({})
-  
+
 export default connect(mapStateToProps, mapDispatchToProps)(EquipmentScreen);

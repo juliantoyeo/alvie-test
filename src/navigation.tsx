@@ -42,10 +42,16 @@ const Navigator = createSwitchNavigator({
 		BarCode: BarCodeScreen,
 		WaitActivation: WaitActivationScreen,
 		BarCodeActivation: BarCodeActivationScreen,
-	}),
+	}, {headerMode: 'none'}),
 	onboarding: createStackNavigator({
 		Onboarding: OnboardingScreen,
 		BarCodeValidation: BarCodeValidationScreen,
+		OnboardingSettingsScreen: {
+			screen: EquipmentScreen,
+			navigationOptions: {
+				header: () => <HeaderText text={i18n.t('equipment.header')} />,
+			},
+		},
 	}, {headerMode: 'none'}),
     mainFlow: createStackNavigator({
 		main_v2: createDrawerNavigator({
