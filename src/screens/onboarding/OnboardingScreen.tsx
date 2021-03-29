@@ -68,13 +68,18 @@ const OnboardingScreen = ({ navigation }) => {
 							style={{ width: screenWidth, height: screenHeight }}
 						/>
 					</View>
-					<View style={styles.onboardingView}>
+					<View style={styles.onboardingView5}>
 						<Image
 							source={require('../../../assets/Background_onboarding5.jpg')}
 							style={{ width: screenWidth, height: screenHeight, position: 'absolute' }}
 						/>
-						<Text style={[hygoStyles.h0, { color: 'white', textTransform: 'none', fontSize: 26, paddingLeft: 50, paddingBottom: 50 }]}>Vous voilà prêt à commencer</Text>
+						<View style={{flex:1, justifyContent: 'flex-end'}}>
+						<Text style={[hygoStyles.h0, { color: 'white', textTransform: 'none', fontSize: 26, paddingLeft: 50, paddingBottom: 50}]}>Vous voilà prêt à commencer</Text>
+						</View>
+						<View style={{flex:1, justifyContent: 'center'}}>
 						<HygoIconsCheck />
+						</View>
+						<View style={{flex: 1}}>
 						<TouchableOpacity
 							style={styles.button}
 							onPress={() => navigation.navigate('BarCodeValidation')}
@@ -82,6 +87,7 @@ const OnboardingScreen = ({ navigation }) => {
 							<HygoIconsArrowRight width={30} height={30}/>
 							<Text style={[hygoStyles.h0, { color: 'white', paddingTop: 10, paddingLeft:10 }]}>Passer à mon équipement</Text>
 						</TouchableOpacity>
+						</View>
 					</View>
 				</ScrollView>
 				<React.Fragment>
@@ -142,6 +148,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
+	onboardingView5: {
+		flex: 1,
+		width: Dimensions.get('screen').width,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
 	bottomOptions: {
 		position: 'absolute',
 		height: Dimensions.get('screen').height / heightRatio,
@@ -191,7 +203,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderRadius: 8,
-		marginTop: 50
+		marginTop: 50,
 	}
 });
 
