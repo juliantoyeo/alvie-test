@@ -92,7 +92,7 @@ const OnboardingScreen = ({ navigation }) => {
 				</ScrollView>
 				<React.Fragment>
 					<View style={styles.bottomOptions}>
-						<View style={{ marginTop: 25, marginHorizontal: 40, height: 20 }}>
+						<View style={{ marginTop: 20, marginHorizontal: 40, height: 20 }}>
 							<Text style={styles.text}>{texts[pagePosition]}</Text>
 						</View>
 						<View style={styles.bottomIcons}>
