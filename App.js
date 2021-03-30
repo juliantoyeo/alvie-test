@@ -41,6 +41,11 @@ const fetchResources = async () => {
             require('./assets/ICN-Rain.png'),
             require('./assets/ICN-Hygro.png'),
             require('./assets/ICN-Wind.png'),
+			require('./assets/Background_onboarding1.jpg'),
+			require('./assets/Background_onboarding2.jpg'),
+			require('./assets/Background_onboarding3.jpg'),
+			require('./assets/Background_onboarding4.gif'),
+			require('./assets/Background_onboarding5.jpg'),
         ]),
     ]);
 };
