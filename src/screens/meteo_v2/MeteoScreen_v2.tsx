@@ -57,14 +57,14 @@ const MeteoScreen_v2 = ({ navigation, parcelles }) => {
                         <Right style={{ flex: 1 }}></Right>
                     </Header>
                     <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({ i }) => switchTab(i)}>
-                        <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
+                        <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
                             <MeteoBriefScreen_v2 style={styles.tabBar} navigation={navigation} />
                         </Tab>
-                        <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
+                        <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
                             <MeteoDetailed_v2 navigation={navigation} style={styles.tabBar} />
                         </Tab>
                         {Localization.locale.indexOf('cs') === -1 && (
-                            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
+                            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
                                 <MeteoRadar_v2 style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
                             </Tab>
                         )}

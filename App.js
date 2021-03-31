@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
-import { AppState } from 'react-native'
+import { AppState, LogBox } from 'react-native'
 import AppContainer from './src/navigation'
 import * as Updates from 'expo-updates';
 import { Asset } from 'expo-asset';
@@ -53,7 +53,10 @@ const fetchResources = async () => {
 const store = configureStore();
 
 // disable warning about getNode()
-console.disableYellowBox = ['Calling getNode()'];
+LogBox.ignoreLogs([
+	'Calling `getNode()` on the ref',
+	'currentlyFocusedField is deprecated and will be removed',
+])
 
 const DataProviders = ({ children }) => (
 	<ModulationProvider>

@@ -51,14 +51,14 @@ const MeteoScreen = ({ navigation }) => {
             <Right style={{ flex: 1 }}></Right>
           </Header>
           <Tabs locked={true} initialPage={0} page={currentTab} tabContainerStyle={styles.tabBar} tabBarUnderlineStyle={{ backgroundColor: '#fff' }} onChangeTab={({i}) => switchTab(i)  }>
-            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
+            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.brief')}>
               <MeteoBriefScreen style={styles.tabBar} navigation={navigation} />
             </Tab>
-            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
+            <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.detailed')}>
               <MeteoDetailed navigation={navigation} style={styles.tabBar} />
             </Tab>
             { Localization.locale.indexOf('cs') === -1 && (
-              <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={[styles.tabStyle]} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
+              <Tab style={[styles.tabBar]} textStyle={styles.textStyle} activeTextStyle={styles.textStyle} activeTabStyle={styles.tabStyle} tabStyle={styles.tabStyle} heading={i18n.t('meteo.radar')}>
                 <MeteoRadar style={styles.tabBar} navigation={navigation} active={currentTab === 2} />
               </Tab>
             )}
@@ -70,13 +70,13 @@ const MeteoScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  statusbar: { 
-    flex: 1, 
+  statusbar: {
+    flex: 1,
     display: 'flex',
   },
-  container: { 
-    flex: 1, 
-    display: 'flex', 
+  container: {
+    flex: 1,
+    display: 'flex',
   },
   header: {
     backgroundColor: 'transparent',
@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'nunito-regular',
     fontSize: 24
-  },  
+  },
   content: {
     flex: 1,
     backgroundColor: Colors.BEIGE
   },
-  tabBar: { 
-    backgroundColor: 'transparent', 
-    shadowOffset: { width: 0, height: 0}, 
+  tabBar: {
+    backgroundColor: 'transparent',
+    shadowOffset: { width: 0, height: 0},
     elevation: 0,
     borderBottomWidth: 0
   },
