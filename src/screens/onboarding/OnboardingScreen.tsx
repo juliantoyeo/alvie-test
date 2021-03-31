@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { OnboardingIcon1, OnboardingIcon2, OnboardingIcon3, OnboardingIcon4 } from '../../icons/HygoOnboardingIcons'
 import hygoStyles, { heightRatio } from '../../styles'
 import COLORS from '../../colors'
-import { HygoIconsArrowRight, HygoIconsArrowRightFilled, HygoIconsCheck } from '../../icons/HygoIcons';
-import HygoButton from '../../components/v2/HygoButton';
+import { HygoIconsArrowRight, HygoIconsCheck } from '../../icons/HygoIcons';
 
 const OnboardingScreen = ({ navigation }) => {
 	const [pagePosition, setPagePosition] = useState<number>(0)

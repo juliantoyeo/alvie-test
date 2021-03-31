@@ -14,6 +14,7 @@ import translations from './src/i18n/i18n.js'
 import SnackbarProvider from './src/context/snackbar.context'
 import ModulationProvider from './src/context/modulation.context'
 import MeteoProvider from './src/context/meteo.context';
+import NewUpdateScreen from './src/screens/NewUpdateScreen';
 
 i18n.translations = translations
 i18n.locale = Localization.locale
@@ -64,16 +65,23 @@ const DataProviders = ({ children }) => (
 
 export default App = () => {
 	const [resourcesLoaded, setResourcesLoaded] = useState(false)
-
+	const [updateRequired, setUpdateRequired] = useState(false)
 	// Check when app is coming to the foreground
 	const onChangeState = (nextAppState) => {
 		if (nextAppState === "active") {
 			Updates.checkForUpdateAsync(({ isAvailable, manifest }) => {
-				if (isAvailable) console.log("=======", test)
-				else console.log("test")
+				if (isAvailable) setUpdateRequired(true)
 			})
+			console.log('===active')
 		}
 	}
+
+	useEffect(() => {
+		AppState.addEventListener("change", onChangeState);
+		return () => {
+		  AppState.removeEventListener("change", onChangeState);
+		};
+	  }, []);
 
 	if (!resourcesLoaded) {
 		return (
@@ -84,7 +92,7 @@ export default App = () => {
 		<Provider store={store}>
 			<SnackbarProvider>
 				<DataProviders>
-					<AppContainer />
+					{ updateRequired ? <NewUpdateScreen /> : <AppContainer /> }
 				</DataProviders>
 			</SnackbarProvider>
 		</Provider>
