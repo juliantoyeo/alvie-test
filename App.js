@@ -98,7 +98,7 @@ export default App = () => {
 			<SnackbarProvider>
 				<DataProviders>
 					{updateRequired ?
-						<NewUpdateScreen onError={() =>setUpdateRequired(false)}/>
+						<NewUpdateScreen onError={() => setUpdateRequired(false)}/>
 						: <AppContainer />}
 				</DataProviders>
 			</SnackbarProvider>
