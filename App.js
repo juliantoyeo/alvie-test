@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import configureStore from './src/store/configureStore';
-import { AppState, View, Text } from 'react-native'
+import { AppState } from 'react-native'
 import AppContainer from './src/navigation'
 import * as Updates from 'expo-updates';
 import { Asset } from 'expo-asset';
@@ -68,20 +68,28 @@ export default App = () => {
 	const [updateRequired, setUpdateRequired] = useState(false)
 	// Check when app is coming to the foreground
 	const onChangeState = (nextAppState) => {
-		if (nextAppState === "active") {
-			Updates.checkForUpdateAsync(({ isAvailable, manifest }) => {
+		const checkUpdate = async () => {
+			try {
+				const {isAvailable } = await Updates.checkForUpdateAsync()
 				if (isAvailable) setUpdateRequired(true)
-			})
-			console.log('===active')
+				console.log("====heyyy")
+			} catch (e) {
+				console.log("===bad")
+				setUpdateRequired(false)
+			}
+		}
+		if (nextAppState === "active") {
+			checkUpdate()
+			console.log('===active!')
 		}
 	}
 
 	useEffect(() => {
 		AppState.addEventListener("change", onChangeState);
 		return () => {
-		  AppState.removeEventListener("change", onChangeState);
+			AppState.removeEventListener("change", onChangeState);
 		};
-	  }, []);
+	}, []);
 
 	if (!resourcesLoaded) {
 		return (
@@ -92,7 +100,9 @@ export default App = () => {
 		<Provider store={store}>
 			<SnackbarProvider>
 				<DataProviders>
-					{ updateRequired ? <NewUpdateScreen /> : <AppContainer /> }
+					{updateRequired ?
+						<NewUpdateScreen onError={() =>setUpdateRequired(false)}/>
+						: <AppContainer />}
 				</DataProviders>
 			</SnackbarProvider>
 		</Provider>

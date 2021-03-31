@@ -1,9 +1,20 @@
 import { Icon } from 'native-base';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, StatusBar, ImageBackground } from 'react-native';
+import COLORS from '../colors'
 import LogoLoading from '../components/LogoLoading';
+import * as Updates from 'expo-updates';
 
-const NewUpdateScreen = () => {
+const NewUpdateScreen = ({onError}) => {
+	const doUpdate = async () => {
+		try {
+			const { isNew } = await Updates.fetchUpdateAsync()
+			if (isNew) await Updates.reloadAsync()
+			else onError()
+		} catch(e){
+			onError()
+		}
+	}
 	return (
 		<SafeAreaView style={{ backgroundColor: 'black', flex: 1, display: 'flex' }} forceInset={{ top: 'always' }}>
 			<React.Fragment>
@@ -14,6 +25,11 @@ const NewUpdateScreen = () => {
 						<LogoLoading duration={1000} color={"#fff"} />
 						<Text style={styles.title}>Une nouvelle version de Hygo est disponible</Text>
 					</View>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={doUpdate}>
+						<Text style={styles.buttonText}>Mettre à jour</Text>
+					</TouchableOpacity>
 				</ImageBackground>
 			</React.Fragment>
 
@@ -45,6 +61,19 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		resizeMode: 'cover'
 	},
+	button: {
+		backgroundColor: 'white',
+		borderRadius: 8,
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+		marginTop: 30
+	},
+	buttonText: {
+		fontFamily: 'nunito-bold',
+		fontSize: 26,
+		textAlign: 'center',
+		color: COLORS.DARK_GREEN
+	}
 })
 
 

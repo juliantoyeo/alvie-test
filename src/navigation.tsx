@@ -36,6 +36,7 @@ import HeaderText from './components/HeaderText';
 import OnboardingScreen from './screens/onboarding/OnboardingScreen';
 
 import COLORS from './colors'
+import NewUpdateScreen from './screens/NewUpdateScreen';
 
 const Navigator = createSwitchNavigator({
 	authentication: createStackNavigator({
