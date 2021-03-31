@@ -56,7 +56,8 @@
     "victory-native": "^34.1.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^8.2.3"
+    "babel-preset-expo": "^8.2.3",
+    "typescript": "~3.9.5"
   },
   "private": true
 }
