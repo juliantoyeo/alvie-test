@@ -1,18 +1,24 @@
-import { Icon } from 'native-base';
+import { Icon, Spinner } from 'native-base';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, StatusBar, ImageBackground } from 'react-native';
 import COLORS from '../colors'
 import LogoLoading from '../components/LogoLoading';
 import * as Updates from 'expo-updates';
 
-const NewUpdateScreen = ({onError}) => {
+const NewUpdateScreen = ({ onError }) => {
+	const [updating, setUpdating] = useState<boolean>(false)
 	const doUpdate = async () => {
+		setUpdating(true)
 		try {
 			const { isNew } = await Updates.fetchUpdateAsync()
 			if (isNew) await Updates.reloadAsync()
-			else onError()
-		} catch(e){
+			else {
+				onError()
+				setUpdating(false)
+			}
+		} catch (e) {
 			onError()
+			setUpdating(false)
 		}
 	}
 	return (
@@ -25,11 +31,17 @@ const NewUpdateScreen = ({onError}) => {
 						<LogoLoading duration={1000} color={"#fff"} />
 						<Text style={styles.title}>Une nouvelle version de Hygo est disponible</Text>
 					</View>
-					<TouchableOpacity
-						style={styles.button}
-						onPress={doUpdate}>
-						<Text style={styles.buttonText}>Mettre à jour</Text>
-					</TouchableOpacity>
+					{updating ? (
+						<Spinner
+							size={40} color='white' style={{ marginTop: 5 }}
+						/>
+					) : (
+						<TouchableOpacity
+							style={styles.button}
+							onPress={doUpdate}>
+							<Text style={styles.buttonText}>Mettre à jour</Text>
+						</TouchableOpacity>
+					)}
 				</ImageBackground>
 			</React.Fragment>
 

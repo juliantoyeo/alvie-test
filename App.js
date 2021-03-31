@@ -72,15 +72,12 @@ export default App = () => {
 			try {
 				const {isAvailable } = await Updates.checkForUpdateAsync()
 				if (isAvailable) setUpdateRequired(true)
-				console.log("====heyyy")
 			} catch (e) {
-				console.log("===bad")
 				setUpdateRequired(false)
 			}
 		}
 		if (nextAppState === "active") {
 			checkUpdate()
-			console.log('===active!')
 		}
 	}
 
