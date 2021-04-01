@@ -91,12 +91,12 @@ class BarCodeScreen extends React.Component {
     gotoNextScreen = async (token, userName, familyName, deviceid, deviceType, hasEquipment, tester) => {
         try {
             await authValidate(
-                { token, userName, familyName, deviceid, deviceType, hasEquipment}, 
+                { token, userName, familyName, deviceid, deviceType, hasEquipment},
                 tester,
                 this.props,
             )
         } catch(e){
-            
+
         }
     }
 
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
 
 BarCodeScreen.navigationOptions = () => {
     return {
-        header: null
+        headerShown: false
     }
 }
 

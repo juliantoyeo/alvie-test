@@ -62,7 +62,7 @@ const Navigator = createSwitchNavigator({
 						MeteoScreen: {
 							screen: MeteoScreen_v2,
 							navigationOptions: {
-								header: null,
+								headerShown: false,
 							},
 						},
 					}),
@@ -148,7 +148,7 @@ const Navigator = createSwitchNavigator({
 		LoadingScreen: {
 			screen: LoadingScreen,
 			navigationOptions: {
-				header: null
+				headerShown: false
 			}
 		},
 
