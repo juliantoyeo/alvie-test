@@ -10,8 +10,6 @@ import { updateAuthInfo } from '../../store/actions/authActions';
 import { updatePhytoProductList, updatePulvInfo } from '../../store/actions/pulveActions'
 import { updateParcellesList, updateCulturesList } from '../../store/actions/metaActions'
 import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../../api/hygoApi';
-import { Notifications } from 'expo';
-//import { getLocationPermissionAsync } from '../geolocation'
 import * as Device from 'expo-device';
 import COLORS from '../../colors'
 import i18n from 'i18n-js';
@@ -47,18 +45,6 @@ class BarCodeScreen extends React.Component {
             this.handleBarCodeScanned(code[0])
         }
     };
-
-    registerForPushNotificationsAsync = async (deviceid) => {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        if (status !== 'granted') {
-            return;
-        }
-        // Get the token that identifies this device
-        const pushToken = await Notifications.getExpoPushTokenAsync();
-
-        // POST the token to the backend server
-        return storePushToken(pushToken, deviceid)
-    }
 
     async componentDidMount() {
         //await getLocationPermissionAsync(i18n.t('geolocation.text'))

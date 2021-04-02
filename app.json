@@ -62,6 +62,7 @@
           "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
         }
       },
+	  "useNextNotificationsApi": true,
       "permissions": [
         "CAMERA",
         "NOTIFICATIONS",
