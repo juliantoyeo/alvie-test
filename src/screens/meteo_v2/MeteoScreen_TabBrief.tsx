@@ -7,6 +7,8 @@ import capitalize from '../../utils/capitalize'
 import { getModulationContext } from '../../api/hygoApi'
 import _ from 'lodash'
 import { ModulationContext, ModulationContextProps } from '../../context/modulation.context'
+import { HygoIconsSprayer } from '../../icons/HygoIcons'
+import hygoStyles from '../../styles'
 
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
@@ -50,6 +52,12 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 		loadSavedReports()
 	}, []);
 
+	const LogoFirstPulve = () => (
+		<React.Fragment>
+			<HygoIconsSprayer />
+			<Text style={[hygoStyles.textBold, {color: 'white', paddingTop: 10, paddingBottom: 0, fontSize: 16}]}>Planifions votre première bouillie !</Text>
+		</React.Fragment>
+	)
 	return (
 		<ScrollView>
 			<View style={styles.textContainer}>
@@ -60,6 +68,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 					title="Pulvérisation"
 					subtitle=""
 					text="Démarrer un travail de pulvérisation"
+					content = {savedModContext.length == 0 && <LogoFirstPulve/>}
 					buttonText="Démarrer"
 					onPress={() => navigation.navigate("Pulverisation_v2")}
 				/>
