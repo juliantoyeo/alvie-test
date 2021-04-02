@@ -26,7 +26,7 @@ export const getPushToken = async () => {
 			return null;
 		}
 		token = (await Notifications.getExpoPushTokenAsync()).data;
-		console.log(token);
+		// console.log(token);
 	} else {
 		//Must use physical device for Push Notifications
 		return null;
@@ -36,7 +36,7 @@ export const getPushToken = async () => {
 
 export const registerForPushNotificationsAsync = async () => {
 
-	const token = getPushToken()
+	const token = await getPushToken()
 	if (token === null) return null
 	if (Platform.OS === 'android') {
 		Notifications.setNotificationChannelAsync('default', {

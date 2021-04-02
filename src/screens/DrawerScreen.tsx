@@ -33,7 +33,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 		try {
 			await logout(deleteToken)
 			navigation.navigate('BarCode');
-		} catch (e) { }
+		} catch (e) { console.log(e) }
 	}
 
 	const becomeTester = async (t) => {

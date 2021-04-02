@@ -64,9 +64,9 @@ export const authValidate = async (
 	}
 }
 
-export const logout = async ({ deleteToken }) => {
-	const pushToken = getPushToken()
-	if (pushToken !== null) await deletePushToken({ pushToken })
+export const logout = async (deleteToken) => {
+	const pushToken = await getPushToken()
+	if (pushToken !== null) await deletePushToken(pushToken)
 	await AsyncStorage.removeItem('token');
 	deleteToken();
 	Amplitude.setUserId(null)
