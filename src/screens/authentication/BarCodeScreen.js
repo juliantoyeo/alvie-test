@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { updateAuthInfo } from '../../store/actions/authActions';
 import { updatePhytoProductList, updatePulvInfo } from '../../store/actions/pulveActions'
 import { updateParcellesList, updateCulturesList } from '../../store/actions/metaActions'
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../../api/hygoApi';
+import { signInWithBarCode, checkToken, getPhytoProducts } from '../../api/hygoApi';
 import * as Device from 'expo-device';
 import COLORS from '../../colors'
 import i18n from 'i18n-js';

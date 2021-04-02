@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
-import { signInWithBarCode, checkToken, storePushToken, getPhytoProducts, getFields, getCultures, checkSetup } from '../../api/hygoApi';
+import { getFields, getCultures, checkSetup } from '../../api/hygoApi';
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 
@@ -49,8 +49,8 @@ export const authValidate = async (
         updateParcellesList(fields)
         updateCulturesList(cultures)
 
-        // TODO debug this
-        // await this.registerForPushNotificationsAsync(deviceid)
+        // TODO
+        // Register notificatio here
 
         if (hasEquipment) {
             navigation.navigate('main_v2');

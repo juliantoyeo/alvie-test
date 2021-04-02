@@ -185,6 +185,16 @@ export const storePushToken = async (token, deviceid) => {
     }
 }
 
+//Delete pushToken
+export const deletePushToken = async (token, deviceid) => {
+    try {
+        const response = await hygoApi.delete('/app/pushtoken', { data: {pushToken: token, deviceid }});
+        return response.data;
+    } catch (error) {
+        return {}
+    }
+}
+
 // Save equipments
 export const storeEquipmentInformation = async ({ buses, speed, pressure, soil, family }) => {
     try {
