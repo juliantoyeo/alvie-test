@@ -49,13 +49,17 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 	}
 
 	useEffect(() => {
+		const focusListener = navigation.addListener('didFocus', () => {
+			loadSavedReports()
+		});
 		loadSavedReports()
+		return () => { focusListener.remove() }
 	}, []);
 
 	const LogoFirstPulve = () => (
 		<React.Fragment>
 			<HygoIconsSprayer />
-			<Text style={[hygoStyles.textBold, {color: 'white', paddingTop: 10, paddingBottom: 0, fontSize: 16}]}>Planifions votre première bouillie !</Text>
+			<Text style={[hygoStyles.textBold, { color: 'white', paddingTop: 10, paddingBottom: 0, fontSize: 16 }]}>Planifions votre première bouillie !</Text>
 		</React.Fragment>
 	)
 	return (
@@ -68,7 +72,7 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 					title="Pulvérisation"
 					subtitle=""
 					text="Démarrer un travail de pulvérisation"
-					content = {savedModContext.length == 0 && <LogoFirstPulve/>}
+					content={savedModContext.length == 0 && <LogoFirstPulve />}
 					buttonText="Démarrer"
 					onPress={() => navigation.navigate("Pulverisation_v2")}
 				/>
