@@ -13,8 +13,10 @@ import HygoButton from '../../components/HygoButton'
 
 const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
     const logoutAndLeave = async () => {
-        await logout(deleteToken)
-        navigation.navigate('BarCode');
+        try {
+			await logout(deleteToken)
+        	navigation.navigate('BarCode');
+		} catch(e) {}
     }
     return (
 

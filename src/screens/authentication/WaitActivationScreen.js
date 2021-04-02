@@ -11,8 +11,10 @@ const WaitActivationScreen = ({navigation}) => {
     const error = navigation.getParam('error')
 	const error2 = navigation.getParam('error2')
     const logoutAndLeave = async () => {
-        await logout(deleteToken)
-        navigation.replace('BarCode');
+        try{
+			await logout(deleteToken)
+        	navigation.replace('BarCode');
+		} catch(e) {}
       }
 
     return (
