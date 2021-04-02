@@ -1,7 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
 import { getFields, getCultures, checkSetup } from '../api/hygoApi';
-
 import { Amplitude, AMPLITUDE_EVENTS } from '../amplitude'
 import { registerForPushNotificationsAsync } from '../utils/notifications';
 import { deletePushToken } from '../api/hygoApi';
@@ -64,7 +63,6 @@ export const authValidate = async (
 		console.log("Erreur AuthValidate")
 	}
 }
-
 
 export const logout = async ({ deleteToken }) => {
 	const pushToken = getPushToken()

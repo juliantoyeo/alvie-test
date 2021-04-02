@@ -1,19 +1,8 @@
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
-import { checkToken, storePushToken } from '../api/hygoApi'
+import { storePushToken } from '../api/hygoApi'
 
-// registerForPushNotificationsAsync = async (deviceid) => {
-//     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-//     if (status !== 'granted') {
-//         return;
-//     }
-//     // Get the token that identifies this device
-//     const pushToken = await Notifications.getExpoPushTokenAsync();
-
-//     // POST the token to the backend server
-//     return storePushToken(pushToken, deviceid)
-// }
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
