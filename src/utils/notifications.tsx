@@ -23,7 +23,7 @@ Notifications.setNotificationHandler({
 	}),
 });
 
-const registerForPushNotificationsAsync = async () => {
+export const getPushToken = async () => {
 	let token;
 	if (Constants.isDevice) {
 		const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -42,7 +42,13 @@ const registerForPushNotificationsAsync = async () => {
 		//Must use physical device for Push Notifications
 		return null;
 	}
+	return token
+}
 
+export const registerForPushNotificationsAsync = async () => {
+
+	const token = getPushToken()
+	if (token === null) return null
 	if (Platform.OS === 'android') {
 		Notifications.setNotificationChannelAsync('default', {
 			name: 'default',
@@ -51,5 +57,6 @@ const registerForPushNotificationsAsync = async () => {
 			lightColor: '#FF231F7C',
 		});
 	}
+	await storePushToken(token);
 	return token;
 };

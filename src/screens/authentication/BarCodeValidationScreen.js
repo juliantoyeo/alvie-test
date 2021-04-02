@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-navigation';
+import { logout } from '../utils/authentication'
 import { StyleSheet, View, Text, StatusBar, AsyncStorage } from 'react-native';
 import { Content, Header, Left, Button, Icon } from 'native-base';
 import { connect } from 'react-redux'
@@ -11,11 +12,8 @@ import { Amplitude } from '../../amplitude'
 import HygoButton from '../../components/HygoButton'
 
 const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
-    const logout = async () => {
-        await AsyncStorage.removeItem('token');
-
-        deleteToken();
-        Amplitude.setUserId(null)
+    const logoutAndLeave = async () => {
+        await logout(deleteToken)
         navigation.navigate('BarCode');
     }
     return (
@@ -24,7 +22,7 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
             <StatusBar translucent backgroundColor="transparent" />
             <Header style={styles.header} androidStatusBarColor={COLORS.CYAN} iosBarStyle="light-content">
                 <Left style={{ flex: 1 }}>
-                    <Button transparent onPress={() => logout()}>
+                    <Button transparent onPress={logoutAndLeave}>
                         <Icon name='close' style={{ color: COLORS.DARK_GREEN }} />
                     </Button>
                 </Left>

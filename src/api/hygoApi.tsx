@@ -176,9 +176,9 @@ export const activateDevice = async (barcode: string, activationCode: string) =>
     }
 }
 // Store a new pushToken for this device
-export const storePushToken = async (token, deviceid) => {
+export const storePushToken = async (token) => {
     try {
-        const response = await hygoApi.post('/app/pushtoken', { pushToken: token, deviceid });
+        const response = await hygoApi.post('/app/pushtoken', { pushToken: token });
         return response.data;
     } catch (error) {
         return {}
@@ -186,9 +186,9 @@ export const storePushToken = async (token, deviceid) => {
 }
 
 //Delete pushToken
-export const deletePushToken = async (token, deviceid) => {
+export const deletePushToken = async (token) => {
     try {
-        const response = await hygoApi.delete('/app/pushtoken', { data: {pushToken: token, deviceid }});
+        const response = await hygoApi.delete('/app/pushtoken', { data: {pushToken: token }});
         return response.data;
     } catch (error) {
         return {}

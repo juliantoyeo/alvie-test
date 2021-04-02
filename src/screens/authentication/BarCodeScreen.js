@@ -19,7 +19,7 @@ import pkg from '../../../app.json'
 import { OTA } from '../../constants'
 
 import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
-import { authValidate } from './authValidate';
+import { authValidate } from '../../utils/authentication';
 
 const { barCodeScreen: ampEvent } = AMPLITUDE_EVENTS
 

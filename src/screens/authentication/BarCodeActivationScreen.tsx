@@ -13,7 +13,7 @@ import { updatePhytoProductList, updatePulvInfo } from '../../store/actions/pulv
 import { updateParcellesList, updateCulturesList } from '../../store/actions/metaActions'
 import { checkToken, activateDevice } from '../../api/hygoApi';
 import HygoButton from '../../components/v2/HygoButton'
-import { authValidate } from './authValidate';
+import { authValidate } from '../../utils/authentication';
 import { HygoCard } from '../../components/v2/HygoCards';
 import hygoStyles from '../../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -45,7 +45,7 @@ const BarCodeActivationScreen = (props) => {
     const handleLink = async () => {
         // Checking if the link is supported for links with custom URL scheme.
         const supported = await Linking.canOpenURL(url);
-    
+
         if (supported) {
           // Opening the link with some app, if the URL scheme is "http" the web link should be opened
           // by some browser in the mobile
@@ -89,7 +89,7 @@ const BarCodeActivationScreen = (props) => {
                         Si vous n'avez rien reçu, merci de vous rapprocher de votre coopérative, ou bien rendez-vous sur :</Text>
                     <TouchableOpacity onPress={handleLink}>
                         <Text style={[hygoStyles.text, {padding:20, fontSize: 20, textAlign: 'center'}]}>{url}</Text>
-                    </TouchableOpacity> 
+                    </TouchableOpacity>
                 </View>
             </Content>
             <Footer style={styles.footer}>

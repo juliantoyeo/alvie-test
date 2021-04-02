@@ -10,11 +10,8 @@ import { deleteToken } from '../../store/actions/authActions'
 const WaitActivationScreen = ({navigation}) => {
     const error = navigation.getParam('error')
 	const error2 = navigation.getParam('error2')
-    const logout = async () => {
-        await AsyncStorage.removeItem('token');
-
-        deleteToken();
-
+    const logoutAndLeave = async () => {
+        await logout(deleteToken)
         navigation.replace('BarCode');
       }
 
@@ -27,7 +24,7 @@ const WaitActivationScreen = ({navigation}) => {
 
             <View style={[StyleSheet.absoluteFill, { flex: 1, backgroundColor: '#000', opacity: .6 }]}></View>
             <View style={[StyleSheet.absoluteFill]}>
-            <TouchableOpacity  onPress={() => logout()} style ={{marginTop:50, marginLeft: 20}}>
+            <TouchableOpacity  onPress={logoutAndLeave} style ={{marginTop:50, marginLeft: 20}}>
                     <Icon name='close' style={{ color: '#fff', fontSize: 40 }} />
             </TouchableOpacity>
             </View>

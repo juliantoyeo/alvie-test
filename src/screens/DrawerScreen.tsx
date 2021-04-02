@@ -1,20 +1,15 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image, AsyncStorage, Linking, TouchableOpacity, SafeAreaView, StatusBar, Platform } from 'react-native'
-import { NavigationActions } from 'react-navigation';
+import { StyleSheet, View, Text, Image, Linking, TouchableOpacity, SafeAreaView, StatusBar, Platform } from 'react-native'
+import { logout } from '../utils/authentication'
 import { DrawerActions } from 'react-navigation-drawer';
 import { connect } from 'react-redux'
 import { deleteToken } from '../store/actions/authActions'
-
 import { Thumbnail, Header } from 'native-base'
 import pkg from '../../app.json'
-
 import COLORS from '../colors'
 import i18n from 'i18n-js'
 import {OTA} from '../constants'
-
 import { getEquipment, getFields, setTester } from '../api/hygoApi'
-
-import { Amplitude } from '../amplitude'
 import { SnackbarContext } from '../context/snackbar.context';
 
 const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, deleteToken, tester }) => {
@@ -34,11 +29,8 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
         navigation.navigate('FieldsScreen')
     }
 
-    const logout = async () => {
-        await AsyncStorage.removeItem('token');
-
-        deleteToken();
-        Amplitude.setUserId(null)
+    const logoutAndLeave = async () => {
+			await logout(deleteToken)
         navigation.navigate('BarCode');
     }
 
@@ -90,7 +82,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
                     <Image source={require('../../assets/contact.png')} style={styles.itemImage} />
                     <Text style={styles.itemText}>{i18n.t('drawer.contact')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item} onPress={logout}>
+                <TouchableOpacity style={styles.item} onPress={() => logoutAndLeave({deleteToken, navigation})}>
                     <Image source={require('../../assets/logout.png')} style={styles.itemImage} />
                     <Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
                 </TouchableOpacity>
