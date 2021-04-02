@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { View, StyleSheet, ScrollView, Text, Image } from 'react-native'
-import { Spinner } from 'native-base'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, ScrollView, Text } from 'react-native'
+
 import { HygoCardTransparent, HygoCardTransparentButton } from '../../components/v2/HygoCards'
 import i18n from 'i18n-js'
 import capitalize from '../../utils/capitalize'
-import COLORS from '../../colors'
-import moment from 'moment-timezone'
-import { getMeteo, getModulationContext } from '../../api/hygoApi'
-import { MeteoContext } from '../../context/meteo.context'
+import { getModulationContext } from '../../api/hygoApi'
 import _ from 'lodash'
-import { ModulationContext, ModulationContextProps, savedReportType } from '../../context/modulation.context'
+import { ModulationContext, ModulationContextProps } from '../../context/modulation.context'
 
 
 const MeteoBriefScreen_v2 = ({ navigation }) => {
