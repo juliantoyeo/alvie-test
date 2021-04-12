@@ -15,8 +15,8 @@ const BarCodeValidationScreen = ({ navigation, deleteToken }) => {
     const logoutAndLeave = async () => {
         try {
 			await logout(deleteToken)
-        	navigation.navigate('BarCode');
 		} catch(e) {}
+		navigation.navigate('BarCode');
     }
     return (
 

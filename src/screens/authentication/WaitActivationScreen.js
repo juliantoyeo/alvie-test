@@ -13,8 +13,8 @@ const WaitActivationScreen = ({navigation}) => {
     const logoutAndLeave = async () => {
         try{
 			await logout(deleteToken)
-        	navigation.replace('BarCode');
 		} catch(e) {}
+		navigation.replace('BarCode');
       }
 
     return (
