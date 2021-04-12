@@ -84,7 +84,7 @@ const DrawerScreen = ({ navigation, deviceid, deviceType, userName, familyName, 
 					<Image source={require('../../assets/contact.png')} style={styles.itemImage} />
 					<Text style={styles.itemText}>{i18n.t('drawer.contact')}</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.item} onPress={() => logoutAndLeave({ deleteToken, navigation })}>
+				<TouchableOpacity style={styles.item} onPress={logoutAndLeave}>
 					<Image source={require('../../assets/logout.png')} style={styles.itemImage} />
 					<Text style={styles.itemText}>{i18n.t('drawer.logout')}</Text>
 				</TouchableOpacity>
