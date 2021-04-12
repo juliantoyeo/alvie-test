@@ -97,8 +97,10 @@ const ReportScreen = ({ navigation, phytoProductList }) => {
                 <Content style={styles.content}>
                     {/*=============== Metrics ===============*/}
                     <View style={{ backgroundColor: COLORS.DARK_BLUE }}>
+						<View style={{alignItems: 'center'}}>
                         <Title style={styles.hourTitle}>{getDay(context.selectedDay)}</Title>
                         <Title style={styles.hourTitle}>{context.selectedSlot.min}h - {context.selectedSlot.max + 1}h</Title>
+						</View>
                         {/* <Title style={styles.hourSubtitle}>{dt}</Title> */}
                         <View style={{ paddingBottom: 20 }}>
                             <Metrics currentHourMetrics={context.metrics} hasRacinaire={hasRacinaire()} />
