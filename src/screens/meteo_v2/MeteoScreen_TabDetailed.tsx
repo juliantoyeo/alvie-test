@@ -224,7 +224,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 							</React.Fragment>
 						)}
 						{/* =============== Loading Spinner ============= */}
-						{ !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt] && !!detailed.days ?
+						{ !loading && !!detailed.data && !!detailed.data[dow[currentDay].dt]?.hours1 && !!detailed.days ?
 							(
 								<View style={styles.pulve}>
 									<Text style={styles.pulveTitle}>{i18n.t('meteo_detailed.pulve_title', { value: detailed.products.length || '' })}</Text>
