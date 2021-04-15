@@ -56,6 +56,7 @@ const HygoInputModalDose = ({ onClose, onSuccess, modalVisible, setModalVisible,
                                         value={value}
                                         style={{ textAlign: 'left', flex: 1 }}
                                         keyboardType='numeric'
+										autoFocus={true}
                                     />
                                     <Text style={{ paddingLeft: 10, textAlign: 'right', textAlignVertical: 'center', flex: 1 }}>{item.unit}</Text>
                                 </View>
