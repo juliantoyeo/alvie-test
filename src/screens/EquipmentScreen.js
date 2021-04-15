@@ -190,6 +190,7 @@ const EquipmentScreen = ({ navigation }) => {
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon name="arrow-down" />}
+				  style={{height: 40}}
                   placeholder={i18n.t('equipment.no_buse')}
                   itemTextStyle={{
                     flex: 1,
@@ -231,11 +232,11 @@ const EquipmentScreen = ({ navigation }) => {
             )} />
 
             <HygoCard title={i18n.t('equipment.speed')} validated={speed.validated} content={(
-              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0 }}>
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 40}}>
                 <HygoSlider
                   min={0}
                   max={35}
-                  sliderLength={Dimensions.get('window').width - 36 - 20}
+                  sliderLength={Dimensions.get('window').width - 80 - 40}
                   value={speed.speed}
                   updateValue={(v) => setSpeed({
                     speed: v,
@@ -246,12 +247,12 @@ const EquipmentScreen = ({ navigation }) => {
             )} />
 
             <HygoCard title={i18n.t('equipment.pressure')} validated={pressure.validated} content={(
-              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0 }}>
+              <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 40}}>
                 <HygoSlider
                   min={1}
                   max={6}
                   increment={0.5}
-                  sliderLength={Dimensions.get('window').width - 36 - 20}
+                  sliderLength={Dimensions.get('window').width - 80 - 40}
                   value={pressure.pressure}
                   updateValue={(v) => setPressure({
                     pressure: v,
@@ -265,6 +266,7 @@ const EquipmentScreen = ({ navigation }) => {
               <View style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
                 <Picker
                   mode="dropdown"
+				  style={{height: 40}}
                   iosIcon={<Icon name="arrow-down" />}
                   placeholder={i18n.t('soils.none')}
                   itemTextStyle={{

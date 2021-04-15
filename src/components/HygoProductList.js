@@ -30,6 +30,7 @@ const HygoProductList = ({ phytoProductList, updatePhyto, produitPhytoClicked, o
     <Picker
       mode="dropdown"
       iosIcon={<Icon name="arrow-down" />}
+	  style={{height: 40}}
       placeholder={i18n.t('phyto.no_phyto')}
       itemTextStyle={{
         flex: 1,

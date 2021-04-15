@@ -34,15 +34,16 @@ const HygoPickerModal = ({onClose, modalVisible, setModalVisible, defaultValue, 
                     <View style={styles.inputBorder}>
                     <Picker
                       mode='dropdown'
+					  style={{height: 40}}
                       selectedValue={value}
                       onValueChange={(v, i)=>{
                         setValue(v)
                       }}
                     >
-                          { items.map((v, i) => <Picker.Item label={v} value={v} key={i}/>)}     
+                          { items.map((v, i) => <Picker.Item label={v} value={v} key={i}/>)}
                     </Picker>
-                    
-                      {/* <TextInput 
+
+                      {/* <TextInput
                         onChangeText={text => setValue(text)}
                         value={value}
                         style={{ textAlign:'left', flex:1}}
@@ -51,7 +52,7 @@ const HygoPickerModal = ({onClose, modalVisible, setModalVisible, defaultValue, 
                     </View>
                     <View style={{flex:1}}/>
                   </View>
-                    <HygoButton 
+                    <HygoButton
                       label='OK'
                       onPress={() => {
                         setInput(value)
@@ -87,8 +88,8 @@ const styles = StyleSheet.create({
         elevation: 5,
         },
       title: {
-        borderColor: '#D1CFCF', 
-        borderBottomWidth: 1, 
+        borderColor: '#D1CFCF',
+        borderBottomWidth: 1,
         alignItems:'center'
       },
       input: {
