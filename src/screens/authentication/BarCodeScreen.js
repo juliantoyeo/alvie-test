@@ -37,7 +37,7 @@ class BarCodeScreen extends React.Component {
 			loading: true,
 			tokenLoading: false,
 			qrError: null,
-			manual: true,
+			manual: false,
 			textQRCode: ''
 		};
 	}
@@ -238,6 +238,13 @@ class BarCodeScreen extends React.Component {
 									fontSize: 18,
 									fontFamily: 'nunito-regular'
 								}}>Entrez l'identifiant de votre capteur (exemple : BE12345)</Text>
+								{scanned && <Text textAlign="center" style={{
+									color: COLORS.DARK_GREEN,
+									textAlign: 'center',
+									fontSize: 18,
+									paddingTop: 30,
+									fontFamily: 'nunito-regular'
+								}}>Identifiant erroné</Text>}
 							</View>
 							<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
 								<View style={styles.inputBorder}>
@@ -247,7 +254,9 @@ class BarCodeScreen extends React.Component {
 										style={{ flex: 1, color: COLORS.DARK_GREEN, textAlign: 'center', fontSize: 26 }}
 									/>
 								</View>
-								<TouchableOpacity style={{paddingLeft:20}}>
+								<TouchableOpacity
+									onPress={() => this.handleBarCodeScanned({data: textQRCode})}
+									style={{paddingLeft:20}}>
 									<HygoIconsArrowRightFilled height={50} width={50}/>
 								</TouchableOpacity>
 							</View>
@@ -269,7 +278,7 @@ class BarCodeScreen extends React.Component {
 					justifyContent: 'flex-end'
 				}]}>
 
-					{scanned && (
+					{scanned && !manual && (
 						<HygoButton onPress={() => this.setState({ scanned: false })} label={i18n.t('bar_code.retry_barcode')} icon={{
 							type: 'EvilIcons',
 							name: 'refresh'
