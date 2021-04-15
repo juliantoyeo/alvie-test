@@ -348,6 +348,7 @@ const EditField = ({ cultureList, fields, selectedFieldIndex, parcelles, onCance
 				<View style={{ display: 'flex', flexDirection: 'row' }}>
 					<Picker
 						mode='dropdown'
+						style={{height: 40}}
 						itemTextStyle={styles.overlayText}
 						textStyle={[styles.overlayText, { paddingLeft: 0 }]}
 						selectedValue={cultureId}
