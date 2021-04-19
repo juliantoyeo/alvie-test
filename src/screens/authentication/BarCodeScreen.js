@@ -23,6 +23,7 @@ import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 import { authValidate } from '../../utils/authentication';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { HygoIconsArrowRight, HygoIconsArrowRightFilled } from '../../icons/HygoIcons';
+import HygoModal from '../../components/v2/HygoModal';
 
 const { barCodeScreen: ampEvent } = AMPLITUDE_EVENTS
 
@@ -38,7 +39,8 @@ class BarCodeScreen extends React.Component {
 			tokenLoading: false,
 			qrError: null,
 			manual: false,
-			textQRCode: ''
+			textQRCode: '',
+			modalVisible: false,
 		};
 	}
 	getPermissionsAsync = async () => {
@@ -107,11 +109,13 @@ class BarCodeScreen extends React.Component {
 			this.setState({ qrError: errorMessage })
 			this.setState({ tokenLoading: false });
 			this.setState({ scanned: true });
+			this.state.manual && this.setState({modalVisible: true})
 		}
 	};
 
+
 	render() {
-		const { hasCameraPermission, scanned, tokenLoading, manual, textQRCode } = this.state;
+		const { hasCameraPermission, scanned, tokenLoading, manual, textQRCode, modalVisible } = this.state;
 
 		return (
 			<SafeAreaView style={[styles.statusbar, { backgroundColor: 'black', flex: 1, display: 'flex' }]} forceInset={{ top: 'always' }}>
@@ -223,6 +227,11 @@ class BarCodeScreen extends React.Component {
 							justifyContent: 'center', backgroundColor: COLORS.BEIGE, margin: 40
 						}}
 						>
+							<HygoModal
+								title='Identifiant erroné'
+								modalVisible={modalVisible}
+								setModalVisible={value => this.setState({modalVisible: value})}
+							/>
 							<View style={{ flex: 1, justifyContent: 'flex-start' }}>
 								<Text textAlign="center" style={{
 									color: COLORS.DARK_BLUE,
@@ -238,27 +247,22 @@ class BarCodeScreen extends React.Component {
 									fontSize: 18,
 									fontFamily: 'nunito-regular'
 								}}>Entrez l'identifiant de votre capteur (exemple : BE12345)</Text>
-								{scanned && <Text textAlign="center" style={{
-									color: COLORS.DARK_GREEN,
-									textAlign: 'center',
-									fontSize: 18,
-									paddingTop: 30,
-									fontFamily: 'nunito-regular'
-								}}>Identifiant erroné</Text>}
 							</View>
-							<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-								<View style={styles.inputBorder}>
-									<TextInput
-										onChangeText={text => this.setState({ textQRCode: text })}
-										value={textQRCode}
-										style={{ flex: 1, color: COLORS.DARK_GREEN, textAlign: 'center', fontSize: 26 }}
-									/>
+							<View style={{ flexDirection: 'column' }}>
+								<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+									<View style={styles.inputBorder}>
+										<TextInput
+											onChangeText={text => this.setState({ textQRCode: text })}
+											value={textQRCode}
+											style={{ flex: 1, color: COLORS.DARK_GREEN, textAlign: 'center', fontSize: 26 }}
+										/>
+									</View>
+									<TouchableOpacity
+										onPress={() => this.handleBarCodeScanned({ data: textQRCode })}
+										style={{ paddingLeft: 20 }}>
+										<HygoIconsArrowRightFilled height={50} width={50} />
+									</TouchableOpacity>
 								</View>
-								<TouchableOpacity
-									onPress={() => this.handleBarCodeScanned({data: textQRCode})}
-									style={{paddingLeft:20}}>
-									<HygoIconsArrowRightFilled height={50} width={50}/>
-								</TouchableOpacity>
 							</View>
 							<View style={{ flex: 1, justifyContent: 'flex-end' }}>
 								<HygoLittleButton
@@ -317,7 +321,7 @@ const styles = StyleSheet.create({
 		borderColor: '#AAA',
 		borderWidth: 1,
 		height: 40,
-		width:200,
+		width: 200,
 	},
 })
 
