@@ -56,7 +56,7 @@
     "android": {
       "package": "com.alvie.hygo",
       "versionCode": 132,
-      "googleServicesFile": "./google-services.json",
+
       "config": {
         "googleMaps": {
           "apiKey": "XXX"
