@@ -40,7 +40,7 @@
         ]
       },
       "config": {
-
+		"googleMapsApiKey": "XXX"
       }
     },
     "androidStatusBar": {
@@ -59,7 +59,7 @@
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBcehqrLopSbh43wWTysViF7fUjnF1vu_o"
+          "apiKey": "XXX"
         }
       },
 	  "useNextNotificationsApi": true,
