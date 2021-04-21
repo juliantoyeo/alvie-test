@@ -76,6 +76,8 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 		return ret
 	}, [context.meteo])
 
+	console.log("===MeteoDetailed_v2 rendered")
+
 	// useEffect(() => {
 	//     let interval
 

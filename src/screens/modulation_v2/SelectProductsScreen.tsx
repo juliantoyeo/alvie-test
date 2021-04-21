@@ -66,6 +66,8 @@ const SelectProductsScreen = ({ navigation }) => {
 	const totalArea = context.selectedFields.reduce((r, f) => r + f.area / 10000, 0)    //converted to ha
 	const [favs, setFavs] = useState<Array<number>>([])
 
+	console.log("===SelectProductsScreen rendered")
+
 	useEffect(() => {
 		// Init product list and retrieve product families and favorites
 		const load = async () => {

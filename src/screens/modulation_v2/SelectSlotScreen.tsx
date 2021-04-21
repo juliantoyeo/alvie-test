@@ -45,6 +45,8 @@ const SelectSlotScreen = ({ navigation, phytoProductList }) => {
 	const ready: boolean = !!context.meteo && !!metrics && !!weeklyModulations
 	const modAvg: number = context.mod.length > 0 ? context.mod.reduce((sum, m) => sum + m, 0) / context.mod.length : 0
 
+	console.log("===SelectSlotScreen rendered")
+
 	const computeRatio = (selectedProduct: activeProductType) => {
 		const thresholdCoop = 0.7;
 		const thresholdHygo = 0.5;

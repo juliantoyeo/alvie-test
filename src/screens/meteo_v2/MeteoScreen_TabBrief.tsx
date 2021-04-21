@@ -36,6 +36,11 @@ const MeteoBriefScreen_v2 = ({ navigation }) => {
 		setSavedModContext(mc)
 	}
 
+
+	console.log("===MeteoBriefScreen_v2 rendered")
+
+
+
 	// navigate to the report screen when click a saved report and context is ready
 	useEffect(() => {
 		if (isReady && clickToReports) {

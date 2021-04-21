@@ -38,9 +38,9 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                 <TouchableOpacity onPress={() => setOpened(!opened)}>
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#D1CFCF' }}>
 
-                        {/* <Icon 
-                      type='AntDesign' 
-                      name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'} 
+                        {/* <Icon
+                      type='AntDesign'
+                      name={items.filter((it)=>it.selected == true).length > 0 ? 'arrowdown' : 'arrowright'}
                       style={{fontSize: 16, color: COLORS.CYAN}} /> */}
 
                         <Text style={[ListStyles.cardTitle, !active && ListStyles.hidden]}>{title}</Text>
@@ -80,7 +80,7 @@ export const ParcelList = ({ title, items, onPress, active }: ParcelListProps) =
                                             {item.nomCommune}
                                         </Text>}
                                 </View>
-                                
+
                                 <View style={{ flex: 1 }}>
                                     { item.svg && <ParcelSVG path={item.svg} height={30} width={30} /> }
                                 </View>
@@ -109,6 +109,7 @@ const SelectParcelsScreen = ({ navigation, cultures }: selectParcelsScreenProps)
     const [names, setNames] = useState<Array<string>>([])
     const [selectedName, setSelectedName] = useState<string>(null)
 
+	console.log("===SelectParcelsScreen rendered")
     useEffect(() => {
         // Init fields and retrieve culture_names
         const load = async () => {

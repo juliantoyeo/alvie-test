@@ -22,6 +22,10 @@ const MeteoScreen_v2 = ({ navigation, parcelles }) => {
     const switchTab = (i) => {
         setCurrentTab(i);
     }
+
+	console.log("===MeteoScreen_v2 rendered")
+
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('didFocus', () => {
             setCurrentTab(0)
