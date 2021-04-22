@@ -19,6 +19,8 @@ import Metrics_v2 from '../../components/v2/Metrics_v2';
 import _ from 'lodash'
 import HygoChart from '../../components/realtime/HygoChart'
 
+import { useCustomHook } from '../../hooks/customHook'
+
 interface detailedType {
 	data: any,
 	products: any,
@@ -48,9 +50,9 @@ const ChartContainer = ({ children, onPress, opened, title }) => {
 
 const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles }) => {
 	const context = React.useContext(MeteoContext)
-	const [loading, setLoading] = useState(true)
-	const [isRefreshing, setIsRefreshing] = useState(false)
-	const [detailed, setDetailed] = useState<detailedType>({} as detailedType)
+	const [loading, setLoading] = useCustomHook(true)
+	const [isRefreshing, setIsRefreshing] = useCustomHook(false)
+	const [detailed, setDetailed] = useCustomHook<detailedType>({} as detailedType)
 	const { dow, currentDay, setCurrentDay } = context
 	const [lastLoad, setLastLoad] = useState(-1)
 	const [counter, setCounter] = useState(0);
@@ -76,7 +78,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 		return ret
 	}, [context.meteo])
 
-	console.log("===MeteoDetailed_v2 rendered")
+	console.log("===MeteoDetailed_v2 rendered", context, 'loading :' , loading, 'isRefreshing :', isRefreshing, 'detailed :', detailed )
 
 	// useEffect(() => {
 	//     let interval
@@ -110,6 +112,7 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 	// }, [counter])
 
 	useEffect(() => {
+		console.log('im useEffect')
 		loadMeteoDetailed()
 	}, [])
 
@@ -137,11 +140,13 @@ const MeteoDetailed_v2 = ({ navigation, lastMeteoLoad, meteoSynced, parcelles })
 	}
 
 	const onRefresh = async () => {
+		console.log('im onRefresh')
 		setIsRefreshing(true)
 		await Promise.all([
 			loadMeteoDetailed(),
-			context.loadConditions(parcelles.fields),
-			context.loadMeteo(parcelles.fields)
+			context.loadMeteoAndConditions(parcelles.fields)
+			// context.loadConditions(parcelles.fields),
+			// context.loadMeteo(parcelles.fields)
 		])
 		setIsRefreshing(false)
 	}
@@ -539,5 +544,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch, props) => ({
 	meteoSynced: (d) => dispatch(meteoSynced(d))
 })
+
+const MemoizedMeteoDetailed_v2 = React.memo(MeteoDetailed_v2)
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeteoDetailed_v2);

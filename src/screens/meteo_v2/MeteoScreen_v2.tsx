@@ -14,16 +14,19 @@ import { Amplitude, AMPLITUDE_EVENTS } from '../../amplitude'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { MeteoContext } from '../../context/meteo.context';
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 const MeteoScreen_v2 = ({ navigation, parcelles }) => {
-    const { loadMeteo, loadConditions } = React.useContext(MeteoContext)
+    const { loadMeteo, loadConditions, loadMeteoAndConditions } = React.useContext(MeteoContext)
+	const value = React.useContext(MeteoContext)
     const [currentTab, setCurrentTab] = useState(0)
     const tabs = ["meteoBriefScreen", "meteoDetailedScreen", "meteoRadarScreen"]
-    const switchTab = (i) => {
+		const switchTab = (i) => {
+				console.log('4')
         setCurrentTab(i);
     }
 
-	console.log("===MeteoScreen_v2 rendered")
+	console.log("===MeteoScreen_v2 rendered", value, 'parcelles :', parcelles)
 
 
     useEffect(() => {
@@ -41,9 +44,15 @@ const MeteoScreen_v2 = ({ navigation, parcelles }) => {
     }, [currentTab])
 
     useEffect(() => {
-        loadMeteo(parcelles.fields)
-        loadConditions(parcelles.fields)
-    }, [])
+		if (!_.isEmpty(parcelles))
+			loadMeteoAndConditions(parcelles.fields)
+    }, [parcelles])
+
+	// useEffect(() => {
+	// 	loadMeteo(parcelles.fields)
+	// 	loadConditions(parcelles.fields)
+    // }, [])
+
     return (
         <SafeAreaView style={[styles.statusbar, { backgroundColor: 'black' }]} forceInset={{ top: 'always' }}>
             <StatusBar translucent backgroundColor="transparent" />

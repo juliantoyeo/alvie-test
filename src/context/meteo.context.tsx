@@ -30,10 +30,18 @@ export interface MeteoContextProps {
     setMeteo?: any
     meteo4h?: Array<any>
     setMeteo4h?: any,
-    loadMeteo?: any
+    loadMeteo?: any,
+
+	loadMeteoAndConditions?: any
 
     conditions?: Array<dailyConditionType>
     loadConditions?: any
+}
+
+interface meteoContextStateType {
+	meteo: Array<Array<meteoByHourType>>,
+	meteo4h: Array<any>,
+	conditions: Array<dailyConditionType>
 }
 
 export type dailyConditionType = Array<conditionType>
@@ -42,8 +50,13 @@ export const MeteoContext = React.createContext<MeteoContextProps>({});
 
 const MeteoProvider = ({ children }) => {
 
-    const snackbar = React.useContext(SnackbarContext)
+	const snackbar = React.useContext(SnackbarContext)
 
+	const [meteoState, setMeteoState] = useState<meteoContextStateType>({
+		meteo: [],
+		meteo4h: [],
+		conditions: null
+	})
     const [meteo, setMeteo] = useState<Array<Array<meteoByHourType>>>()
     const [meteo4h, setMeteo4h] = useState<Array<any>>()
     const [metrics, setMetrics] = useState<metricsType>()
@@ -55,7 +68,57 @@ const MeteoProvider = ({ children }) => {
         moment.utc().add(i, 'day'))
     ).map((d) => ({ dt: d.format('YYYY-MM-DD'), name: d.format('dddd') }))
 
+	const getMeteo = async (fields: Array<fieldType>) => {
+		try {
+			const data = await getMetrics_v2({ days: dow.map((d) => d.dt), fields })
+			const data4h = await getMetrics4h_v2(({ days: dow.map((d) => d.dt), fields }))
+			return { data, data4h }
+		} catch (error) {
+			return { data : null, data4h: null }
+			snackbar.showSnackbar(i18n.t('snackbar.meteo_error'), "ALERT")
+		}
+    }
 
+	const getConditions = async (fields:Array<fieldType>, products:Array<activeProductType>) => {
+		let now = moment.utc()
+		if (now.minutes() >= 30) {
+			now.hours(now.hours() + 1)
+		}
+		now = now.startOf('day')
+		// array of the 5 next days to iterate on
+		const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+		try {
+			const data: Array<dailyConditionType> = await Promise.all(
+				dt.map((day) => {
+					return (getConditions_v2({
+						day,
+						products: [6], //products.map((p) => p.phytoproduct.id),
+						parcelles: fields.map((f) => f.id)
+					}))
+				}
+				))
+			return data
+		} catch (e) {
+			return null
+			snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
+		}
+	}
+
+	const loadMeteoAndConditions = async (fields: Array<fieldType>, products:Array<activeProductType>) => {
+		let newMeteo = []
+		let newMeteo4h = []
+		let newConditions = null
+
+		const meteoRes = await getMeteo(fields)
+		const conditionRes = await getConditions(fields, products)
+		const newMeteoState = {
+			meteo: meteoRes.data,
+			meteo4h: meteoRes.data4h,
+			conditions: conditionRes
+		}
+		if (!_.isEqual(meteoState, newMeteoState))
+			setMeteoState(newMeteoState)
+	}
 
     /*====== Meteo ======*/
     const loadMeteo = async (fields: Array<fieldType>) => {
@@ -70,16 +133,42 @@ const MeteoProvider = ({ children }) => {
         }
     }
 
+	// TODO : use the active products or redefine a specific algorithm
+    const loadConditions = async (fields:Array<fieldType>, products:Array<activeProductType>) => {
+        let now = moment.utc()
+        if (now.minutes() >= 30) {
+            now.hours(now.hours() + 1)
+        }
+        now = now.startOf('day')
+        // array of the 5 next days to iterate on
+        const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
+        try {
+            const data: Array<dailyConditionType> = await Promise.all(
+                dt.map((day) => {
+                    return (getConditions_v2({
+                        day,
+                        products: [6], //products.map((p) => p.phytoproduct.id),
+                        parcelles: fields.map((f) => f.id)
+                    }))
+                }
+                ))
+            setConditions(data)
+        } catch (e) {
+            setConditions(null)
+            snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
+        }
+    }
+
     /*========= Metrics ======*/
     useEffect(() => {
         const buildMetrics = async () => {
             // build metrics for the whole day : between 5h and 22h
-            if (!!meteo) {
+            if (!!meteoState.meteo) {
                 setMetrics(null)
             }
             const minval = -99999, maxval = 99999
             let chd: metricsType = {}, dir = []
-            _.forEach(meteo[currentDay], (v, k2) => {
+            _.forEach(meteoState.meteo[currentDay], (v, k2) => {
                 const h = v.hour.toString().padStart(2, '0')
                 if (parseInt(h) < 5 || parseInt(h) > 22) {
                     return
@@ -117,44 +206,30 @@ const MeteoProvider = ({ children }) => {
             setMetrics(chd)
         }
 
-        !!meteo && buildMetrics()
-    }, [meteo, currentDay])
+        !!meteoState.meteo && buildMetrics()
+    }, [meteoState.meteo, currentDay])
 
-    // TODO : use the active products or redefine a specific algorithm
-    const loadConditions = async (fields:Array<fieldType>, products:Array<activeProductType>) => {
-        let now = moment.utc()
-        if (now.minutes() >= 30) {
-            now.hours(now.hours() + 1)
-        }
-        now = now.startOf('day')
-        // array of the 5 next days to iterate on
-        const dt = [...Array(5).keys()].map((i) => now.add(i == 0 ? 0 : 1, 'day').format('YYYY-MM-DD'))
-        try {
-            const data: Array<dailyConditionType> = await Promise.all(
-                dt.map((day) => {
-                    return (getConditions_v2({
-                        day,
-                        products: [6], //products.map((p) => p.phytoproduct.id),
-                        parcelles: fields.map((f) => f.id)
-                    }))
-                }
-                ))
-            setConditions(data)
-        } catch (e) {
-            setConditions(null)
-            snackbar.showSnackbar(i18n.t('snackbar.condition_error'), "ALERT")
-        }
-    }
+	const value = React.useMemo(() => ({
+		dow, currentDay, setCurrentDay,
+		meteo: meteoState.meteo, setMeteo, meteo4h: meteoState.meteo4h, setMeteo4h, loadMeteo,
+		loadMeteoAndConditions,
+		metrics, setMetrics,
+		conditions: meteoState.conditions, loadConditions
+	}), [currentDay, meteoState, metrics, conditions])
+
+	// const value = {
+	// 	dow, currentDay, setCurrentDay,
+	// 	meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
+	// 	loadMeteoAndConditions,
+	// 	metrics, setMetrics,
+	// 	conditions, loadConditions
+	// }
+
     return (
-        <MeteoContext.Provider value={{
-            dow, currentDay, setCurrentDay,
-            meteo, setMeteo, meteo4h, setMeteo4h, loadMeteo,
-            metrics, setMetrics,
-            conditions, loadConditions
-        }}>
+        <MeteoContext.Provider value={value}>
             {children}
         </MeteoContext.Provider>
     );
 };
 
-export default MeteoProvider;
+export default React.memo(MeteoProvider);
